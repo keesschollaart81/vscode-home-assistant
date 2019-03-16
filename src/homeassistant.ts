@@ -12,7 +12,7 @@ export class HomeAssistant {
 
     private async ensureConnection(): Promise<void> {
         return new Promise(async (resolve, reject) => {
-            
+
             if (this.connection) {
                 return resolve();
             }
@@ -35,7 +35,7 @@ export class HomeAssistant {
             catch (error) {
                 this.connection = undefined;
                 vscode.window.showErrorMessage(`Error connecting to your Home Assistant Server at ${config.haUrl}, check your network or update your VS Code Settings. Error: ${error.message}`);
-                console.error(error); 
+                console.error(error);
                 return reject(error);
             }
 
@@ -48,17 +48,16 @@ export class HomeAssistant {
 
     public async getEntityCompletions(): Promise<HomeAssistantCompletionItem[]> {
         await this.ensureConnection();
-        
+
         if (!this.hassEntities) {
             return [];
         }
 
         let completions: HomeAssistantCompletionItem[] = [];
-        if (this.hassEntities) {
-            for (const [key, value] of Object.entries(this.hassEntities)) {
-                let completionItem = new HomeAssistantCompletionItem(` ${value.entity_id}`, vscode.CompletionItemKind.EnumMember);
-                completions.push(completionItem);
-            }
+        
+        for (const [key, value] of Object.entries(this.hassEntities)) {
+            let completionItem = new HomeAssistantCompletionItem(` ${value.entity_id}`, vscode.CompletionItemKind.EnumMember);
+            completions.push(completionItem);
         }
 
         return completions;

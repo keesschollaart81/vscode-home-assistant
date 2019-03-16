@@ -22,7 +22,7 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
         let entityCompletions = await this.ha.getEntityCompletions();
 
         return {
-            incomplete: true,
+            incomplete: false,
             items: entityCompletions
         };
     }
