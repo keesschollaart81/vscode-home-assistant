@@ -1,23 +1,31 @@
 {
 	"name": "vscode-home-assistant",
-	"displayName": "vscode-home-assistant",
-    "description": " IntelliSense for entity-id's in Home Assistant Configurations",
-    "version": "0.1.0",
+	"displayName": "Home Assistant",
+	"description": " Completion for entity-id's in Home Assistant Configurations",
+	"version": "0.1.1",
+	"preview": true,
 	"engines": {
 		"vscode": "^1.32.0"
 	},
 	"categories": [
 		"Other"
 	],
-    "publisher": "keesschollaart", 
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/keesschollaart81/home-assistant-vscode-extension"
+	"publisher": "keesschollaart",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/keesschollaart81/home-assistant-vscode-extension"
 	},
-    "license": "MIT",
-    "icon": "assets/logo.png",
+	"license": "MIT",
+	"icon": "assets/logo.png",
 	"activationEvents": [
-		"*"
+		"onLanguage:yaml",
+		"workspaceContains:**/configuration.yaml"
+	],
+	"keywords": [
+		"home",
+		"assistant",
+		"home-assistant",
+		"homeassistant"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -44,9 +52,7 @@
 		"@types/ws": "6.0.1"
 	},
 	"dependencies": {
-		"@types/node": "^10.12.21",
 		"home-assistant-js-websocket": "3.3.0",
-		"ws": "6.2.0",
-		"isomorphic-ws":"4.0.1" 
+		"ws": "6.2.0"
 	}
 }
