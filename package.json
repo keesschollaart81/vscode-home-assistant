@@ -2,7 +2,7 @@
 	"name": "vscode-home-assistant",
 	"displayName": "Home Assistant",
 	"description": " Completion for entity-id's in Home Assistant Configurations",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"preview": true,
 	"engines": {
 		"vscode": "^1.32.0"

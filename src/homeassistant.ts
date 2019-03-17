@@ -38,7 +38,15 @@ export class HomeAssistant {
                 return reject(error);
             }
 
+            this.connection.addEventListener("ready", () => {
+                console.log("Connected to Home Assistant");
+            });
+            this.connection.addEventListener("disconnected", () => {
+                console.log("Lost connection with Home Assistant");
+            });
+
             ha.subscribeEntities(this.connection, entities => {
+                console.log(`Got ${Object.keys(entities).length} from Home Assistant`);
                 this.hassEntities = entities;
                 return resolve();
             });
@@ -56,13 +64,22 @@ export class HomeAssistant {
 
         for (const [key, value] of Object.entries(this.hassEntities)) {
             let completionItem = new HomeAssistantCompletionItem(` ${value.entity_id}`, vscode.CompletionItemKind.EnumMember);
+
+            completionItem.documentation = new vscode.MarkdownString(`**${value.entity_id}** \r\n \r\n`);
+            if (value.state) {
+                completionItem.documentation.appendMarkdown(`State: ${value.state} \r\n \r\n`);
+            }
+            completionItem.documentation.appendMarkdown(`| Attribute | Value | \r\n`);
+            completionItem.documentation.appendMarkdown(`| :---- | :---- | \r\n`);
+
+            for (const [attrKey, attrValue] of Object.entries(value.attributes)) {
+                completionItem.documentation.appendMarkdown(`| ${attrKey} | ${attrValue} | \r\n`);
+            }
             completions.push(completionItem);
         }
-
         return completions;
     }
 }
-
 
 export class HomeAssistantCompletionItem extends CompletionItem {
 } 
