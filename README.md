@@ -1,4 +1,10 @@
-# WIP for Home Assistant VS Code Extension
+# Home Assistant for VS Code
+
+This is a preview / work in progress of the Home Assistant Extension for VS Code. By being connected to Home Assistant it provides auto completion for your entity_id's.
+
+![Intellisense](https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/master/assets/screenshot.gif)
+
+## Configuration
 
 Use the settings:
 
