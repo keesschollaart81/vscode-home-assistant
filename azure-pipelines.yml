@@ -17,5 +17,25 @@ steps:
 
 - script: |
     npm install
-    npm run build
-  displayName: 'npm install and build'
+    npm run compile
+  displayName: 'npm install and compile'
+
+- script: |
+    sudo npm install -g vsce
+    vsce package
+  displayName: Create VSIX
+
+# Choose files to publish
+- task: CopyFiles@2
+  displayName: Stage VSIX for publishing
+  inputs:
+    contents: |-
+      *.vsix
+    targetFolder: $(Build.ArtifactStagingDirectory)
+
+# Publish files as an artifact
+- task: PublishBuildArtifacts@1
+  displayName: Publish VSIX
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: vscode-home-assistant
