@@ -4,7 +4,13 @@ import { HomeAssistant } from "./homeassistant";
 
 export class EntityIdCompletionProvider implements vscode.CompletionItemProvider {
 
-    entityIdPropertyMatch = /(.*)entity_id(:)?( )?([-\w]+?)?$/;
+    propertyMatches = [
+        /(.*)entity_id(:)?( )?([-\w]+?)?$/,
+        /(.*)entity(:)?( )?([-\w]+?)?$/,
+        /(.*)entities(:)?( )?([-\w]+?)?$/,
+        /(.*)include_entities(:)?( )?([-\w]+?)?$/,
+        /(.*)exclude_entities(:)?( )?([-\w]+?)?$/
+    ];
 
     constructor(private ha: HomeAssistant) {
     }
@@ -15,7 +21,7 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
             .lineAt(position)
             .text.substr(0, position.character);
 
-        const isSingleLineMatch = linePrefix.match(this.entityIdPropertyMatch);
+        const isSingleLineMatch = this.propertyMatches.some(regex => regex.test(linePrefix));
 
         if (!isSingleLineMatch && !this.isMultiLineMatch(document, position)) {
             return [];
@@ -38,7 +44,7 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
                 currentLine--;
                 continue;
             }
-            return this.entityIdPropertyMatch.test(thisLine.text);
+            return this.propertyMatches.some(regex => regex.test(thisLine.text));
         }
         return false;
     }
