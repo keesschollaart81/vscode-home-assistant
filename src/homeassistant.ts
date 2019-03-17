@@ -12,6 +12,11 @@ export class HomeAssistant {
     private async ensureConnection(): Promise<void> {
         return new Promise(async (resolve, reject) => {
 
+            if (!config.haUrl || !config.haToken){
+                // todo: suggest to set settings (or ask for url/token via UI)
+                return resolve();
+            }
+
             if (this.connection) {
                 return resolve();
             }

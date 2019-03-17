@@ -18,3 +18,4 @@ Then when you type an ```entity_id``` the autocomplete list should be populated 
 ## Todo
 
 * Entity_Id dictionaries/aries, currenty only single line is supported
+* Easier onboarding (ask for url / token)
