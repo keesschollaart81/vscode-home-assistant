@@ -1,4 +1,3 @@
-
 import * as ha from "home-assistant-js-websocket";
 import * as s from "./socket";
 import { config } from "./configuration";
@@ -29,7 +28,7 @@ export class HomeAssistant {
             try {
                 this.connection = await ha.createConnection({
                     auth,
-                    createSocket: async (opt) => s.createSocket(auth)
+                    createSocket: async () => s.createSocket(auth)
                 });
             }
             catch (error) {
@@ -54,7 +53,7 @@ export class HomeAssistant {
         }
 
         let completions: HomeAssistantCompletionItem[] = [];
-        
+
         for (const [key, value] of Object.entries(this.hassEntities)) {
             let completionItem = new HomeAssistantCompletionItem(` ${value.entity_id}`, vscode.CompletionItemKind.EnumMember);
             completions.push(completionItem);

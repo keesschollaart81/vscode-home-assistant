@@ -1,14 +1,21 @@
 {
 	"name": "vscode-home-assistant",
 	"displayName": "vscode-home-assistant",
-	"description": "",
-	"version": "0.0.1",
+    "description": " IntelliSense for entity-id's in Home Assistant Configurations",
+    "version": "0.1.0",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
 	"categories": [
 		"Other"
 	],
+    "publisher": "keesschollaart", 
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/keesschollaart81/home-assistant-vscode-extension"
+	},
+    "license": "MIT",
+    "icon": "assets/logo.png",
 	"activationEvents": [
 		"*"
 	],

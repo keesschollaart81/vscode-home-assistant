@@ -66,7 +66,7 @@ export function createSocket(auth: ha.Auth): Promise<any> {
         };
 
         // Auth is mandatory, so we can send the auth message right away.
-        const handleOpen = async (event: any) => {
+        const handleOpen = async () => {
             try {
                 if (auth.expired) {
                     await auth.refreshAccessToken();
