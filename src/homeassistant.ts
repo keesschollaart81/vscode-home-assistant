@@ -12,11 +12,9 @@ export class HomeAssistant {
     private async ensureConnection(): Promise<void> {
         return new Promise(async (resolve, reject) => {
 
-            if (!config.haUrl || !config.haToken) {
-                let didUpdateConfig = await config.trySetConfig();
-                if (!didUpdateConfig){
-                    return reject();
-                } 
+            let hasConfig = await config.hasConfigOrAsk();
+            if (!hasConfig) {
+                return reject();
             }
 
             if (this.connection) {
@@ -87,7 +85,7 @@ export class HomeAssistant {
             completions.push(completionItem);
         }
         return completions;
-    } 
+    }
 }
 
 export class HomeAssistantCompletionItem extends CompletionItem {

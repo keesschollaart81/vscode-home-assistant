@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { EntityIdCompletionProvider } from './entity-id-completion-provider';
 import { HomeAssistant } from './homeassistant';
+import { config } from './configuration';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -14,6 +15,8 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(completionProvider);
+
+	config.hasConfigOrAsk();
 }
 
 export function deactivate() { }
