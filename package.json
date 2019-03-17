@@ -2,7 +2,7 @@
 	"name": "vscode-home-assistant",
 	"displayName": "Home Assistant",
 	"description": " Completion for entity-id's in Home Assistant Configurations",
-	"version": "0.1.3",
+	"version": "0.1.5",
 	"preview": true,
 	"engines": {
 		"vscode": "^1.32.0"
@@ -33,6 +33,24 @@
 			{
 				"command": "extension.helloWorld",
 				"title": "Hello World"
+			}
+		],
+		"configuration": [
+			{
+				"title": "Home Assistant",
+				"properties": {
+					"vscode-home-assistant.ha-url": {
+						"type": "string",
+						"title": "Host URL",
+						"default": "https://schollaartthuis.duckdns.org",
+						"description": "The Host URL of your Home Assistant Server"
+					},
+					"vscode-home-assistant.ha-token": {
+						"type": "string",
+						"title": "Long Lived Access-Token",
+						"description": "The Long Lived Access-Token for Home Assistant"
+					}
+				}
 			}
 		]
 	},

@@ -4,6 +4,8 @@ import { HomeAssistant } from "./homeassistant";
 
 export class EntityIdCompletionProvider implements vscode.CompletionItemProvider {
 
+    entityIdPropertyMatch = /(.*)entity_id(:)?( )?([-\w]+?)?$/;
+
     constructor(private ha: HomeAssistant) {
     }
 
@@ -13,9 +15,9 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
             .lineAt(position)
             .text.substr(0, position.character);
 
-        const match = linePrefix.match(/(.*)entity_id(:)?( )?([-\w]+?)?$/);
-        // const match = linePrefix.endsWith("entity_id:");
-        if (!match) {
+        const isSingleLineMatch = linePrefix.match(this.entityIdPropertyMatch);
+
+        if (!isSingleLineMatch && !this.isMultiLineMatch(document, position)) {
             return [];
         }
 
@@ -25,5 +27,19 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
             incomplete: false,
             items: entityCompletions
         };
+    }
+
+    isMultiLineMatch(document: vscode.TextDocument, position: vscode.Position): boolean {
+        let currentLine = position.line;
+        while (currentLine > 0) {
+            var thisLine = document.lineAt(currentLine);
+            let isOtherItemInList = thisLine.text.match(/-\s*([-\w]+)?(\.)?([-\w]+?)?\s*$/);
+            if (isOtherItemInList) {
+                currentLine--;
+                continue;
+            }
+            return this.entityIdPropertyMatch.test(thisLine.text);
+        }
+        return false;
     }
 }

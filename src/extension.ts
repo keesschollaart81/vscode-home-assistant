@@ -9,7 +9,8 @@ export function activate(context: vscode.ExtensionContext) {
 	let completionProvider = vscode.languages.registerCompletionItemProvider(
 		'yaml',
 		new EntityIdCompletionProvider(ha),
-		":"
+		":",
+		"-"
 	);
 
 	context.subscriptions.push(completionProvider);
