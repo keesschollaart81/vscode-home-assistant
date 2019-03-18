@@ -1,8 +1,9 @@
 import * as ha from "home-assistant-js-websocket";
-import * as s from "./socket";
 import { config } from "./configuration";
 import { CompletionItem } from "vscode";
 import * as vscode from 'vscode';
+
+const WebSocket = require("ws");
 
 export class HomeAssistant {
 
@@ -31,15 +32,12 @@ export class HomeAssistant {
             });
 
             try {
-                console.log("Connecting to Home Assistant...")
-                this.connection = await ha.createConnection({
-                    auth,
-                    createSocket: async () => s.createSocket(auth)
-                });
+                console.log("Connecting to Home Assistant...");
+                this.connection = await ha.createConnection({ auth, WebSocket });
             }
             catch (error) {
                 this.connection = undefined;
-                vscode.window.showErrorMessage(`Error connecting to your Home Assistant Server at ${config.haUrl}, check your network or update your VS Code Settings. Error: ${error.message}`);
+                vscode.window.showErrorMessage(`Error connecting to your Home Assistant Server at ${config.haUrl}, check your network or update your VS Code Settings. Error: ${error}`);
                 console.error(error);
                 return reject(error);
             }

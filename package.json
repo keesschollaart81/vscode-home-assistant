@@ -2,7 +2,7 @@
 	"name": "vscode-home-assistant",
 	"displayName": "Home Assistant Config Helper",
 	"description": " Completion for entity-id's in Home Assistant Configurations",
-	"version": "0.1.8",
+	"version": "0.2.0",
 	"preview": true,
 	"engines": {
 		"vscode": "^1.32.0"
@@ -67,7 +67,7 @@
 		"@types/ws": "6.0.1"
 	},
 	"dependencies": {
-		"home-assistant-js-websocket": "3.3.0",
+		"home-assistant-js-websocket": "3.4.0",
 		"ws": "6.2.0"
 	}
 }

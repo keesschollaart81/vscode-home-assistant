@@ -41,7 +41,7 @@ export const config = {
             return false;
         }
 
-        let config = vscode.workspace.getConfiguration("vscode-home-assistant")
+        let config = vscode.workspace.getConfiguration("vscode-home-assistant");
         await config.update("hostUrl", url);
         await config.update("longLivedAccessToken", token); 
         
