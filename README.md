@@ -1,14 +1,18 @@
 # Home Assistant Config Helper for VS Code
 
-This is a preview / work in progress of the Home Assistant Extension for VS Code. By being connected to Home Assistant it provides auto completion for your entity_id's.
+This the Home Assistant Extension for VS Code. By being connected to Home Assistant it provides auto completion for your entity_id's.
 
-Then when you type ```entity_id:``` the autocomplete list should be populated with your entities
+Then when you type ```entity_id:``` (or any entity related property) the autocomplete list should be populated with your entities:
 
 ![Intellisense](https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/master/assets/screenshot.gif)
 
 ## Configuration
 
-You need to set your **Home Assistant Root URL** and a **Long Lived Access Token**. After installing, when you first try to set an entity_id the extension will ask you to set them. It's also possible to set them using the defaul settings page, go to 'Preferences: Open Settings (UI)', then go to 'Extensions' and 'Home Assistant'.
+Install the extension, open your Home Assistant folder and a popup will aks you to set your **Home Assistant Root URL** and a **Long Lived Access Token**. 
+
+To open the VS Code settings, go to (cmd+shift+p) *'Preferences: Open Settings (UI)'*, then go to *'Extensions'* and then *'Home Assistant'*. Please note the difference between 'User Settings' and 'Workspace Settings'.
+
+When you open a workspace containing a **/configuration.yaml file, this extension starts. If you did not set these two settings, it will prompt you to set them. This flow will set your settings on 'Workspace level'.
 
 ## Feedback / Ideas
 
