@@ -1,7 +1,7 @@
 import * as vscode from "vscode"; 
 
 export const config = {
-    get all() {
+    get all() { 
         return vscode.workspace.getConfiguration("vscode-home-assistant");
     },
     get haUrl() {
@@ -21,7 +21,7 @@ export const config = {
             "Now",
             "Later");
 
-        if (optionClicked === "Later") {
+        if (!optionClicked || optionClicked === "Later") {
             return false;
         }
 

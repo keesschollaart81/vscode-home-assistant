@@ -7,9 +7,9 @@ const WebSocket = require("ws");
 
 export class HomeAssistant {
 
-    connection: ha.Connection | undefined;
-    hassEntities!: Promise<ha.HassEntities>;
-    hassServices!: Promise<ha.HassServices>;
+    private connection: ha.Connection | undefined;
+    private hassEntities!: Promise<ha.HassEntities>;
+    private hassServices!: Promise<ha.HassServices>;
 
     private async ensureConnection(): Promise<void> {
 
@@ -126,6 +126,16 @@ export class HomeAssistant {
         }
 
         return completions;
+    }
+
+    public disconnect () {
+        console.log(`Disconnecting from Home Assistant`);
+        
+        if (!this.connection) {
+            return;
+        }
+        this.connection.close();
+        this.connection = undefined;
     }
 }
 
