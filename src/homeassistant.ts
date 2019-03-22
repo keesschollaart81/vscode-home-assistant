@@ -56,16 +56,16 @@ export class HomeAssistant {
         var tokenIndication = `${config.haToken}`.substring(0,5);
         var errorText = error;
         switch(error){
-            case "1":
+            case 1:
                 errorText = "ERR_CANNOT_CONNECT";
                 break;
-            case "2":
+            case 2:
                 errorText = "ERR_INVALID_AUTH";
                 break;
-            case "3":
+            case 3:
                 errorText = "ERR_CONNECTION_LOST";
                 break;
-            case "4":
+            case 4:
                 errorText = "ERR_HASS_HOST_REQUIRED";
                 break;
         }
@@ -170,7 +170,7 @@ export class HomeAssistant {
 
     public disconnect () {
         console.log(`Disconnecting from Home Assistant`);
-        
+
         if (!this.connection) {
             return;
         }
