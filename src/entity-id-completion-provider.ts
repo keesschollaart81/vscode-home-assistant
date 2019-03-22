@@ -29,6 +29,8 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
 
         let entityCompletions = await this.ha.getEntityCompletions();
 
+        console.log(`Showing ${entityCompletions.length} completions`);
+
         return {
             incomplete: false,
             items: entityCompletions

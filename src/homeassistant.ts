@@ -17,7 +17,7 @@ export class HomeAssistant {
         if (!hasConfig) {
             let message = `Cannot connect to Home Assistant: not configured`;
             vscode.window.showErrorMessage(message);
-            throw new Error(message)
+            throw new Error(message);
         }
 
         if (this.connection) {
@@ -119,7 +119,9 @@ export class HomeAssistant {
         let completions: HomeAssistantCompletionItem[] = [];
 
         for (const [key, value] of Object.entries(entities)) {
-            let completionItem = new HomeAssistantCompletionItem(` ${value.entity_id}`, vscode.CompletionItemKind.EnumMember);
+            let completionItem = new HomeAssistantCompletionItem(`${value.entity_id}`, vscode.CompletionItemKind.EnumMember);
+            completionItem.filterText = ` ${value.entity_id}`; // enable a leading space
+            completionItem.insertText = completionItem.filterText;
 
             completionItem.documentation = new vscode.MarkdownString(`**${value.entity_id}** \r\n \r\n`);
             if (value.state) {
@@ -148,7 +150,9 @@ export class HomeAssistant {
 
         for (const [domainKey, domainValue] of Object.entries(services)) {
             for (const [serviceKey, serviceValue] of Object.entries(domainValue)) {
-                let completionItem = new HomeAssistantCompletionItem(` ${domainKey}.${serviceKey}`, vscode.CompletionItemKind.EnumMember);
+                let completionItem = new HomeAssistantCompletionItem(`${domainKey}.${serviceKey}`, vscode.CompletionItemKind.EnumMember);
+                completionItem.filterText = ` ${domainKey}.${serviceKey}`; // enable a leading space
+                completionItem.insertText = completionItem.filterText; 
 
                 var fields = Object.entries(serviceValue.fields);
 
