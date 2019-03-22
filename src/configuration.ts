@@ -27,7 +27,8 @@ export const config = {
 
         var url = await vscode.window.showInputBox(<vscode.InputBoxOptions>{
             prompt: "Enter your Home Assistant (base) URL",
-            placeHolder: "https://your.homeassistant.com:8123"
+            placeHolder: "https://your.homeassistant.com:8123",
+            ignoreFocusOut: true
         });
         if (!url) {
             return false;
@@ -35,15 +36,16 @@ export const config = {
 
         var token = await vscode.window.showInputBox(<vscode.InputBoxOptions>{
             prompt: "Enter a Home Assistant 'Long-Lived Access Token', create one on your user/profile page in HA.",
-            password: true
+            password: true,
+            ignoreFocusOut: true
         });
         if (!token) {
             return false;
         }
 
         let config = vscode.workspace.getConfiguration("vscode-home-assistant");
-        await config.update("hostUrl", url);
-        await config.update("longLivedAccessToken", token); 
+        await config.update("hostUrl", url, true);
+        await config.update("longLivedAccessToken", token, true); 
         
         return true;
     }
