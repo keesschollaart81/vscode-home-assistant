@@ -12,7 +12,7 @@ Install the extension, open your Home Assistant folder and a popup will aks you 
 
 ![Popup](https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/master/assets/popup.png)
 
-This popup will only show if your workspace contains a configuration.yaml file. If you don't see the popup, don't worry, just set the values with the default settings editor of VS Code: to open the VS Code settings, go to (cmd+shift+p) *'Preferences: Open Settings (UI)'*, then go to *'Extensions'* and then *'Home Assistant'*. Please note the difference between 'User Settings' and 'Workspace Settings'. 
+This popup will only show if your workspace contains a configuration.yaml file. If you don't see the popup, don't worry, just set the values with the default settings editor of VS Code: to open the VS Code settings, go to (cmd+shift+p) *'Preferences: Open Settings (UI)'*, then go to *'Extensions'* and then *'Home Assistant'*. Please note the difference between 'User Settings' and 'Workspace Settings', by default the extension sets them on User-level but they can be overridden at workspace level.
 
 ## Feedback / Ideas
 
