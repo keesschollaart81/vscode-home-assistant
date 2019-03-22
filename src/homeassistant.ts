@@ -7,15 +7,17 @@ const WebSocket = require("ws");
 
 export class HomeAssistant {
 
-    connection: ha.Connection | undefined;
-    hassEntities!: Promise<ha.HassEntities>;
-    hassServices!: Promise<ha.HassServices>;
+    private connection: ha.Connection | undefined;
+    private hassEntities!: Promise<ha.HassEntities>;
+    private hassServices!: Promise<ha.HassServices>;
 
     private async ensureConnection(): Promise<void> {
 
         let hasConfig = await config.hasConfigOrAsk();
         if (!hasConfig) {
-            return;
+            let message = `Cannot connect to Home Assistant: not configured`;
+            vscode.window.showErrorMessage(message);
+            throw new Error(message)
         }
 
         if (this.connection) {
@@ -36,10 +38,8 @@ export class HomeAssistant {
             this.connection = await ha.createConnection({ auth, WebSocket });
         }
         catch (error) {
-            this.connection = undefined;
-            vscode.window.showErrorMessage(`Error connecting to your Home Assistant Server at ${config.haUrl}, check your network or update your VS Code Settings. Error: ${error}`);
-            console.error(error);
-            throw error;
+           this.handleConnectionError(error);
+           throw error;
         }
 
         this.connection.addEventListener("ready", () => {
@@ -49,37 +49,76 @@ export class HomeAssistant {
         this.connection.addEventListener("disconnected", () => {
             console.log("Lost connection with Home Assistant");
         });
+    }
 
-        this.hassEntities = new Promise<ha.HassEntities>(async (resolve, reject) => {
-            if (!this.connection) {
-                return reject();
-            }
-            ha.subscribeEntities(this.connection, entities => {
-                console.log(`Got ${Object.keys(entities).length} entities from Home Assistant`);
-                return resolve(entities);
+    private handleConnectionError = (error: any) =>{
+        this.connection = undefined;
+        var tokenIndication = `${config.haToken}`.substring(0,5);
+        var errorText = error;
+        switch(error){
+            case "1":
+                errorText = "ERR_CANNOT_CONNECT";
+                break;
+            case "2":
+                errorText = "ERR_INVALID_AUTH";
+                break;
+            case "3":
+                errorText = "ERR_CONNECTION_LOST";
+                break;
+            case "4":
+                errorText = "ERR_HASS_HOST_REQUIRED";
+                break;
+        }
+        let message = `Error connecting to your Home Assistant Server at ${config.haUrl} and token '${tokenIndication}...', check your network or update your VS Code Settings, make sure to (also) check your workspace settings! Error: ${errorText}`;
+        vscode.window.showErrorMessage(message);
+        console.error(message); 
+    }
+
+    private getHassEntities = async () :Promise<ha.HassEntities> =>{
+        await this.ensureConnection();
+
+        if (!this.hassEntities){ 
+            this.hassEntities = new Promise<ha.HassEntities>(async (resolve, reject) => {
+                if (!this.connection) {
+                    return reject();
+                }
+                ha.subscribeEntities(this.connection, entities => {
+                    console.log(`Got ${Object.keys(entities).length} entities from Home Assistant`);
+                    return resolve(entities);
+                });
             });
-        });
-        this.hassServices = new Promise<ha.HassServices>(async (resolve, reject) => {
-            if (!this.connection) {
-                return reject();
-            }
-            ha.subscribeServices(this.connection, services => {
-                console.log(`Got ${Object.keys(services).length} services from Home Assistant`);
-                return resolve(services);
+        } 
+        return await this.hassEntities;
+    }
+
+    private getHassServices = async () :Promise<ha.HassServices> =>{
+        await this.ensureConnection();
+
+        if (!this.hassServices){ 
+            this.hassServices = new Promise<ha.HassServices>(async (resolve, reject) => {
+                if (!this.connection) {
+                    return reject();
+                }
+                ha.subscribeServices(this.connection, services => {
+                    console.log(`Got ${Object.keys(services).length} services from Home Assistant`);
+                    return resolve(services);
+                });
             });
-        });
+        } 
+        return await this.hassServices;
     }
 
     public async getEntityCompletions(): Promise<HomeAssistantCompletionItem[]> {
-        await this.ensureConnection();
 
-        if (!await this.hassEntities) {
+        let entities = await this.getHassEntities();
+
+        if (!entities) {
             return [];
         }
 
         let completions: HomeAssistantCompletionItem[] = [];
 
-        for (const [key, value] of Object.entries(await this.hassEntities)) {
+        for (const [key, value] of Object.entries(entities)) {
             let completionItem = new HomeAssistantCompletionItem(` ${value.entity_id}`, vscode.CompletionItemKind.EnumMember);
 
             completionItem.documentation = new vscode.MarkdownString(`**${value.entity_id}** \r\n \r\n`);
@@ -98,15 +137,16 @@ export class HomeAssistant {
     }
 
     public async getServiceCompletions(): Promise<HomeAssistantCompletionItem[]> {
-        await this.ensureConnection();
 
-        if (!this.hassServices) {
+        let services = await this.getHassServices();
+
+        if (!services) {
             return [];
         }
 
         let completions: HomeAssistantCompletionItem[] = [];
 
-        for (const [domainKey, domainValue] of Object.entries(await this.hassServices)) {
+        for (const [domainKey, domainValue] of Object.entries(services)) {
             for (const [serviceKey, serviceValue] of Object.entries(domainValue)) {
                 let completionItem = new HomeAssistantCompletionItem(` ${domainKey}.${serviceKey}`, vscode.CompletionItemKind.EnumMember);
 
