@@ -52,7 +52,25 @@
 					}
 				}
 			}
-		]
+		],
+		"snippets": [
+            {
+                "language": "yaml",
+                "path": "./snippets/homeassistant_automation.json"
+            },
+            {
+                "language": "yaml",
+                "path": "./snippets/homeassistant_group.json"
+            },
+            {
+                "language": "yaml",
+                "path": "./snippets/homeassistant_script.json"
+            },
+            {
+                "language": "yaml",
+                "path": "./snippets/homeassistant_sensor.json"
+            }
+        ]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
