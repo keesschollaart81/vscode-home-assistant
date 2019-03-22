@@ -1,0 +1,55 @@
+{
+    "automation": {
+        "prefix": "automation",
+        "body": [
+            "- id: ${1:automation id}",
+            "  alias: ${2:automation alias (name)}",
+            "  trigger:",
+            "  condition:",
+            "  action:"
+        ],
+        "description": "Add a Home Assistant automation"
+    },
+    "condition state": {
+        "prefix": "condition-state",
+        "body": [
+            "    - condition: state",
+            "      entity_id: ${1:entity id}",
+            "      state: ${2: state}"
+        ],
+        "description": "Add a Home Assistant state condition for automation"
+    },
+    "condition template": {
+        "prefix": "condition-template",
+        "body":[
+            "    - condition: template",
+            "      value_template: \"{{ ${1: template} }}\""
+        ]
+    },
+    "trigger state": {
+        "prefix": "trigger-state",
+        "body": [
+            "    - platform: state",
+            "      entity_id: ${1:entity id}",
+            "      from: ${2: from state}",
+            "      to: ${3: to state}"
+        ],
+        "description": "Add a Home Assistant state trigger for automation"
+    },
+    "action service": {
+        "prefix": "action-service",
+        "body": [
+            "    - service: ${1:service name}",
+            "      data_template:",
+            "        entity_id: "
+        ],
+        "description": "Add a Home Assistant service action for automation"
+    },
+    "action service script turn on": {
+        "prefix": "action-script-on",
+        "body": [
+            "    - service: script.turn_on",
+            "      entity_id: "
+        ]
+    }
+}
