@@ -1,0 +1,13 @@
+{
+    "group": {
+        "prefix": "group",
+        "body": [
+            "${1:group id}",
+            "  name: ${1:group name}",
+            "  view: no",
+            "  entities:",
+            "    - "
+        ],
+        "description": "Add a Home Assistant group"
+    }
+}

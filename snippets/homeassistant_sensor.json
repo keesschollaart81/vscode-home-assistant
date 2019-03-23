@@ -1,0 +1,13 @@
+{
+    "(binary) sensor template": {
+        "prefix": "sensor-template",
+        "body": [
+            "- platform: template",
+            "  sensors:",
+            "    ${1:sensor name}:",
+            "      friendly_name: \"${1:sensor friendly name}\"",
+            "      value_template: {{ ${2:sensor value template} }}"
+        ],
+        "description": "Add a Home Assistant template (binary) sensor"
+    }
+}
