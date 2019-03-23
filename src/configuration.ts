@@ -5,10 +5,18 @@ export const config = {
         return vscode.workspace.getConfiguration("vscode-home-assistant");
     },
     get haUrl() {
-        return config.all.get<string>("hostUrl");
+        let haUrlViaConfig = config.all.get<string>("hostUrl");
+        if (!haUrlViaConfig && process.env.HASS_SERVER){
+            return process.env.HASS_SERVER;
+        }
+        return haUrlViaConfig;
     },
     get haToken() {
-        return config.all.get<string>("longLivedAccessToken");
+        let haTokenViaConfig = config.all.get<string>("longLivedAccessToken");
+        if (!haTokenViaConfig && process.env.HASS_TOKEN){
+            return process.env.HASS_TOKEN;
+        }
+        return haTokenViaConfig;
     },
     async hasConfigOrAsk(): Promise<boolean> {
 
