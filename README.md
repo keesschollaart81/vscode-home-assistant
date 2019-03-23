@@ -6,13 +6,17 @@ Then when you type ```entity_id:``` (or any entity related property) the autocom
 
 ![Intellisense](https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/master/assets/screenshot.gif)
 
+Or when you want to use snippets just write snippet name and press tab:
+
+![Snippets](https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/master/assets/snippets.gif)
+
 ## Configuration
 
-After installation, this extension needs your... 
-- **Home Assistant Root URL** and a 
-- **Long Lived Access Token** 
+After installation, this extension needs your...
+- **Home Assistant Root URL** and a
+- **Long Lived Access Token**
 
-...to be able to connect to your Home Assistant Server. 
+...to be able to connect to your Home Assistant Server.
 
 There are 3 ways to get this done:
 
@@ -20,7 +24,7 @@ There are 3 ways to get this done:
 
     ![Popup](https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/master/assets/popup.png)
 
-    This popup will only show if your workspace contains a configuration.yaml file and enables you to set the configuration on user-level 
+    This popup will only show if your workspace contains a configuration.yaml file and enables you to set the configuration on user-level
 
 2. Via the default VS Code Settings UI
 
