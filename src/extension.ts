@@ -20,6 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 		":"
 	);
 
+	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => ha.disconnect()));
 	context.subscriptions.push(entityCompletionProvider);
 	context.subscriptions.push(serviceCompletionProvider);
 

@@ -1,14 +1,22 @@
 import * as vscode from "vscode"; 
 
 export const config = {
-    get all() {
+    get all() { 
         return vscode.workspace.getConfiguration("vscode-home-assistant");
     },
     get haUrl() {
-        return config.all.get<string>("hostUrl");
+        let haUrlViaConfig = config.all.get<string>("hostUrl");
+        if (!haUrlViaConfig && process.env.HASS_SERVER){
+            return process.env.HASS_SERVER;
+        }
+        return haUrlViaConfig;
     },
     get haToken() {
-        return config.all.get<string>("longLivedAccessToken");
+        let haTokenViaConfig = config.all.get<string>("longLivedAccessToken");
+        if (!haTokenViaConfig && process.env.HASS_TOKEN){
+            return process.env.HASS_TOKEN;
+        }
+        return haTokenViaConfig;
     },
     async hasConfigOrAsk(): Promise<boolean> {
 
@@ -21,13 +29,14 @@ export const config = {
             "Now",
             "Later");
 
-        if (optionClicked === "Later") {
+        if (!optionClicked || optionClicked === "Later") {
             return false;
         }
 
         var url = await vscode.window.showInputBox(<vscode.InputBoxOptions>{
             prompt: "Enter your Home Assistant (base) URL",
-            placeHolder: "https://your.homeassistant.com:8123"
+            placeHolder: "https://your.homeassistant.com:8123",
+            ignoreFocusOut: true
         });
         if (!url) {
             return false;
@@ -35,15 +44,16 @@ export const config = {
 
         var token = await vscode.window.showInputBox(<vscode.InputBoxOptions>{
             prompt: "Enter a Home Assistant 'Long-Lived Access Token', create one on your user/profile page in HA.",
-            password: true
+            password: true,
+            ignoreFocusOut: true
         });
         if (!token) {
             return false;
         }
 
         let config = vscode.workspace.getConfiguration("vscode-home-assistant");
-        await config.update("hostUrl", url);
-        await config.update("longLivedAccessToken", token); 
+        await config.update("hostUrl", url, true);
+        await config.update("longLivedAccessToken", token, true); 
         
         return true;
     }

@@ -29,6 +29,8 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
 
         let entityCompletions = await this.ha.getEntityCompletions();
 
+        console.log(`Showing ${entityCompletions.length} completions`);
+
         return {
             incomplete: false,
             items: entityCompletions
@@ -37,7 +39,7 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
 
     isMultiLineMatch(document: vscode.TextDocument, position: vscode.Position): boolean {
         let currentLine = position.line;
-        while (currentLine > 0) {
+        while (currentLine >= 0) {
             var thisLine = document.lineAt(currentLine);
             let isOtherItemInList = thisLine.text.match(/-\s*([-\w]+)?(\.)?([-\w]+?)?\s*$/);
             if (isOtherItemInList) {
