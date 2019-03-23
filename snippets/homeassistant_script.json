@@ -1,9 +1,9 @@
 {
     "script": {
-        "prefix": "sctript",
+        "prefix": "script",
         "body": [
             "${1:script id}",
-            "  alias: \"${1:script alias (name)}\"",
+            "  alias: \"${2:script alias (name)}\"",
             "  sequence:"
         ],
         "description": "Add a Home Assistant script"
