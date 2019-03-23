@@ -2,7 +2,7 @@
 	"name": "vscode-home-assistant",
 	"displayName": "Home Assistant Config Helper",
 	"description": " Completion for entity-id's in Home Assistant Configurations",
-	"version": "0.2.1",
+	"version": "0.3.2",
 	"preview": true,
 	"engines": {
 		"vscode": "^1.32.0"
@@ -42,12 +42,11 @@
 				"title": "Home Assistant Config Helper",
 				"properties": {
 					"vscode-home-assistant.hostUrl": {
-						"type": "string", 
-						"default": "https://my.home-assistant-host.com:8123",
+						"type": "string",
 						"description": "The Host URL of your Home Assistant Host, only protocol, host and port (no path or querystring)"
 					},
 					"vscode-home-assistant.longLivedAccessToken": {
-						"type": "string", 
+						"type": "string",
 						"description": "The Long Lived Access-Token for Home Assistant. Obtain a token via your user profile page in Home Assitant."
 					}
 				}

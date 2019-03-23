@@ -21,6 +21,8 @@ export class ServiceCompletionProvider implements vscode.CompletionItemProvider 
 
         let serviceCompletions = await this.ha.getServiceCompletions();
 
+        console.log(`Showing ${serviceCompletions.length} completions`);
+
         return {
             incomplete: false,
             items: serviceCompletions
