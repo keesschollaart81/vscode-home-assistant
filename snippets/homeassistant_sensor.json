@@ -5,8 +5,8 @@
             "- platform: template",
             "  sensors:",
             "    ${1:sensor name}:",
-            "      friendly_name: \"${1:sensor friendly name}\"",
-            "      value_template: {{ ${2:sensor value template} }}"
+            "      friendly_name: \"${2:sensor friendly name}\"",
+            "      value_template: {{ ${3:sensor value template} }}"
         ],
         "description": "Add a Home Assistant template (binary) sensor"
     }
