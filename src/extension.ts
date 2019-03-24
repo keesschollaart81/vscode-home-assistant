@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import { EntityIdCompletionProvider } from './entity-id-completion-provider';
 import { HomeAssistant } from './homeassistant';
-import { config } from './configuration';
+import { Config }  from './configuration';
 import { ServiceCompletionProvider } from './service-completion-provider';
 
 export function activate(context: vscode.ExtensionContext) {
-
-	let ha = new HomeAssistant();
+	let config = new Config();
+	let ha = new HomeAssistant(config);
 
 	let entityCompletionProvider = vscode.languages.registerCompletionItemProvider(
 		'yaml',
@@ -20,7 +20,11 @@ export function activate(context: vscode.ExtensionContext) {
 		":"
 	);
 
-	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => ha.disconnect()));
+	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
+		ha.disconnect();
+		config.reset();
+	}));
+	
 	context.subscriptions.push(entityCompletionProvider);
 	context.subscriptions.push(serviceCompletionProvider);
 
