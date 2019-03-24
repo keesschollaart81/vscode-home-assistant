@@ -1,18 +1,14 @@
 import * as vscode from "vscode";
 
 export class Config {
-
-    private all: vscode.WorkspaceConfiguration;
+ 
     private url: string | undefined;
     private token: string | undefined;
-
-    constructor() {
-        this.all = vscode.workspace.getConfiguration("vscode-home-assistant");
-    }
-
+ 
     public haUrl(): string | undefined {
         if (!this.url) {
-            let haUrlViaConfig = this.all.get<string>("hostUrl");
+            var config = vscode.workspace.getConfiguration("vscode-home-assistant");
+            let haUrlViaConfig = config.get<string>("hostUrl");
             if (!haUrlViaConfig && process.env.HASS_SERVER) {
                 console.log("Reading HA URL from Environment Variables");
                 this.url = process.env.HASS_SERVER;
@@ -27,7 +23,8 @@ export class Config {
 
     public haToken(): string | undefined {
         if (!this.token) {
-            let haTokenViaConfig = this.all.get<string>("longLivedAccessToken");
+            var config = vscode.workspace.getConfiguration("vscode-home-assistant");
+            let haTokenViaConfig = config.get<string>("longLivedAccessToken");
             if (!haTokenViaConfig && process.env.HASS_TOKEN) {
                 console.log("Reading HA Token from Environment Variables");
                 this.token = process.env.HASS_TOKEN;
