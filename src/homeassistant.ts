@@ -191,8 +191,8 @@ export class HomeAssistant {
     }
     
     private websocketWithOptions = (options: ws.ClientOptions) => class extends ws {
-        constructor(url: unknown) {
-            super(<string>url, options);
+        constructor(url: any) {
+            super(url, options);
         }
     }
 }
