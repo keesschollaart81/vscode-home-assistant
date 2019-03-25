@@ -2,8 +2,7 @@ import * as ha from "home-assistant-js-websocket";
 import { Config } from "./configuration";
 import { CompletionItem } from "vscode";
 import * as vscode from 'vscode';
-
-const WebSocket = require("ws");
+import * as ws from "ws";
 
 export class HomeAssistant {
 
@@ -36,10 +35,15 @@ export class HomeAssistant {
             expires_in: +new Date(new Date().getTime() + 1e11),
             refresh_token: ""
         });
-
+        
         try {
             console.log("Connecting to Home Assistant...");
-            this.connection = await ha.createConnection({ auth, WebSocket });
+            this.connection = await ha.createConnection({ 
+                auth: auth, 
+                WebSocket: this.websocketWithOptions({
+                    rejectUnauthorized: false
+                })
+             });
         }
         catch (error) {
             this.handleConnectionError(error);
@@ -184,6 +188,12 @@ export class HomeAssistant {
         }
         this.connection.close();
         this.connection = undefined;
+    }
+    
+    private websocketWithOptions = (options: ws.ClientOptions) => class extends ws {
+        constructor(url: unknown) {
+            super(<string>url, options);
+        }
     }
 }
 
