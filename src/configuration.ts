@@ -1,26 +1,50 @@
-import * as vscode from "vscode"; 
+import * as vscode from "vscode";
 
-export const config = {
-    get all() { 
-        return vscode.workspace.getConfiguration("vscode-home-assistant");
-    },
-    get haUrl() {
-        let haUrlViaConfig = config.all.get<string>("hostUrl");
-        if (!haUrlViaConfig && process.env.HASS_SERVER){
-            return process.env.HASS_SERVER;
+export class Config {
+ 
+    private url: string | undefined;
+    private token: string | undefined;
+ 
+    public haUrl(): string | undefined {
+        if (!this.url) {
+            var config = vscode.workspace.getConfiguration("vscode-home-assistant");
+            let haUrlViaConfig = config.get<string>("hostUrl");
+            if (!haUrlViaConfig && process.env.HASS_SERVER) {
+                console.log("Reading HA URL from Environment Variables");
+                this.url = process.env.HASS_SERVER;
+            }
+            else {
+                console.log("Reading HA URL from settings");
+                this.url = haUrlViaConfig;
+            }
         }
-        return haUrlViaConfig;
-    },
-    get haToken() {
-        let haTokenViaConfig = config.all.get<string>("longLivedAccessToken");
-        if (!haTokenViaConfig && process.env.HASS_TOKEN){
-            return process.env.HASS_TOKEN;
-        }
-        return haTokenViaConfig;
-    },
-    async hasConfigOrAsk(): Promise<boolean> {
+        return this.url;
+    }
 
-        if (this.haUrl && this.haToken){
+    public haToken(): string | undefined {
+        if (!this.token) {
+            var config = vscode.workspace.getConfiguration("vscode-home-assistant");
+            let haTokenViaConfig = config.get<string>("longLivedAccessToken");
+            if (!haTokenViaConfig && process.env.HASS_TOKEN) {
+                console.log("Reading HA Token from Environment Variables");
+                this.token = process.env.HASS_TOKEN;
+            }
+            else {
+                console.log("Reading HA Token from settings");
+                this.token = haTokenViaConfig;
+            }
+        }
+        return this.token;
+    }
+
+    public reset(): any {
+        this.url = undefined;
+        this.token = undefined;
+    }
+
+    public async hasConfigOrAsk(): Promise<boolean> {
+
+        if (this.haUrl && this.haToken) {
             return true;
         }
 
@@ -53,9 +77,8 @@ export const config = {
 
         let config = vscode.workspace.getConfiguration("vscode-home-assistant");
         await config.update("hostUrl", url, true);
-        await config.update("longLivedAccessToken", token, true); 
-        
+        await config.update("longLivedAccessToken", token, true);
+
         return true;
     }
-};
-
+}

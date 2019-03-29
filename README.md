@@ -36,6 +36,26 @@ There are 3 ways to get this done:
 
     Remember the scope of your environment variables differs per OS. Usually for this to work, you need to start VS Code from the from the prompt where the environment variables are set.
 
+## Release Notes
+
+### v0.3 - 23-03-2019
+ 
+- New: Autocompletion for services (#4)
+- New: Snippets for automations, sensors, scripts and groups (by @michalchecinski)  
+- New: Config HASS_SERVER & HASS_TOKEN environment variables (single config with HA CLI) 
+- Fixed: Multi-line entity id completion at first line (by @mickdekkers) 
+- Fixed: Keep configuration input boxes open when they lose focus  (by @mickdekkers) 
+- Fixed: Extension not working when workspace is opened via SSH FS 
+
+### v0.1 17-03-2019
+
+ - Initial release with autocompletion for entity_id's
+
 ## Feedback / Ideas
 
 Reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home Assistant Discord](https://discord.gg/c5DvZ4e).
+
+## Things to do / up for grabs
+
+[] Extract JSON scheme from HA to enable validation/completion on 'everything' static
+[] Render template locally (like/via CLI?) in preview pane 
