@@ -57,5 +57,8 @@ Reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home As
 
 ## Things to do / up for grabs
 
-[] Extract JSON scheme from HA to enable validation/completion on 'everything' static
-[] Render template locally (like/via CLI?) in preview pane 
+- [ ] Extract JSON scheme from HA to enable validation/completion on 'everything' static
+- [ ] Render Jinja2 template locally (like/via CLI?) in preview pane 
+- [ ] Autocomplete !secrets
+- [ ] Autocomplete triggers
+- [ ] Schema for ui-lovelace.yaml
