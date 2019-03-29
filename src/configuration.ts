@@ -1,10 +1,11 @@
 import * as vscode from "vscode";
 
 export class Config {
- 
+
     private url: string | undefined;
     private token: string | undefined;
- 
+    private ignoreCertificates: boolean | undefined;
+
     public haUrl(): string | undefined {
         if (!this.url) {
             var config = vscode.workspace.getConfiguration("vscode-home-assistant");
@@ -35,6 +36,19 @@ export class Config {
             }
         }
         return this.token;
+    }
+
+    public haIgnoreCertificates(): boolean {
+        if (!this.ignoreCertificates) {
+            var config = vscode.workspace.getConfiguration("vscode-home-assistant");
+            this.ignoreCertificates = config.get<boolean>("ignoreCertificates");
+            if (this.ignoreCertificates === undefined)
+            {
+                config.update("ignoreCertificates", false, true);
+                this.ignoreCertificates = false;
+            }
+        }
+        return this.ignoreCertificates;
     }
 
     public reset(): any {
@@ -78,6 +92,7 @@ export class Config {
         let config = vscode.workspace.getConfiguration("vscode-home-assistant");
         await config.update("hostUrl", url, true);
         await config.update("longLivedAccessToken", token, true);
+        await config.update("ignoreCertificates", false, true);
 
         return true;
     }

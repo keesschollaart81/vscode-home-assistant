@@ -2,7 +2,7 @@
 	"name": "vscode-home-assistant",
 	"displayName": "Home Assistant Config Helper",
 	"description": " Completion for entity-id's in Home Assistant Configurations",
-	"version": "0.3.5",
+	"version": "0.3.6",
 	"preview": true,
 	"engines": {
 		"vscode": "^1.32.0"
@@ -48,6 +48,10 @@
 					"vscode-home-assistant.longLivedAccessToken": {
 						"type": "string",
 						"description": "The Long Lived Access-Token for Home Assistant. Obtain a token via your user profile page in Home Assitant."
+					},
+					"vscode-home-assistant.ignoreCertificates": {
+						"type": "boolean",
+						"description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
 					}
 				}
 			}

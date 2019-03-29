@@ -35,15 +35,15 @@ export class HomeAssistant {
             expires_in: +new Date(new Date().getTime() + 1e11),
             refresh_token: ""
         });
-        
+
         try {
             console.log("Connecting to Home Assistant...");
-            this.connection = await ha.createConnection({ 
-                auth: auth, 
+            this.connection = await ha.createConnection({
+                auth: auth,
                 WebSocket: this.websocketWithOptions({
-                    rejectUnauthorized: false
+                    rejectUnauthorized: !this.config.haIgnoreCertificates()
                 })
-             });
+            });
         }
         catch (error) {
             this.handleConnectionError(error);
@@ -189,10 +189,17 @@ export class HomeAssistant {
         this.connection.close();
         this.connection = undefined;
     }
-    
+
     private websocketWithOptions = (options: ws.ClientOptions) => class extends ws {
         constructor(url: any) {
             super(url, options);
+            this.addEventListener("error", (e) => {
+                if (e.error && e.error.code === "ERR_TLS_CERT_ALTNAME_INVALID") {
+                    vscode.window.showErrorMessage(`Cannot connect to Home Assistant because of an invalid certificate, fix this or go to the settings of this extension and check 'Enable insecure transport'. Error message: ${e.message}`);
+                } else {
+                    vscode.window.showErrorMessage(`Error in WebSocket connection: ${e.message}`);
+                }
+            });
         }
     }
 }
