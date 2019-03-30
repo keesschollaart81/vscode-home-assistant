@@ -9,7 +9,8 @@ export class EntityIdCompletionProvider implements vscode.CompletionItemProvider
         /(.*)entity(:)?( )?([-\w]+?)?$/,
         /(.*)entities(:)?( )?([-\w]+?)?$/,
         /(.*)include_entities(:)?( )?([-\w]+?)?$/,
-        /(.*)exclude_entities(:)?( )?([-\w]+?)?$/
+        /(.*)exclude_entities(:)?( )?([-\w]+?)?$/,
+        /(.*)badges(:)?( )?([-\w]+?)?$/
     ];
 
     constructor(private ha: HomeAssistant) {
