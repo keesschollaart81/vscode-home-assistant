@@ -1,97 +1,108 @@
 {
-	"name": "vscode-home-assistant",
-	"displayName": "Home Assistant Config Helper",
-	"description": " Completion for entity-id's in Home Assistant Configurations",
-	"version": "0.3.6",
-	"preview": true,
-	"engines": {
-		"vscode": "^1.32.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"publisher": "keesschollaart",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/keesschollaart81/vscode-home-assistant"
-	},
-	"license": "MIT",
-	"icon": "assets/logo.png",
-	"activationEvents": [
-		"workspaceContains:**/configuration.yaml",
-		"onFileSystem:ftp",
-		"onFileSystem:ssh",
-		"onFileSystem:sftp"
-	],
-	"keywords": [
-		"home",
-		"assistant",
-		"home-assistant",
-		"homeassistant"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		],
-		"configuration": [
-			{
-				"title": "Home Assistant Config Helper",
-				"properties": {
-					"vscode-home-assistant.hostUrl": {
-						"type": "string",
-						"description": "The Host URL of your Home Assistant Host, only protocol, host and port (no path or querystring)"
-					},
-					"vscode-home-assistant.longLivedAccessToken": {
-						"type": "string",
-						"description": "The Long Lived Access-Token for Home Assistant. Obtain a token via your user profile page in Home Assitant."
-					},
-					"vscode-home-assistant.ignoreCertificates": {
-						"type": "boolean",
-						"description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
-					}
-				}
-			}
-		],
-		"snippets": [
-            {
-                "language": "yaml",
-                "path": "./snippets/homeassistant_automation.json"
-            },
-            {
-                "language": "yaml",
-                "path": "./snippets/homeassistant_group.json"
-            },
-            {
-                "language": "yaml",
-                "path": "./snippets/homeassistant_script.json"
-            },
-            {
-                "language": "yaml",
-                "path": "./snippets/homeassistant_sensor.json"
-            }
-        ]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
-	},
-	"devDependencies": {
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28",
-		"tslint": "^5.12.1",
-		"@types/node": "^10.12.21",
-		"@types/mocha": "^2.2.42",
-		"@types/ws": "6.0.1"
-	},
-	"dependencies": {
-		"home-assistant-js-websocket": "3.4.0",
-		"ws": "6.2.0"
-	}
+  "name": "vscode-home-assistant",
+  "displayName": "Home Assistant Config Helper",
+  "description": " Completion for entity-id's in Home Assistant Configurations",
+  "version": "0.3.7",
+  "preview": true,
+  "extensionDependencies": [
+    "redhat.vscode-yaml"
+  ],
+  "engines": {
+    "vscode": "^1.32.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "publisher": "keesschollaart",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/keesschollaart81/vscode-home-assistant"
+  },
+  "license": "MIT",
+  "icon": "assets/logo.png",
+  "activationEvents": [
+    "workspaceContains:**/configuration.yaml",
+    "onFileSystem:ftp",
+    "onFileSystem:ssh",
+    "onFileSystem:sftp"
+  ],
+  "keywords": [
+    "home",
+    "assistant",
+    "home-assistant",
+    "homeassistant"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.helloWorld",
+        "title": "Hello World"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Home Assistant Config Helper",
+        "properties": {
+          "vscode-home-assistant.hostUrl": {
+            "type": "string",
+            "description": "The Host URL of your Home Assistant Host, only protocol, host and port (no path or querystring)"
+          },
+          "vscode-home-assistant.longLivedAccessToken": {
+            "type": "string",
+            "description": "The Long Lived Access-Token for Home Assistant. Obtain a token via your user profile page in Home Assitant."
+          },
+          "vscode-home-assistant.ignoreCertificates": {
+            "type": "boolean",
+            "description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
+          }
+        }
+      }
+    ],
+    "snippets": [
+      {
+        "language": "yaml",
+        "path": "./snippets/homeassistant_automation.json"
+      },
+      {
+        "language": "yaml",
+        "path": "./snippets/homeassistant_group.json"
+      },
+      {
+        "language": "yaml",
+        "path": "./snippets/homeassistant_script.json"
+      },
+      {
+        "language": "yaml",
+        "path": "./snippets/homeassistant_sensor.json"
+      }
+    ],
+    "yamlValidation": [
+      {
+        "fileMatch": "ui-lovelace.yaml",
+        "url": "./src/lovelace-schema/ui-lovelace.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+	"test": "npm run compile && node ./node_modules/vscode/bin/test",
+	"schema": "typescript-json-schema ./tsconfig.json LovelaceConfig --noExtraProps > src/lovelace-schema/ui-lovelace.json"
+  },
+  "devDependencies": {
+    "typescript": "^3.3.1",
+    "vscode": "^1.1.28",
+	"tslint": "^5.12.1",
+	"typescript-json-schema": "0.36.0",
+    "@types/node": "^10.12.21",
+    "@types/mocha": "^2.2.42",
+    "@types/ws": "6.0.1"
+  },
+  "dependencies": {
+    "home-assistant-js-websocket": "3.4.0",
+    "ws": "6.2.0"
+  }
 }

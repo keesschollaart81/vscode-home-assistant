@@ -1,0 +1,1488 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "definitions": {
+        "AlarmPanelCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "states": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "enum": [
+                        "alarm-panel"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "CallServiceActionConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "enum": [
+                        "call-service"
+                    ],
+                    "type": "string"
+                },
+                "service": {
+                    "type": "string"
+                },
+                "service_data": {
+                    "additionalProperties": {
+                    },
+                    "properties": {
+                        "entity_id": {
+                            "anyOf": [
+                                {
+                                    "additionalItems": {
+                                        "anyOf": [
+                                            {
+                                                "type": "string"
+                                            }
+                                        ]
+                                    },
+                                    "items": [
+                                        {
+                                            "type": "string"
+                                        }
+                                    ],
+                                    "minItems": 1,
+                                    "type": "array"
+                                },
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "Condition": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "state_not": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "ConditionalCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "card": {
+                    "$ref": "#/definitions/LovelaceCardConfig"
+                },
+                "conditions": {
+                    "items": {
+                        "$ref": "#/definitions/Condition"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "type": {
+                    "enum": [
+                        "conditional"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "ConfigEntity": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "hold_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tap_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "EmptyStateCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "EntitiesCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entities": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/EntitiesCardEntityConfig"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "show_header_toggle": {
+                    "type": "boolean"
+                },
+                "theme": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "entities"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "EntitiesCardEntityConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "action_name": {
+                    "type": "string"
+                },
+                "entity": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "secondary_info": {
+                    "enum": [
+                        "entity-id",
+                        "last-changed"
+                    ],
+                    "type": "string"
+                },
+                "service": {
+                    "type": "string"
+                },
+                "service_data": {
+                    "additionalProperties": true,
+                    "properties": {
+                    },
+                    "type": "object"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "EntityButtonCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "hold_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "show_icon": {
+                    "type": "boolean"
+                },
+                "show_name": {
+                    "type": "boolean"
+                },
+                "tap_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "theme": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "entity-button"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "EntityConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "EntityFilterCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "card": {
+                    "$ref": "#/definitions/Partial<LovelaceCardConfig>"
+                },
+                "entities": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/EntityConfig"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "show_empty": {
+                    "type": "boolean"
+                },
+                "state_filter": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "enum": [
+                        "entity-filter"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "ErrorCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "origConfig": {
+                    "$ref": "#/definitions/LovelaceCardConfig"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "GaugeCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "max": {
+                    "type": "number"
+                },
+                "min": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "severity": {
+                    "$ref": "#/definitions/SeverityConfig"
+                },
+                "theme": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "gauge"
+                    ],
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "GlanceCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "columns": {
+                    "type": "number"
+                },
+                "entities": {
+                    "items": {
+                        "$ref": "#/definitions/ConfigEntity"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "show_icon": {
+                    "type": "boolean"
+                },
+                "show_name": {
+                    "type": "boolean"
+                },
+                "show_state": {
+                    "type": "boolean"
+                },
+                "theme": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "glance"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "HistoryGraphConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entities": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/EntityConfig"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "hours_to_show": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "refresh_interval": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "history-graph"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "IframeCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "aspect_ratio": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "iframe"
+                    ],
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "LightCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "theme": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "light"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "LovelaceCardConfig": {
+            "additionalProperties": {
+            },
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "LovelaceElementConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "style": {
+                    "additionalProperties": true,
+                    "properties": {
+                    },
+                    "type": "object"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "LovelaceViewConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "background": {
+                    "type": "string"
+                },
+                "badges": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "cards": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/AlarmPanelCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/ConditionalCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/EmptyStateCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/EntitiesCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/EntityButtonCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/EntityFilterCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/ErrorCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/GaugeCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/GlanceCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/IframeCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/LightCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/MapCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/MarkdownCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/MediaControlCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/PictureCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/PictureElementsCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/PictureEntityCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/PictureGlanceCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/PlantStatusCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/SensorCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/HistoryGraphConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/ShoppingListCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/StackCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/ThermostatCardConfig"
+                            },
+                            {
+                                "$ref": "#/definitions/WeatherForecastCardConfig"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "panel": {
+                    "type": "boolean"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "theme": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "MapCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "aspect_ratio": {
+                    "type": "string"
+                },
+                "default_zoom": {
+                    "type": "number"
+                },
+                "entities": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/EntityConfig"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "geo_location_sources": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "map"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "MarkdownCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "markdown"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "MediaControlCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "type": {
+                    "enum": [
+                        "media-control"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "MoreInfoActionConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "enum": [
+                        "more-info"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "NavigateActionConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "enum": [
+                        "navigate"
+                    ],
+                    "type": "string"
+                },
+                "navigation_path": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "NoActionConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "enum": [
+                        "none"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "Partial<LovelaceCardConfig>": {
+            "additionalProperties": false,
+            "description": "Make all properties in T optional",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "PictureCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "hold_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "tap_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "type": {
+                    "enum": [
+                        "picture"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "PictureElementsCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "aspect_ratio": {
+                    "type": "string"
+                },
+                "camera_image": {
+                    "type": "string"
+                },
+                "elements": {
+                    "items": {
+                        "$ref": "#/definitions/LovelaceElementConfig"
+                    },
+                    "type": "array"
+                },
+                "entity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "state_image": {
+                    "properties": {
+                    },
+                    "type": "object"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "picture-elements"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "PictureEntityCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "aspect_ratio": {
+                    "type": "string"
+                },
+                "camera_image": {
+                    "type": "string"
+                },
+                "entity": {
+                    "type": "string"
+                },
+                "hold_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "show_name": {
+                    "type": "boolean"
+                },
+                "show_state": {
+                    "type": "boolean"
+                },
+                "state_image": {
+                    "properties": {
+                    },
+                    "type": "object"
+                },
+                "tap_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "type": {
+                    "enum": [
+                        "picture-entity"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "PictureGlanceCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "aspect_ratio": {
+                    "type": "string"
+                },
+                "camera_image": {
+                    "type": "string"
+                },
+                "entities": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/EntityConfig"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "entity": {
+                    "type": "string"
+                },
+                "hold_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "state_image": {
+                    "properties": {
+                    },
+                    "type": "object"
+                },
+                "tap_action": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ToggleActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/CallServiceActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NavigateActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/MoreInfoActionConfig"
+                        },
+                        {
+                            "$ref": "#/definitions/NoActionConfig"
+                        }
+                    ]
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "picture-glance"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "PlantStatusCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "plant-status"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "SensorCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "detail": {
+                    "type": "number"
+                },
+                "entity": {
+                    "type": "string"
+                },
+                "graph": {
+                    "type": "string"
+                },
+                "hours_to_show": {
+                    "type": "number"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "theme": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "sensor"
+                    ],
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "SeverityConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "green": {
+                    "type": "number"
+                },
+                "red": {
+                    "type": "number"
+                },
+                "yellow": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "ShoppingListCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "shopping-list"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "StackCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "cards": {
+                    "items": {
+                        "$ref": "#/definitions/LovelaceCardConfig"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "type": {
+                    "enum": [
+                        "horizontal-stack",
+                        "vertical-stack"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "ThermostatCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "theme": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "thermostat"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        },
+        "ToggleActionConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "action": {
+                    "enum": [
+                        "toggle"
+                    ],
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "WeatherForecastCardConfig": {
+            "additionalProperties": false,
+            "properties": {
+                "entity": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "weather-forecast"
+                    ],
+                    "type": "string"
+                },
+                "view_index": {
+                    "type": "number"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "background": {
+            "type": "string"
+        },
+        "resources": {
+            "items": {
+                "additionalProperties": false,
+                "properties": {
+                    "type": {
+                        "enum": [
+                            "css",
+                            "html",
+                            "js",
+                            "module"
+                        ],
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "title": {
+            "type": "string"
+        },
+        "views": {
+            "items": {
+                "$ref": "#/definitions/LovelaceViewConfig"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object"
+}
+
