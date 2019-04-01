@@ -62,3 +62,4 @@ Reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home As
 - [ ] Autocomplete !secrets
 - [ ] Autocomplete triggers
 - [ ] Schema for ui-lovelace.yaml
+- [ ] Check local config with HA Server
