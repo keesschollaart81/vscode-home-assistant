@@ -4,9 +4,15 @@
     "target": "es6",
     "outDir": "out",
     "rootDir": "src",
-    "lib": ["es6"],
-    "sourceMap": true
+    "lib": [
+      "es6"
+    ],
+    "sourceMap": true,
+		"skipLibCheck": true /* todo: remove when WebSocket error is solved*/
   },
-  "exclude": ["node_modules", ".vscode-test"],
-  "references": [{ "path": "./src/client" }, { "path": "./src/server" }]
+  "exclude": [
+    "node_modules",
+    ".vscode-test",
+    "server"
+  ]
 }

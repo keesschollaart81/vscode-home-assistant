@@ -3,7 +3,7 @@ import { Config } from "./configuration";
 import { CompletionItem } from "vscode";
 import * as vscode from 'vscode';
 import * as ws from "ws";
-
+ 
 export class HomeAssistant {
 
     private connection: ha.Connection | undefined;

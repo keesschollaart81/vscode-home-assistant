@@ -32,7 +32,7 @@
     "home-assistant",
     "homeassistant"
   ],
-	"main": "./client/out/extension",
+  "main": "./out/src/extension",
   "contributes": {
     "commands": [
       {
@@ -85,12 +85,12 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "cd server && npm install && cd .. && tsc -p ./ && tsc -p server/",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
-    "schema": "typescript-json-schema ./tsconfig.json LovelaceConfig --noExtraProps > src/lovelace-schema/ui-lovelace.json"
+    "schema": "typescript-json-schema ./tsconfig.json LovelaceConfig --noExtraProps > src/lovelace-schema/ui-lovelace.json",
+    "vscode:prepublish": "tsc -p ./"
   },
   "devDependencies": {
     "typescript": "^3.3.1",
@@ -100,5 +100,10 @@
     "@types/node": "^10.12.21",
     "@types/mocha": "^2.2.42",
     "@types/ws": "6.0.1"
+  },
+  "dependencies": {
+    "vscode": "^1.1.30",
+    "home-assistant-js-websocket": "3.4.0",
+    "ws": "6.2.0"
   }
 }
