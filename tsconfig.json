@@ -10,6 +10,9 @@
     "sourceMap": true,
 		"skipLibCheck": true /* todo: remove when WebSocket error is solved*/
   },
+  "include": [
+    "src/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     ".vscode-test",

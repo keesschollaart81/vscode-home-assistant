@@ -32,7 +32,7 @@
     "home-assistant",
     "homeassistant"
   ],
-  "main": "./out/src/extension",
+  "main": "./out/extension",
   "contributes": {
     "commands": [
       {
@@ -85,7 +85,7 @@
     ]
   },
   "scripts": {
-    "compile": "cd server && npm install && cd .. && tsc -p ./ && tsc -p server/",
+    "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
@@ -104,6 +104,11 @@
   "dependencies": {
     "vscode": "^1.1.30",
     "home-assistant-js-websocket": "3.4.0",
-    "ws": "6.2.0"
+    "ws": "6.2.0",
+    "vscode-languageclient": "5.2.1",
+    "vscode-json-languageservice": "^3.1.6",
+    "vscode-languageserver": "^3.5.1",
+    "vscode-languageserver-protocol": "3.5.0",
+    "yaml-language-server": "0.0.18"
   }
 }

@@ -23,6 +23,20 @@
           "sourceMaps": true,
           "outFiles": [ "${workspaceRoot}/out/test/**/*.js" ],
           "preLaunchTask": "npm: watch"
-      }
+      },
+      {
+        "type": "node",
+        "request": "attach",
+        "name": "Attach to Server",
+        "port": 6003,
+        "restart": true,
+        "outFiles": ["${workspaceRoot}/server/out/**/*.js"]
+      },
+  ],
+  "compounds": [
+    {
+      "name": "Client + Server",
+      "configurations": ["Extension", "Attach to Server"]
+    }
   ]
 }
