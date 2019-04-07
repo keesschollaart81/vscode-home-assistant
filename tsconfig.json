@@ -11,7 +11,8 @@
 		"skipLibCheck": true /* todo: remove when WebSocket error is solved*/
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.json"
   ],
   "exclude": [
     "node_modules",
