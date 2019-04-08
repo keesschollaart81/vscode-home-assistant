@@ -13,10 +13,16 @@ The generated schema (lovelace-ui.json) is also (committed) in this folder and
 
 export interface LovelaceConfig {
   title?: string;
-  views: LovelaceViewConfig[];
+  views: Array<LovelaceViewConfig | IncludeDirective>;
   background?: string;
   resources?: Array<{ type: "css" | "js" | "module" | "html"; url: string }>;
 }
+
+/**
+ * @TJS-type string
+ * @TJS-pattern [.]yaml|[.]yml$
+ */
+export interface IncludeDirective {}
 
 export interface LovelaceViewConfig {
   id?: string; //Updated

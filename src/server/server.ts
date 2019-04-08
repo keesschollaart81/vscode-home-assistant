@@ -1,7 +1,5 @@
 import { createConnection, TextDocuments, ProposedFeatures, TextDocumentSyncKind, RequestType} from 'vscode-languageserver';
-import { getLanguageService, ClientSettings } from './yamlLanguageService';
-import { URI } from 'yaml-language-server/out/server/src/languageservice/utils/uri';
-import { CustomSchemaContentRequest } from 'yaml-language-server/out/server/src/server';
+import { getLanguageService } from './yamlLanguageService';
 import * as path from 'path';
 import { parse as parseYAML } from 'yaml-language-server/out/server/src/languageservice/parser/yamlParser';
 
@@ -28,47 +26,10 @@ let workspaceContext = {
     resolveRelativePath: (relativePath: string, resource: string) => {
         return path.resolve(resource, relativePath);
     }
-};
-let schemaRequestService = (uri: string): Thenable<string> => {
-    if (uri.startsWith('file://')) {
-        let fsPath = uri;
-        return new Promise<string>((c, e) => {
-            // fs.readFile(fsPath, 'UTF-8', (err, result) => {
-            //     err ? e('') : c(result.toString());
-            // });
-        });
-    } else if (uri.startsWith('vscode://')) {
-        return connection.sendRequest(new RequestType('vscode/content'), uri).then(responseText => {
-            return responseText;
-        }, error => {
-            return error.message;
-        });
-    } else {
-        let scheme = URI.parse(uri).scheme.toLowerCase();
-        if (scheme !== 'http' && scheme !== 'https') {
-            // custom scheme
-            return <Thenable<string>>connection.sendRequest(CustomSchemaContentRequest.type, uri);
-        }
-    }
-    if (uri.indexOf('//schema.management.azure.com/') !== -1) {
-        connection.telemetry.logEvent({
-            key: 'json.schema',
-            value: {
-                schemaURL: uri
-            }
-        });
-    }
-    // let headers = { 'Accept-Encoding': 'gzip, deflate' };
-    // return xhr({ url: uri, followRedirects: 5, headers }).then(response => {
-    //     return response.responseText;
-    // }, (error: XHRResponse) => {
-    //     return null;
-    // });
-};
+}; 
 
 
-export let languageService = getLanguageService(
-    schemaRequestService,
+export let languageService = getLanguageService( 
     workspaceContext,
     {
         validation: true
@@ -97,9 +58,11 @@ documents.onDidChangeContent((textDocumentChangeEvent) =>{
             diagnosticResults[diagnosticItem].severity = 1; //Convert all warnings to errors
             diagnostics.push(diagnosticResults[diagnosticItem]);
         }
-
-        // connection.sendDiagnostics({ uri: textDocumentChangeEvent.document.uri, diagnostics: removeDuplicatesObj(diagnostics) });
-    }, (error) => { });})
+        connection.sendDiagnostics({ uri: textDocumentChangeEvent.document.uri, diagnostics: diagnostics });
+    }, (error) => {
+        connection.window.showErrorMessage(`oops: ${error}`);
+     });
+    })
 
 documents.onDidOpen((event) => {
 	connection.console.log(`[Server(${process.pid}) ${workspaceFolder}] Document opened: ${event.document.uri}`);
