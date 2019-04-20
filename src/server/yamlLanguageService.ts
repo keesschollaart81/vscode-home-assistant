@@ -26,7 +26,13 @@ export function getLanguageService(workspaceContext, promiseConstructor?): Langu
     });
    
     let yamlvalidation = new YAMLValidation(jsonSchemaService, promise);
-    yamlvalidation.configure({ validate: true });
+    yamlvalidation.configure({ 
+        validate: true ,
+        customTags: [
+            "!include scalar",
+            "!include_dir_list scalar"
+        ]
+    });
 
     return { 
         doValidation: yamlvalidation.doValidation.bind(yamlvalidation)  

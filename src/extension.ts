@@ -56,6 +56,9 @@ export function activate(context: vscode.ExtensionContext) {
    };
 
    var client = new LanguageClient('home-assistant', 'Home Assistant Language Server', serverOptions, clientOptions);
+   client.onReady().then(() =>{
+	client.onRequest('ha/openTextDocument', vscode.workspace.openTextDocument);
+   })
    context.subscriptions.push(client.start());
 }
 
