@@ -1,4 +1,7 @@
 import * as YAML from "yaml";
+// @ts-ignore
+import * as p from "yaml/dist/schema/parseMap";
+
 import { Tag } from "yaml";
 import URI from "vscode-uri";
 import * as path from "path";
@@ -18,6 +21,7 @@ export interface NestedYamlParseResult {
 
 export interface FileAccessor {
   getFileContents(fileName: string): Promise<string>;
+  getFilesInFolder(subFolder: string): Promise<string[]>;
   getUnifiedUri(input: string): string;
 }
 
@@ -37,10 +41,28 @@ export class VsCodeFileAccessor implements FileAccessor {
   }
 
   public getUnifiedUri(input: string): string {
-    if (!input.startsWith("file:/")) {
+    if (
+      !input.startsWith("file:/") &&
+      !input.startsWith(URI.parse(this.workspaceFolder).fsPath)
+    ) {
       input = path.join(this.workspaceFolder, input);
     }
     return URI.parse(input).fsPath;
+  }
+
+  async getFilesInFolder(subFolder: string): Promise<string[]> {
+    var folderName = this.getUnifiedUri(subFolder);
+    var folders = this.walkSync(folderName);
+    return folders;
+  }
+
+  private walkSync(dir, filelist = []) {
+    fs.readdirSync(dir).forEach(file => {
+      filelist = fs.statSync(path.join(dir, file)).isDirectory()
+        ? this.walkSync(path.join(dir, file), filelist)
+        : filelist.concat(path.join(dir, file));
+    });
+    return filelist;
   }
 }
 
@@ -62,7 +84,9 @@ export class NestedYamlParser {
     currentPath: string = ""
   ): Promise<ParseResult> {
     for (var index in fileNames) {
-      var fileContents = await this.fileAccessor.getFileContents(fileNames[index]);
+      var fileContents = await this.fileAccessor.getFileContents(
+        fileNames[index]
+      );
 
       var yaml = YAML.parse(fileContents, {
         tags: this.getCustomTags(fileNames[index])
@@ -71,31 +95,53 @@ export class NestedYamlParser {
     }
 
     // parse all referenced files (this causes recursion)
-    this.parse(Object.keys(this.includes), currentPath);
+    // this.parse(Object.keys(this.includes), currentPath);
 
-    var result =  <ParseResult>{
+    await this.replaceFolderBasedIncludes();
+
+    var result = <ParseResult>{
       filePathMappings: this.getPathMappings()
-    }; 
+    };
 
     return result;
   }
 
-  private getPathMappings = () :FilePathMapping =>{
-    var result : FilePathMapping = {};
+  private getPathMappings = (): FilePathMapping => {
+    var result: FilePathMapping = {};
 
-    for(var toFile in this.includes){
-      for(var fromFile in this.includes[toFile].referencedFrom){
-        var mapping = this.includes[toFile].referencedFrom[fromFile];
-        var entry = result[toFile];
-        if (!entry){
-          result[toFile] = mapping.path;
-        }else{
+    for (var toFileOrFolder in this.includes) {
+      for (var fromFile in this.includes[toFileOrFolder].referencedFrom) {
+        var mapping = this.includes[toFileOrFolder].referencedFrom[fromFile];
+        if (!result[toFileOrFolder]) {
+          result[toFileOrFolder] = mapping.path;
+        } else {
           // assuming it's the same path
           // todo: if multiple files point to this same file, and the path is different, throw an exception
         }
       }
     }
     return result;
+  };
+
+  private async replaceFolderBasedIncludes() {
+    for (var toFileOrFolder in this.includes) {
+      for (var fromFile in this.includes[toFileOrFolder].referencedFrom) {
+        var mapping = this.includes[toFileOrFolder].referencedFrom[fromFile];
+        //@ts-ignore
+        if(mapping.tag.suffix === "include"){
+          continue;
+        }
+
+        var files = await this.fileAccessor.getFilesInFolder(
+          toFileOrFolder
+        );
+        files.map(x => {
+          this.includes[x] = new YamlIncludeReference();
+          this.includes[x].referencedFrom[fromFile] = { ...mapping };
+        });
+        delete this.includes[toFileOrFolder];
+      }
+    }
   }
 
   private async updatePathsViaTraversal(obj, currentPath): Promise<void> {
@@ -109,7 +155,7 @@ export class NestedYamlParser {
       if (obj.isInclude) {
         // parsed reference
         var theDetails = <ReferencedFromEntry>(
-          this.includes[obj.toFile].referencedFrom[obj.fromFile]
+          this.includes[obj.toFileOrFolder].referencedFrom[obj.fromFile]
         );
 
         theDetails.path = `${currentPath}`;
@@ -128,6 +174,22 @@ export class NestedYamlParser {
       {
         tag: "!include",
         resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
+      },
+      {
+        tag: "!include_dir_list",
+        resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
+      },
+      {
+        tag: "!include_dir_named",
+        resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
+      },
+      {
+        tag: "!include_dir_merge_list",
+        resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
+      },
+      {
+        tag: "!include_dir_merge_named",
+        resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
       }
     ];
   }
@@ -138,9 +200,9 @@ export class NestedYamlParser {
     cstNode: YAML.cst.Node
   ): YAML.ast.Node => {
     var fromFile = this.fileAccessor.getUnifiedUri(filename);
-    var toFile = this.fileAccessor.getUnifiedUri(cstNode.rawValue);
+    var toFileOrFolder = this.fileAccessor.getUnifiedUri(cstNode.rawValue);
 
-    var reference = this.includes[toFile];
+    var reference = this.includes[toFileOrFolder];
     if (!reference) {
       reference = new YamlIncludeReference();
     }
@@ -153,15 +215,16 @@ export class NestedYamlParser {
     referencedFrom.end = cstNode.range.end;
 
     reference.referencedFrom[fromFile] = referencedFrom;
-    this.includes[toFile] = reference;
+    this.includes[toFileOrFolder] = reference;
 
     return YAML.createNode({
       isInclude: true,
       fromFile: fromFile,
-      toFile: toFile
+      toFileOrFolder: toFileOrFolder
     });
   };
 }
+
 namespace OpenTextDocumentRequest {
   export const type: RequestType<{}, {}, {}, {}> = new RequestType(
     "ha/openTextDocument"
