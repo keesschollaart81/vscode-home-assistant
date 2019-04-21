@@ -1,22 +1,15 @@
-import * as YAML from "yaml";
-// @ts-ignore
-import * as p from "yaml/dist/schema/parseMap";
-
+import * as YAML from "yaml"; 
 import { Tag } from "yaml";
 import URI from "vscode-uri";
 import * as path from "path";
 import * as fs from "fs";
-import {
-  IConnection,
-  RequestType,
-  VersionedTextDocumentIdentifier
-} from "vscode-languageserver";
+import { IConnection } from "vscode-languageserver";
 
 export interface NestedYamlParseResult {
   filename: string;
   path: string;
   contents: string;
-  referencedFiles: NestedYamlParseResult[];
+  includedFiles: NestedYamlParseResult[];
 }
 
 export interface FileAccessor {
@@ -71,11 +64,16 @@ export interface ParseResult {
 }
 
 export interface FilePathMapping {
-  [filename: string]: string;
+  [filename: string]: FilePathMappingEntry;
+}
+
+export interface FilePathMappingEntry {
+  path: string;
+  includeType: Includetype;
 }
 
 export class NestedYamlParser {
-  private includes: YamlIncludeReferences = new YamlIncludeReferences();
+  private includes: YamlIncludes | null;
 
   constructor(private fileAccessor: FileAccessor) {}
 
@@ -83,6 +81,8 @@ export class NestedYamlParser {
     fileNames: string[],
     currentPath: string = ""
   ): Promise<ParseResult> {
+    this.includes = new YamlIncludes();
+
     for (var index in fileNames) {
       var fileContents = await this.fileAccessor.getFileContents(
         fileNames[index]
@@ -94,7 +94,7 @@ export class NestedYamlParser {
       await this.updatePathsViaTraversal(yaml, currentPath);
     }
 
-    // parse all referenced files (this causes recursion)
+    // parse all included files (this causes recursion)
     // this.parse(Object.keys(this.includes), currentPath);
 
     await this.replaceFolderBasedIncludes();
@@ -110,10 +110,13 @@ export class NestedYamlParser {
     var result: FilePathMapping = {};
 
     for (var toFileOrFolder in this.includes) {
-      for (var fromFile in this.includes[toFileOrFolder].referencedFrom) {
-        var mapping = this.includes[toFileOrFolder].referencedFrom[fromFile];
+      for (var fromFile in this.includes[toFileOrFolder].includedFrom) {
+        var mapping = this.includes[toFileOrFolder].includedFrom[fromFile];
         if (!result[toFileOrFolder]) {
-          result[toFileOrFolder] = mapping.path;
+          result[toFileOrFolder] = {
+            path: mapping.path,
+            includeType: mapping.includeType
+          };
         } else {
           // assuming it's the same path
           // todo: if multiple files point to this same file, and the path is different, throw an exception
@@ -125,19 +128,16 @@ export class NestedYamlParser {
 
   private async replaceFolderBasedIncludes() {
     for (var toFileOrFolder in this.includes) {
-      for (var fromFile in this.includes[toFileOrFolder].referencedFrom) {
-        var mapping = this.includes[toFileOrFolder].referencedFrom[fromFile];
-        //@ts-ignore
-        if(mapping.tag.suffix === "include"){
+      for (var fromFile in this.includes[toFileOrFolder].includedFrom) {
+        var mapping = this.includes[toFileOrFolder].includedFrom[fromFile];
+        if (mapping.includeType === Includetype.include) {
           continue;
         }
 
-        var files = await this.fileAccessor.getFilesInFolder(
-          toFileOrFolder
-        );
+        var files = await this.fileAccessor.getFilesInFolder(toFileOrFolder);
         files.map(x => {
-          this.includes[x] = new YamlIncludeReference();
-          this.includes[x].referencedFrom[fromFile] = { ...mapping };
+          this.includes[x] = new YamlInclude();
+          this.includes[x].includedFrom[fromFile] = { ...mapping };
         });
         delete this.includes[toFileOrFolder];
       }
@@ -153,9 +153,9 @@ export class NestedYamlParser {
     } else if (typeof obj === "object" && obj !== null) {
       // objects
       if (obj.isInclude) {
-        // parsed reference
-        var theDetails = <ReferencedFromEntry>(
-          this.includes[obj.toFileOrFolder].referencedFrom[obj.fromFile]
+        // parsed include
+        var theDetails = <IncludedFromEntry>(
+          this.includes[obj.toFileOrFolder].includedFrom[obj.fromFile]
         );
 
         theDetails.path = `${currentPath}`;
@@ -172,23 +172,23 @@ export class NestedYamlParser {
   private getCustomTags(filename: string): Tag[] {
     return <Tag[]>[
       {
-        tag: "!include",
+        tag: `!${Includetype[Includetype.include]}`,
         resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
       },
       {
-        tag: "!include_dir_list",
+        tag: `!${Includetype[Includetype.include_dir_list]}`,
         resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
       },
       {
-        tag: "!include_dir_named",
+        tag: `!${Includetype[Includetype.include_dir_named]}`,
         resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
       },
       {
-        tag: "!include_dir_merge_list",
+        tag: `!${Includetype[Includetype.include_dir_merge_list]}`,
         resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
       },
       {
-        tag: "!include_dir_merge_named",
+        tag: `!${Includetype[Includetype.include_dir_merge_named]}`,
         resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
       }
     ];
@@ -202,20 +202,41 @@ export class NestedYamlParser {
     var fromFile = this.fileAccessor.getUnifiedUri(filename);
     var toFileOrFolder = this.fileAccessor.getUnifiedUri(cstNode.rawValue);
 
-    var reference = this.includes[toFileOrFolder];
-    if (!reference) {
-      reference = new YamlIncludeReference();
+    var include = this.includes[toFileOrFolder];
+    if (!include) {
+      include = new YamlInclude();
     }
-    var referencedFrom = reference.referencedFrom[fromFile];
-    if (!referencedFrom) {
-      referencedFrom = new ReferencedFromEntry();
+    var includedFrom = include.includedFrom[fromFile];
+    if (!includedFrom) {
+      includedFrom = new IncludedFromEntry();
     }
-    referencedFrom.tag = cstNode.tag;
-    referencedFrom.start = cstNode.range.start;
-    referencedFrom.end = cstNode.range.end;
+    var includeType: Includetype;
+    // @ts-ignore
+    switch (cstNode.tag.suffix) {
+      case "include":
+        includeType = Includetype.include;
+        break;
+      case "include_dir_list":
+        includeType = Includetype.include_dir_list;
+        break;
+      case "include_dir_merge_list":
+        includeType = Includetype.include_dir_merge_list;
+        break;
+      case "include_dir_merge_named":
+        includeType = Includetype.include_dir_merge_named;
+        break;
+      case "include_dir_named":
+        includeType = Includetype.include_dir_named;
+        break;
+      default:
+        throw new Error("Unknown include tag");
+    }
+    includedFrom.includeType = includeType;
+    includedFrom.start = cstNode.range.start;
+    includedFrom.end = cstNode.range.end;
 
-    reference.referencedFrom[fromFile] = referencedFrom;
-    this.includes[toFileOrFolder] = reference;
+    include.includedFrom[fromFile] = includedFrom;
+    this.includes[toFileOrFolder] = include;
 
     return YAML.createNode({
       isInclude: true,
@@ -225,26 +246,61 @@ export class NestedYamlParser {
   };
 }
 
-namespace OpenTextDocumentRequest {
-  export const type: RequestType<{}, {}, {}, {}> = new RequestType(
-    "ha/openTextDocument"
-  );
+export class YamlIncludes {
+  [filename: string]: YamlInclude;
 }
 
-export class YamlIncludeReferences {
-  [filename: string]: YamlIncludeReference;
+export class YamlInclude {
+  includedFrom: IncludedFrom = new IncludedFrom();
 }
 
-export class YamlIncludeReference {
-  referencedFrom: ReferencedFrom = new ReferencedFrom();
+export class IncludedFrom {
+  [filename: string]: IncludedFromEntry;
 }
-
-export class ReferencedFrom {
-  [filename: string]: ReferencedFromEntry;
-}
-export class ReferencedFromEntry {
+export class IncludedFromEntry {
   path: string | null;
-  tag: null | { verbatim: string } | { handle: string; suffix: string };
+  includeType: Includetype;
   start: number;
   end: number;
+}
+
+export class SchemaServiceForIncludes {
+  private schemaContributions: any;
+
+  constructor(private jsonSchemaService: any) {}
+
+  public onUpdate(fileMappings: FilePathMapping) {
+    if (!this.schemaContributions) {
+      this.schemaContributions = this.getSchemaContributions();
+    }
+    this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
+  }
+
+  private getSchemaContributions() {
+    var jsonPath = path.join(
+      __dirname,
+      "..",
+      "lovelace-schema",
+      "ui-lovelace.json"
+    );
+    var sc = fs.readFileSync(jsonPath, "utf-8");
+    var schema = JSON.parse(sc);
+
+    return {
+      schemas: {
+        "http://schema.ha.com/lovelace": schema
+      },
+      schemaAssociations: {
+        "**/ui-lovelace.yaml": ["http://schema.ha.com/lovelace"]
+      }
+    };
+  }
+}
+
+export enum Includetype {
+  include,
+  include_dir_list,
+  include_dir_named,
+  include_dir_merge_list,
+  include_dir_merge_named
 }

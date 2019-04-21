@@ -4,9 +4,6 @@
   "description": " Completion for entity-id's in Home Assistant Configurations",
   "version": "0.3.7",
   "preview": true,
-  "extensionDependencies": [
-    "redhat.vscode-yaml"
-  ],
   "engines": {
     "vscode": "^1.32.0"
   },
@@ -77,10 +74,26 @@
         "path": "./snippets/homeassistant_sensor.json"
       }
     ],
-    "yamlValidation": [
+    "languages": [
       {
-        "fileMatch": "ui-lovelace.yaml",
-        "url": "./src/lovelace-schema/ui-lovelace.json"
+        "id": "home-assistant",
+        "configuration": "./yaml-language/language-configuration.json",
+        "filenamePatterns": [
+          "ui-lovelace.yml",
+          "ui-lovelace.yaml",
+          "configuration.yml",
+          "configuration.yaml"
+        ],
+        "aliases": [
+          "Home Assistant"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "yaml",
+        "scopeName": "source.yaml",
+        "path": "./yaml-language/yaml.tmLanguage.json"
       }
     ]
   },

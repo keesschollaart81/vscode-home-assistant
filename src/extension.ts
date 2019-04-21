@@ -7,8 +7,8 @@ import { Config }  from './configuration';
 import { ServiceCompletionProvider } from './service-completion-provider';
 
 const documentSelector = [
-    { language: 'yaml', scheme: 'file' },
-    { language: 'yaml', scheme: 'untitled' }
+    { language: 'home-assistant', scheme: 'file' },
+    { language: 'home-assistant', scheme: 'untitled' }
 ];
 
 export function activate(context: vscode.ExtensionContext) {
@@ -56,9 +56,10 @@ export function activate(context: vscode.ExtensionContext) {
    };
 
    var client = new LanguageClient('home-assistant', 'Home Assistant Language Server', serverOptions, clientOptions);
-   client.onReady().then(() =>{
-	client.onRequest('ha/openTextDocument', vscode.workspace.openTextDocument);
-   })
+   
+   // is this really needed?
+   vscode.languages.setLanguageConfiguration('home-assistant', { wordPattern: /("(?:[^\\\"]*(?:\\.)?)*"?)|[^\s{}\[\],:]+/ });
+ 
    context.subscriptions.push(client.start());
 }
 
