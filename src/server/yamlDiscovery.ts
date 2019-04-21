@@ -1,4 +1,4 @@
-import * as YAML from "yaml"; 
+import * as YAML from "yaml";
 import { Tag } from "yaml";
 import URI from "vscode-uri";
 import * as path from "path";
@@ -22,7 +22,7 @@ export class VsCodeFileAccessor implements FileAccessor {
   constructor(
     private workspaceFolder: string,
     private connection: IConnection
-  ) {}
+  ) { }
 
   async getFileContents(uri: string): Promise<string> {
     uri = this.getUnifiedUri(uri);
@@ -75,7 +75,7 @@ export interface FilePathMappingEntry {
 export class NestedYamlParser {
   private includes: YamlIncludes | null;
 
-  constructor(private fileAccessor: FileAccessor) {}
+  constructor(private fileAccessor: FileAccessor) { }
 
   public async parse(
     fileNames: string[],
@@ -267,7 +267,7 @@ export class IncludedFromEntry {
 export class SchemaServiceForIncludes {
   private schemaContributions: any;
 
-  constructor(private jsonSchemaService: any) {}
+  constructor(private jsonSchemaService: any) { }
 
   public onUpdate(fileMappings: FilePathMapping) {
     if (!this.schemaContributions) {
@@ -277,21 +277,22 @@ export class SchemaServiceForIncludes {
   }
 
   private getSchemaContributions() {
-    var jsonPath = path.join(
-      __dirname,
-      "..",
-      "lovelace-schema",
-      "ui-lovelace.json"
-    );
-    var sc = fs.readFileSync(jsonPath, "utf-8");
-    var schema = JSON.parse(sc);
+    var loveLaceJsonPath = path.join(__dirname, "..", "schemas", "ui-lovelace.json");
+    var lovelaceFile = fs.readFileSync(loveLaceJsonPath, "utf-8");
+    var lovelaceSchema = JSON.parse(lovelaceFile);
+   
+    var automationJsonPath = path.join(__dirname, "..", "schemas", "automation.json");
+    var automationFile = fs.readFileSync(automationJsonPath, "utf-8");
+    var automationSchema = JSON.parse(automationFile);
 
     return {
       schemas: {
-        "http://schema.ha.com/lovelace": schema
+        "http://schema.ha.com/lovelace": lovelaceSchema,
+        "http://schema.ha.com/automation": automationSchema
       },
       schemaAssociations: {
-        "**/ui-lovelace.yaml": ["http://schema.ha.com/lovelace"]
+        "**/ui-lovelace.yaml": ["http://schema.ha.com/lovelace"],
+        "**/automations/backyard.yaml": ["http://schema.ha.com/automation"]
       }
     };
   }
