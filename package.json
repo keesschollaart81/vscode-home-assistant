@@ -91,7 +91,7 @@
     ],
     "grammars": [
       {
-        "language": "yaml",
+        "language": "home-assistant",
         "scopeName": "source.yaml",
         "path": "./yaml-language/yaml.tmLanguage.json"
       }
