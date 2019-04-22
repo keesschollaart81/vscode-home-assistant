@@ -91,7 +91,7 @@ export class NestedYamlParser {
       var yaml = YAML.parse(fileContents, {
         tags: this.getCustomTags(fileNames[index])
       });
-      await this.updatePathsViaTraversal(yaml, currentPath);
+      await this.updatePathsViaTraversal(yaml, fileNames[index], currentPath);
     }
 
     // parse all included files (this causes recursion)
@@ -144,11 +144,11 @@ export class NestedYamlParser {
     }
   }
 
-  private async updatePathsViaTraversal(obj, currentPath): Promise<void> {
+  private async updatePathsViaTraversal(obj, filename, currentPath): Promise<void> {
     if (Object.prototype.toString.call(obj) === "[object Array]") {
       // Ignore the key/indexer of arrays
       for (var i = 0; i < obj.length; i++) {
-        this.updatePathsViaTraversal(obj[i], `${currentPath}`);
+        this.updatePathsViaTraversal(obj[i], filename, `${filename}/${currentPath}`);
       }
     } else if (typeof obj === "object" && obj !== null) {
       // objects
@@ -162,7 +162,7 @@ export class NestedYamlParser {
       } else {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
-            this.updatePathsViaTraversal(obj[key], `${currentPath}/${key}`);
+            this.updatePathsViaTraversal(obj[key], filename, `${filename}/${currentPath}/${key}`);
           }
         }
       }
@@ -271,30 +271,87 @@ export class SchemaServiceForIncludes {
 
   public onUpdate(fileMappings: FilePathMapping) {
     if (!this.schemaContributions) {
-      this.schemaContributions = this.getSchemaContributions();
+      this.schemaContributions = this.getSchemaContributions(fileMappings);
     }
     this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
   }
 
-  private getSchemaContributions() {
-    var loveLaceJsonPath = path.join(__dirname, "..", "schemas", "ui-lovelace.json");
-    var lovelaceFile = fs.readFileSync(loveLaceJsonPath, "utf-8");
-    var lovelaceSchema = JSON.parse(lovelaceFile);
-   
-    var automationJsonPath = path.join(__dirname, "..", "schemas", "automation.json");
-    var automationFile = fs.readFileSync(automationJsonPath, "utf-8");
-    var automationSchema = JSON.parse(automationFile);
-
-    return {
-      schemas: {
-        "http://schema.ha.com/lovelace": lovelaceSchema,
-        "http://schema.ha.com/automation": automationSchema
+  private getPathToSchemaFileMappings(): PathToSchemaMapping[] {
+    return [
+      {
+        key: "automations-named",
+        path: "configuration.yaml/automation",
+        isList: false,
+        file: "automations-named.json"
       },
-      schemaAssociations: {
-        "**/ui-lovelace.yaml": ["http://schema.ha.com/lovelace"],
-        "**/automations/backyard.yaml": ["http://schema.ha.com/automation"]
+      {
+        key: "automations-list",
+        path: "configuration.yaml/automation",
+        isList: true,
+        file: "automations-list.json"
+      },
+      {
+        key: "ui-lovelace",
+        path: "ui-lovelace.yaml",
+        isList: false,
+        file: "ui-lovelace.json"
       }
+    ];
+  }
+
+  private getSchemaContributions(fileMappings: FilePathMapping) {
+    var schemas = {};
+    var schemaAssociations = {};
+    var pathToSchemaFileMappings = this.getPathToSchemaFileMappings();
+
+    pathToSchemaFileMappings.forEach(pathToSchemaMapping => {
+      var jsonPath = path.join(__dirname, "..", "schemas", pathToSchemaMapping.file);
+      var filecontents = fs.readFileSync(jsonPath, "utf-8");
+      var schema = JSON.parse(filecontents); 
+
+      schemas[`http://schemas.home-assistant.io/${pathToSchemaMapping.key}`] = schema;
+    });
+
+    for (var sourceFile in fileMappings) {
+      var sourceFileMapping = fileMappings[sourceFile];
+      var relatedPathToSchemaMapping = pathToSchemaFileMappings.find(x => {
+        var samePath = x.path === sourceFileMapping.path;
+        if (!samePath) {
+          return false;
+        }
+        switch (sourceFileMapping.includeType) {
+          case Includetype.include:
+          case Includetype.include_dir_merge_named:
+          case Includetype.include_dir_named:
+            return !x.isList;
+          case Includetype.include_dir_list:
+          case Includetype.include_dir_merge_list:
+            return x.isList;
+        }
+      });
+
+      schemaAssociations[`**/${sourceFile}`] = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
+    }
+
+    return { 
+      schemas: schemas,
+      schemaAssociations: schemaAssociations
     };
+
+    // var automationJsonPath = path.join(__dirname, "..", "schemas", "automation.json");
+    // var automationFile = fs.readFileSync(automationJsonPath, "utf-8");
+    // var automationSchema = JSON.parse(automationFile);
+
+    // return {
+    //   schemas: {
+    //     "http://schema.ha.com/lovelace": lovelaceSchema,
+    //     "http://schema.ha.com/automation": automationSchema
+    //   },
+    //   schemaAssociations: {
+    //     "**/ui-lovelace.yaml": ["http://schema.ha.com/lovelace"],
+    //     "**/automations/backyard.yaml": ["http://schema.ha.com/automation"]
+    //   }
+    // };
   }
 }
 
@@ -304,4 +361,10 @@ export enum Includetype {
   include_dir_named,
   include_dir_merge_list,
   include_dir_merge_named
+}
+export interface PathToSchemaMapping {
+  key: string;
+  path: string;
+  isList: boolean;
+  file: string;
 }

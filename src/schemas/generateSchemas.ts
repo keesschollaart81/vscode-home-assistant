@@ -17,5 +17,9 @@ let schema = TJS.generateSchema(program, "LovelaceConfig", settings);
 fs.writeFileSync("src/schemas/ui-lovelace.json", JSON.stringify(schema));
 
 program = TJS.getProgramFromFiles([resolve("src/schemas/automation.ts")], compilerOptions); 
+schema = TJS.generateSchema(program, "Automation", settings);
+fs.writeFileSync("src/schemas/automations-named.json", JSON.stringify(schema));
+
+program = TJS.getProgramFromFiles([resolve("src/schemas/automation.ts")], compilerOptions); 
 schema = TJS.generateSchema(program, "Automations", settings);
-fs.writeFileSync("src/schemas/automation.json", JSON.stringify(schema));
+fs.writeFileSync("src/schemas/automations-list.json", JSON.stringify(schema));
