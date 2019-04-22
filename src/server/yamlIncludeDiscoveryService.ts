@@ -1,86 +1,19 @@
 import * as YAML from "yaml";
-import { Tag } from "yaml";
-import URI from "vscode-uri";
-import * as path from "path";
-import * as fs from "fs";
-import { IConnection } from "vscode-languageserver";
+import { Tag } from "yaml"; 
+import { FileAccessor } from "./fileAccessor";
 
-export interface NestedYamlParseResult {
-  filename: string;
-  path: string;
-  contents: string;
-  includedFiles: NestedYamlParseResult[];
-}
-
-export interface FileAccessor {
-  getFileContents(fileName: string): Promise<string>;
-  getFilesInFolder(subFolder: string): Promise<string[]>;
-  getUnifiedUri(input: string): string;
-}
-
-export class VsCodeFileAccessor implements FileAccessor {
-  constructor(
-    private workspaceFolder: string,
-    private connection: IConnection
-  ) { }
-
-  async getFileContents(uri: string): Promise<string> {
-    uri = this.getUnifiedUri(uri);
-    return new Promise<string>((c, e) => {
-      fs.readFile(uri, "UTF-8", (err, result) => {
-        err ? e("") : c(result);
-      });
-    });
-  }
-
-  public getUnifiedUri(input: string): string {
-    // if (
-    //   !input.startsWith("file:/") &&
-    //   !input.startsWith(URI.parse(this.workspaceFolder).fsPath)
-    // ) {
-    //   input = path.join(this.workspaceFolder, input);
-    // }
-    return URI.parse(input).fsPath;
-  }
-
-  async getFilesInFolder(subFolder: string): Promise<string[]> {
-    var folderName = this.getUnifiedUri(subFolder);
-    var folders = this.walkSync(folderName);
-    return folders;
-  }
-
-  private walkSync(dir, filelist = []) {
-    fs.readdirSync(dir).forEach(file => {
-      filelist = fs.statSync(path.join(dir, file)).isDirectory()
-        ? this.walkSync(path.join(dir, file), filelist)
-        : filelist.concat(path.join(dir, file));
-    });
-    return filelist;
-  }
-}
-
-export interface ParseResult {
-  filePathMappings: FilePathMapping;
-}
-
-export interface FilePathMapping {
-  [filename: string]: FilePathMappingEntry;
-}
-
-export interface FilePathMappingEntry {
-  path: string;
-  includeType: Includetype;
-}
-
-export class NestedYamlParser {
+export class YamlIncludeDiscoveryService {
   private includes: YamlIncludes | null;
 
   constructor(private fileAccessor: FileAccessor) { }
 
-  public async parse(
-    fileNames: string[],
-    currentPath: string = ""
-  ): Promise<ParseResult> {
+  /**
+   * Read the files given in the fileNames parameter
+   * Discover all the !include (and similar) tags 
+   * Return a list of mappings, from location (path) in file x to file y via tag-type z
+   * @param fileNames the files to find !includes in
+   */
+  public async discover(fileNames: string[]): Promise<DiscoveryResult> {
     this.includes = new YamlIncludes();
 
     for (var index in fileNames) {
@@ -91,21 +24,22 @@ export class NestedYamlParser {
       var yaml = YAML.parse(fileContents, {
         tags: this.getCustomTags(fileNames[index])
       });
-      await this.updatePathsViaTraversal(yaml, fileNames[index], currentPath);
+      await this.updatePathsViaTraversal(yaml, fileNames[index], "");
     }
-
-    // parse all included files (this causes recursion)
-    // this.parse(Object.keys(this.includes), currentPath);
 
     await this.replaceFolderBasedIncludes();
 
-    var result = <ParseResult>{
+    var result = <DiscoveryResult>{
       filePathMappings: this.getPathMappings(fileNames)
     };
 
     return result;
   }
 
+  /**
+   * Flatten (and distinct) the includes to a 2 dimensional array
+   * that can be used by external services
+   * */ 
   private getPathMappings = (rootFiles: string[]): FilePathMapping => {
     var result: FilePathMapping = {};
     for (var rootFileIndex in rootFiles) {
@@ -130,8 +64,11 @@ export class NestedYamlParser {
       }
     }
     return result;
-  };
+  }
 
+  /** 
+   * Replace directory-based includes with includes for all the files in the directory
+  */
   private async replaceFolderBasedIncludes() {
     for (var toFileOrFolder in this.includes) {
       for (var fromFile in this.includes[toFileOrFolder].includedFrom) {
@@ -150,6 +87,12 @@ export class NestedYamlParser {
     }
   }
 
+  /** 
+   * Traverse over YAML document and find the includes
+   * The includes are a special type of object set via this.includeResolver()
+   * In this includeResolver it's unknown where this include is (no context)
+   * This method sets the 'path' property on this object 
+   */
   private async updatePathsViaTraversal(obj, filename, currentPath): Promise<void> {
     if (Object.prototype.toString.call(obj) === "[object Array]") {
       // Ignore the key/indexer of arrays
@@ -200,13 +143,16 @@ export class NestedYamlParser {
     ];
   }
 
-  private includeResolver = (
-    filename: string,
-    doc: YAML.ast.Document,
-    cstNode: YAML.cst.Node
-  ): YAML.ast.Node => {
-    var fromFile = this.fileAccessor.getUnifiedUri(filename);
-    var toFileOrFolder = this.fileAccessor.getUnifiedUri(cstNode.rawValue);
+  /**
+   * Custom Resolver for the tags set in `this.getCustomTags()`
+   * This gets called as part of the `YAML.parse()` operatin
+   * both the `!include` and the `filename.yaml` part are replaced in the final YAML result
+   * they are replaced by an object containing both the from- and to filenames
+   * also all includes are stored in `this.includes` for later use
+   */
+  private includeResolver = (filename: string, doc: YAML.ast.Document, cstNode: YAML.cst.Node): YAML.ast.Node => {
+    var fromFile = filename;
+    var toFileOrFolder = cstNode.rawValue;
 
     var include = this.includes[toFileOrFolder];
     if (!include) {
@@ -219,19 +165,19 @@ export class NestedYamlParser {
     var includeType: Includetype;
     // @ts-ignore
     switch (cstNode.tag.suffix) {
-      case "include":
+      case `${Includetype[Includetype.include]}`:
         includeType = Includetype.include;
         break;
-      case "include_dir_list":
+      case `${Includetype[Includetype.include_dir_list]}`:
         includeType = Includetype.include_dir_list;
         break;
-      case "include_dir_merge_list":
+      case `${Includetype[Includetype.include_dir_merge_list]}`:
         includeType = Includetype.include_dir_merge_list;
         break;
-      case "include_dir_merge_named":
+      case `${Includetype[Includetype.include_dir_merge_named]}`:
         includeType = Includetype.include_dir_merge_named;
         break;
-      case "include_dir_named":
+      case `${Includetype[Includetype.include_dir_named]}`:
         includeType = Includetype.include_dir_named;
         break;
       default:
@@ -249,7 +195,20 @@ export class NestedYamlParser {
       fromFile: fromFile,
       toFileOrFolder: toFileOrFolder
     });
-  };
+  }
+}
+ 
+export interface DiscoveryResult {
+  filePathMappings: FilePathMapping;
+}
+
+export interface FilePathMapping {
+  [filename: string]: FilePathMappingEntry;
+}
+
+export interface FilePathMappingEntry {
+  path: string;
+  includeType: Includetype;
 }
 
 export class YamlIncludes {
@@ -263,89 +222,12 @@ export class YamlInclude {
 export class IncludedFrom {
   [filename: string]: IncludedFromEntry;
 }
+
 export class IncludedFromEntry {
   path: string | null;
   includeType?: Includetype;
   start: number;
   end: number;
-}
-
-export class SchemaServiceForIncludes {
-  private schemaContributions: any;
-
-  constructor(private jsonSchemaService: any) { }
-
-  public onUpdate(fileMappings: FilePathMapping) {
-    // if (!this.schemaContributions) {
-    this.schemaContributions = this.getSchemaContributions(fileMappings);
-    // }
-    this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
-  }
-
-  private getPathToSchemaFileMappings(): PathToSchemaMapping[] {
-    return [
-      {
-        key: "automations-named",
-        path: "configuration.yaml/automation",
-        isList: false,
-        file: "automations-named.json"
-      },
-      {
-        key: "automations-list",
-        path: "configuration.yaml/automation",
-        isList: true,
-        file: "automations-list.json"
-      },
-      {
-        key: "ui-lovelace",
-        path: "ui-lovelace.yaml",
-        isList: false,
-        file: "ui-lovelace.json"
-      }
-    ];
-  }
-
-  private getSchemaContributions(fileMappings: FilePathMapping) {
-    var schemas = {};
-    var schemaAssociations = {};
-    var pathToSchemaFileMappings = this.getPathToSchemaFileMappings();
-
-    pathToSchemaFileMappings.forEach(pathToSchemaMapping => {
-      var jsonPath = path.join(__dirname, "..", "schemas", pathToSchemaMapping.file);
-      var filecontents = fs.readFileSync(jsonPath, "utf-8");
-      var schema = JSON.parse(filecontents);
-
-      schemas[`http://schemas.home-assistant.io/${pathToSchemaMapping.key}`] = schema;
-    });
-
-    for (var sourceFile in fileMappings) {
-      var sourceFileMapping = fileMappings[sourceFile];
-      var relatedPathToSchemaMapping = pathToSchemaFileMappings.find(x => {
-        var samePath = x.path === sourceFileMapping.path;
-        if (!samePath) {
-          return false;
-        }
-        switch (sourceFileMapping.includeType) {
-          case null:
-          case Includetype.include:
-          case Includetype.include_dir_merge_named:
-          case Includetype.include_dir_named:
-            return !x.isList;
-          case Includetype.include_dir_list:
-          case Includetype.include_dir_merge_list:
-            return x.isList;
-        }
-      });
-      if (relatedPathToSchemaMapping) {
-        schemaAssociations[`**/${sourceFile}`] = [`http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`];
-      }
-    }
-
-    return {
-      schemas: schemas,
-      schemaAssociations: schemaAssociations
-    };
-  }
 }
 
 export enum Includetype {
@@ -354,10 +236,4 @@ export enum Includetype {
   include_dir_named,
   include_dir_merge_list,
   include_dir_merge_named
-}
-export interface PathToSchemaMapping {
-  key: string;
-  path: string;
-  isList: boolean;
-  file: string;
 }
