@@ -42,9 +42,8 @@ export class HomeAssistantLanguageService {
             return;
         }
 
-        var parseResult = await this.nestedYamlParser.parse([
-            path.join(this.workspaceFolder, "configuration.yaml"),
-            path.join(this.workspaceFolder, "ui-lovelace.yaml")
+        var parseResult = await this.nestedYamlParser.parse([ 
+             "configuration.yaml","ui-lovelace.yaml" 
         ]);
 
         this.schemaServiceForIncludes.onUpdate(parseResult.filePathMappings);

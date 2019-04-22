@@ -34,12 +34,12 @@ export class VsCodeFileAccessor implements FileAccessor {
   }
 
   public getUnifiedUri(input: string): string {
-    if (
-      !input.startsWith("file:/") &&
-      !input.startsWith(URI.parse(this.workspaceFolder).fsPath)
-    ) {
-      input = path.join(this.workspaceFolder, input);
-    }
+    // if (
+    //   !input.startsWith("file:/") &&
+    //   !input.startsWith(URI.parse(this.workspaceFolder).fsPath)
+    // ) {
+    //   input = path.join(this.workspaceFolder, input);
+    // }
     return URI.parse(input).fsPath;
   }
 
@@ -100,14 +100,20 @@ export class NestedYamlParser {
     await this.replaceFolderBasedIncludes();
 
     var result = <ParseResult>{
-      filePathMappings: this.getPathMappings()
+      filePathMappings: this.getPathMappings(fileNames)
     };
 
     return result;
   }
 
-  private getPathMappings = (): FilePathMapping => {
+  private getPathMappings = (rootFiles: string[]): FilePathMapping => {
     var result: FilePathMapping = {};
+    for (var rootFileIndex in rootFiles) {
+      result[rootFiles[rootFileIndex]] = {
+        includeType: null,
+        path: rootFiles[rootFileIndex]
+      };
+    }
 
     for (var toFileOrFolder in this.includes) {
       for (var fromFile in this.includes[toFileOrFolder].includedFrom) {
@@ -148,7 +154,7 @@ export class NestedYamlParser {
     if (Object.prototype.toString.call(obj) === "[object Array]") {
       // Ignore the key/indexer of arrays
       for (var i = 0; i < obj.length; i++) {
-        this.updatePathsViaTraversal(obj[i], filename, `${filename}/${currentPath}`);
+        this.updatePathsViaTraversal(obj[i], filename, `${currentPath}`);
       }
     } else if (typeof obj === "object" && obj !== null) {
       // objects
@@ -158,11 +164,11 @@ export class NestedYamlParser {
           this.includes[obj.toFileOrFolder].includedFrom[obj.fromFile]
         );
 
-        theDetails.path = `${currentPath}`;
+        theDetails.path = `${filename}${currentPath}`;
       } else {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
-            this.updatePathsViaTraversal(obj[key], filename, `${filename}/${currentPath}/${key}`);
+            this.updatePathsViaTraversal(obj[key], filename, `${currentPath}/${key}`);
           }
         }
       }
@@ -259,7 +265,7 @@ export class IncludedFrom {
 }
 export class IncludedFromEntry {
   path: string | null;
-  includeType: Includetype;
+  includeType?: Includetype;
   start: number;
   end: number;
 }
@@ -270,9 +276,9 @@ export class SchemaServiceForIncludes {
   constructor(private jsonSchemaService: any) { }
 
   public onUpdate(fileMappings: FilePathMapping) {
-    if (!this.schemaContributions) {
-      this.schemaContributions = this.getSchemaContributions(fileMappings);
-    }
+    // if (!this.schemaContributions) {
+    this.schemaContributions = this.getSchemaContributions(fileMappings);
+    // }
     this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
   }
 
@@ -307,7 +313,7 @@ export class SchemaServiceForIncludes {
     pathToSchemaFileMappings.forEach(pathToSchemaMapping => {
       var jsonPath = path.join(__dirname, "..", "schemas", pathToSchemaMapping.file);
       var filecontents = fs.readFileSync(jsonPath, "utf-8");
-      var schema = JSON.parse(filecontents); 
+      var schema = JSON.parse(filecontents);
 
       schemas[`http://schemas.home-assistant.io/${pathToSchemaMapping.key}`] = schema;
     });
@@ -320,6 +326,7 @@ export class SchemaServiceForIncludes {
           return false;
         }
         switch (sourceFileMapping.includeType) {
+          case null:
           case Includetype.include:
           case Includetype.include_dir_merge_named:
           case Includetype.include_dir_named:
@@ -329,29 +336,15 @@ export class SchemaServiceForIncludes {
             return x.isList;
         }
       });
-
-      schemaAssociations[`**/${sourceFile}`] = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
+      if (relatedPathToSchemaMapping) {
+        schemaAssociations[`**/${sourceFile}`] = [`http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`];
+      }
     }
 
-    return { 
+    return {
       schemas: schemas,
       schemaAssociations: schemaAssociations
     };
-
-    // var automationJsonPath = path.join(__dirname, "..", "schemas", "automation.json");
-    // var automationFile = fs.readFileSync(automationJsonPath, "utf-8");
-    // var automationSchema = JSON.parse(automationFile);
-
-    // return {
-    //   schemas: {
-    //     "http://schema.ha.com/lovelace": lovelaceSchema,
-    //     "http://schema.ha.com/automation": automationSchema
-    //   },
-    //   schemaAssociations: {
-    //     "**/ui-lovelace.yaml": ["http://schema.ha.com/lovelace"],
-    //     "**/automations/backyard.yaml": ["http://schema.ha.com/automation"]
-    //   }
-    // };
   }
 }
 
