@@ -51,8 +51,8 @@ export class HomeAssistantLanguageService {
 
     public ensureInitialization = async () => {
         if (!this.initialized) {
-            await this.updateSchemas();
             this.initialized = true;
+            await this.updateSchemas();
         }
     }
 
@@ -61,7 +61,7 @@ export class HomeAssistantLanguageService {
         this.schemaServiceForIncludes.onUpdate(yamlIncludes.filePathMappings);
     }
 
-    public onDidChangeContent = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<any[]> => {
+    public getDiagnostics = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<any[]> => {
         if (!textDocumentChangeEvent.document) {
             return;
         }
@@ -159,10 +159,7 @@ export class HomeAssistantLanguageService {
         }
     }
 
-    public onDidOpenTextDocument = async (onDidOpenTextDocument: DidOpenTextDocumentParams) => {
-        await this.ensureInitialization();
-    }
-    public onDidOpen = async (onDidOpen: any) => {
+    public onDidOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent) => {
         await this.ensureInitialization();
     }
 
