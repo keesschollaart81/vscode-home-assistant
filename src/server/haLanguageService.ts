@@ -15,7 +15,7 @@ import { format } from "yaml-language-server/out/server/src/languageservice/serv
 export class HomeAssistantLanguageService {
 
 
-    private schemaServiceForIncludes: any;
+    private schemaServiceForIncludes: SchemaServiceForIncludes;
     private yamlValidation: any;
     private yamlDocumentSymbols: any;
     private yamlCompletion: any;
@@ -49,17 +49,15 @@ export class HomeAssistantLanguageService {
         this.yamlHover = new YAMLHover(this.jsonSchemaService, []);
     }
 
-    public ensureInitialization = async () => {
-        if (!this.initialized) {
-            this.initialized = true;
-            await this.updateSchemas();
-        }
-    }
+    private pendingSchemaUpdate: NodeJS.Timer;
 
-    private updateSchemas = async (): Promise<void> => {
-        var yamlIncludes = await this.yamlIncludeDiscoveryService.discover(this.rootFiles);
-        this.schemaServiceForIncludes.onUpdate(yamlIncludes.filePathMappings);
-    }
+    public triggerSchemaLoad = async () => {
+        clearTimeout(this.pendingSchemaUpdate);
+        this.pendingSchemaUpdate = setTimeout(async () => {
+            var yamlIncludes = await this.yamlIncludeDiscoveryService.discover(this.rootFiles);
+            this.schemaServiceForIncludes.onUpdate(yamlIncludes.filePathMappings);
+        }, 200);
+    } 
 
     public getDiagnostics = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<any[]> => {
         if (!textDocumentChangeEvent.document) {
@@ -67,7 +65,7 @@ export class HomeAssistantLanguageService {
         }
 
         if (this.rootFiles.some(x => textDocumentChangeEvent.document.uri.endsWith(x))) {
-            await this.updateSchemas();
+            await this.triggerSchemaLoad();
         }
 
         if (textDocumentChangeEvent.document.getText().length === 0) {
@@ -117,7 +115,7 @@ export class HomeAssistantLanguageService {
         return format(document, formatParams.options, this.getValidYamlTags());
     }
 
-    public onCompletion = (textDocumentPosition) => {
+    public onCompletion = async (textDocumentPosition): Promise<any> => {
         let textDocument = this.documents.get(
             textDocumentPosition.textDocument.uri
         );
@@ -134,7 +132,7 @@ export class HomeAssistantLanguageService {
         let completionFix = completionHelper(textDocument, textDocumentPosition.position);
         let newText = completionFix.newText;
         let jsonDocument = parseYAML(newText);
-        return this.yamlCompletion.doComplete(textDocument, textDocumentPosition.position, jsonDocument);
+        return await this.yamlCompletion.doComplete(textDocument, textDocumentPosition.position, jsonDocument);
     }
 
     public onCompletionResolve = (completionItem) => {
@@ -155,12 +153,12 @@ export class HomeAssistantLanguageService {
 
     public onDidChangeWatchedFiles = async (onDidChangeWatchedFiles: DidChangeWatchedFilesParams) => {
         if (this.rootFiles.some(x => onDidChangeWatchedFiles.changes.some(y => y.uri.endsWith(x)))) {
-            await this.updateSchemas();
+            await this.triggerSchemaLoad();
         }
     }
 
     public onDidOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent) => {
-        await this.ensureInitialization();
+        // await this.triggerSchemaLoad();
     }
 
     private getValidYamlTags(): string[] {

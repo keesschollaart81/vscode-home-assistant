@@ -19,6 +19,7 @@ connection.onInitialize(async params => {
     params.rootUri,
     yamlIncludeDiscoveryService
   ); 
+  await homeAsisstantLanguageService.triggerSchemaLoad();
 
   var triggerValidation = async (e: TextDocumentChangeEvent) =>{
     var diagnostics = await homeAsisstantLanguageService.getDiagnostics(e);

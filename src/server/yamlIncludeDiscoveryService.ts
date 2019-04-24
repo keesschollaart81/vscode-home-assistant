@@ -1,4 +1,5 @@
 import * as YAML from "yaml";
+import * as path from "path";
 import { Tag } from "yaml"; 
 import { FileAccessor } from "./fileAccessor";
 
@@ -41,19 +42,20 @@ export class YamlIncludeDiscoveryService {
    * that can be used by external services
    * */ 
   private getPathMappings = (rootFiles: string[]): FilePathMapping => {
-    var result: FilePathMapping = {};
-    for (var rootFileIndex in rootFiles) {
+    let result: FilePathMapping = {};
+    for (let rootFileIndex in rootFiles) {
       result[rootFiles[rootFileIndex]] = {
         includeType: null,
         path: rootFiles[rootFileIndex]
       };
     }
 
-    for (var toFileOrFolder in this.includes) {
-      for (var fromFile in this.includes[toFileOrFolder].includedFrom) {
-        var mapping = this.includes[toFileOrFolder].includedFrom[fromFile];
-        if (!result[toFileOrFolder]) {
-          result[toFileOrFolder] = {
+    for (let toFile in this.includes) {
+      for (let fromFile in this.includes[toFile].includedFrom) {
+        let mapping = this.includes[toFile].includedFrom[fromFile];
+        let resultKey = toFile.replace("\\", "/"); 
+        if (!result[resultKey]) {
+          result[resultKey] = {
             path: mapping.path,
             includeType: mapping.includeType
           };
@@ -152,7 +154,7 @@ export class YamlIncludeDiscoveryService {
    */
   private includeResolver = (filename: string, doc: YAML.ast.Document, cstNode: YAML.cst.Node): YAML.ast.Node => {
     var fromFile = filename;
-    var toFileOrFolder = cstNode.rawValue;
+    var toFileOrFolder = cstNode.rawValue; 
 
     var include = this.includes[toFileOrFolder];
     if (!include) {
