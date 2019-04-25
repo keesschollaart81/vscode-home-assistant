@@ -21,6 +21,9 @@ export class YamlIncludeDiscoveryService {
       var fileContents = await this.fileAccessor.getFileContents(
         fileNames[index]
       );
+      if (!fileContents){
+        continue;
+      }
 
       var yaml = YAML.parse(fileContents, {
         tags: this.getCustomTags(fileNames[index])
@@ -53,7 +56,7 @@ export class YamlIncludeDiscoveryService {
     for (let toFile in this.includes) {
       for (let fromFile in this.includes[toFile].includedFrom) {
         let mapping = this.includes[toFile].includedFrom[fromFile];
-        let resultKey = toFile.replace("\\", "/"); 
+        let resultKey = toFile.replace("\\", "/"); // only for windows, otherwise the mapping to schema file will not work
         if (!result[resultKey]) {
           result[resultKey] = {
             path: mapping.path,
@@ -154,7 +157,7 @@ export class YamlIncludeDiscoveryService {
    */
   private includeResolver = (filename: string, doc: YAML.ast.Document, cstNode: YAML.cst.Node): YAML.ast.Node => {
     var fromFile = filename;
-    var toFileOrFolder = cstNode.rawValue; 
+    var toFileOrFolder = `${cstNode.rawValue}`.trim(); 
 
     var include = this.includes[toFileOrFolder];
     if (!include) {

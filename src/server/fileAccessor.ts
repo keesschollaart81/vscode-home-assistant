@@ -12,8 +12,13 @@ export class VsCodeFileAccessor implements FileAccessor {
     
     public async getFileContents(uri: string): Promise<string> {
         return new Promise<string>((c, e) => {
-            fs.readFile(uri, "UTF-8", (err, result) => {
-                err ? e("") : c(result);
+            fs.exists(uri, (exists) => {
+                if (!exists) {
+                    c(null);
+                }
+                fs.readFile(uri, "UTF-8", (err, result) => {
+                    err ? e(err) : c(result);
+                });
             });
         });
     }

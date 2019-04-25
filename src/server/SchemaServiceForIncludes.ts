@@ -8,6 +8,7 @@ export class SchemaServiceForIncludes {
 
     public onUpdate(fileMappings: FilePathMapping) {
         this.schemaContributions = this.getSchemaContributions(fileMappings);
+        this.jsonSchemaService.clearExternalSchemas(); // otherwise it will stack the scheme in memory for every file change
         this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
     }
 
@@ -30,6 +31,18 @@ export class SchemaServiceForIncludes {
                 path: "ui-lovelace.yaml",
                 isList: false,
                 file: "ui-lovelace.json"
+            },
+            {
+                key: "lovelace-views-list",
+                path: "ui-lovelace.yaml/views",
+                isList: true,
+                file: "lovelace-views-list.json"
+            },
+            {
+                key: "lovelace-views-named",
+                path: "ui-lovelace.yaml/views",
+                isList: false,
+                file: "lovelace-views-named.json"
             }
         ];
     }
@@ -40,7 +53,7 @@ export class SchemaServiceForIncludes {
         var pathToSchemaFileMappings = this.getPathToSchemaFileMappings();
 
         pathToSchemaFileMappings.forEach(pathToSchemaMapping => {
-            var jsonPath = path.join(__dirname, "..", "schemas", pathToSchemaMapping.file);
+            var jsonPath = path.join(__dirname, "..", "schemas", "json", pathToSchemaMapping.file);
             var filecontents = fs.readFileSync(jsonPath, "utf-8");
             var schema = JSON.parse(filecontents);
             schemas[`http://schemas.home-assistant.io/${pathToSchemaMapping.key}`] = schema;
@@ -54,11 +67,11 @@ export class SchemaServiceForIncludes {
                     return false;
                 }
                 switch (sourceFileMapping.includeType) {
-                    case null:
-                    case Includetype.include:
                     case Includetype.include_dir_merge_named:
                     case Includetype.include_dir_named:
                         return !x.isList;
+                    case null:
+                    case Includetype.include:
                     case Includetype.include_dir_list:
                     case Includetype.include_dir_merge_list:
                         return x.isList;

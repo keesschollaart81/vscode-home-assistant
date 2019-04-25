@@ -18,10 +18,10 @@ connection.onInitialize(async params => {
     documents,
     params.rootUri,
     yamlIncludeDiscoveryService
-  ); 
+  );
   await homeAsisstantLanguageService.triggerSchemaLoad();
 
-  var triggerValidation = async (e: TextDocumentChangeEvent) =>{
+  var triggerValidation = async (e: TextDocumentChangeEvent) => {
     var diagnostics = await homeAsisstantLanguageService.getDiagnostics(e);
     if (diagnostics) {
       connection.sendDiagnostics({
@@ -30,21 +30,21 @@ connection.onInitialize(async params => {
       });
     }
   };
-  
-  documents.onDidChangeContent(triggerValidation); 
+
+  documents.onDidChangeContent(triggerValidation);
   documents.onDidOpen(triggerValidation);
 
   connection.onDocumentSymbol(homeAsisstantLanguageService.onDocumentSymbol);
   connection.onDocumentFormatting(homeAsisstantLanguageService.onDocumentFormatting);
   connection.onCompletion(homeAsisstantLanguageService.onCompletion);
-  connection.onCompletionResolve(homeAsisstantLanguageService.onCompletionResolve); 
+  connection.onCompletionResolve(homeAsisstantLanguageService.onCompletionResolve);
   connection.onHover(homeAsisstantLanguageService.onHover);
-  connection.onDidChangeWatchedFiles(homeAsisstantLanguageService.onDidChangeWatchedFiles); 
+  connection.onDidChangeWatchedFiles(homeAsisstantLanguageService.onDidChangeWatchedFiles);
 
   return {
     capabilities: <ServerCapabilities>{
       textDocumentSync: documents.syncKind,
-      completionProvider: { resolveProvider: true },
+      completionProvider: { triggerCharacters: [" ", ":", "-"], resolveProvider: true },
       hoverProvider: true,
       documentSymbolProvider: true,
       documentFormattingProvider: true

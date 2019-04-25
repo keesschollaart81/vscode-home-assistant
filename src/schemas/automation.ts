@@ -5,12 +5,13 @@ export type Automations = Array<Automation>;
 export interface Automation {
   id?: string;
   alias?: string;
-  initial_state?: boolean;
+  initial_state?: string | boolean;
   hide_entity?: boolean;
-  trigger: Triggers;
+  trigger: Triggers | Array<Triggers>;
   condition?: ConditionsConfig;
-  action: Action | Array<Action>;
+  action: Actions | Array<Actions>;
 }
+export type Actions = EventActionSchema | ServiceActionSchema | DelayActionSchema | ServiceActionTemplateSchema;
 
 export interface HaTrigger {
   platform: "homeassistant";
@@ -58,7 +59,7 @@ export interface GeoLocationTrigger {
 }
 export interface StateTrigger {
   platform: "state";
-  entity_id: string;
+  entity_id: string | string[];
   from?: string | boolean;
   to?: string | boolean;
   for?: string | StateTriggerFor;
@@ -72,20 +73,20 @@ export interface StateTriggerFor {
 }
 export interface ZoneTrigger {
   platform: "zone";
-  entity_id: string;
+  entity_id: string | string[];
   zone: string;
   event: "enter" | "leave";
 }
 
 export interface NumericStateTrigger {
   platform: "numeric_state";
-  entity_id: string;
-  below?: string;
-  above?: string;
+  entity_id: string | string[];
+  below?: string | number;
+  above?: string | number;
   value_template?: string;
-  for?: string;
+  for?: string | StateTriggerFor;
 }
-
+ 
 export type Triggers =
   HaTrigger
   | SunTrigger
@@ -98,41 +99,49 @@ export type Triggers =
   | GeoLocationTrigger
   | StateTrigger
   | ZoneTrigger
-  | NumericStateTrigger
-  | Array<
-    HaTrigger
-    | SunTrigger
-    | TimeTrigger
-    | TemplateTrigger
-    | WebhookTrigger
-    | EventTrigger
-    | TimePatternTrigger
-    | MqttTrigger
-    | GeoLocationTrigger
-    | StateTrigger
-    | ZoneTrigger
-    | NumericStateTrigger
-  >;
+  | NumericStateTrigger;
 
 export interface Action {
-  service: string;
-  data?: any;
+}
 
+export interface EventActionSchema extends Action {
+  alias?: string;
+  event: string;
+  event_data?: any;
+  event_data_template?: any;
+}
+export interface DelayActionSchema extends Action {
+  delay: number | string | StateTriggerFor; 
+}
+
+export interface ServiceActionSchema extends Action {
+  service: string;
+  service_template?: string;
+  entity_id?: string | string[];
+  data?: any;
+  data_template?: any;
+}
+
+export interface ServiceActionTemplateSchema extends Action {
+  service_template: string;
+  entity_id?: string | string[];
+  data?: any;
+  data_template?: any;
 }
 
 export interface NumericStateConditionSchema {
   condition: "numeric_state";
-  entity_id: string;
-  below: number;
-  above: number;
+  entity_id: string | string[];
+  below?: string | number;
+  above?: string | number;
   value_template?: string;
 }
 
 export interface StateConditionSchema {
   condition: "state";
-  entity_id: string;
-  state: string;
-  for?: string;
+  entity_id: string | string[];
+  state: string | boolean;
+  for?: string | StateTriggerFor;
   from?: string;
 }
 
@@ -153,12 +162,14 @@ export interface TimeConditionSchema {
   condition: "time";
   before?: string;
   after?: string;
-  weekday?: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
+  weekday?: Weekday | Array<Weekday>;
 }
+
+export type Weekday = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
 export interface ZoneConditionSchema {
   condition: "zone";
-  entity_id: string;
+  entity_id: string | string[];
   zone?: string;
 }
 export interface AndConditionSchema {

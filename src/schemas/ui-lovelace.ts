@@ -13,7 +13,7 @@ The generated schema (lovelace-ui.json) is also (committed) in this folder and
 
 export interface LovelaceConfig {
   title?: string;
-  views: Array<LovelaceViewConfig | IncludeDirective>;
+  views: Array<LovelaceViewConfig | IncludeDirective | IncludeFolderDirective>;
   background?: string;
   resources?: Array<{ type: "css" | "js" | "module" | "html"; url: string }>;
 }
@@ -22,7 +22,20 @@ export interface LovelaceConfig {
  * @TJS-type string
  * @TJS-pattern [.]yaml|[.]yml$
  */
-export interface IncludeDirective {}
+export interface IncludeDirective { }
+
+/**
+ * @TJS-type string
+ */
+export interface IncludeFolderDirective { }
+
+/**
+ * @TJS-type string
+ * @TJS-pattern [.]yaml|[.]yml$
+ */
+export interface SecretDirective { }
+
+export type LovelaceViewConfigs = Array<LovelaceViewConfig>;
 
 export interface LovelaceViewConfig {
   id?: string; //Updated
@@ -56,6 +69,7 @@ export interface LovelaceViewConfig {
     | StackCardConfig
     | ThermostatCardConfig
     | WeatherForecastCardConfig
+    | CustomCardConfig
   >;
   path?: string;
   icon?: string;
@@ -71,6 +85,17 @@ export interface LovelaceCardConfig {
   type: string;
   [key: string]: any;
 }
+
+// updated
+/**
+ * @TJS-additionalProperties true
+ */
+export interface CustomCardConfig{ 
+  /**
+   * @TJS-pattern custom:(.*)$
+   */
+  type: string;
+}  
 
 export interface ToggleActionConfig {
   action: "toggle";
@@ -126,17 +151,14 @@ export interface EmptyStateCardConfig extends LovelaceCardConfig {
 export interface EntitiesCardEntityConfig extends EntityConfig {
   type?: string;
   secondary_info?: "entity-id" | "last-changed";
-  action_name?: string;
-  service?: string;
-  service_data?: object;
-  url?: string;
+  format?: "relative" | "total" | "date" | "time" | "datetime";
 }
 
 export interface EntitiesCardConfig extends LovelaceCardConfig {
   type: "entities"; //Updated
   show_header_toggle?: boolean;
   title?: string;
-  entities: Array<EntitiesCardEntityConfig | string>;
+  entities: Array<EntitiesCardEntityConfig | WebLinkEntityConfig | CallServiceEntityConfig | DividerEntityConfig | SectionEntityConfig | CustomEntityConfig | string>;
   theme?: string;
 }
 
@@ -214,8 +236,8 @@ export interface LightCardConfig extends LovelaceCardConfig {
 
 export interface MapCardConfig extends LovelaceCardConfig {
   type: "map"; //Updated
-  title: string;
-  aspect_ratio: string;
+  title?: string;
+  aspect_ratio?: string;
   default_zoom?: number;
   entities?: Array<EntityConfig | string>;
   geo_location_sources?: string[];
@@ -247,7 +269,7 @@ export interface PictureElementsCardConfig extends LovelaceCardConfig {
   state_image?: {};
   aspect_ratio?: string;
   entity?: string;
-  elements: LovelaceElementConfig[];
+  elements: Elements;
 }
 
 export interface PictureEntityCardConfig extends LovelaceCardConfig {
@@ -300,8 +322,8 @@ export interface HistoryGraphConfig extends LovelaceCardConfig {
   type: "history-graph";
   entities: Array<EntityConfig | string>;
   hours_to_show?: number;
-  title: string;
-  refresh_interval: number;
+  title?: string;
+  refresh_interval?: number;
 }
 export interface ShoppingListCardConfig extends LovelaceCardConfig {
   type: "shopping-list"; //Updated
@@ -338,7 +360,123 @@ export interface EntityConfig {
   name?: string;
   icon?: string;
 }
-export interface LovelaceElementConfig {
-  type: string;
-  style: object;
+
+// export interface LovelaceElementConfig {
+//   type: string;
+//   style: object;
+// }
+
+export interface StateBadgeElement {
+  type: "state-badge";
+  entity: EntityConfig | string;
+  style?: any;
 }
+
+export interface StateIconElement {
+  type: "state-icon";
+  entity: EntityConfig | string;
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  style?: any;
+}
+export interface StateLabelElement {
+  type: "state-label";
+  entity: EntityConfig | string;
+  prefix?: string;
+  suffix?: string;
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  style?: any;
+}
+export interface IconElement {
+  type: "icon";
+  icon: string;
+  entity?: EntityConfig | string;
+  title?: string;
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  style?: any;
+}
+export interface ImageElement {
+  type: "image";
+  entity?: EntityConfig | string;
+  image?: string;
+  camera_image?: string;
+  camera_view?: string;
+  state_image?: any;
+  filter?: string;
+  state_filter?: object;
+  aspect_ratio?: string;
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  style?: any;
+}
+export interface ConditionalElement {
+  type: "conditional";
+  conditions: Array<ElementCondition>;
+  elements: Elements;
+}
+
+/**
+ * @TJS-additionalProperties true
+ */
+export interface CustomElement {
+
+  /**
+   * @TJS-pattern custom:(.*)$
+   */
+  type: string;
+  style: any;
+}
+export interface ElementCondition {
+  entity: EntityConfig;
+  state?: string;
+  state_not?: string;
+}
+
+export type Elements = Array<
+  StateBadgeElement
+  | StateIconElement
+  | StateLabelElement
+  | IconElement
+  | ImageElement
+  | ConditionalElement
+  | CustomElement
+>;
+
+export interface WebLinkEntityConfig {
+  type: "weblink";
+  url: string;
+  name?: string;
+  icon?: string;
+}
+export interface CallServiceEntityConfig {
+  type: "call-service";
+  name: string;
+  service: string;
+  icon?: string;
+  action_name?: string;
+  service_data?: {
+    entity_id?: string | [string];
+    [key: string]: any;
+  };
+}
+export interface DividerEntityConfig {
+  type: "divider";
+  style?: any;
+}
+export interface SectionEntityConfig {
+  type: "section";
+  label?: string;
+}
+/**
+ * @TJS-additionalProperties true
+ */
+export interface CustomEntityConfig {
+  /**
+   * @TJS-pattern custom:(.*)$
+   */
+  type: string;
+  label?: string;
+}
+ 

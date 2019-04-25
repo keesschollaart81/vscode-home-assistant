@@ -1,5 +1,4 @@
 import * as path from "path";
-import URI from "vscode-uri";
 import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams } from "vscode-languageserver";
 import { completionHelper } from "./completionHelper";
 import { Includetype, YamlIncludeDiscoveryService } from "./yamlIncludeDiscoveryService";
@@ -14,15 +13,12 @@ import { format } from "yaml-language-server/out/server/src/languageservice/serv
 
 export class HomeAssistantLanguageService {
 
-
     private schemaServiceForIncludes: SchemaServiceForIncludes;
     private yamlValidation: any;
     private yamlDocumentSymbols: any;
     private yamlCompletion: any;
     private yamlHover: any;
     private jsonSchemaService: any;
-
-    private initialized: boolean;
 
     private rootFiles = [
         "configuration.yaml", "ui-lovelace.yaml"
@@ -45,7 +41,10 @@ export class HomeAssistantLanguageService {
         this.yamlValidation = new YAMLValidation(this.jsonSchemaService);
         this.yamlValidation.configure({ validate: true });
         this.yamlDocumentSymbols = new YAMLDocumentSymbols();
-        this.yamlCompletion = new YAMLCompletion(this.jsonSchemaService, []);
+        this.yamlCompletion = new YAMLCompletion(this.jsonSchemaService);
+        // enables auto completion suggestions for tags like !include ()
+        // commeted because they end up at the top of the list which does not look nice :-)
+        // this.yamlCompletion.configure(null, this.getValidYamlTags()); 
         this.yamlHover = new YAMLHover(this.jsonSchemaService, []);
     }
 
@@ -53,7 +52,7 @@ export class HomeAssistantLanguageService {
 
     public triggerSchemaLoad = async () => {
         clearTimeout(this.pendingSchemaUpdate);
-        this.pendingSchemaUpdate = setTimeout(async () => {
+        this.pendingSchemaUpdate = setTimeout(async () => { // debounce while typing
             var yamlIncludes = await this.yamlIncludeDiscoveryService.discover(this.rootFiles);
             this.schemaServiceForIncludes.onUpdate(yamlIncludes.filePathMappings);
         }, 200);
@@ -65,6 +64,7 @@ export class HomeAssistantLanguageService {
         }
 
         if (this.rootFiles.some(x => textDocumentChangeEvent.document.uri.endsWith(x))) {
+            console.log(`Edit of ${textDocumentChangeEvent.document.uri}, updating schema's...`)
             await this.triggerSchemaLoad();
         }
 
@@ -115,7 +115,7 @@ export class HomeAssistantLanguageService {
         return format(document, formatParams.options, this.getValidYamlTags());
     }
 
-    public onCompletion = async (textDocumentPosition): Promise<any> => {
+    public onCompletion = async (textDocumentPosition):  Promise<CompletionList> => {
         let textDocument = this.documents.get(
             textDocumentPosition.textDocument.uri
         );
@@ -132,7 +132,8 @@ export class HomeAssistantLanguageService {
         let completionFix = completionHelper(textDocument, textDocumentPosition.position);
         let newText = completionFix.newText;
         let jsonDocument = parseYAML(newText);
-        return await this.yamlCompletion.doComplete(textDocument, textDocumentPosition.position, jsonDocument);
+        var completions = await this.yamlCompletion.doComplete(textDocument, textDocumentPosition.position, jsonDocument);
+        return completions;
     }
 
     public onCompletionResolve = (completionItem) => {
@@ -155,11 +156,7 @@ export class HomeAssistantLanguageService {
         if (this.rootFiles.some(x => onDidChangeWatchedFiles.changes.some(y => y.uri.endsWith(x)))) {
             await this.triggerSchemaLoad();
         }
-    }
-
-    public onDidOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent) => {
-        // await this.triggerSchemaLoad();
-    }
+    } 
 
     private getValidYamlTags(): string[] {
         var validTags: string[] = [];
