@@ -1,3 +1,5 @@
+import { IncludeTag, IncludeFolderTag } from "./homeassistant";
+
 /*
 
 Types are copied from
@@ -13,27 +15,11 @@ The generated schema (lovelace-ui.json) is also (committed) in this folder and
 
 export interface LovelaceConfig {
   title?: string;
-  views: Array<LovelaceViewConfig | IncludeDirective | IncludeFolderDirective>;
+  views: Array<LovelaceViewConfig | IncludeTag | IncludeFolderTag>;
   background?: string;
   resources?: Array<{ type: "css" | "js" | "module" | "html"; url: string }>;
 }
 
-/**
- * @TJS-type string
- * @TJS-pattern [.]yaml|[.]yml$
- */
-export interface IncludeDirective { }
-
-/**
- * @TJS-type string
- */
-export interface IncludeFolderDirective { }
-
-/**
- * @TJS-type string
- * @TJS-pattern [.]yaml|[.]yml$
- */
-export interface SecretDirective { }
 
 export type LovelaceViewConfigs = Array<LovelaceViewConfig>;
 

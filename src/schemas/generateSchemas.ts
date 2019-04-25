@@ -17,8 +17,12 @@ let schema = TJS.generateSchema(program, "LovelaceConfig", settings);
 fs.writeFileSync("src/schemas/json/ui-lovelace.json", JSON.stringify(schema));
 
 program = TJS.getProgramFromFiles([resolve("src/schemas/homeassistant.ts")], compilerOptions); 
-schema = TJS.generateSchema(program, "HomeAssistant", settings);
+schema = TJS.generateSchema(program, "HomeAssistantRoot", settings);
 fs.writeFileSync("src/schemas/json/homeassistant.json", JSON.stringify(schema));
+
+program = TJS.getProgramFromFiles([resolve("src/schemas/homeassistant.ts")], compilerOptions); 
+schema = TJS.generateSchema(program, "HomeAssistantRoot", settings);
+fs.writeFileSync("src/schemas/json/homeassistant-packages.json", JSON.stringify(schema));
 
 program = TJS.getProgramFromFiles([resolve("src/schemas/ui-lovelace.ts")], compilerOptions); 
 schema = TJS.generateSchema(program, "LovelaceViewConfig", settings);

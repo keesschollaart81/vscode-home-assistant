@@ -15,6 +15,16 @@ export class SchemaServiceForIncludes {
     private getPathToSchemaFileMappings(): PathToSchemaMapping[] {
         return [
             {
+                key: "homeassistant",
+                path: "configuration.yaml",
+                isList: false,
+                file: "homeassistant.json"
+            }, {
+                key: "homeassistant-packages",
+                path: "configuration.yaml/homeassistant/packages",
+                isList: false,
+                file: "homeassistant-packages.json"
+            }, {
                 key: "automations-named",
                 path: "configuration.yaml/automation",
                 isList: false,
@@ -70,11 +80,12 @@ export class SchemaServiceForIncludes {
                     case Includetype.include_dir_merge_named:
                     case Includetype.include_dir_named:
                         return !x.isList;
-                    case null:
                     case Includetype.include:
                     case Includetype.include_dir_list:
                     case Includetype.include_dir_merge_list:
                         return x.isList;
+                    case null: // root files
+                        return true;
                 }
             });
             if (relatedPathToSchemaMapping) {
