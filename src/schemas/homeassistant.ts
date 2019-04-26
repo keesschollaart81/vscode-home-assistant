@@ -1,4 +1,5 @@
 import { Automations } from "./automation";
+import { Sensors } from "./sensors";
 
 /**
  * @TJS-additionalProperties true
@@ -6,12 +7,12 @@ import { Automations } from "./automation";
 export interface HomeAssistantRoot{
     homeassistant?: HomeAssistantComponent;
     automation?: Automations;
-    group?: any;
+    group?: GroupComponent;
     http?: any;
     default_config?: any;
     person?: any;
     system_health?: any;
-    panel_iframe?: any;
+    panel_iframe?: PanelIframeComponent;
     panel_custom?: any;
     updater?: any;
     discovery?: any;
@@ -22,7 +23,7 @@ export interface HomeAssistantRoot{
     sun?: any;
     tts?: any;
     recorder?: any;
-    sensor?: any;
+    sensor?: null | Array<Sensors>;
     ifttt?: any;
     ios?: any;
     mqtt?: any;
@@ -37,7 +38,7 @@ export interface HomeAssistantComponent{
     unit_system?: "metric" | "imperial";
     time_zone?: string  ;
     whitelist_external_dirs?: string[];
-    customize?: any;
+    customize?: CustomizeComponent;
     customize_domain?: any;
     customize_glob?: any;
     packages?: Array<HomeAssistantComponent> | IncludeTag | IncludeFolderTag;
@@ -60,3 +61,42 @@ export interface IncludeFolderTag { }
  * @TJS-pattern [.]yaml|[.]yml$
  */
 export interface SecretTag { }
+
+
+export interface PanelIframeComponent{
+    [key: string]: PanelIframeComponentEntry;
+}
+export interface PanelIframeComponentEntry{
+    title:string;
+    url: string;
+    icon?: string;
+    require_admin?: boolean;
+}
+export interface CustomizeComponent{
+    [key: string]: CustomizeComponentEntry;
+}
+export interface CustomizeComponentEntry{ 
+    friendly_name?: string;
+    homebridge_name?: string;
+    hidden?: boolean;
+    homebridge_hidden?: boolean;
+    emulated_hue_hidden?: boolean;
+    entity_picture?: string;
+    icon?: string;
+    assumed_state?: boolean;
+    device_class?: string;
+    unit_of_measurement?: string;
+    initial_state?: boolean;
+}
+export interface GroupComponent{
+    [key: string]: GroupComponentEntry | string[];
+}
+export interface GroupComponentEntry{ 
+    name?: string; 
+    view?: boolean; 
+    icon?: string; 
+    control?: string; 
+    entities: string | string[]; 
+    all?: boolean;  
+}
+
