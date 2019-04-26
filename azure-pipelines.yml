@@ -6,14 +6,23 @@
 trigger:
 - master
 
+pr:
+- dev
+
 pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
+
+- task: gittools.gitversion.gitversion-task.GitVersion@4
+  displayName: GitVersion
+  inputs:
+    preferBundledVersion: false
+
 - task: NodeTool@0
   inputs:
     versionSpec: '8.x'
-  displayName: 'Install Node.js'
+  displayName: 'Install Node.js' 
 
 - script: |
     npm install
