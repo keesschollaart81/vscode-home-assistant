@@ -5,14 +5,14 @@ import { Sensors } from "./sensors";
  * @TJS-additionalProperties true
  */
 export interface HomeAssistantRoot{
-    homeassistant?: HomeAssistantComponent;
-    automation?: Automations;
-    group?: GroupComponent;
+    homeassistant?: HomeAssistantComponent | IncludeTags;
+    automation?: Automations | IncludeTags;
+    group?: GroupComponent | IncludeTags;
     http?: any;
     default_config?: any;
     person?: any;
     system_health?: any;
-    panel_iframe?: PanelIframeComponent;
+    panel_iframe?: PanelIframeComponent | IncludeTags;
     panel_custom?: any;
     updater?: any;
     discovery?: any;
@@ -23,7 +23,7 @@ export interface HomeAssistantRoot{
     sun?: any;
     tts?: any;
     recorder?: any;
-    sensor?: null | Array<Sensors>;
+    sensor?: null | Array<Sensors> | IncludeTags;
     ifttt?: any;
     ios?: any;
     mqtt?: any;
@@ -38,10 +38,11 @@ export interface HomeAssistantComponent{
     unit_system?: "metric" | "imperial";
     time_zone?: string  ;
     whitelist_external_dirs?: string[];
-    customize?: CustomizeComponent;
+    customize?: CustomizeComponent | IncludeTags;
     customize_domain?: any;
     customize_glob?: any;
-    packages?: Array<HomeAssistantComponent> | IncludeTag | IncludeFolderTag;
+    packages?: Array<HomeAssistantComponent> | IncludeTags;
+    auth_providers: AuthProviders[];
 }
 
 
@@ -55,6 +56,8 @@ export interface IncludeTag { }
  * @TJS-type string
  */
 export interface IncludeFolderTag { }
+
+export type IncludeTags = IncludeTag | IncludeFolderTag;
 
 /**
  * @TJS-type string
@@ -100,3 +103,28 @@ export interface GroupComponentEntry{
     all?: boolean;  
 }
 
+export type AuthProviders = 
+    HomeAssistantAuthProvider | 
+    TrustedNetworksAuthProvider |
+    CommandLineAuthProvider |
+    LegacyApiPasswordAuthProvider;
+
+export interface HomeAssistantAuthProvider{
+    type: "homeassistant";
+}
+export interface TrustedNetworksAuthProvider{
+    type: "trusted_networks";
+    trusted_networks: string | string[] | any[];
+    trusted_users: string | string[] | any[];
+    allow_bypass_login?: boolean;
+}
+export interface CommandLineAuthProvider{
+    type: "command_line";
+    command: string;
+    args?: any;
+    meta?: boolean;
+}
+export interface LegacyApiPasswordAuthProvider{
+    type: "legacy_api_password";
+    api_password: string | SecretTag;
+}
