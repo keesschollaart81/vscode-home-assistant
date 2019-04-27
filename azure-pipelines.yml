@@ -29,6 +29,7 @@ steps:
   displayName: 'Install Node.js' 
 
 - script: |
+    npm version $(GitVersion.SemVer)
     npm install
     npm run compile
   displayName: 'npm install and compile'
