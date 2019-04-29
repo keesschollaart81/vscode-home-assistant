@@ -10,6 +10,7 @@ import { YAMLHover } from "yaml-language-server/out/server/src/languageservice/s
 import { YAMLValidation } from "yaml-language-server/out/server/src/languageservice/services/yamlValidation";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
 import { format } from "yaml-language-server/out/server/src/languageservice/services/yamlFormatter";
+import { EntityIdCompletionContribution } from "./testCompletion";
 
 export class HomeAssistantLanguageService {
 
@@ -41,11 +42,11 @@ export class HomeAssistantLanguageService {
         this.yamlValidation = new YAMLValidation(this.jsonSchemaService);
         this.yamlValidation.configure({ validate: true });
         this.yamlDocumentSymbols = new YAMLDocumentSymbols();
-        this.yamlCompletion = new YAMLCompletion(this.jsonSchemaService);
+        this.yamlCompletion = new YAMLCompletion(this.jsonSchemaService, [ new EntityIdCompletionContribution() ]);
         // enables auto completion suggestions for tags like !include ()
         // commeted because they end up at the top of the list which does not look nice :-)
         // this.yamlCompletion.configure(null, this.getValidYamlTags()); 
-        this.yamlHover = new YAMLHover(this.jsonSchemaService, []);
+        this.yamlHover = new YAMLHover(this.jsonSchemaService);
     }
 
     private pendingSchemaUpdate: NodeJS.Timer;

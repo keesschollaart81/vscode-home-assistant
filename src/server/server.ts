@@ -1,4 +1,4 @@
-import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities, TextDocumentChangeEvent } from "vscode-languageserver";
+import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities, TextDocumentChangeEvent, Files } from "vscode-languageserver";
 import { VsCodeFileAccessor } from "./fileAccessor";
 import { HomeAssistantLanguageService } from "./haLanguageService";
 import { YamlIncludeDiscoveryService } from "./yamlIncludeDiscoveryService";
@@ -12,8 +12,7 @@ connection.onInitialize(async params => {
   connection.console.log(`[Server(${process.pid})] Started and initialize received`);
 
   var vsCodeFileAccessor = new VsCodeFileAccessor(params.rootUri, connection);
-  var yamlIncludeDiscoveryService = new YamlIncludeDiscoveryService(vsCodeFileAccessor);
-
+  var yamlIncludeDiscoveryService = new YamlIncludeDiscoveryService(vsCodeFileAccessor); 
   var homeAsisstantLanguageService = new HomeAssistantLanguageService(
     documents,
     params.rootUri,
@@ -40,6 +39,10 @@ connection.onInitialize(async params => {
   connection.onCompletionResolve(homeAsisstantLanguageService.onCompletionResolve);
   connection.onHover(homeAsisstantLanguageService.onHover);
   connection.onDidChangeWatchedFiles(homeAsisstantLanguageService.onDidChangeWatchedFiles);
+
+  connection.onDidChangeConfiguration((change) => {
+    console.log(change);
+  });
 
   return {
     capabilities: <ServerCapabilities>{
