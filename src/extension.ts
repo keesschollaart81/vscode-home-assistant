@@ -15,25 +15,25 @@ export function activate(context: vscode.ExtensionContext) {
 	let config = new Config();
 	let ha = new HomeAssistant(config);
 
-	let entityCompletionProvider = vscode.languages.registerCompletionItemProvider(
-		documentSelector,
-		new EntityIdCompletionProvider(ha),
-		":",
-		"-"
-	);
-	let serviceCompletionProvider = vscode.languages.registerCompletionItemProvider(
-		documentSelector,
-		new ServiceCompletionProvider(ha),
-		":"
-	);
+	// let entityCompletionProvider = vscode.languages.registerCompletionItemProvider(
+	// 	documentSelector,
+	// 	new EntityIdCompletionProvider(ha),
+	// 	":",
+	// 	"-"
+	// );
+	// let serviceCompletionProvider = vscode.languages.registerCompletionItemProvider(
+	// 	documentSelector,
+	// 	new ServiceCompletionProvider(ha),
+	// 	":"
+	// );
 
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
 		ha.disconnect();
 		config.reset();
 	}));
 	
-	context.subscriptions.push(entityCompletionProvider);
-	context.subscriptions.push(serviceCompletionProvider);
+	// context.subscriptions.push(entityCompletionProvider);
+	// context.subscriptions.push(serviceCompletionProvider);
 
 	config.hasConfigOrAsk();
 
