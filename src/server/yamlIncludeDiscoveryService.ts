@@ -125,6 +125,9 @@ export class YamlIncludeDiscoveryService {
 
   private getCustomTags(filename: string): Tag[] {
     return <Tag[]>[
+      // {
+      //   tag: "!secret"
+      // },
       {
         tag: `!${Includetype[Includetype.include]}`,
         resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)

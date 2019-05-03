@@ -1,4 +1,4 @@
-import { MarkedString } from 'vscode-languageserver';
+import { MarkedString, CompletionItem, CompletionItemKind } from 'vscode-languageserver';
 import { JSONWorkerContribution, JSONPath, CompletionsCollector } from 'vscode-json-languageservice';
 import { IHaConnection } from './haConnection';
 
@@ -28,8 +28,13 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
         if (!this.propertyMatches.some(x => x === currentKey)) {
             return null;
         }
-        var entityIdCompletions = await this.haConnection.getEntityCompletions();
-        entityIdCompletions.forEach(c => result.add(c));
+        let item: CompletionItem = { kind: CompletionItemKind.Property, label: "label", insertText: "inserttext" };
+        result.add(item);
+
+        // var entityIdCompletions = await this.haConnection.getEntityCompletions();
+        // entityIdCompletions.forEach(c => {
+        //     // result.add(c)
+        // });
 
         return null;
     }

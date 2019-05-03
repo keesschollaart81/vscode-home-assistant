@@ -1,8 +1,8 @@
 import * as ha from "home-assistant-js-websocket";
-import { CompletionItem } from "vscode-json-languageservice";
-import { CompletionItemKind, MarkupContent } from "vscode-languageserver-types";
+import { MarkedString, CompletionItem, CompletionItemKind, MarkupContent } from 'vscode-languageserver';
 import { IConfigurationService } from "./ConfigurationService";
 import ws = require("ws");
+import {createSocket} from "./socket";
 
 export interface IHaConnection {
     tryConnect(): Promise<void>;
@@ -42,12 +42,10 @@ export class HaConnection implements IHaConnection {
         });
 
         try {
-            this.logger("Connecting to Home Assistant...");
+            console.log("Connecting to Home Assistant...");
             this.connection = await ha.createConnection({
                 auth: auth,
-                WebSocket: this.websocketWithOptions({
-                    rejectUnauthorized: !this.configurationService.ignoreCertificates
-                }, this.logger)
+                createSocket: async (o) => createSocket(auth)
             });
         }
         catch (error) {
@@ -56,11 +54,14 @@ export class HaConnection implements IHaConnection {
         }
 
         this.connection.addEventListener("ready", () => {
-            this.logger("Connected to Home Assistant");
+            console.log("(re-)connected to Home Assistant");
         });
 
         this.connection.addEventListener("disconnected", () => {
-            this.logger("Lost connection with Home Assistant");
+            console.warn("Lost connection with Home Assistant");
+        });
+        this.connection.addEventListener("reconnect-error", (data) => {
+            console.error("Reconnect error with Home Assistant", data);
         });
     }
 
@@ -83,10 +84,10 @@ export class HaConnection implements IHaConnection {
                 break;
         }
         let message = `Error connecting to your Home Assistant Server at ${this.configurationService.url} and token '${tokenIndication}...', check your network or update your VS Code Settings, make sure to (also) check your workspace settings! Error: ${errorText}`;
-        this.logger(message);
+        console.error(message);
     }
 
-    public notifyConfigUpdate = async  (notifyConfigUpdate: any) : Promise<void> => {
+    public notifyConfigUpdate = async (notifyConfigUpdate: any): Promise<void> => {
         this.disconnect();
         await this.tryConnect();
     }
@@ -100,7 +101,7 @@ export class HaConnection implements IHaConnection {
                     return reject();
                 }
                 ha.subscribeEntities(this.connection, entities => {
-                    this.logger(`Got ${Object.keys(entities).length} entities from Home Assistant`);
+                    console.log(`Got ${Object.keys(entities).length} entities from Home Assistant`);
                     return resolve(entities);
                 });
             });
@@ -124,20 +125,20 @@ export class HaConnection implements IHaConnection {
             completionItem.filterText = ` ${value.entity_id}`; // enable a leading space
             completionItem.insertText = completionItem.filterText;
 
-            completionItem.documentation = <MarkupContent>{
-                kind: "markdown",
-                value: `**${value.entity_id}** \r\n \r\n`
-            };
+            // completionItem.documentation = <MarkupContent>{
+            //     kind: "markdown",
+            //     value: `**${value.entity_id}** \r\n \r\n`
+            // };
 
-            if (value.state) {
-                completionItem.documentation.value += `State: ${value.state} \r\n \r\n`;
-            }
-            completionItem.documentation.value += `| Attribute | Value | \r\n`;
-            completionItem.documentation.value += `| :---- | :---- | \r\n`;
+            // if (value.state) {
+            //     completionItem.documentation.value += `State: ${value.state} \r\n \r\n`;
+            // }
+            // completionItem.documentation.value += `| Attribute | Value | \r\n`;
+            // completionItem.documentation.value += `| :---- | :---- | \r\n`;
 
-            for (const [attrKey, attrValue] of Object.entries(value.attributes)) {
-                completionItem.documentation.value += `| ${attrKey} | ${attrValue} | \r\n`;
-            }
+            // for (const [attrKey, attrValue] of Object.entries(value.attributes)) {
+            //     completionItem.documentation.value += `| ${attrKey} | ${attrValue} | \r\n`;
+            // }
             completions.push(completionItem);
         }
         return completions;
@@ -147,21 +148,8 @@ export class HaConnection implements IHaConnection {
         if (!this.connection) {
             return;
         }
-        this.logger(`Disconnecting from Home Assistant`);
+        console.log(`Disconnecting from Home Assistant`);
         this.connection.close();
         this.connection = undefined;
-    }
-
-    private websocketWithOptions = (options: ws.ClientOptions, logger: (message: string) => any) => class extends ws {
-        constructor(url: any) {
-            super(url, options);
-            this.addEventListener("error", (e) => {
-                if (e.error && e.error.code === "ERR_TLS_CERT_ALTNAME_INVALID") {
-                    logger(`Cannot connect to Home Assistant because of an invalid certificate, fix this or go to the settings of this extension and check 'Enable insecure transport'. Error message: ${e.message}`);
-                } else {
-                    logger(`Error in WebSocket connection: ${e.message}`);
-                }
-            });
-        }
     }
 }

@@ -115,7 +115,7 @@
     "vscode": "^1.1.33"
   },
   "dependencies": {
-    "home-assistant-js-websocket": "3.4.0",
+    "home-assistant-js-websocket": "4.0.0",
     "ws": "6.2.0",
     "vscode-json-languageservice": "3.2.0",
     "vscode-languageclient": "5.2.1",

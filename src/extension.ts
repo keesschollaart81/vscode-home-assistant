@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import { LanguageClient, LanguageClientOptions, TransportKind, ServerOptions } from 'vscode-languageclient';
 import { EntityIdCompletionProvider } from './entity-id-completion-provider';
-import { HomeAssistant } from './homeassistant';
+// import { HomeAssistant } from './homeassistant';
 import { Config }  from './configuration';
 import { ServiceCompletionProvider } from './service-completion-provider';
 
@@ -12,8 +12,8 @@ const documentSelector = [
 ];
 
 export function activate(context: vscode.ExtensionContext) {
-	let config = new Config();
-	let ha = new HomeAssistant(config);
+	// let config = new Config();
+	// let ha = new HomeAssistant(config);
 
 	// let entityCompletionProvider = vscode.languages.registerCompletionItemProvider(
 	// 	documentSelector,
@@ -27,15 +27,15 @@ export function activate(context: vscode.ExtensionContext) {
 	// 	":"
 	// );
 
-	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
-		ha.disconnect();
-		config.reset();
-	}));
+	// context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
+	// 	ha.disconnect();
+	// 	config.reset();
+	// }));
 	
 	// context.subscriptions.push(entityCompletionProvider);
 	// context.subscriptions.push(serviceCompletionProvider);
 
-	config.hasConfigOrAsk();
+	// config.hasConfigOrAsk();
 
    // start language client
    var serverModule = path.join(context.extensionPath, 'out', 'server', 'server.js');

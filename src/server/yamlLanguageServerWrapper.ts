@@ -43,8 +43,8 @@ export class YamlLanguageServiceWrapper{
         return this.yamlDocumentSymbols.findDocumentSymbols(document, jsonDocument);
     }
 
-    public doComplete(textDocument: TextDocument, position: any, jsonDocument: any) :any {
-        return this.yamlCompletion.doComplete(textDocument, position, jsonDocument);
+    public doComplete = async (textDocument: TextDocument, position: any, jsonDocument: any) : Promise<any> => {
+        return await this.yamlCompletion.doComplete(textDocument, position, jsonDocument);
     }
 
     public doResolve(completionItem: any):any {

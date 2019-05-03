@@ -8,17 +8,20 @@ import { EntityIdCompletionContribution } from "./entityIdCompletion";
 import { ConfigurationService } from "./ConfigurationService";
 
 let connection = createConnection(ProposedFeatures.all);
+
+console.log = connection.console.log.bind(connection.console);
+console.error = connection.console.error.bind(connection.console);
+console.warn = connection.console.warn.bind(connection.console);
+
 let documents = new TextDocuments();
 documents.listen(connection);
-
-var settings: any = {};
 
 connection.onInitialize(async params => {
 
   connection.console.log(`[Server(${process.pid})] Started and initialize received`);
 
   var configurationService = new ConfigurationService();
-  var haConnection = new HaConnection(configurationService, connection.console.log);
+  var haConnection = new HaConnection(configurationService, (m) => connection.console.log(m));
   var vsCodeFileAccessor = new VsCodeFileAccessor(params.rootUri, connection);
   var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([ 
     new EntityIdCompletionContribution(haConnection) 

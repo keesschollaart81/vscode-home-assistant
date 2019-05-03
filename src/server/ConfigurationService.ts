@@ -7,9 +7,10 @@ export interface IConfigurationService {
     ignoreCertificates: boolean;
     updateConfiguration(config: DidChangeConfigurationParams): void;
 }
+
 export interface HomeAssistantConfiguration {
-    token?: string;
-    url?: string;
+    longLivedAccessToken?: string;
+    hostUrl?: string;
     ignoreCertificates: boolean;
 }
 
@@ -20,12 +21,12 @@ export class ConfigurationService implements IConfigurationService {
     public ignoreCertificates: boolean = false;
 
     public updateConfiguration = (config: DidChangeConfigurationParams): void => {
-        var incoming = <HomeAssistantConfiguration>config.settings;
-        this.token = incoming.token;
-        this.url = incoming.url;
+        var incoming = <HomeAssistantConfiguration>config.settings["vscode-home-assistant"];
+       
+        this.token = incoming.longLivedAccessToken;
+        this.url = incoming.hostUrl;
         this.ignoreCertificates = !!incoming.ignoreCertificates;
 
         this.isConfigured = true;
-    };
-
+    }
 }
