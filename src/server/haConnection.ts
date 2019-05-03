@@ -2,7 +2,7 @@ import * as ha from "home-assistant-js-websocket";
 import { MarkedString, CompletionItem, CompletionItemKind, MarkupContent } from 'vscode-languageserver';
 import { IConfigurationService } from "./ConfigurationService";
 import ws = require("ws");
-import {createSocket} from "./socket";
+import { createSocket } from "./socket";
 
 export interface IHaConnection {
     tryConnect(): Promise<void>;
@@ -19,6 +19,7 @@ export class HaConnection implements IHaConnection {
     constructor(private configurationService: IConfigurationService) {
 
     }
+
     public tryConnect = async () => {
         await this.createConnection();
     }
@@ -46,7 +47,7 @@ export class HaConnection implements IHaConnection {
             console.log("Connecting to Home Assistant...");
             this.connection = await ha.createConnection({
                 auth: auth,
-                createSocket: async (o) => createSocket(auth)
+                createSocket: async (o) => createSocket(auth, this.configurationService.ignoreCertificates)
             });
             console.log("Connected to Home Assistant");
         }
@@ -91,7 +92,12 @@ export class HaConnection implements IHaConnection {
 
     public notifyConfigUpdate = async (notifyConfigUpdate: any): Promise<void> => {
         this.disconnect();
-        await this.tryConnect();
+        try {
+            await this.tryConnect();
+        }
+        catch (err) {
+            // so be it, error is now displayed in logs
+        }
     }
 
     private getHassEntities = async (): Promise<ha.HassEntities> => {
@@ -124,7 +130,7 @@ export class HaConnection implements IHaConnection {
         for (const [key, value] of Object.entries(entities)) {
             let completionItem = CompletionItem.create(`${value.entity_id}`);
             completionItem.kind = CompletionItemKind.EnumMember;
-            completionItem.filterText = `${value.entity_id}`; 
+            completionItem.filterText = `${value.entity_id}`;
             completionItem.insertText = completionItem.filterText;
             completionItem.data = {};
             completionItem.data.isEntity = true;
@@ -179,19 +185,19 @@ export class HaConnection implements IHaConnection {
             for (const [serviceKey, serviceValue] of Object.entries(domainValue)) {
                 let completionItem = CompletionItem.create(`${domainKey}.${serviceKey}`);
                 completionItem.kind = CompletionItemKind.EnumMember;
-                completionItem.filterText = `${domainKey}.${serviceKey}`; 
-                completionItem.insertText = completionItem.filterText; 
+                completionItem.filterText = `${domainKey}.${serviceKey}`;
+                completionItem.insertText = completionItem.filterText;
                 completionItem.data = {};
                 completionItem.data.isService = true;
 
                 var fields = Object.entries(serviceValue.fields);
- 
+
                 if (fields.length > 0) {
                     completionItem.documentation = <MarkupContent>{
                         kind: "markdown",
                         value: `**${domainKey}.${serviceKey}:** \r\n \r\n`
                     };
-                     
+
                     completionItem.documentation.value += `| Field | Description | Example | \r\n`;
                     completionItem.documentation.value += `| :---- | :---- | :---- | \r\n`;
 

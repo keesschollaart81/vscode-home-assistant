@@ -1,18 +1,23 @@
 import { Automations } from "./automation";
 import { Sensors } from "./sensors";
+import { EntityConfig } from "./ui-lovelace";
 
 /**
  * @TJS-additionalProperties true
  */
-export interface HomeAssistantRoot{
+export interface HomeAssistantRoot {
     homeassistant?: HomeAssistantComponent | IncludeTags;
     automation?: Automations | IncludeTags;
     group?: GroupComponent | IncludeTags;
+    panel_iframe?: PanelIframeComponent | IncludeTags;
+    sensor?: null | Array<Sensors> | IncludeTags;
+    scene?: SceneComponentEntry[] | IncludeTags;
+    input_boolean?: InputBooleanEntry | IncludeTags;
+    script?: Script | IncludeTags;
     http?: any;
     default_config?: any;
     person?: any;
     system_health?: any;
-    panel_iframe?: PanelIframeComponent | IncludeTags;
     panel_custom?: any;
     updater?: any;
     discovery?: any;
@@ -23,20 +28,19 @@ export interface HomeAssistantRoot{
     sun?: any;
     tts?: any;
     recorder?: any;
-    sensor?: null | Array<Sensors> | IncludeTags;
     ifttt?: any;
     ios?: any;
     mqtt?: any;
     remote?: any;
 }
-  
-export interface HomeAssistantComponent{
+
+export interface HomeAssistantComponent {
     name?: string;
     latitude?: string | number;
     longitude?: string | number;
     elevation?: string | number;
     unit_system?: "metric" | "imperial";
-    time_zone?: string  ;
+    time_zone?: string;
     whitelist_external_dirs?: string[];
     customize?: CustomizeComponent | IncludeTags;
     customize_domain?: any;
@@ -66,22 +70,22 @@ export type IncludeTags = IncludeTag | IncludeFolderTag;
 export interface SecretTag { }
 
 
-export interface PanelIframeComponent{
+export interface PanelIframeComponent {
     [key: string]: PanelIframeComponentEntry;
 }
-export interface PanelIframeComponentEntry{
-    title:string;
+export interface PanelIframeComponentEntry {
+    title: string;
     url: string;
     icon?: string;
     require_admin?: boolean;
 }
-export interface CustomizeComponent{
+export interface CustomizeComponent {
     [key: string]: CustomizeComponentEntry;
 }
 /**
  * @TJS-additionalProperties true
  */
-export interface CustomizeComponentEntry{ 
+export interface CustomizeComponentEntry {
     friendly_name?: string;
     homebridge_name?: string;
     hidden?: boolean;
@@ -94,40 +98,110 @@ export interface CustomizeComponentEntry{
     unit_of_measurement?: string;
     initial_state?: boolean;
 }
-export interface GroupComponent{
+export interface GroupComponent {
     [key: string]: GroupComponentEntry | string[];
 }
-export interface GroupComponentEntry{ 
-    name?: string; 
-    view?: boolean; 
-    icon?: string; 
-    control?: string; 
-    entities: string | string[]; 
-    all?: boolean;  
+export interface GroupComponentEntry {
+    name?: string;
+    view?: boolean;
+    icon?: string;
+    control?: string;
+    entities: string | string[];
+    all?: boolean;
 }
 
-export type AuthProviders = 
-    HomeAssistantAuthProvider | 
+export type AuthProviders =
+    HomeAssistantAuthProvider |
     TrustedNetworksAuthProvider |
     CommandLineAuthProvider |
     LegacyApiPasswordAuthProvider;
 
-export interface HomeAssistantAuthProvider{
+export interface HomeAssistantAuthProvider {
     type: "homeassistant";
 }
-export interface TrustedNetworksAuthProvider{
+export interface TrustedNetworksAuthProvider {
     type: "trusted_networks";
     trusted_networks: string | string[] | any[];
     trusted_users?: string | string[] | any[];
     allow_bypass_login?: boolean;
 }
-export interface CommandLineAuthProvider{
+export interface CommandLineAuthProvider {
     type: "command_line";
     command: string;
     args?: any;
     meta?: boolean;
 }
-export interface LegacyApiPasswordAuthProvider{
+export interface LegacyApiPasswordAuthProvider {
     type: "legacy_api_password";
     api_password: string | SecretTag;
+}
+
+export type SceneComponentEntries = Array<SceneComponentEntry>;
+
+export interface SceneComponentEntry {
+    name: string;
+    entities: { [name: string]: string | boolean | EntitySceneConfig };
+}
+
+/**
+ * @TJS-additionalProperties true
+ */
+export interface EntitySceneConfig {
+    state?: boolean;
+    brightness?: number | string;
+    source?: string;
+    color_temp?: number | string;
+    xy_color?: any;
+}
+
+export type InputBooleans = {
+    [name: string]: InputBooleanEntry
+};
+
+export interface InputBooleanEntry {
+    [name: string]: {
+        name?: string;
+        initial?: boolean;
+        icon?: string
+    };
+}
+
+export interface Script {
+    [name: string]: SequencedAction | ScriptAction;
+}
+
+export interface SequencedAction{
+    alias?: string;
+    sequence: ScriptAction[];
+}
+
+export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
+
+export interface ServiceAction {
+    service: string;
+    data?: any;
+    data_template?: any;
+}
+export interface DelayAction {
+    delay: string;
+}
+export interface WaitAction {
+    wait_template: string;
+    timeout?: string;
+    continue_on_timeout?: boolean;
+}
+export interface EventAction {
+    event: string;
+    event_data: EventActionData;
+    event_data_template: any;
+}
+
+/**
+ * @TJS-additionalProperties true
+ */
+export interface EventActionData {
+    name?: string;
+    message?: string;
+    entity_id?: string;
+    domain?: string;
 }

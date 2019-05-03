@@ -13,7 +13,7 @@ const MSG_TYPE_AUTH_INVALID = "auth_invalid";
 const MSG_TYPE_AUTH_OK = "auth_ok";
 const ERR_INVALID_AUTH = 2;
 
-export function createSocket(auth: ha.Auth): Promise<any> {
+export function createSocket(auth: ha.Auth, ignoreCertificates: boolean): Promise<any> {
 
     // Convert from http:// -> ws://, https:// -> wss://
     const url = auth.wsUrl;
@@ -27,7 +27,9 @@ export function createSocket(auth: ha.Auth): Promise<any> {
     ) {
         console.log("[Auth Phase] Connecting to Home Assistant...", url);
 
-        const socket = new WebSocket(url);
+        const socket = new WebSocket(url,{
+            rejectUnauthorized: !ignoreCertificates
+        });
 
         // If invalid auth, we will not try to reconnect.
         let invalidAuth = false;

@@ -26,7 +26,7 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
         }
         var currentNode = location[location.length - 1];
         var parentNode = location[location.length - 2]; // in case or arrays, currentNode is the indexer for the array position
-        if (!EntityIdCompletionContribution.propertyMatches.some(x => x === currentNode || x === parentNode)) {
+        if (!EntityIdCompletionContribution.propertyMatches.some(x => x === currentNode || (!isNaN(+currentNode) && x === parentNode))) {
             return null;
         }
         var entityIdCompletions = await this.haConnection.getEntityCompletions();

@@ -16,12 +16,36 @@
     "fromType": "HomeAssistantRoot"
   },
   {
-    "key": "homeassistant-packages",
+    "key": "homeassistant-customize",
     "path": "configuration.yaml/homeassistant/customize",
     "isList": true,
     "file": "homeassistant-customize-named.json",
     "tsFile": "homeassistant.ts",
     "fromType": "CustomizeComponent"
+  },
+  {
+    "key": "homeassistant-scene",
+    "path": "configuration.yaml/scene",
+    "isList": true,
+    "file": "homeassistant-scene-named.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "SceneComponentEntries"
+  },
+  {
+    "key": "homeassistant-input-boolean",
+    "path": "configuration.yaml/input_boolean",
+    "isList": true,
+    "file": "homeassistant-input-boolean-named.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "InputBooleanEntry"
+  },
+  {
+    "key": "homeassistant-script",
+    "path": "configuration.yaml/script",
+    "isList": true,
+    "file": "homeassistant-script-named.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "Script"
   },
   {
     "key": "automations-named",
