@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
-import { FilePathMapping, Includetype } from "./yamlIncludeDiscoveryService";
+import { FilePathMapping, Includetype } from "../yamlIncludeDiscoveryService";
+
 
 export class SchemaServiceForIncludes {
     private schemaContributions: any;
@@ -8,53 +9,15 @@ export class SchemaServiceForIncludes {
 
     public onUpdate(fileMappings: FilePathMapping) {
         this.schemaContributions = this.getSchemaContributions(fileMappings);
-        this.jsonSchemaService.clearExternalSchemas(); // otherwise it will stack the scheme in memory for every file change
+        this.jsonSchemaService.clearExternalSchemas(); // otherwise it will stack the schemes in memory for every file change
         this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
     }
 
     private getPathToSchemaFileMappings(): PathToSchemaMapping[] {
-        return [
-            {
-                key: "homeassistant",
-                path: "configuration.yaml",
-                isList: false,
-                file: "homeassistant.json"
-            }, {
-                key: "homeassistant-packages",
-                path: "configuration.yaml/homeassistant/packages",
-                isList: false,
-                file: "homeassistant-packages.json"
-            }, {
-                key: "automations-named",
-                path: "configuration.yaml/automation",
-                isList: false,
-                file: "automations-named.json"
-            },
-            {
-                key: "automations-list",
-                path: "configuration.yaml/automation",
-                isList: true,
-                file: "automations-list.json"
-            },
-            {
-                key: "ui-lovelace",
-                path: "ui-lovelace.yaml",
-                isList: false,
-                file: "ui-lovelace.json"
-            },
-            {
-                key: "lovelace-views-list",
-                path: "ui-lovelace.yaml/views",
-                isList: true,
-                file: "lovelace-views-list.json"
-            },
-            {
-                key: "lovelace-views-named",
-                path: "ui-lovelace.yaml/views",
-                isList: false,
-                file: "lovelace-views-named.json"
-            }
-        ];
+        var jsonPath = path.join(__dirname, "mappings.json");
+        var filecontents = fs.readFileSync(jsonPath, "utf-8");
+        var pathToSchemaMappings: PathToSchemaMapping[] = JSON.parse(filecontents);
+        return pathToSchemaMappings;
     }
 
     private getSchemaContributions(fileMappings: FilePathMapping) {
@@ -63,7 +26,7 @@ export class SchemaServiceForIncludes {
         var pathToSchemaFileMappings = this.getPathToSchemaFileMappings();
 
         pathToSchemaFileMappings.forEach(pathToSchemaMapping => {
-            var jsonPath = path.join(__dirname, "..", "schemas", "json", pathToSchemaMapping.file);
+            var jsonPath = path.join(__dirname, "json", pathToSchemaMapping.file);
             var filecontents = fs.readFileSync(jsonPath, "utf-8");
             var schema = JSON.parse(filecontents);
             schemas[`http://schemas.home-assistant.io/${pathToSchemaMapping.key}`] = schema;
@@ -105,4 +68,6 @@ export interface PathToSchemaMapping {
     path: string;
     isList: boolean;
     file: string;
+    tsFile: string;
+    fromType: string;
 }

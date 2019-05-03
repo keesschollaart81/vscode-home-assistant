@@ -1,11 +1,11 @@
-import { SchemaServiceForIncludes } from "./SchemaServiceForIncludes";
+import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { YAMLDocumentSymbols } from "yaml-language-server/out/server/src/languageservice/services/documentSymbols";
 import { JSONSchemaService } from "yaml-language-server/out/server/src/languageservice/services/jsonSchemaService";
 import { YAMLCompletion } from "yaml-language-server/out/server/src/languageservice/services/yamlCompletion";
 import { YAMLHover } from "yaml-language-server/out/server/src/languageservice/services/yamlHover";
 import { YAMLValidation } from "yaml-language-server/out/server/src/languageservice/services/yamlValidation";
 import * as path from "path";
-import { EntityIdCompletionContribution } from "./entityIdCompletion";
+import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { TextDocument } from "vscode-languageserver-types";
 import { JSONWorkerContribution } from "vscode-json-languageservice";
 

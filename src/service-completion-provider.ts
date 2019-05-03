@@ -1,31 +1,31 @@
 
-import * as vscode from "vscode";
-import { HomeAssistant } from "./homeassistant";
+// import * as vscode from "vscode";
+// import { HomeAssistant } from "./homeassistant";
 
-export class ServiceCompletionProvider implements vscode.CompletionItemProvider {
+// export class ServiceCompletionProvider implements vscode.CompletionItemProvider {
  
-    constructor(private ha: HomeAssistant) {
-    }
+//     constructor(private ha: HomeAssistant) {
+//     }
 
-    async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+//     async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 
-        let linePrefix = document
-            .lineAt(position)
-            .text.substr(0, position.character);
+//         let linePrefix = document
+//             .lineAt(position)
+//             .text.substr(0, position.character);
 
-        const isSingleLineMatch = /(.*)service(:)?( )?([-\w]+?)?$/.test(linePrefix);
+//         const isSingleLineMatch = /(.*)service(:)?( )?([-\w]+?)?$/.test(linePrefix);
 
-        if (!isSingleLineMatch) {
-            return [];
-        }
+//         if (!isSingleLineMatch) {
+//             return [];
+//         }
 
-        let serviceCompletions = await this.ha.getServiceCompletions();
+//         let serviceCompletions = await this.ha.getServiceCompletions();
 
-        console.log(`Showing ${serviceCompletions.length} completions`);
+//         console.log(`Showing ${serviceCompletions.length} completions`);
 
-        return {
-            incomplete: false,
-            items: serviceCompletions
-        };
-    }
-}
+//         return {
+//             incomplete: false,
+//             items: serviceCompletions
+//         };
+//     }
+// }

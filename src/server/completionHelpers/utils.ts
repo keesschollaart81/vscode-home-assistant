@@ -1,5 +1,6 @@
 import { TextDocument, Position } from "vscode-languageserver";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
+import { EntityIdCompletionContribution } from "./entityIds";
 
 // this is the updated implementation from
 // https://github.com/Microsoft/azure-pipelines-language-server/blob/master/language-service/src/utils/yamlServiceUtils.ts
@@ -15,8 +16,8 @@ function is_EOL(c: number) {
 }
 
 export interface CompletionAdjustment {
-    newText: string,
-    newPosition: Position
+    newText: string;
+    newPosition: Position;
 }
 
 export function completionHelper(document: TextDocument, textDocumentPosition: Position): CompletionAdjustment {
@@ -69,3 +70,4 @@ export function completionHelper(document: TextDocument, textDocumentPosition: P
         };
     }
 }
+ 

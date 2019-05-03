@@ -4,14 +4,14 @@ import { HomeAssistantLanguageService } from "./haLanguageService";
 import { YamlIncludeDiscoveryService } from "./yamlIncludeDiscoveryService";
 import { HaConnection } from "./haConnection";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServerWrapper";
-import { EntityIdCompletionContribution } from "./entityIdCompletion";
+import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { ConfigurationService } from "./ConfigurationService";
+import { ServicesCompletionContribution } from "./completionHelpers/services";
 
 let connection = createConnection(ProposedFeatures.all);
 
 console.log = connection.console.log.bind(connection.console);
-console.error = connection.console.error.bind(connection.console);
-console.warn = connection.console.warn.bind(connection.console);
+console.error = connection.console.error.bind(connection.console); 
 
 let documents = new TextDocuments();
 documents.listen(connection);
@@ -21,17 +21,19 @@ connection.onInitialize(async params => {
   connection.console.log(`[Server(${process.pid})] Started and initialize received`);
 
   var configurationService = new ConfigurationService();
-  var haConnection = new HaConnection(configurationService, (m) => connection.console.log(m));
+  var haConnection = new HaConnection(configurationService);
   var vsCodeFileAccessor = new VsCodeFileAccessor(params.rootUri, connection);
   var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([ 
-    new EntityIdCompletionContribution(haConnection) 
+    new EntityIdCompletionContribution(haConnection),
+    new ServicesCompletionContribution(haConnection)
   ]);
   var yamlIncludeDiscoveryService = new YamlIncludeDiscoveryService(vsCodeFileAccessor);
   var homeAsisstantLanguageService = new HomeAssistantLanguageService(
     documents,
     params.rootUri,
     yamlLanguageServiceWrapper,
-    yamlIncludeDiscoveryService    
+    yamlIncludeDiscoveryService,
+    haConnection
   ); 
   await homeAsisstantLanguageService.triggerSchemaLoad();
 
@@ -48,7 +50,7 @@ connection.onInitialize(async params => {
   documents.onDidChangeContent(triggerValidation);
   documents.onDidOpen(triggerValidation);
 
-  connection.client.register(DidChangeConfigurationNotification.type, undefined);
+  // connection.client.register(DidChangeConfigurationNotification.type, undefined);
   connection.onDidChangeConfiguration(async (config) => {
     configurationService.updateConfiguration(config);
     await haConnection.notifyConfigUpdate(config);
@@ -65,7 +67,7 @@ connection.onInitialize(async params => {
   return {
     capabilities: <ServerCapabilities>{
       textDocumentSync: documents.syncKind,
-      completionProvider: { triggerCharacters: [" ", ":", "-"], resolveProvider: true },
+      completionProvider: { triggerCharacters: [" "], resolveProvider: true },
       hoverProvider: true,
       documentSymbolProvider: true,
       documentFormattingProvider: true

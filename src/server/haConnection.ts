@@ -8,6 +8,7 @@ export interface IHaConnection {
     tryConnect(): Promise<void>;
     notifyConfigUpdate(conf: any);
     getEntityCompletions(): Promise<CompletionItem[]>;
+    getServiceCompletions(): Promise<CompletionItem[]>;
 }
 export class HaConnection implements IHaConnection {
 
@@ -15,7 +16,7 @@ export class HaConnection implements IHaConnection {
     private hassEntities!: Promise<ha.HassEntities>;
     private hassServices!: Promise<ha.HassServices>;
 
-    constructor(private configurationService: IConfigurationService, private logger: (message: string) => void) {
+    constructor(private configurationService: IConfigurationService) {
 
     }
     public tryConnect = async () => {
@@ -47,6 +48,7 @@ export class HaConnection implements IHaConnection {
                 auth: auth,
                 createSocket: async (o) => createSocket(auth)
             });
+            console.log("Connected to Home Assistant");
         }
         catch (error) {
             this.handleConnectionError(error);
@@ -58,7 +60,7 @@ export class HaConnection implements IHaConnection {
         });
 
         this.connection.addEventListener("disconnected", () => {
-            console.warn("Lost connection with Home Assistant");
+            console.log("Lost connection with Home Assistant");
         });
         this.connection.addEventListener("reconnect-error", (data) => {
             console.error("Reconnect error with Home Assistant", data);
@@ -122,27 +124,89 @@ export class HaConnection implements IHaConnection {
         for (const [key, value] of Object.entries(entities)) {
             let completionItem = CompletionItem.create(`${value.entity_id}`);
             completionItem.kind = CompletionItemKind.EnumMember;
-            completionItem.filterText = ` ${value.entity_id}`; // enable a leading space
+            completionItem.filterText = `${value.entity_id}`; 
             completionItem.insertText = completionItem.filterText;
+            completionItem.data = {};
+            completionItem.data.isEntity = true;
 
-            // completionItem.documentation = <MarkupContent>{
-            //     kind: "markdown",
-            //     value: `**${value.entity_id}** \r\n \r\n`
-            // };
+            completionItem.documentation = <MarkupContent>{
+                kind: "markdown",
+                value: `**${value.entity_id}** \r\n \r\n`
+            };
 
-            // if (value.state) {
-            //     completionItem.documentation.value += `State: ${value.state} \r\n \r\n`;
-            // }
-            // completionItem.documentation.value += `| Attribute | Value | \r\n`;
-            // completionItem.documentation.value += `| :---- | :---- | \r\n`;
+            if (value.state) {
+                completionItem.documentation.value += `State: ${value.state} \r\n \r\n`;
+            }
+            completionItem.documentation.value += `| Attribute | Value | \r\n`;
+            completionItem.documentation.value += `| :---- | :---- | \r\n`;
 
-            // for (const [attrKey, attrValue] of Object.entries(value.attributes)) {
-            //     completionItem.documentation.value += `| ${attrKey} | ${attrValue} | \r\n`;
-            // }
+            for (const [attrKey, attrValue] of Object.entries(value.attributes)) {
+                completionItem.documentation.value += `| ${attrKey} | ${attrValue} | \r\n`;
+            }
             completions.push(completionItem);
         }
         return completions;
     }
+
+    private getHassServices = async (): Promise<ha.HassServices> => {
+        await this.createConnection();
+
+        if (!this.hassServices) {
+            this.hassServices = new Promise<ha.HassServices>(async (resolve, reject) => {
+                if (!this.connection) {
+                    return reject();
+                }
+                ha.subscribeServices(this.connection, services => {
+                    console.log(`Got ${Object.keys(services).length} services from Home Assistant`);
+                    return resolve(services);
+                });
+            });
+        }
+        return await this.hassServices;
+    }
+
+    public async getServiceCompletions(): Promise<CompletionItem[]> {
+
+        let services = await this.getHassServices();
+
+        if (!services) {
+            return [];
+        }
+
+        let completions: CompletionItem[] = [];
+
+        for (const [domainKey, domainValue] of Object.entries(services)) {
+            for (const [serviceKey, serviceValue] of Object.entries(domainValue)) {
+                let completionItem = CompletionItem.create(`${domainKey}.${serviceKey}`);
+                completionItem.kind = CompletionItemKind.EnumMember;
+                completionItem.filterText = `${domainKey}.${serviceKey}`; 
+                completionItem.insertText = completionItem.filterText; 
+                completionItem.data = {};
+                completionItem.data.isService = true;
+
+                var fields = Object.entries(serviceValue.fields);
+ 
+                if (fields.length > 0) {
+                    completionItem.documentation = <MarkupContent>{
+                        kind: "markdown",
+                        value: `**${domainKey}.${serviceKey}:** \r\n \r\n`
+                    };
+                     
+                    completionItem.documentation.value += `| Field | Description | Example | \r\n`;
+                    completionItem.documentation.value += `| :---- | :---- | :---- | \r\n`;
+
+                    for (const [fieldKey, fieldValue] of fields) {
+                        completionItem.documentation.value += `| ${fieldKey} | ${fieldValue.description} |  ${fieldValue.example} | \r\n`;
+                    }
+                }
+                completions.push(completionItem);
+            }
+        }
+
+        return completions;
+    }
+
+
 
     public disconnect() {
         if (!this.connection) {

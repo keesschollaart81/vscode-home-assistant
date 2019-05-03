@@ -100,7 +100,7 @@
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
-    "schema": "ts-node src/schemas/generateSchemas.ts",
+    "schema": "ts-node src/server/schemas/generateSchemas.ts",
     "vscode:prepublish": "tsc -p ./"
   },
   "devDependencies": {

@@ -1,0 +1,66 @@
+[
+  {
+    "key": "homeassistant",
+    "path": "configuration.yaml",
+    "isList": false,
+    "file": "homeassistant.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "HomeAssistantRoot"
+  },
+  {
+    "key": "homeassistant-packages",
+    "path": "configuration.yaml/homeassistant/packages",
+    "isList": false,
+    "file": "homeassistant-packages.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "HomeAssistantRoot"
+  },
+  {
+    "key": "homeassistant-packages",
+    "path": "configuration.yaml/homeassistant/customize",
+    "isList": true,
+    "file": "homeassistant-customize-named.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "CustomizeComponent"
+  },
+  {
+    "key": "automations-named",
+    "path": "configuration.yaml/automation",
+    "isList": false,
+    "file": "automations-named.json",
+    "tsFile": "automation.ts",
+    "fromType": "Automation"
+  },
+  {
+    "key": "automations-list",
+    "path": "configuration.yaml/automation",
+    "isList": true,
+    "file": "automations-list.json",
+    "tsFile": "automation.ts",
+    "fromType": "Automations"
+  },
+  {
+    "key": "ui-lovelace",
+    "path": "ui-lovelace.yaml",
+    "isList": false,
+    "file": "ui-lovelace.json",
+    "tsFile": "ui-lovelace.ts",
+    "fromType": "LovelaceConfig"
+  },
+  {
+    "key": "lovelace-views-list",
+    "path": "ui-lovelace.yaml/views",
+    "isList": true,
+    "file": "lovelace-views-list.json",
+    "tsFile": "ui-lovelace.ts",
+    "fromType": "LovelaceViewConfigs"
+  },
+  {
+    "key": "lovelace-views-named",
+    "path": "ui-lovelace.yaml/views",
+    "isList": false,
+    "file": "lovelace-views-named.json",
+    "tsFile": "ui-lovelace.ts",
+    "fromType": "LovelaceViewConfig"
+  }
+]

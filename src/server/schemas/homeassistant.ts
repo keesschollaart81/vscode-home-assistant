@@ -29,7 +29,7 @@ export interface HomeAssistantRoot{
     mqtt?: any;
     remote?: any;
 }
- 
+  
 export interface HomeAssistantComponent{
     name?: string;
     latitude?: string | number;
@@ -42,7 +42,7 @@ export interface HomeAssistantComponent{
     customize_domain?: any;
     customize_glob?: any;
     packages?: Array<HomeAssistantComponent> | IncludeTags;
-    auth_providers: AuthProviders[];
+    auth_providers?: AuthProviders[];
 }
 
 
@@ -78,6 +78,9 @@ export interface PanelIframeComponentEntry{
 export interface CustomizeComponent{
     [key: string]: CustomizeComponentEntry;
 }
+/**
+ * @TJS-additionalProperties true
+ */
 export interface CustomizeComponentEntry{ 
     friendly_name?: string;
     homebridge_name?: string;
@@ -115,7 +118,7 @@ export interface HomeAssistantAuthProvider{
 export interface TrustedNetworksAuthProvider{
     type: "trusted_networks";
     trusted_networks: string | string[] | any[];
-    trusted_users: string | string[] | any[];
+    trusted_users?: string | string[] | any[];
     allow_bypass_login?: boolean;
 }
 export interface CommandLineAuthProvider{

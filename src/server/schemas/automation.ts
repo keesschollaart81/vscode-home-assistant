@@ -120,7 +120,7 @@ export interface ServiceActionSchema extends Action {
   entity_id?: string | string[];
   data?: any;
   data_template?: any;
-}
+}  
 
 export interface ServiceActionTemplateSchema extends Action {
   service_template: string;

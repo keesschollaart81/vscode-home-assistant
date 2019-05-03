@@ -26,7 +26,8 @@ export class YamlIncludeDiscoveryService {
       }
 
       var yaml = YAML.parse(fileContents, {
-        tags: this.getCustomTags(fileNames[index])
+        // @ts-ignore the typings of this library are not up to date
+        customTags: this.getCustomTags(fileNames[index])
       });
       await this.updatePathsViaTraversal(yaml, fileNames[index], "");
     }
@@ -125,9 +126,10 @@ export class YamlIncludeDiscoveryService {
 
   private getCustomTags(filename: string): Tag[] {
     return <Tag[]>[
-      // {
-      //   tag: "!secret"
-      // },
+      {
+        tag: "!secret",
+        resolve: (doc, cst) => Symbol.for(cst.strValue)
+      },
       {
         tag: `!${Includetype[Includetype.include]}`,
         resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)

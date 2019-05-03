@@ -1,13 +1,16 @@
-import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams } from "vscode-languageserver";
-import { completionHelper } from "./completionHelper";
+import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem } from "vscode-languageserver";
+import { completionHelper } from "./completionHelpers/utils";
 import { Includetype, YamlIncludeDiscoveryService } from "./yamlIncludeDiscoveryService";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
 import { format } from "yaml-language-server/out/server/src/languageservice/services/yamlFormatter";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServerWrapper";
-import { SchemaServiceForIncludes } from "./SchemaServiceForIncludes";
- 
+import { SchemaServiceForIncludes } from "./schemas/schemaService";
+import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
+import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
+import { HaConnection } from "./haConnection";
+import { ServicesCompletionContribution } from "./completionHelpers/services";
 export class HomeAssistantLanguageService {
-   
+
     private schemaServiceForIncludes: SchemaServiceForIncludes;
 
     private rootFiles = [
@@ -18,21 +21,23 @@ export class HomeAssistantLanguageService {
         private documents: TextDocuments,
         private workspaceFolder: string,
         private yamlLanguageService: YamlLanguageServiceWrapper,
-        private yamlIncludeDiscoveryService: YamlIncludeDiscoveryService
+        private yamlIncludeDiscoveryService: YamlIncludeDiscoveryService,
+        private haConnection: HaConnection
     ) {
         this.schemaServiceForIncludes = new SchemaServiceForIncludes(this.yamlLanguageService.jsonSchemaService);
     }
 
     private pendingSchemaUpdate: NodeJS.Timer;
 
-    public triggerSchemaLoad = async () => {
+    public triggerSchemaLoad = async (becauseOfFilename?: string) => {
         // working with a timeout to debounce while typing
         clearTimeout(this.pendingSchemaUpdate);
-        this.pendingSchemaUpdate = setTimeout(async () => { 
+        this.pendingSchemaUpdate = setTimeout(async () => {
+            console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
             var yamlIncludes = await this.yamlIncludeDiscoveryService.discover(this.rootFiles);
             this.schemaServiceForIncludes.onUpdate(yamlIncludes.filePathMappings);
         }, 200);
-    } 
+    }
 
     public getDiagnostics = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<any[]> => {
         if (!textDocumentChangeEvent.document) {
@@ -40,8 +45,7 @@ export class HomeAssistantLanguageService {
         }
 
         if (this.rootFiles.some(x => textDocumentChangeEvent.document.uri.endsWith(x))) {
-            console.log(`Edit of ${textDocumentChangeEvent.document.uri}, updating schema's...`)
-            await this.triggerSchemaLoad();
+            await this.triggerSchemaLoad(textDocumentChangeEvent.document.uri);
         }
 
         if (textDocumentChangeEvent.document.getText().length === 0) {
@@ -91,7 +95,7 @@ export class HomeAssistantLanguageService {
         return format(document, formatParams.options, this.getValidYamlTags());
     }
 
-    public onCompletion = async (textDocumentPosition):  Promise<CompletionList> => {
+    public onCompletion = async (textDocumentPosition): Promise<CompletionList> => {
         let textDocument = this.documents.get(
             textDocumentPosition.textDocument.uri
         );
@@ -106,9 +110,16 @@ export class HomeAssistantLanguageService {
         }
 
         let completionFix = completionHelper(textDocument, textDocumentPosition.position);
+
         let newText = completionFix.newText;
         let jsonDocument = parseYAML(newText);
-        var completions = await this.yamlLanguageService.doComplete(textDocument, textDocumentPosition.position, jsonDocument);
+
+        var completions: CompletionList = await this.yamlLanguageService.doComplete(textDocument, textDocumentPosition.position, jsonDocument);
+
+        var additionalCompletions = await this.getServiceAndEntityCompletions(textDocument, textDocumentPosition.position, completions);
+        if (additionalCompletions.length > 0) {
+            completions.items.push(...additionalCompletions);
+        }
         return completions;
     }
 
@@ -130,9 +141,9 @@ export class HomeAssistantLanguageService {
 
     public onDidChangeWatchedFiles = async (onDidChangeWatchedFiles: DidChangeWatchedFilesParams) => {
         if (this.rootFiles.some(x => onDidChangeWatchedFiles.changes.some(y => y.uri.endsWith(x)))) {
-            await this.triggerSchemaLoad();
+            await this.triggerSchemaLoad(onDidChangeWatchedFiles.changes[0].uri);
         }
-    } 
+    }
 
     private getValidYamlTags(): string[] {
         var validTags: string[] = [];
@@ -143,5 +154,62 @@ export class HomeAssistantLanguageService {
         }
         validTags.push("!secret scalar");
         return validTags;
+    }
+
+    private getServiceAndEntityCompletions = async (document: TextDocument, textDocumentPosition: Position, currentCompletions: CompletionList): Promise<CompletionItem[]> => {
+        // sadly this is needed here. 
+        // the normal completion engine cannot provide completions for type `string | string[]`
+        // updating the type to only one of the 2 types will break the yaml-validation.
+        // so we tap in here, iterate over the lines of the text file to see if this if 
+        // we need to add entity_id's to the completion list
+
+        var properties: { [provider: string]: string[] } = {};
+        properties["entities"] = EntityIdCompletionContribution.propertyMatches;
+        properties["services"] = ServicesCompletionContribution.propertyMatches;
+
+        var additionalCompletionProvider = this.findAutoCompletionProperty(document, textDocumentPosition, properties);
+        let additionalCompletion: CompletionItem[] = [];
+        switch (additionalCompletionProvider) {
+            case "entities":
+                // sometimes the entities are already added, do not add them twice
+                if (!currentCompletions.items.some(x => x.data && x.data.isEntity)) {
+                    additionalCompletion = await this.haConnection.getEntityCompletions();
+                }
+                break;
+            case "services":
+                if (!currentCompletions.items.some(x => x.data && x.data.isService)) {
+                    additionalCompletion = await this.haConnection.getServiceCompletions();
+                }
+                break;
+        }
+        return additionalCompletion;
+    }
+
+    private findAutoCompletionProperty = (document: TextDocument, textDocumentPosition: Position, properties: { [provider: string]: string[] }): string => {
+        let currentLine = textDocumentPosition.line;
+        while (currentLine >= 0) {
+            const lineOffsets: number[] = getLineOffsets(document.getText());
+            const start: number = lineOffsets[currentLine];
+            var end = 0;
+            if (lineOffsets[currentLine + 1] !== undefined) {
+                end = lineOffsets[currentLine + 1];
+            } else {
+                end = document.getText().length;
+            }
+            let thisLine = document.getText().substring(start, end);
+
+            let isOtherItemInList = thisLine.match(/-\s*([-\w]+)?(\.)?([-\w]+?)?\s*$/);
+            if (isOtherItemInList) {
+                currentLine--;
+                continue;
+            }
+            for (var key in properties) {
+                if (properties[key].some(propertyName => new RegExp(`(.*)${propertyName}(:)([\s]*)([\w]*)(\s*)`).test(thisLine))) {
+                    return key;
+                }
+            }
+            return undefined;
+        }
+        return undefined;
     }
 }

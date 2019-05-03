@@ -1,10 +1,10 @@
 import { MarkedString, CompletionItem, CompletionItemKind } from 'vscode-languageserver';
 import { JSONWorkerContribution, JSONPath, CompletionsCollector } from 'vscode-json-languageservice';
-import { IHaConnection } from './haConnection';
+import { IHaConnection } from '../haConnection';
 
 export class EntityIdCompletionContribution implements JSONWorkerContribution {
 
-    private propertyMatches: string[] = [
+    public static propertyMatches: string[] = [
         "entity_id",
         "entity",
         "entities",
@@ -21,20 +21,26 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
     }
 
     public collectPropertyCompletions = async (resource: string, location: JSONPath, currentWord: string, addValue: boolean, isLast: boolean, result: CompletionsCollector): Promise<any> => {
-        return null;
-    }
-
-    public collectValueCompletions = async (resource: string, location: JSONPath, currentKey: string, result: CompletionsCollector): Promise<any> => {
-        if (!this.propertyMatches.some(x => x === currentKey)) {
+        if (location.length < 2) {
+            return;
+        }
+        var currentNode = location[location.length - 1];
+        var parentNode = location[location.length - 2]; // in case or arrays, currentNode is the indexer for the array position
+        if (!EntityIdCompletionContribution.propertyMatches.some(x => x === currentNode || x === parentNode)) {
             return null;
         }
-        let item: CompletionItem = { kind: CompletionItemKind.Property, label: "label", insertText: "inserttext" };
-        result.add(item);
+        var entityIdCompletions = await this.haConnection.getEntityCompletions();
+        entityIdCompletions.forEach(c => result.add(c));
 
-        // var entityIdCompletions = await this.haConnection.getEntityCompletions();
-        // entityIdCompletions.forEach(c => {
-        //     // result.add(c)
-        // });
+        return null;
+   }
+
+    public collectValueCompletions = async (resource: string, location: JSONPath, currentKey: string, result: CompletionsCollector): Promise<any> => {
+        if (!EntityIdCompletionContribution.propertyMatches.some(x => x === currentKey)) {
+            return null;
+        }
+        var entityIdCompletions = await this.haConnection.getEntityCompletions();
+        entityIdCompletions.forEach(c => result.add(c));
 
         return null;
     }

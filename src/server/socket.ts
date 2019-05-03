@@ -18,14 +18,14 @@ export function createSocket(auth: ha.Auth): Promise<any> {
     // Convert from http:// -> ws://, https:// -> wss://
     const url = auth.wsUrl;
 
-    console.log("[Auth phase] Initializing", url);
+    console.log("[Auth phase] Initializing WebSocket connection to Home Assistant", url);
 
     function connect(
         triesLeft: number,
         promResolve: (socket: any) => void,
         promReject: (err: number) => void
     ) {
-        console.log("[Auth Phase] New connection", url);
+        console.log("[Auth Phase] Connecting to Home Assistant...", url);
 
         const socket = new WebSocket(url);
 
@@ -98,7 +98,7 @@ export function createSocket(auth: ha.Auth): Promise<any> {
         const handleMessage = async (event: { data: any; type: string; target: WebSocket }) => {
             const message = JSON.parse(event.data);
 
-            console.log("[Auth phase] Received", message);
+            console.log(`[Auth phase] Received a message of type ${message.type}`, message);
 
             switch (message.type) {
                 case MSG_TYPE_AUTH_INVALID:
@@ -117,7 +117,7 @@ export function createSocket(auth: ha.Auth): Promise<any> {
                 default:
                     // We already send this message when socket opens
                     if (message.type !== MSG_TYPE_AUTH_REQUIRED) {
-                        console.warn("[Auth phase] Unhandled message", message);
+                        console.log("[Auth phase] Unhandled message", message);
                     }
             }
         };
