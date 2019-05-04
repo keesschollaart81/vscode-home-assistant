@@ -40,17 +40,7 @@ export class SchemaServiceForIncludes {
                 if (!samePath) {
                     return false;
                 }
-                switch (sourceFileMapping.includeType) {
-                    case Includetype.include_dir_merge_named:
-                    case Includetype.include_dir_named:
-                    case Includetype.include_dir_list:
-                        return !x.isList;
-                    case Includetype.include:
-                    case Includetype.include_dir_merge_list:
-                        return x.isList;
-                    case null: // root files
-                        return true;
-                }
+                return true;
             });
             if (relatedPathToSchemaMapping) {
                 schemaAssociations[`**/${sourceFile}`] = [`http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`];
@@ -66,8 +56,7 @@ export class SchemaServiceForIncludes {
 
 export interface PathToSchemaMapping {
     key: string;
-    path: string;
-    isList: boolean;
+    path: string; 
     file: string;
     tsFile: string;
     fromType: string;

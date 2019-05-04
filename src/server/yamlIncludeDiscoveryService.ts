@@ -98,7 +98,7 @@ export class YamlIncludeFileParser {
           continue;
         }
 
-        var files = await this.fileAccessor.getFilesInFolderRelativeFrom(toFileOrFolder, fromFile);
+        var files = await this.fileAccessor.getFilesInFolder(toFileOrFolder);
         files = files.filter(f => path.extname(f) === ".yaml");
         files.map(x => {
           this.includes[x] = new YamlInclude();
@@ -179,6 +179,8 @@ export class YamlIncludeFileParser {
   private includeResolver = (filename: string, doc: YAML.ast.Document, cstNode: YAML.cst.Node): YAML.ast.Node => {
     var fromFile = filename;
     var toFileOrFolder = `${cstNode.rawValue}`.trim();
+    toFileOrFolder = this.fileAccessor.getRelativePath(filename, toFileOrFolder);
+
 
     var include = this.includes[toFileOrFolder];
     if (!include) {

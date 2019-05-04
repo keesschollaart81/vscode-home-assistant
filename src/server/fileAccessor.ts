@@ -6,9 +6,11 @@ export interface FileAccessor {
     getFileContents(fileName: string): Promise<string>;
     getFilesInFolder(subFolder: string): string[];
     getFilesInFolderRelativeFrom(subFolder: string, relativeFrom: string): string[];
+    getRelativePath(relativeFrom: string, filename: string): string;
 }
 
 export class VsCodeFileAccessor implements FileAccessor {
+
     constructor(private workspaceFolder: string, private connection: IConnection) { }
 
     public async getFileContents(uri: string): Promise<string> {
@@ -43,5 +45,10 @@ export class VsCodeFileAccessor implements FileAccessor {
         var dirOfFile = path.dirname(relativeFrom);
         subFolder = path.join(dirOfFile, subFolder);
         return this.getFilesInFolder(subFolder);
+    }
+
+    public getRelativePath = (relativeFrom: string, filename: string): string => {
+        var dirOfFile = path.dirname(relativeFrom);
+        return path.join(dirOfFile, filename)
     }
 }

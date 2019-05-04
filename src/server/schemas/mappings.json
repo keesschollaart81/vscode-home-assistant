@@ -1,90 +1,72 @@
 [
   {
     "key": "homeassistant",
-    "path": "configuration.yaml",
-    "isList": false,
+    "path": "configuration.yaml", 
     "file": "homeassistant.json",
     "tsFile": "homeassistant.ts",
     "fromType": "HomeAssistantRoot"
   },
   {
     "key": "homeassistant-packages",
-    "path": "configuration.yaml/homeassistant/packages",
-    "isList": false,
+    "path": "configuration.yaml/homeassistant/packages", 
     "file": "homeassistant-packages.json",
     "tsFile": "homeassistant.ts",
     "fromType": "HomeAssistantRoot"
   },
   {
     "key": "homeassistant-customize",
-    "path": "configuration.yaml/homeassistant/customize",
-    "isList": false,
-    "file": "homeassistant-customize-named.json",
+    "path": "configuration.yaml/homeassistant/customize", 
+    "file": "homeassistant-customize.json",
     "tsFile": "homeassistant.ts",
-    "fromType": "CustomizeComponent"
+    "fromType": "CustomizeFile"
   },
   {
     "key": "homeassistant-scene",
-    "path": "configuration.yaml/scene",
-    "isList": true,
-    "file": "homeassistant-scene-named.json",
+    "path": "configuration.yaml/scene", 
+    "file": "homeassistant-scene.json",
     "tsFile": "homeassistant.ts",
     "fromType": "SceneComponentEntries"
   },
   {
     "key": "homeassistant-input-boolean",
-    "path": "configuration.yaml/input_boolean",
-    "isList": true,
-    "file": "homeassistant-input-boolean-named.json",
+    "path": "configuration.yaml/input_boolean", 
+    "file": "homeassistant-input-boolean.json",
     "tsFile": "homeassistant.ts",
-    "fromType": "InputBooleanEntry"
+    "fromType": "InputBooleans"
   },
   {
     "key": "homeassistant-script",
-    "path": "configuration.yaml/script",
-    "isList": true,
-    "file": "homeassistant-script-named.json",
+    "path": "configuration.yaml/script", 
+    "file": "homeassistant-script.json",
     "tsFile": "homeassistant.ts",
-    "fromType": "Script"
-  },
+    "fromType": "ScriptFile"
+  }, 
   {
-    "key": "automations-named",
-    "path": "configuration.yaml/automation",
-    "isList": false,
-    "file": "automations-named.json",
+    "key": "automations",
+    "path": "configuration.yaml/automation", 
+    "file": "automations.json",
     "tsFile": "automation.ts",
-    "fromType": "Automation"
-  },
-  {
-    "key": "automations-list",
-    "path": "configuration.yaml/automation",
-    "isList": true,
-    "file": "automations-list.json",
-    "tsFile": "automation.ts",
-    "fromType": "Automations"
+    "fromType": "AutomationsFile"
   },
   {
     "key": "ui-lovelace",
-    "path": "ui-lovelace.yaml",
-    "isList": false,
+    "path": "ui-lovelace.yaml", 
     "file": "ui-lovelace.json",
     "tsFile": "ui-lovelace.ts",
     "fromType": "LovelaceConfig"
   },
   {
-    "key": "lovelace-views-list",
-    "path": "ui-lovelace.yaml/views",
-    "isList": true,
-    "file": "lovelace-views-list.json",
+    "key": "lovelace-views",
+    "path": "ui-lovelace.yaml/views", 
+    "file": "lovelace-views.json",
     "tsFile": "ui-lovelace.ts",
     "fromType": "LovelaceViewConfigs"
   },
   {
-    "key": "lovelace-views-named",
-    "path": "ui-lovelace.yaml/views",
-    "isList": false,
-    "file": "lovelace-views-named.json",
+    "key": "lovelace-cards",
+    "path": "ui-lovelace.yaml/views/cards", 
+    "file": "lovelace-cards.json",
     "tsFile": "ui-lovelace.ts",
-    "fromType": "LovelaceViewConfig"
+    "fromType": "LoveLaceCardFile"
   }
 ]

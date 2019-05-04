@@ -79,6 +79,9 @@ export interface PanelIframeComponentEntry {
     icon?: string;
     require_admin?: boolean;
 }
+
+export type CustomizeFile = CustomizeComponent | CustomizeComponent[];
+
 export interface CustomizeComponent {
     [key: string]: CustomizeComponentEntry;
 }
@@ -136,7 +139,7 @@ export interface LegacyApiPasswordAuthProvider {
     api_password: string | SecretTag;
 }
 
-export type SceneComponentEntries = Array<SceneComponentEntry>;
+export type SceneComponentEntries = SceneComponentEntry | Array<SceneComponentEntry>;
 
 export interface SceneComponentEntry {
     name: string;
@@ -153,7 +156,7 @@ export interface EntitySceneConfig {
     color_temp?: number | string;
     xy_color?: any;
 }
-
+ 
 export type InputBooleans = {
     [name: string]: InputBooleanEntry
 };
@@ -166,11 +169,13 @@ export interface InputBooleanEntry {
     };
 }
 
+export type ScriptFile = Script | Script[];
+
 export interface Script {
     [name: string]: SequencedAction | ScriptAction;
 }
 
-export interface SequencedAction{
+export interface SequencedAction {
     alias?: string;
     sequence: ScriptAction[];
 }

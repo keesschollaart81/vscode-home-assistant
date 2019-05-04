@@ -1,4 +1,4 @@
-import { IncludeTag, IncludeFolderTag } from "./homeassistant";
+import { IncludeTag, IncludeFolderTag, IncludeTags } from "./homeassistant";
 
 /*
 
@@ -15,54 +15,55 @@ The generated schema (lovelace-ui.json) is also (committed) in this folder and
 
 export interface LovelaceConfig {
   title?: string;
-  views: Array<LovelaceViewConfig | IncludeTag | IncludeFolderTag>;
+  views: Array<LovelaceViewConfig | IncludeTags>;
   background?: string;
   resources?: Array<{ type: "css" | "js" | "module" | "html"; url: string }>;
 }
 
 
-export type LovelaceViewConfigs = Array<LovelaceViewConfig>;
+export type LovelaceViewConfigs = LovelaceViewConfig | Array<LovelaceViewConfig>;
 
 export interface LovelaceViewConfig {
   id?: string; //Updated
   index?: number;
   title?: string;
   badges?: string[];
-  cards?: Array<
-    // Updated
-    | AlarmPanelCardConfig
-    | ConditionalCardConfig
-    | EmptyStateCardConfig
-    | EntitiesCardConfig
-    | EntityButtonCardConfig
-    | EntityFilterCardConfig
-    | ErrorCardConfig
-    | GaugeCardConfig
-    | GlanceCardConfig
-    | HistoryGraphConfig
-    | IframeCardConfig
-    | LightCardConfig
-    | MapCardConfig
-    | MarkdownCardConfig
-    | MediaControlCardConfig
-    | PictureCardConfig
-    | PictureElementsCardConfig
-    | PictureEntityCardConfig
-    | PictureGlanceCardConfig
-    | PlantStatusCardConfig
-    | SensorCardConfig
-    | ShoppingListCardConfig
-    | StackCardConfig
-    | ThermostatCardConfig
-    | WeatherForecastCardConfig
-    | CustomCardConfig
-  >;
+  cards?: Array<LoveLaceCard | IncludeTags>; // updated
   path?: string;
   icon?: string;
   theme?: string;
   panel?: boolean;
   background?: string;
 }
+
+export type LoveLaceCardFile = LoveLaceCard | Array<LoveLaceCard>;
+
+export type LoveLaceCard = AlarmPanelCardConfig
+  | ConditionalCardConfig
+  | EmptyStateCardConfig
+  | EntitiesCardConfig
+  | EntityButtonCardConfig
+  | EntityFilterCardConfig
+  | ErrorCardConfig
+  | GaugeCardConfig
+  | GlanceCardConfig
+  | HistoryGraphConfig
+  | IframeCardConfig
+  | LightCardConfig
+  | MapCardConfig
+  | MarkdownCardConfig
+  | MediaControlCardConfig
+  | PictureCardConfig
+  | PictureElementsCardConfig
+  | PictureEntityCardConfig
+  | PictureGlanceCardConfig
+  | PlantStatusCardConfig
+  | SensorCardConfig
+  | ShoppingListCardConfig
+  | StackCardConfig
+  | ThermostatCardConfig
+  | WeatherForecastCardConfig
+  | CustomCardConfig
 
 export interface LovelaceCardConfig {
   id?: string; //Updated
@@ -76,12 +77,12 @@ export interface LovelaceCardConfig {
 /**
  * @TJS-additionalProperties true
  */
-export interface CustomCardConfig{ 
+export interface CustomCardConfig {
   /**
    * @TJS-pattern custom:(.*)$
    */
   type: string;
-}  
+}
 
 export interface ToggleActionConfig {
   action: "toggle";
@@ -278,6 +279,7 @@ export interface PictureGlanceCardConfig extends LovelaceCardConfig {
   title?: string;
   image?: string;
   camera_image?: string;
+  camera_view?: "live" | "auto"; //updated
   state_image?: {};
   aspect_ratio?: string;
   entity?: string;
@@ -465,4 +467,3 @@ export interface CustomEntityConfig {
   type: string;
   label?: string;
 }
- 
