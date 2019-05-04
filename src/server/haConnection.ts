@@ -1,6 +1,6 @@
 import * as ha from "home-assistant-js-websocket";
 import { MarkedString, CompletionItem, CompletionItemKind, MarkupContent } from 'vscode-languageserver';
-import { IConfigurationService } from "./ConfigurationService";
+import { IConfigurationService } from "./configurationService";
 import ws = require("ws");
 import { createSocket } from "./socket";
 

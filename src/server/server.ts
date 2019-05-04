@@ -1,12 +1,12 @@
 import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities, TextDocumentChangeEvent, DidChangeConfigurationNotification, Files, DidChangeConfigurationParams } from "vscode-languageserver";
 import { VsCodeFileAccessor } from "./fileAccessor";
-import { HomeAssistantLanguageService } from "./haLanguageService";
-import { YamlIncludeDiscoveryService } from "./yamlIncludeDiscoveryService";
+import { HomeAssistantLanguageService } from "./haLanguageService"; 
 import { HaConnection } from "./haConnection";
-import { YamlLanguageServiceWrapper } from "./yamlLanguageServerWrapper";
+import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
-import { ConfigurationService } from "./ConfigurationService";
+import { ConfigurationService } from "./configurationService";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
+import { YamlIncludeDiscovery } from "./yamlIncludeDiscoveryService";
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -27,7 +27,7 @@ connection.onInitialize(async params => {
     new EntityIdCompletionContribution(haConnection),
     new ServicesCompletionContribution(haConnection)
   ]);
-  var yamlIncludeDiscoveryService = new YamlIncludeDiscoveryService(vsCodeFileAccessor);
+  var yamlIncludeDiscoveryService = new YamlIncludeDiscovery(vsCodeFileAccessor);
   var homeAsisstantLanguageService = new HomeAssistantLanguageService(
     documents,
     params.rootUri,

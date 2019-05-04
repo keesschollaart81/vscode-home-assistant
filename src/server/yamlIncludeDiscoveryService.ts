@@ -1,58 +1,73 @@
 import * as YAML from "yaml";
 import * as path from "path";
-import { Tag } from "yaml"; 
+import { Tag } from "yaml";
 import { FileAccessor } from "./fileAccessor";
 
-export class YamlIncludeDiscoveryService {
+export class YamlIncludeDiscovery {
+
+  constructor(private fileAccessor: FileAccessor) { }
+
+  public discoverFiles = async (filenames: string[]): Promise<FilePathMapping> => {
+    var result: FilePathMapping = {};
+    for (var filename in filenames) {
+      var fileDiscoveryResult = await this.discover(filenames[filename]);
+      result = { ...result, ...fileDiscoveryResult }
+    }
+    return result;
+  }
+
+  public discover = async (filename: string): Promise<FilePathMapping> => {
+    return await this.discoverCore(filename, filename);
+  }
+
+  private discoverCore = async (filename: string, path: string): Promise<FilePathMapping> => {
+    var result: FilePathMapping = {};
+    var parser = new YamlIncludeFileParser(this.fileAccessor);
+    var parseResult = await parser.parse(filename, path);
+    for (var filenameKey in parseResult) {
+      var currentPath = `${parseResult[filenameKey].path}`;
+      var resultsRecursive = await this.discoverCore(filenameKey, currentPath);
+      result = { ...result, ...resultsRecursive };
+    }
+    return { ...result, ...parseResult };
+  }
+}
+
+export class YamlIncludeFileParser {
   private includes: YamlIncludes | null;
 
   constructor(private fileAccessor: FileAccessor) { }
 
-  /**
-   * Read the files given in the fileNames parameter
-   * Discover all the !include (and similar) tags 
+  /** 
+   * Find all the !include (and similar) tags 
    * Return a list of mappings, from location (path) in file x to file y via tag-type z
-   * @param fileNames the files to find !includes in
+   * @param filename of the file to find !includes in
    */
-  public async discover(fileNames: string[]): Promise<DiscoveryResult> {
+  public async parse(filename: string, path: string): Promise<FilePathMapping> {
     this.includes = new YamlIncludes();
 
-    for (var index in fileNames) {
-      var fileContents = await this.fileAccessor.getFileContents(
-        fileNames[index]
-      );
-      if (!fileContents){
-        continue;
-      }
-
-      var yaml = YAML.parse(fileContents, {
-        // @ts-ignore the typings of this library are not up to date
-        customTags: this.getCustomTags(fileNames[index])
-      });
-      await this.updatePathsViaTraversal(yaml, fileNames[index], "");
+    var fileContents = await this.fileAccessor.getFileContents(filename);
+    if (!fileContents) {
+      return;
     }
+
+    var yaml = YAML.parse(fileContents, {
+      // @ts-ignore the typings of this library are not up to date
+      customTags: this.getCustomTags(filename)
+    });
+    await this.updatePathsViaTraversal(yaml, path);
 
     await this.replaceFolderBasedIncludes();
 
-    var result = <DiscoveryResult>{
-      filePathMappings: this.getPathMappings(fileNames)
-    };
-
-    return result;
+    return this.getPathMappings();
   }
 
   /**
    * Flatten (and distinct) the includes to a 2 dimensional array
    * that can be used by external services
-   * */ 
-  private getPathMappings = (rootFiles: string[]): FilePathMapping => {
+   * */
+  private getPathMappings = (): FilePathMapping => {
     let result: FilePathMapping = {};
-    for (let rootFileIndex in rootFiles) {
-      result[rootFiles[rootFileIndex]] = {
-        includeType: null,
-        path: rootFiles[rootFileIndex]
-      };
-    }
 
     for (let toFile in this.includes) {
       for (let fromFile in this.includes[toFile].includedFrom) {
@@ -83,7 +98,8 @@ export class YamlIncludeDiscoveryService {
           continue;
         }
 
-        var files = await this.fileAccessor.getFilesInFolder(toFileOrFolder);
+        var files = await this.fileAccessor.getFilesInFolderRelativeFrom(toFileOrFolder, fromFile);
+        files = files.filter(f => path.extname(f) === ".yaml");
         files.map(x => {
           this.includes[x] = new YamlInclude();
           this.includes[x].includedFrom[fromFile] = { ...mapping };
@@ -99,11 +115,11 @@ export class YamlIncludeDiscoveryService {
    * In this includeResolver it's unknown where this include is (no context)
    * This method sets the 'path' property on this object 
    */
-  private async updatePathsViaTraversal(obj, filename, currentPath): Promise<void> {
+  private async updatePathsViaTraversal(obj, currentPath): Promise<void> {
     if (Object.prototype.toString.call(obj) === "[object Array]") {
       // Ignore the key/indexer of arrays
       for (var i = 0; i < obj.length; i++) {
-        this.updatePathsViaTraversal(obj[i], filename, `${currentPath}`);
+        this.updatePathsViaTraversal(obj[i], `${currentPath}`);
       }
     } else if (typeof obj === "object" && obj !== null) {
       // objects
@@ -113,11 +129,11 @@ export class YamlIncludeDiscoveryService {
           this.includes[obj.toFileOrFolder].includedFrom[obj.fromFile]
         );
 
-        theDetails.path = `${filename}${currentPath}`;
+        theDetails.path = currentPath;
       } else {
         for (var key in obj) {
           if (obj.hasOwnProperty(key)) {
-            this.updatePathsViaTraversal(obj[key], filename, `${currentPath}/${key}`);
+            this.updatePathsViaTraversal(obj[key], `${currentPath}/${key}`);
           }
         }
       }
@@ -162,7 +178,7 @@ export class YamlIncludeDiscoveryService {
    */
   private includeResolver = (filename: string, doc: YAML.ast.Document, cstNode: YAML.cst.Node): YAML.ast.Node => {
     var fromFile = filename;
-    var toFileOrFolder = `${cstNode.rawValue}`.trim(); 
+    var toFileOrFolder = `${cstNode.rawValue}`.trim();
 
     var include = this.includes[toFileOrFolder];
     if (!include) {
@@ -207,7 +223,7 @@ export class YamlIncludeDiscoveryService {
     });
   }
 }
- 
+
 export interface DiscoveryResult {
   filePathMappings: FilePathMapping;
 }

@@ -1,9 +1,9 @@
 import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
-import { Includetype, YamlIncludeDiscoveryService } from "./yamlIncludeDiscoveryService";
+import { Includetype, YamlIncludeDiscovery } from "./yamlIncludeDiscoveryService";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
 import { format } from "yaml-language-server/out/server/src/languageservice/services/yamlFormatter";
-import { YamlLanguageServiceWrapper } from "./yamlLanguageServerWrapper";
+import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
@@ -21,7 +21,7 @@ export class HomeAssistantLanguageService {
         private documents: TextDocuments,
         private workspaceFolder: string,
         private yamlLanguageService: YamlLanguageServiceWrapper,
-        private yamlIncludeDiscoveryService: YamlIncludeDiscoveryService,
+        private yamlIncludeDiscovery: YamlIncludeDiscovery,
         private haConnection: HaConnection
     ) {
         this.schemaServiceForIncludes = new SchemaServiceForIncludes(this.yamlLanguageService.jsonSchemaService);
@@ -34,8 +34,8 @@ export class HomeAssistantLanguageService {
         clearTimeout(this.pendingSchemaUpdate);
         this.pendingSchemaUpdate = setTimeout(async () => {
             console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
-            var yamlIncludes = await this.yamlIncludeDiscoveryService.discover(this.rootFiles);
-            this.schemaServiceForIncludes.onUpdate(yamlIncludes.filePathMappings);
+            var yamlIncludes = await this.yamlIncludeDiscovery.discoverFiles(this.rootFiles);
+            this.schemaServiceForIncludes.onUpdate(yamlIncludes);
             console.log(`Schema's updated!`);
         }, 200);
     }

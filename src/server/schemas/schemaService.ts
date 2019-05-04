@@ -35,16 +35,17 @@ export class SchemaServiceForIncludes {
         for (var sourceFile in fileMappings) {
             var sourceFileMapping = fileMappings[sourceFile];
             var relatedPathToSchemaMapping = pathToSchemaFileMappings.find(x => {
-                var samePath = x.path === sourceFileMapping.path;
+                var sourceFileMappingPath = sourceFileMapping.path.replace("homeassistant/packages/", "");
+                var samePath = x.path === sourceFileMappingPath;
                 if (!samePath) {
                     return false;
                 }
                 switch (sourceFileMapping.includeType) {
                     case Includetype.include_dir_merge_named:
                     case Includetype.include_dir_named:
+                    case Includetype.include_dir_list:
                         return !x.isList;
                     case Includetype.include:
-                    case Includetype.include_dir_list:
                     case Includetype.include_dir_merge_list:
                         return x.isList;
                     case null: // root files

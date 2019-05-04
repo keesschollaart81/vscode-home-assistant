@@ -18,7 +18,7 @@
   {
     "key": "homeassistant-customize",
     "path": "configuration.yaml/homeassistant/customize",
-    "isList": true,
+    "isList": false,
     "file": "homeassistant-customize-named.json",
     "tsFile": "homeassistant.ts",
     "fromType": "CustomizeComponent"
