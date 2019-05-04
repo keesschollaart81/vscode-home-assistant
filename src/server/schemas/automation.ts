@@ -1,5 +1,3 @@
-
-
 export type Automations = Array<Automation>;
 export type AutomationsFile = Automation |  Array<Automation>;
 

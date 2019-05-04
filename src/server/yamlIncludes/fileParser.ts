@@ -1,39 +1,11 @@
 import * as YAML from "yaml";
 import * as path from "path";
 import { Tag } from "yaml";
-import { FileAccessor } from "./fileAccessor";
-
-export class YamlIncludeDiscovery {
-
-  constructor(private fileAccessor: FileAccessor) { }
-
-  public discoverFiles = async (filenames: string[]): Promise<FilePathMapping> => {
-    var result: FilePathMapping = {};
-    for (var filename in filenames) {
-      var fileDiscoveryResult = await this.discover(filenames[filename]);
-      result = { ...result, ...fileDiscoveryResult }
-    }
-    return result;
-  }
-
-  public discover = async (filename: string): Promise<FilePathMapping> => {
-    return await this.discoverCore(filename, filename);
-  }
-
-  private discoverCore = async (filename: string, path: string): Promise<FilePathMapping> => {
-    var result: FilePathMapping = {};
-    var parser = new YamlIncludeFileParser(this.fileAccessor);
-    var parseResult = await parser.parse(filename, path);
-    for (var filenameKey in parseResult) {
-      var currentPath = `${parseResult[filenameKey].path}`;
-      var resultsRecursive = await this.discoverCore(filenameKey, currentPath);
-      result = { ...result, ...resultsRecursive };
-    }
-    return { ...result, ...parseResult };
-  }
-}
+import { FileAccessor } from "../fileAccessor";
+import { YamlIncludes, FilePathMapping, Includetype, YamlInclude, IncludedFromEntry } from "./dto";
 
 export class YamlIncludeFileParser {
+  
   private includes: YamlIncludes | null;
 
   constructor(private fileAccessor: FileAccessor) { }
@@ -224,44 +196,4 @@ export class YamlIncludeFileParser {
       toFileOrFolder: toFileOrFolder
     });
   }
-}
-
-export interface DiscoveryResult {
-  filePathMappings: FilePathMapping;
-}
-
-export interface FilePathMapping {
-  [filename: string]: FilePathMappingEntry;
-}
-
-export interface FilePathMappingEntry {
-  path: string;
-  includeType: Includetype;
-}
-
-export class YamlIncludes {
-  [filename: string]: YamlInclude;
-}
-
-export class YamlInclude {
-  includedFrom: IncludedFrom = new IncludedFrom();
-}
-
-export class IncludedFrom {
-  [filename: string]: IncludedFromEntry;
-}
-
-export class IncludedFromEntry {
-  path: string | null;
-  includeType?: Includetype;
-  start: number;
-  end: number;
-}
-
-export enum Includetype {
-  include,
-  include_dir_list,
-  include_dir_named,
-  include_dir_merge_list,
-  include_dir_merge_named
 }

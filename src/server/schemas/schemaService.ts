@@ -1,7 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
-import { FilePathMapping, Includetype } from "../yamlIncludeDiscoveryService";
-
+import { FilePathMapping } from "../yamlIncludes/dto";
 
 export class SchemaServiceForIncludes {
     private schemaContributions: any;
@@ -53,10 +52,9 @@ export class SchemaServiceForIncludes {
     }
 }
 
-
 export interface PathToSchemaMapping {
     key: string;
-    path: string; 
+    path: string;
     file: string;
     tsFile: string;
     fromType: string;

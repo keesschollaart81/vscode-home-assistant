@@ -27,7 +27,7 @@ export function createSocket(auth: ha.Auth, ignoreCertificates: boolean): Promis
     ) {
         console.log("[Auth Phase] Connecting to Home Assistant...", url);
 
-        const socket = new WebSocket(url,{
+        const socket = new WebSocket(url, {
             rejectUnauthorized: !ignoreCertificates
         });
 
@@ -36,17 +36,17 @@ export function createSocket(auth: ha.Auth, ignoreCertificates: boolean): Promis
 
         const closeMessage = (ev: { wasClean: boolean; code: number; reason: string; target: WebSocket }) => {
             let errorMessage;
-            if (ev && ev.code && ev.code !== 1000){
+            if (ev && ev.code && ev.code !== 1000) {
                 errorMessage = `WebSocket connection to Home Assistant closed with code ${ev.code} and reason ${ev.reason}`;
             }
             closeOrError(errorMessage);
         };
 
-        const errorMessage = (ev: {error: any, message: any, type: string, target: WebSocket }) => {
+        const errorMessage = (ev: { error: any, message: any, type: string, target: WebSocket }) => {
             // If we are in error handler make sure close handler doesn't also fire.
             socket.removeEventListener("close", closeMessage);
             let errorMessage = "Disconnected from Home Assistant with a WebSocket error";
-            if (ev.message){
+            if (ev.message) {
                 errorMessage += ` with message: ${ev.message}`;
 
             }
@@ -55,6 +55,9 @@ export function createSocket(auth: ha.Auth, ignoreCertificates: boolean): Promis
 
         const closeOrError = (errorText?: string) => {
 
+            if (errorText) {
+                console.log(`WebSocket Connection to Home Assistant closed with an error: ${errorText}`);
+            }
             if (invalidAuth) {
                 promReject(ha.ERR_INVALID_AUTH);
                 return;

@@ -1,14 +1,15 @@
 import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
-import { Includetype, YamlIncludeDiscovery } from "./yamlIncludeDiscoveryService";
+import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
 import { format } from "yaml-language-server/out/server/src/languageservice/services/yamlFormatter";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
-import { HaConnection } from "./haConnection";
+import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
+import { Includetype } from "./yamlIncludes/dto";
 export class HomeAssistantLanguageService {
 
     private schemaServiceForIncludes: SchemaServiceForIncludes;

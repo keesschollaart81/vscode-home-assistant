@@ -63,7 +63,7 @@ export type LoveLaceCard = AlarmPanelCardConfig
   | StackCardConfig
   | ThermostatCardConfig
   | WeatherForecastCardConfig
-  | CustomCardConfig
+  | CustomCardConfig;
 
 export interface LovelaceCardConfig {
   id?: string; //Updated

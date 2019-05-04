@@ -1,12 +1,12 @@
 import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities, TextDocumentChangeEvent, DidChangeConfigurationNotification, Files, DidChangeConfigurationParams } from "vscode-languageserver";
 import { VsCodeFileAccessor } from "./fileAccessor";
 import { HomeAssistantLanguageService } from "./haLanguageService"; 
-import { HaConnection } from "./haConnection";
+import { HaConnection } from "./home-assistant/haConnection";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
-import { ConfigurationService } from "./configurationService";
+import { ConfigurationService } from "./configuration";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { YamlIncludeDiscovery } from "./yamlIncludeDiscoveryService";
+import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -53,7 +53,7 @@ connection.onInitialize(async params => {
   // connection.client.register(DidChangeConfigurationNotification.type, undefined);
   connection.onDidChangeConfiguration(async (config) => {
     configurationService.updateConfiguration(config);
-    await haConnection.notifyConfigUpdate(config);
+    await haConnection.notifyConfigUpdate();
   });
 
   connection.onDocumentSymbol(homeAsisstantLanguageService.onDocumentSymbol);

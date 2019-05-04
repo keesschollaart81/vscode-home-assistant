@@ -1,6 +1,6 @@
 import { MarkedString } from 'vscode-languageserver';
 import { JSONWorkerContribution, JSONPath, CompletionsCollector } from 'vscode-json-languageservice';
-import { IHaConnection } from '../haConnection';
+import { IHaConnection } from '../home-assistant/haConnection';
 
 export class ServicesCompletionContribution implements JSONWorkerContribution {
 

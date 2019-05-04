@@ -49,6 +49,6 @@ export class VsCodeFileAccessor implements FileAccessor {
 
     public getRelativePath = (relativeFrom: string, filename: string): string => {
         var dirOfFile = path.dirname(relativeFrom);
-        return path.join(dirOfFile, filename)
+        return path.join(dirOfFile, filename);
     }
 }

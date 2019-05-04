@@ -1,7 +1,6 @@
 import * as ha from "home-assistant-js-websocket";
-import { MarkedString, CompletionItem, CompletionItemKind, MarkupContent } from 'vscode-languageserver';
-import { IConfigurationService } from "./configurationService";
-import ws = require("ws");
+import { CompletionItem, CompletionItemKind, MarkupContent } from 'vscode-languageserver';
+import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
 
 export interface IHaConnection {
@@ -10,15 +9,14 @@ export interface IHaConnection {
     getEntityCompletions(): Promise<CompletionItem[]>;
     getServiceCompletions(): Promise<CompletionItem[]>;
 }
+
 export class HaConnection implements IHaConnection {
 
     private connection: ha.Connection | undefined;
     private hassEntities!: Promise<ha.HassEntities>;
     private hassServices!: Promise<ha.HassServices>;
 
-    constructor(private configurationService: IConfigurationService) {
-
-    }
+    constructor(private configurationService: IConfigurationService) { }
 
     public tryConnect = async () => {
         await this.createConnection();
@@ -47,7 +45,7 @@ export class HaConnection implements IHaConnection {
             console.log("Connecting to Home Assistant...");
             this.connection = await ha.createConnection({
                 auth: auth,
-                createSocket: async (o) => createSocket(auth, this.configurationService.ignoreCertificates)
+                createSocket: async () => createSocket(auth, this.configurationService.ignoreCertificates)
             });
             console.log("Connected to Home Assistant");
         }
@@ -90,7 +88,7 @@ export class HaConnection implements IHaConnection {
         console.error(message);
     }
 
-    public notifyConfigUpdate = async (notifyConfigUpdate: any): Promise<void> => {
+    public notifyConfigUpdate = async (): Promise<void> => {
         this.disconnect();
         try {
             await this.tryConnect();
@@ -127,7 +125,7 @@ export class HaConnection implements IHaConnection {
 
         let completions: CompletionItem[] = [];
 
-        for (const [key, value] of Object.entries(entities)) {
+        for (const [, value] of Object.entries(entities)) {
             let completionItem = CompletionItem.create(`${value.entity_id}`);
             completionItem.kind = CompletionItemKind.EnumMember;
             completionItem.filterText = `${value.entity_id}`;
@@ -211,8 +209,6 @@ export class HaConnection implements IHaConnection {
 
         return completions;
     }
-
-
 
     public disconnect() {
         if (!this.connection) {
