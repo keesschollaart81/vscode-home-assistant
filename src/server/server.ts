@@ -57,6 +57,10 @@ connection.onInitialize(async params => {
   connection.onDidChangeConfiguration(async (config) => {
     configurationService.updateConfiguration(config);
     await haConnection.notifyConfigUpdate();
+
+    if (!configurationService.isConfigured) {
+      connection.sendNotification("no-config");
+    }
   });
 
   connection.onDocumentSymbol(homeAsisstantLanguageService.onDocumentSymbol);
@@ -66,6 +70,7 @@ connection.onInitialize(async params => {
   connection.onHover(homeAsisstantLanguageService.onHover);
   connection.onDefinition((td) => homeAsisstantLanguageService.onDefinition(td, documents.get(td.textDocument.uri)))
   connection.onDidChangeWatchedFiles(homeAsisstantLanguageService.onDidChangeWatchedFiles);
+
 
   return {
     capabilities: <ServerCapabilities>{

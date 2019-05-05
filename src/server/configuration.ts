@@ -22,11 +22,11 @@ export class ConfigurationService implements IConfigurationService {
 
     public updateConfiguration = (config: DidChangeConfigurationParams): void => {
         var incoming = <HomeAssistantConfiguration>config.settings["vscode-home-assistant"];
-       
+
         this.token = incoming.longLivedAccessToken;
         this.url = incoming.hostUrl;
         this.ignoreCertificates = !!incoming.ignoreCertificates;
 
-        this.isConfigured = true;
+        this.isConfigured = `${this.url}` !== "";
     }
 }

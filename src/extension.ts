@@ -9,29 +9,39 @@ const documentSelector = [
 
 export function activate(context: vscode.ExtensionContext) {
 
-	var serverModule = path.join(context.extensionPath, 'out', 'server', 'server.js');
+    var serverModule = path.join(context.extensionPath, 'out', 'server', 'server.js');
 
-   var debugOptions = { execArgv: ['--nolazy', "--inspect=6003"] };
+    var debugOptions = { execArgv: ['--nolazy', "--inspect=6003"] };
 
-   var serverOptions: ServerOptions = {
-	   run: { module: serverModule, transport: TransportKind.ipc },
-	   debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
-   };
+    var serverOptions: ServerOptions = {
+        run: { module: serverModule, transport: TransportKind.ipc },
+        debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
+    };
 
-   var clientOptions: LanguageClientOptions = {
-	   documentSelector,
-	   synchronize: {
-		   configurationSection: 'vscode-home-assistant',
-		   fileEvents: vscode.workspace.createFileSystemWatcher('**/*.?(e)y?(a)ml')
-	   }
-   };
+    var clientOptions: LanguageClientOptions = {
+        documentSelector,
+        synchronize: {
+            configurationSection: 'vscode-home-assistant',
+            fileEvents: vscode.workspace.createFileSystemWatcher('**/*.?(e)y?(a)ml')
+        }
+    };
 
-   var client = new LanguageClient('home-assistant', 'Home Assistant Language Server', serverOptions, clientOptions);
-   
-   // is this really needed?
-   vscode.languages.setLanguageConfiguration('home-assistant', { wordPattern: /("(?:[^\\\"]*(?:\\.)?)*"?)|[^\s{}\[\],:]+/ });
- 
-   context.subscriptions.push(client.start());
+    var client = new LanguageClient('home-assistant', 'Home Assistant Language Server', serverOptions, clientOptions);
+
+    // is this really needed?
+    vscode.languages.setLanguageConfiguration('home-assistant', { wordPattern: /("(?:[^\\\"]*(?:\\.)?)*"?)|[^\s{}\[\],:]+/ });
+
+    context.subscriptions.push(client.start());
+
+    client.onReady().then(async () => {
+        client.onNotification("no-config", async () => {
+            let goToSettings = "Go to Settings (UI)";
+            var optionClicked = await vscode.window.showInformationMessage("Please configure Home Assistant (search for 'Home Assistant' in settings).", goToSettings);
+            if (optionClicked === goToSettings) {
+                vscode.commands.executeCommand("workbench.action.openSettings2");
+            }
+        });
+    });
 }
 
 export function deactivate() { }
