@@ -1,6 +1,6 @@
 import { FileAccessor } from "../fileAccessor";
 import { YamlIncludeFileParser } from "./fileParser";
-import { FilePathMapping } from "./dto";
+import { FilePathMapping, Includetype } from "./dto";
 
 export class YamlIncludeDiscovery {
 
@@ -16,7 +16,14 @@ export class YamlIncludeDiscovery {
   }
 
   public discover = async (filename: string): Promise<FilePathMapping> => {
-    return await this.discoverCore(filename, filename);
+    var discoverIncludedFiles = await this.discoverCore(filename, filename);
+    var mappingForThisFile: FilePathMapping = {
+      [filename]: {
+        includeType: null,
+        path: filename
+      }
+    };
+    return { ...mappingForThisFile, ...discoverIncludedFiles };
   }
 
   private discoverCore = async (filename: string, path: string): Promise<FilePathMapping> => {

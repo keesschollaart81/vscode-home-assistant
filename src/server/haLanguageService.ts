@@ -1,8 +1,7 @@
-import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem } from "vscode-languageserver";
+import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
 import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
-import { format } from "yaml-language-server/out/server/src/languageservice/services/yamlFormatter";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
@@ -87,14 +86,14 @@ export class HomeAssistantLanguageService {
         return this.yamlLanguageService.findDocumentSymbols(document, jsonDocument);
     }
 
-    public onDocumentFormatting = (formatParams) => {
+    public onDocumentFormatting = (formatParams): TextEdit[] => {
         let document = this.documents.get(formatParams.textDocument.uri);
 
         if (!document) {
             return;
         }
 
-        return format(document, formatParams.options, this.getValidYamlTags());
+        return this.yamlLanguageService.format(document, formatParams.options);
     }
 
     public onCompletion = async (textDocumentPosition): Promise<CompletionList> => {

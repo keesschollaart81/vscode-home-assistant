@@ -1,6 +1,5 @@
 import { Automations } from "./automation";
 import { Sensors } from "./sensors";
-import { EntityConfig } from "./ui-lovelace";
 
 /**
  * @TJS-additionalProperties true
@@ -156,7 +155,7 @@ export interface EntitySceneConfig {
     color_temp?: number | string;
     xy_color?: any;
 }
- 
+
 export type InputBooleans = {
     [name: string]: InputBooleanEntry
 };
