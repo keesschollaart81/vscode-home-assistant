@@ -7,25 +7,25 @@ This the Home Assistant Extension for VS Code. By being connected to Home Assist
 
 When connected with your Home Assistant server, entity id' and services will be auto-completed.
  
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/entity_service_completion.gif" width="800" > 
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/entity_service_completion.gif"   > 
 
 ## Completion & Validation for Configuration & Lovelace Schema
 
 Most of the scheme's of Home Assistant will be validated and things like properties, values and enums will be auto-completed. This extension understands the behaviour of Home Assistant '!include...' behaviour and use this to provide scoped validation for all your files.
  
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema_validation_completion.gif" width="800" > 
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema_validation_completion.gif"  > 
 
 ## Go to Definition for Includes
 
 Easy navigate between your files references via the different !include... tags using 'f12' / 'Go to Definition'.
  
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/go_to_definition.gif" width="800" > 
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/go_to_definition.gif"  > 
 
 ## Snippets
 
 Snippets allow you to create commonly used data structures very quickly. 
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif" width="800" > 
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif"   > 
 
 ## Configuration
 
