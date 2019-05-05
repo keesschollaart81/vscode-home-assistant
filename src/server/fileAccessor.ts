@@ -42,13 +42,33 @@ export class VsCodeFileAccessor implements FileAccessor {
     }
 
     public getFilesInFolderRelativeFrom(subFolder: string, relativeFrom: string): string[] {
+        relativeFrom = relativeFrom.replace(/file:\/\//, '');
+
         var dirOfFile = path.dirname(relativeFrom);
         subFolder = path.join(dirOfFile, subFolder);
         return this.getFilesInFolder(subFolder);
     }
 
     public getRelativePath = (relativeFrom: string, filename: string): string => {
+
+        relativeFrom = relativeFrom.replace(/file:\/\//, '');
+
         var dirOfFile = path.dirname(relativeFrom);
-        return path.join(dirOfFile, filename);
+        let joinedPath = path.join(dirOfFile, filename);
+
+        return joinedPath;
+    }
+
+    private isWindows(): boolean {
+        return /^win/.test(process.platform);
+    }
+
+    private uriToPath(uri: string): string {
+        const p = path.resolve(uri.replace(/file:\/\/\//, ''));
+        return this.isWindows() ? p.replace(/\//g, '\\') : p;
+    }
+
+    private pathToUri(p: string): string {
+        return 'file://' + (this.isWindows() ? '/' + p.replace(/\//g, '/') : p);
     }
 }

@@ -1,4 +1,4 @@
-import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit } from "vscode-languageserver";
+import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
 import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
@@ -8,7 +8,8 @@ import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { Includetype } from "./yamlIncludes/dto";
+import { Includetype } from "./yamlIncludes/dto"; 
+import { DefinitionProvider } from "./definition";
 export class HomeAssistantLanguageService {
 
     private schemaServiceForIncludes: SchemaServiceForIncludes;
@@ -22,7 +23,8 @@ export class HomeAssistantLanguageService {
         private workspaceFolder: string,
         private yamlLanguageService: YamlLanguageServiceWrapper,
         private yamlIncludeDiscovery: YamlIncludeDiscovery,
-        private haConnection: HaConnection
+        private haConnection: HaConnection,
+        private definitionProvider: DefinitionProvider
     ) {
         this.schemaServiceForIncludes = new SchemaServiceForIncludes(this.yamlLanguageService.jsonSchemaService);
     }
@@ -144,6 +146,18 @@ export class HomeAssistantLanguageService {
         if (this.rootFiles.some(x => onDidChangeWatchedFiles.changes.some(y => y.uri.endsWith(x)))) {
             await this.triggerSchemaLoad(onDidChangeWatchedFiles.changes[0].uri);
         }
+    }
+
+    public onDefinition = async (textDocumentPositionParams: TextDocumentPositionParams, textDocument: TextDocument): Promise<Definition | DefinitionLink[] | undefined> => {
+        if (!textDocument) {
+            return;
+        }
+        const lineOffsets: number[] = getLineOffsets(textDocument.getText());
+        const start: number = lineOffsets[textDocumentPositionParams.position.line];
+        const end: number = lineOffsets[textDocumentPositionParams.position.line + 1];
+        let thisLine = textDocument.getText().substring(start, end);
+
+        return await this.definitionProvider.onDefinition(thisLine, textDocument.uri);
     }
 
     private getValidYamlTags(): string[] {
