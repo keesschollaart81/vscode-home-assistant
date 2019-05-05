@@ -52,8 +52,7 @@ connection.onInitialize(async params => {
 
   documents.onDidChangeContent(triggerValidation);
   documents.onDidOpen(triggerValidation);
-
-  // connection.client.register(DidChangeConfigurationNotification.type, undefined);
+ 
   connection.onDidChangeConfiguration(async (config) => {
     configurationService.updateConfiguration(config);
     await haConnection.notifyConfigUpdate();
@@ -68,9 +67,8 @@ connection.onInitialize(async params => {
   connection.onCompletion(homeAsisstantLanguageService.onCompletion);
   connection.onCompletionResolve(homeAsisstantLanguageService.onCompletionResolve);
   connection.onHover(homeAsisstantLanguageService.onHover);
-  connection.onDefinition((td) => homeAsisstantLanguageService.onDefinition(td, documents.get(td.textDocument.uri)))
+  connection.onDefinition(homeAsisstantLanguageService.onDefinition)
   connection.onDidChangeWatchedFiles(homeAsisstantLanguageService.onDidChangeWatchedFiles);
-
 
   return {
     capabilities: <ServerCapabilities>{
