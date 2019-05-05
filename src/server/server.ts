@@ -1,4 +1,4 @@
-import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities, TextDocumentChangeEvent, DidChangeConfigurationNotification, Files, DidChangeConfigurationParams } from "vscode-languageserver";
+import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities } from "vscode-languageserver";
 import { VsCodeFileAccessor } from "./fileAccessor";
 import { HomeAssistantLanguageService } from "./haLanguageService";
 import { HaConnection } from "./home-assistant/haConnection";
@@ -24,43 +24,26 @@ connection.onInitialize(async params => {
   var configurationService = new ConfigurationService();
   var haConnection = new HaConnection(configurationService);
   var vsCodeFileAccessor = new VsCodeFileAccessor(params.rootUri, connection);
+  var yamlIncludeDiscovery = new YamlIncludeDiscovery(vsCodeFileAccessor);
+  var definitionProvider = new DefinitionProvider(vsCodeFileAccessor);
+
   var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([
     new EntityIdCompletionContribution(haConnection),
     new ServicesCompletionContribution(haConnection)
   ]);
-  var yamlIncludeDiscoveryService = new YamlIncludeDiscovery(vsCodeFileAccessor);
-  var definitionProvider = new DefinitionProvider(vsCodeFileAccessor);
+
   var homeAsisstantLanguageService = new HomeAssistantLanguageService(
     documents,
-    params.rootUri,
     yamlLanguageServiceWrapper,
-    yamlIncludeDiscoveryService,
+    yamlIncludeDiscovery,
     haConnection,
     definitionProvider
   );
+
   await homeAsisstantLanguageService.triggerSchemaLoad();
 
-  var triggerValidation = async (e: TextDocumentChangeEvent) => {
-    var diagnostics = await homeAsisstantLanguageService.getDiagnostics(e);
-    if (diagnostics) {
-      connection.sendDiagnostics({
-        uri: e.document.uri,
-        diagnostics: diagnostics
-      });
-    }
-  };
-
-  documents.onDidChangeContent(triggerValidation);
-  documents.onDidOpen(triggerValidation);
- 
-  connection.onDidChangeConfiguration(async (config) => {
-    configurationService.updateConfiguration(config);
-    await haConnection.notifyConfigUpdate();
-
-    if (!configurationService.isConfigured) {
-      connection.sendNotification("no-config");
-    }
-  });
+  documents.onDidChangeContent((e) => homeAsisstantLanguageService.getDiagnostics(e, connection));
+  documents.onDidOpen((e) => homeAsisstantLanguageService.getDiagnostics(e, connection));
 
   connection.onDocumentSymbol(homeAsisstantLanguageService.onDocumentSymbol);
   connection.onDocumentFormatting(homeAsisstantLanguageService.onDocumentFormatting);
@@ -69,6 +52,15 @@ connection.onInitialize(async params => {
   connection.onHover(homeAsisstantLanguageService.onHover);
   connection.onDefinition(homeAsisstantLanguageService.onDefinition)
   connection.onDidChangeWatchedFiles(homeAsisstantLanguageService.onDidChangeWatchedFiles);
+
+  connection.onDidChangeConfiguration(async (config) => {
+    configurationService.updateConfiguration(config);
+    await haConnection.notifyConfigUpdate();
+
+    if (!configurationService.isConfigured) {
+      connection.sendNotification("no-config");
+    }
+  });
 
   return {
     capabilities: <ServerCapabilities>{

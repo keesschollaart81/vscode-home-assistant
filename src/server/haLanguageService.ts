@@ -1,4 +1,4 @@
-import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location } from "vscode-languageserver";
+import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
 import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
@@ -8,7 +8,7 @@ import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { Includetype } from "./yamlIncludes/dto"; 
+import { Includetype } from "./yamlIncludes/dto";
 import { DefinitionProvider } from "./definition";
 export class HomeAssistantLanguageService {
 
@@ -20,7 +20,6 @@ export class HomeAssistantLanguageService {
 
     constructor(
         private documents: TextDocuments,
-        private workspaceFolder: string,
         private yamlLanguageService: YamlLanguageServiceWrapper,
         private yamlIncludeDiscovery: YamlIncludeDiscovery,
         private haConnection: HaConnection,
@@ -42,7 +41,7 @@ export class HomeAssistantLanguageService {
         }, 200);
     }
 
-    public getDiagnostics = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<any[]> => {
+    public getDiagnostics = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<any[]> => {
         if (!textDocumentChangeEvent.document) {
             return;
         }
@@ -69,12 +68,16 @@ export class HomeAssistantLanguageService {
             return;
         }
         let diagnostics = [];
+        
         for (let diagnosticItem in diagnosticResults) {
             diagnosticResults[diagnosticItem].severity = 1; //Convert all warnings to errors
             diagnostics.push(diagnosticResults[diagnosticItem]);
         }
 
-        return diagnostics;
+        connection.sendDiagnostics({
+            uri: textDocumentChangeEvent.document.uri,
+            diagnostics: diagnostics
+        });
     }
 
     public onDocumentSymbol = (documentSymbolParams) => {

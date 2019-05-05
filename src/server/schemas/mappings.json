@@ -32,7 +32,7 @@
     "path": "configuration.yaml/input_boolean", 
     "file": "homeassistant-input-boolean.json",
     "tsFile": "homeassistant.ts",
-    "fromType": "InputBooleans"
+    "fromType": "InputBooleanEntry"
   },
   {
     "key": "homeassistant-script",

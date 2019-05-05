@@ -17,7 +17,7 @@ export interface LovelaceConfig {
   title?: string;
   views: Array<LovelaceViewConfig | IncludeTags>;
   background?: string;
-  resources?: Array<{ type: "css" | "js" | "module" | "html"; url: string }>;
+  resources?: Array<{ type: "css" | "js" | "module" | "html"; url: string }> | IncludeTags;
 }
 
 

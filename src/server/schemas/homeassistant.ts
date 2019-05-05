@@ -156,10 +156,6 @@ export interface EntitySceneConfig {
     xy_color?: any;
 }
 
-export type InputBooleans = {
-    [name: string]: InputBooleanEntry
-};
-
 export interface InputBooleanEntry {
     [name: string]: {
         name?: string;
