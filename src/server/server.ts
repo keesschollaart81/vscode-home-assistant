@@ -50,7 +50,7 @@ connection.onInitialize(async params => {
   connection.onCompletion(homeAsisstantLanguageService.onCompletion);
   connection.onCompletionResolve(homeAsisstantLanguageService.onCompletionResolve);
   connection.onHover(homeAsisstantLanguageService.onHover);
-  connection.onDefinition(homeAsisstantLanguageService.onDefinition)
+  connection.onDefinition(homeAsisstantLanguageService.onDefinition);
   connection.onDidChangeWatchedFiles(homeAsisstantLanguageService.onDidChangeWatchedFiles);
 
   connection.onDidChangeConfiguration(async (config) => {
