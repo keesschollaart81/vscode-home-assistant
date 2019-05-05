@@ -25,7 +25,7 @@ Easy navigate between your files references via the different !include... tags u
 
 Snippets allow you to create commonly used data structures very quickly. 
 
-![go to definition](https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif =250x)
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif" width="400" > 
 
 ## Configuration
 
