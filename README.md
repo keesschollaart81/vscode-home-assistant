@@ -1,7 +1,8 @@
-# Home Assistant Config Helper for VS Code
+<h1 align="center">
 
-This the Home Assistant Extension for VS Code. By being connected to Home Assistant it provides auto completion for your entity_id's.
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/header.png" alt="Home Assistant Config Helper for Visual Studio Code"/>
 
+</h1>
 
 ## Completion for Entity ID's & Services
 
