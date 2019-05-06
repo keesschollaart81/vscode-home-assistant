@@ -54,9 +54,9 @@ export class HomeAssistantLanguageService {
             return;
         }
 
-        if (this.rootFiles.some(x => textDocumentChangeEvent.document.uri.endsWith(x))) {
-            await this.triggerSchemaLoad(textDocumentChangeEvent.document.uri);
-        }
+        // if (this.rootFiles.some(x => textDocumentChangeEvent.document.uri.endsWith(x))) {
+        await this.triggerSchemaLoad(textDocumentChangeEvent.document.uri);
+        // }
 
         if (textDocumentChangeEvent.document.getText().length === 0) {
             return;
