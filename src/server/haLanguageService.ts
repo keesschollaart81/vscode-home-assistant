@@ -35,8 +35,13 @@ export class HomeAssistantLanguageService {
         clearTimeout(this.pendingSchemaUpdate);
         this.pendingSchemaUpdate = setTimeout(async () => {
             console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
-            var yamlIncludes = await this.yamlIncludeDiscovery.discoverFiles(this.rootFiles);
-            this.schemaServiceForIncludes.onUpdate(yamlIncludes);
+            try {
+                var yamlIncludes = await this.yamlIncludeDiscovery.discoverFiles(this.rootFiles);
+                this.schemaServiceForIncludes.onUpdate(yamlIncludes);
+            }
+            catch (err) {
+                console.error(`Unexpected error updating the schema, message: ${err}`, err);
+            }
             console.log(`Schema's updated!`);
         }, 200);
     }
@@ -68,7 +73,7 @@ export class HomeAssistantLanguageService {
             return;
         }
         let diagnostics = [];
-        
+
         for (let diagnosticItem in diagnosticResults) {
             diagnosticResults[diagnosticItem].severity = 1; //Convert all warnings to errors
             diagnostics.push(diagnosticResults[diagnosticItem]);

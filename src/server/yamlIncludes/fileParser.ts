@@ -5,7 +5,7 @@ import { FileAccessor } from "../fileAccessor";
 import { YamlIncludes, FilePathMapping, Includetype, YamlInclude, IncludedFromEntry } from "./dto";
 
 export class YamlIncludeFileParser {
-  
+
   private includes: YamlIncludes | null;
 
   constructor(private fileAccessor: FileAccessor) { }
@@ -23,10 +23,16 @@ export class YamlIncludeFileParser {
       return;
     }
 
-    var yaml = YAML.parse(fileContents, {
-      // @ts-ignore the typings of this library are not up to date
-      customTags: this.getCustomTags(filename)
-    });
+    try {
+      var yaml = YAML.parse(fileContents, {
+        // @ts-ignore the typings of this library are not up to date
+        customTags: this.getCustomTags(filename)
+      });
+    }
+    catch (err) {
+      console.log(`Could not parse file ${filename} for path ${path} because of error: ${err}`);
+      return;
+    }
     await this.updatePathsViaTraversal(yaml, path);
 
     await this.replaceFolderBasedIncludes();
