@@ -18,7 +18,7 @@ export class DefinitionProvider {
 
         switch (includeType) {
             case "!include":
-                let destination = this.fileAccessor.getRelativePath(uri, whatToInclude);
+                let destination = this.fileAccessor.getRelativePathAsFileUri(uri, whatToInclude);
                 return Location.create(destination, {
                     start: { line: 0, character: 0 },
                     end: { line: 0, character: 0 }
@@ -27,7 +27,7 @@ export class DefinitionProvider {
             case "!include_dir_named":
             case "!include_dir_merge_list":
             case "!include_dir_merge_named":
-                var files = this.fileAccessor.getFilesInFolderRelativeFrom(whatToInclude, uri);
+                var files = this.fileAccessor.getFilesInFolderRelativeFromAsFileUri(whatToInclude, uri);
                 files = files.filter(f => path.extname(f) === ".yaml");
                 return files.map(f => Location.create(f, {
                     start: { line: 0, character: 0 },

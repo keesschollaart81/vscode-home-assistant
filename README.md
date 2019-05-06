@@ -9,6 +9,7 @@
 1. [Get/Install from the VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)
 
 2. Make sure the Language is set to 'Home Assistant'
+
     <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/select_language.png"/>
 
 ## Completion for Entity ID's & Services

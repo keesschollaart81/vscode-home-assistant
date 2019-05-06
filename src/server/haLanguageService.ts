@@ -37,6 +37,9 @@ export class HomeAssistantLanguageService {
             console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
             try {
                 var yamlIncludes = await this.yamlIncludeDiscovery.discoverFiles(this.rootFiles);
+                if (yamlIncludes && Object.keys(yamlIncludes).length > 0) {
+                    console.log(`Applying schema's for ${yamlIncludes} files...`);
+                }
                 this.schemaServiceForIncludes.onUpdate(yamlIncludes);
             }
             catch (err) {
