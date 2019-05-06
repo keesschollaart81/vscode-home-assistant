@@ -12,6 +12,8 @@
 
     <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/select_language.png"/>
 
+    [The VS Code docs](https://code.visualstudio.com/docs/languages/overview#_changing-the-language-for-the-selected-file) also explain how to set the 'Home Assistant' language as default for '.yaml' or for a workspace (via a settings file).
+
 ## Completion for Entity ID's & Services
 
 When connected with your Home Assistant server, entity id' and services will be auto-completed.
