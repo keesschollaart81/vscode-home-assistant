@@ -14,7 +14,7 @@
 
     <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/select_language.png" width="250"/>
 
-    and/or pin it via a `./vscode/settings.json` file:
+    and/or pin it via a `./vscode/settings.json` file in your Home Assistant configuration folder:
 
     ``` yaml
     {
