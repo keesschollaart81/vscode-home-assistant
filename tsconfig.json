@@ -1,21 +1,23 @@
 {
-	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es6",
-		"outDir": "out",
-		"lib": [
-			"es6"
-		],
-		"sourceMap": true,
-		"rootDir": "src",
-		"strict": true, 
-		"noImplicitReturns": true, 
-		"noFallthroughCasesInSwitch": true, 
-		"noUnusedParameters": true,
-		"skipLibCheck": true /* todo: remove when WebSocket error is solved*/
-	},
-	"exclude": [
-		"node_modules",
-		".vscode-test"
-	]
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "outDir": "out",
+    "rootDir": "src",
+    "lib": [
+      "es6"
+    ],
+    "sourceMap": true,
+    "skipLibCheck": true, /* todo: remove when WebSocket error is solved*/
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.json"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode-test",
+    "server"
+  ]
 }
