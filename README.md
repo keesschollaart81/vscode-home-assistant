@@ -80,9 +80,11 @@ Reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home As
 
 # Things to do / up for grabs
 
-[] Render template locally (like/via CLI?) in preview pane 
-
-[] Go to Definition for sntities, scripts and automations
+- [ ] Go to Definition for sntities, scripts and automations
+- [ ] Render Jinja2 template locally (like/via CLI?) in preview pane 
+- [ ] Autocomplete !secrets
+- [ ] Autocomplete triggers
+- [ ] Check local config with HA Server
 
 # Build & Deployment status
 
