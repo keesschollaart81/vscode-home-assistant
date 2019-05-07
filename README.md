@@ -10,10 +10,20 @@
       
 1. [Get/Install from the VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)
 
-2. Make sure the Language is set to 'Home Assistant'
+2. Make sure the Language is set to 'Home Assistant' using the language picker:
 
     <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/select_language.png" width="250"/>
 
+    and/or pin it via a `./vscode/settings.json` file:
+
+    ``` yaml
+    {
+        "files.associations": {
+            "*.yaml": "home-assistant"
+        }
+    }
+    ```
+    
     [The VS Code docs](https://code.visualstudio.com/docs/languages/overview#_changing-the-language-for-the-selected-file) also explain how to set the 'Home Assistant' language as default for '.yaml' or for a workspace (via a settings file).
 
 3. Configure the connection to Home Assistant (more info in the [Configuration section below](#Configuration))
