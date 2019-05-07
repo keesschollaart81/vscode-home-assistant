@@ -38,7 +38,7 @@ export class HomeAssistantLanguageService {
             try {
                 var yamlIncludes = await this.yamlIncludeDiscovery.discoverFiles(this.rootFiles);
                 if (yamlIncludes && Object.keys(yamlIncludes).length > 0) {
-                    console.log(`Applying schema's for ${yamlIncludes} files...`);
+                    console.log(`Applying schema's to ${Object.keys(yamlIncludes).length} of your configuration files...`);
                 }
                 this.schemaServiceForIncludes.onUpdate(yamlIncludes);
             }
@@ -54,9 +54,9 @@ export class HomeAssistantLanguageService {
             return;
         }
 
-        if (this.rootFiles.some(x => textDocumentChangeEvent.document.uri.endsWith(x))) {
-            await this.triggerSchemaLoad(textDocumentChangeEvent.document.uri);
-        }
+        // if (this.rootFiles.some(x => textDocumentChangeEvent.document.uri.endsWith(x))) {
+        await this.triggerSchemaLoad(textDocumentChangeEvent.document.uri);
+        // }
 
         if (textDocumentChangeEvent.document.getText().length === 0) {
             return;

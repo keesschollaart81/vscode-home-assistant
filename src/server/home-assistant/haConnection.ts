@@ -22,13 +22,13 @@ export class HaConnection implements IHaConnection {
         await this.createConnection();
     }
 
-    private isConnected = (): boolean => {
-        return this.configurationService.isConfigured && this.connection !== undefined;
-    }
-
     private async createConnection(): Promise<void> {
 
-        if (this.isConnected()) {
+        if (!this.configurationService.isConfigured) {
+            return;
+        }
+
+        if (this.connection !== undefined) {
             return;
         }
 
@@ -59,8 +59,9 @@ export class HaConnection implements IHaConnection {
         });
 
         this.connection.addEventListener("disconnected", () => {
-            console.log("Lost connection with Home Assistant");
+            console.warn("Lost connection with Home Assistant");
         });
+
         this.connection.addEventListener("reconnect-error", (data) => {
             console.error("Reconnect error with Home Assistant", data);
         });

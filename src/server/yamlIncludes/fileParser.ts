@@ -30,7 +30,7 @@ export class YamlIncludeFileParser {
       });
     }
     catch (err) {
-      console.log(`Could not parse file ${filename} for path ${path} because of error: ${err}`);
+      console.warn(`${filename} could not be parsed, it was referenced from path '${path}'. This file will be ignored. Internal error: ${err}`);
       return;
     }
     await this.updatePathsViaTraversal(yaml, path);

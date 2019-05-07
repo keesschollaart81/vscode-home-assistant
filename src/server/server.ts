@@ -12,7 +12,9 @@ import { DefinitionProvider } from "./definition";
 let connection = createConnection(ProposedFeatures.all);
 
 console.log = connection.console.log.bind(connection.console);
-console.error = connection.console.error.bind(connection.console);
+// console.error = connection.console.error.bind(connection.console);
+console.warn = connection.window.showWarningMessage.bind(connection.window);
+console.error = connection.window.showErrorMessage.bind(connection.window);
 
 let documents = new TextDocuments();
 documents.listen(connection);
