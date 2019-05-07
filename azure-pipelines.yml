@@ -10,26 +10,12 @@ pool:
 
 steps:
 
-- bash: | # stupid, but: https://github.com/GitTools/GitVersion/issues/1497
-    shopt -s nullglob
-    function join_by { local IFS="$1"; shift; echo "$*"; }
-    lib_path=$(join_by ';' $(Agent.WorkFolder)/_tasks/GitVersion*/4.0.*/lib/linux/x86_64)
-    echo LD_LIBRARY_PATH: $lib_path
-    echo "##vso[task.setvariable variable=LD_LIBRARY_PATH]$lib_path"
-  displayName: Update LD_LIBRARY_PATH for GitVersion
-
-- task: gittools.gitversion.gitversion-task.GitVersion@4
-  displayName: GitVersion
-  inputs:
-    preferBundledVersion: false
-
 - task: NodeTool@0
   inputs:
     versionSpec: '8.x'
   displayName: 'Install Node.js' 
 
 - script: |
-    npm version $(GitVersion.SemVer)
     npm install
     npm run compile
   displayName: 'npm install and compile'
