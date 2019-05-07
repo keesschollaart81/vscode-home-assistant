@@ -8,12 +8,26 @@
     "vscode": "^1.32.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Programming Languages",
+    "Formatters",
+    "Snippets"
+  ],
+  "badges": [
+    {
+      "url": "https://caseonline.visualstudio.com/vscode-home-assistant/_apis/build/status/keesschollaart81.vscode-home-assistant?branchName=master",
+      "href": "https://caseonline.visualstudio.com/vscode-home-assistant/_build/index?definitionId=23",
+      "description": "Azure Pipelines | Build"
+    }
   ],
   "publisher": "keesschollaart",
   "repository": {
     "type": "git",
     "url": "https://github.com/keesschollaart81/vscode-home-assistant"
+  },
+  "bugs": {
+    "url": "https://github.com/keesschollaart81/vscode-home-assistant/issues",
+    "email": "keesschollaart81@hotmail.com"
   },
   "license": "MIT",
   "icon": "assets/logo.png",
@@ -122,6 +136,7 @@
     "vscode-languageclient": "5.2.1",
     "vscode-languageserver": "5.3.0-next.1",
     "yaml-language-server": "0.4.0",
-    "yaml": "1.5.0"
+    "yaml": "1.5.0",
+    "vscode-extension-telemetry": "0.1.1"
   }
 }
