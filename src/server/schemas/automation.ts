@@ -61,9 +61,9 @@ export interface StateTrigger {
   entity_id: string | string[];
   from?: string | boolean;
   to?: string | boolean;
-  for?: string | StateTriggerFor;
+  for?: string | TimePeriod;
 }
-export interface StateTriggerFor {
+export interface TimePeriod {
   days?: string | number;
   hours?: string | number;
   minutes?: string | number;
@@ -83,7 +83,7 @@ export interface NumericStateTrigger {
   below?: string | number;
   above?: string | number;
   value_template?: string;
-  for?: string | StateTriggerFor;
+  for?: string | TimePeriod;
 }
  
 export type Triggers =
@@ -110,7 +110,7 @@ export interface EventActionSchema extends Action {
   event_data_template?: any;
 }
 export interface DelayActionSchema extends Action {
-  delay: number | string | StateTriggerFor; 
+  delay: number | string | TimePeriod; 
 }
 
 export interface ServiceActionSchema extends Action {
@@ -140,7 +140,7 @@ export interface StateConditionSchema {
   condition: "state";
   entity_id: string | string[];
   state: string | boolean;
-  for?: string | StateTriggerFor;
+  for?: string | TimePeriod;
   from?: string;
 }
 

@@ -1,4 +1,4 @@
-import { Automations } from "./automation";
+import { Automations, ConditionsConfig, TimePeriod } from "./automation";
 import { Sensors } from "./sensors";
 
 /**
@@ -173,18 +173,20 @@ export interface Script {
 
 export interface SequencedAction {
     alias?: string;
-    sequence: ScriptAction | ScriptAction[];
+    sequence: ScriptAction | Array<ScriptAction | ConditionsConfig>;
 }
 
 export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
 
 export interface ServiceAction {
     service: string;
+    service_template?: string;
     data?: any;
     data_template?: any;
+    entity_id?: string;
 }
 export interface DelayAction {
-    delay: string;
+    delay: string | number | TimePeriod;
 }
 export interface WaitAction {
     wait_template: string;
