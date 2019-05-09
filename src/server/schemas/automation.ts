@@ -8,7 +8,7 @@ export interface Automation {
   hide_entity?: boolean;
   trigger: Triggers | Array<Triggers>;
   condition?: ConditionsConfig;
-  action: Actions | Array<Actions>;
+  action: Actions | Array<Actions | ConditionsConfig>;
 }
 export type Actions = EventActionSchema | ServiceActionSchema | DelayActionSchema | ServiceActionTemplateSchema;
 
