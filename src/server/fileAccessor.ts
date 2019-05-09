@@ -1,4 +1,4 @@
-import { IConnection } from "vscode-languageserver";
+import { IConnection, TextDocument, TextDocuments } from "vscode-languageserver";
 import * as fs from "fs";
 import * as path from "path";
 import Uri from 'vscode-uri'
@@ -14,9 +14,15 @@ export interface FileAccessor {
 
 export class VsCodeFileAccessor implements FileAccessor {
 
-    constructor(private workspaceFolder: string, private connection: IConnection) { }
+    constructor(private workspaceFolder: string, private connection: IConnection, private documents: TextDocuments) { }
 
     public async getFileContents(uri: string): Promise<string> {
+        var fullUri = Uri.file(path.resolve(uri));
+        var textDocument = this.documents.get(fullUri.toString());
+        if (textDocument) {
+            // open file in editor, might not be saved yet
+            return textDocument.getText();
+        }
         return new Promise<string>((c, e) => {
             fs.exists(uri, (exists) => {
                 if (!exists) {

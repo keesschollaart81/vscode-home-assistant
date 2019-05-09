@@ -25,9 +25,9 @@ connection.onInitialize(async params => {
 
   var configurationService = new ConfigurationService();
   var haConnection = new HaConnection(configurationService);
-  var vsCodeFileAccessor = new VsCodeFileAccessor(params.rootUri, connection);
-  var yamlIncludeDiscovery = new YamlIncludeDiscovery(vsCodeFileAccessor);
-  var definitionProvider = new DefinitionProvider(vsCodeFileAccessor);
+  var fileAccessor = new VsCodeFileAccessor(params.rootUri, connection, documents);
+  var yamlIncludeDiscovery = new YamlIncludeDiscovery(fileAccessor);
+  var definitionProvider = new DefinitionProvider(fileAccessor);
 
   var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([
     new EntityIdCompletionContribution(haConnection),

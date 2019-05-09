@@ -30,7 +30,14 @@ export class YamlIncludeFileParser {
       });
     }
     catch (err) {
-      console.warn(`${filename} could not be parsed, it was referenced from path '${path}'. This file will be ignored. Internal error: ${err}`);
+      var message = `${filename} could not be parsed, it was referenced from path '${path}'. This file will be ignored. Internal error: ${err}`;
+      if (filename === path) {
+        // root file has more impact
+        console.warn(message);
+      }
+      else {
+        console.log(message);
+      }
       return;
     }
     await this.updatePathsViaTraversal(yaml, path);
