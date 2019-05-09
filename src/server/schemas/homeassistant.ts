@@ -173,7 +173,7 @@ export interface Script {
 
 export interface SequencedAction {
     alias?: string;
-    sequence: ScriptAction[];
+    sequence: ScriptAction | ScriptAction[];
 }
 
 export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
