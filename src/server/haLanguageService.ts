@@ -1,4 +1,4 @@
-import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection } from "vscode-languageserver";
+import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection, Diagnostic } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
 import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
@@ -30,7 +30,7 @@ export class HomeAssistantLanguageService {
 
     private pendingSchemaUpdate: NodeJS.Timer;
 
-    public triggerSchemaLoad = async (becauseOfFilename?: string) => {
+    public triggerSchemaLoad = async (connection: IConnection, becauseOfFilename?: string) => {
         // working with a timeout to debounce while typing
         clearTimeout(this.pendingSchemaUpdate);
         this.pendingSchemaUpdate = setTimeout(async () => {
@@ -41,6 +41,10 @@ export class HomeAssistantLanguageService {
                     console.log(`Applying schema's to ${Object.keys(yamlIncludes).length} of your configuration files...`);
                 }
                 this.schemaServiceForIncludes.onUpdate(yamlIncludes);
+                this.documents.all().forEach(async d => {
+                    var diagnostics = await this.getDiagnostics(d);
+                    this.sendDiagnostics(d.uri, diagnostics, connection);
+                });
             }
             catch (err) {
                 console.error(`Unexpected error updating the schema, message: ${err}`, err);
@@ -49,26 +53,40 @@ export class HomeAssistantLanguageService {
         }, 200);
     }
 
-    public getDiagnostics = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<any[]> => {
-        if (!textDocumentChangeEvent.document) {
+    public onDocumentChange = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
+        await this.triggerSchemaLoad(connection, textDocumentChangeEvent.document.uri);
+
+        var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
+
+        this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics, connection);
+    }
+
+    public onDocumentOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
+        var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
+
+        this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics, connection);
+    }
+
+    private sendDiagnostics(uri: string, diagnostics: Diagnostic[], connection: IConnection) {
+        connection.sendDiagnostics({
+            uri: uri,
+            diagnostics: diagnostics
+        });
+    }
+
+    public getDiagnostics = async (document: TextDocument): Promise<Diagnostic[]> => {
+
+        if (!document || document.getText().length === 0) {
             return;
         }
 
-        // if (this.rootFiles.some(x => textDocumentChangeEvent.document.uri.endsWith(x))) {
-        await this.triggerSchemaLoad(textDocumentChangeEvent.document.uri);
-        // }
-
-        if (textDocumentChangeEvent.document.getText().length === 0) {
-            return;
-        }
-
-        let yamlDocument = parseYAML(textDocumentChangeEvent.document.getText(), this.getValidYamlTags());
+        let yamlDocument = parseYAML(document.getText(), this.getValidYamlTags());
         if (!yamlDocument) {
             return;
         }
 
         var diagnosticResults = await this.yamlLanguageService.doValidation(
-            textDocumentChangeEvent.document,
+            document,
             yamlDocument
         );
 
@@ -82,10 +100,7 @@ export class HomeAssistantLanguageService {
             diagnostics.push(diagnosticResults[diagnosticItem]);
         }
 
-        connection.sendDiagnostics({
-            uri: textDocumentChangeEvent.document.uri,
-            diagnostics: diagnostics
-        });
+        return diagnostics;
     }
 
     public onDocumentSymbol = (documentSymbolParams) => {
@@ -151,12 +166,6 @@ export class HomeAssistantLanguageService {
         let jsonDocument = parseYAML(document.getText());
 
         return this.yamlLanguageService.doHover(document, textDocumentPositionParams.position, jsonDocument);
-    }
-
-    public onDidChangeWatchedFiles = async (onDidChangeWatchedFiles: DidChangeWatchedFilesParams) => {
-        if (this.rootFiles.some(x => onDidChangeWatchedFiles.changes.some(y => y.uri.endsWith(x)))) {
-            await this.triggerSchemaLoad(onDidChangeWatchedFiles.changes[0].uri);
-        }
     }
 
     public onDefinition = async (textDocumentPositionParams: TextDocumentPositionParams): Promise<Definition | DefinitionLink[] | undefined> => {

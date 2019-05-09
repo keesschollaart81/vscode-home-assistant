@@ -42,10 +42,10 @@ connection.onInitialize(async params => {
     definitionProvider
   );
 
-  await homeAsisstantLanguageService.triggerSchemaLoad();
+  await homeAsisstantLanguageService.triggerSchemaLoad(connection);
 
-  documents.onDidChangeContent((e) => homeAsisstantLanguageService.getDiagnostics(e, connection));
-  documents.onDidOpen((e) => homeAsisstantLanguageService.getDiagnostics(e, connection));
+  documents.onDidChangeContent((e) => homeAsisstantLanguageService.onDocumentChange(e, connection));
+  documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e, connection));
 
   connection.onDocumentSymbol(homeAsisstantLanguageService.onDocumentSymbol);
   connection.onDocumentFormatting(homeAsisstantLanguageService.onDocumentFormatting);
@@ -53,7 +53,6 @@ connection.onInitialize(async params => {
   connection.onCompletionResolve(homeAsisstantLanguageService.onCompletionResolve);
   connection.onHover(homeAsisstantLanguageService.onHover);
   connection.onDefinition(homeAsisstantLanguageService.onDefinition);
-  connection.onDidChangeWatchedFiles(homeAsisstantLanguageService.onDidChangeWatchedFiles);
 
   connection.onDidChangeConfiguration(async (config) => {
     configurationService.updateConfiguration(config);

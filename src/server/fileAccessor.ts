@@ -1,7 +1,7 @@
 import { IConnection, TextDocument, TextDocuments } from "vscode-languageserver";
 import * as fs from "fs";
 import * as path from "path";
-import Uri from 'vscode-uri'
+import Uri from 'vscode-uri';
 
 export interface FileAccessor {
     getFileContents(fileName: string): Promise<string>;

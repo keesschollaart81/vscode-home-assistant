@@ -7,7 +7,7 @@ import { YAMLValidation } from "yaml-language-server/out/server/src/languageserv
 import { YAMLFormatter } from "yaml-language-server/out/server/src/languageservice/services/yamlFormatter";
 import * as path from "path";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
-import { TextDocument, TextEdit } from "vscode-languageserver-types";
+import { TextDocument, TextEdit, Diagnostic } from "vscode-languageserver-types";
 import { JSONWorkerContribution } from "vscode-json-languageservice";
 
 export class YamlLanguageServiceWrapper {
@@ -38,7 +38,7 @@ export class YamlLanguageServiceWrapper {
         this.yamlFormatter = new YAMLFormatter();
     }
 
-    public doValidation(document: TextDocument, yamlDocument: any): any {
+    public doValidation(document: TextDocument, yamlDocument: any): Diagnostic[] {
         return this.yamlValidation.doValidation(document, yamlDocument);
     }
 
