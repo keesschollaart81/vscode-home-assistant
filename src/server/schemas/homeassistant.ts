@@ -179,7 +179,7 @@ export interface SequencedAction {
 export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
 
 export interface ServiceAction {
-    service: string;
+    service?: string;
     service_template?: string;
     data?: any;
     data_template?: any;
