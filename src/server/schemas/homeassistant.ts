@@ -46,6 +46,7 @@ export interface HomeAssistantComponent {
     customize_glob?: any;
     packages?: Array<HomeAssistantComponent> | IncludeTags;
     auth_providers?: AuthProviders[];
+    auth_mfa_modules: Array<any> | IncludeTags;
 }
 
 
@@ -172,7 +173,7 @@ export interface Script {
 
 export interface SequencedAction {
     alias?: string;
-    sequence: ScriptAction[];
+    sequence: ScriptAction | ScriptAction[];
 }
 
 export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
