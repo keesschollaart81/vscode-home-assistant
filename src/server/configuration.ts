@@ -22,6 +22,8 @@ export class ConfigurationService implements IConfigurationService {
 
     constructor() {
         this.setConfigViaEnvironmentVariables();
+        
+        this.isConfigured = `${this.url}` !== "";
     }
 
     public updateConfiguration = (config: DidChangeConfigurationParams): void => {
