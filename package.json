@@ -113,7 +113,19 @@
         "scopeName": "source.yaml",
         "path": "./yaml-language/yaml.tmLanguage.json"
       }
-    ]
+    ],
+    "configurationDefaults": {
+      "[home-assistant]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.quickSuggestions": {
+          "other": true,
+          "comments": false,
+          "strings": true
+        },
+        "editor.autoIndent": false
+      }
+    }
   },
   "scripts": {
     "compile": "tsc -p ./",
