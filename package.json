@@ -79,19 +79,19 @@
     "snippets": [
       {
         "language": "home-assistant",
-        "path": "./src/snippets/homeassistant_automation.json"
+        "path": "./out/snippets/homeassistant_automation.json"
       },
       {
         "language": "home-assistant",
-        "path": "./src/snippets/homeassistant_group.json"
+        "path": "./out/snippets/homeassistant_group.json"
       },
       {
         "language": "home-assistant",
-        "path": "./src/snippets/homeassistant_script.json"
+        "path": "./out/snippets/homeassistant_script.json"
       },
       {
         "language": "home-assistant",
-        "path": "./src/snippets/homeassistant_sensor.json"
+        "path": "./out/snippets/homeassistant_sensor.json"
       }
     ],
     "languages": [
