@@ -1,14 +1,10 @@
-export interface DiscoveryResult {
-    filePathMappings: FilePathMapping;
-}
-
-export interface FilePathMapping {
-    [filename: string]: FilePathMappingEntry;
-}
-
-export interface FilePathMappingEntry {
-    path: string;
-    includeType: Includetype;
+export interface IncludeReferences {
+    [filename: string]: {
+        path: string;
+        includeType: Includetype;
+        start: number;
+        end: number;
+    }
 }
 
 export class YamlIncludes {
@@ -37,3 +33,12 @@ export enum Includetype {
     include_dir_merge_list,
     include_dir_merge_named
 }
+
+export interface YamlIncludePlaceholder {
+    isInclude: boolean;
+    fromFile: string;
+    includeType: Includetype;
+    toFileOrFolder: string;
+    start: number;
+    end: number;
+}  

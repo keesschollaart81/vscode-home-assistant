@@ -6,8 +6,8 @@ import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { ConfigurationService } from "./configuration";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { DefinitionProvider } from "./definition";
+import { HomeAssistantConfiguration } from "./yamlIncludes/haConfig";
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -26,7 +26,7 @@ connection.onInitialize(async params => {
   var configurationService = new ConfigurationService();
   var haConnection = new HaConnection(configurationService);
   var fileAccessor = new VsCodeFileAccessor(params.rootUri, connection, documents);
-  var yamlIncludeDiscovery = new YamlIncludeDiscovery(fileAccessor);
+  var haConfig = new HomeAssistantConfiguration(fileAccessor);
   var definitionProvider = new DefinitionProvider(fileAccessor);
 
   var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([
@@ -37,11 +37,12 @@ connection.onInitialize(async params => {
   var homeAsisstantLanguageService = new HomeAssistantLanguageService(
     documents,
     yamlLanguageServiceWrapper,
-    yamlIncludeDiscovery,
+    haConfig,
     haConnection,
     definitionProvider
   );
 
+  // await haConfig.discoverFiles();
   await homeAsisstantLanguageService.triggerSchemaLoad(connection);
 
   documents.onDidChangeContent((e) => homeAsisstantLanguageService.onDocumentChange(e, connection));

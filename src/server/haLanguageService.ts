@@ -1,6 +1,5 @@
 import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection, Diagnostic } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
-import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
@@ -10,18 +9,15 @@ import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { Includetype } from "./yamlIncludes/dto";
 import { DefinitionProvider } from "./definition";
+import { HomeAssistantConfiguration } from "./yamlIncludes/haConfig";
 export class HomeAssistantLanguageService {
 
     private schemaServiceForIncludes: SchemaServiceForIncludes;
 
-    private rootFiles = [
-        "configuration.yaml", "ui-lovelace.yaml"
-    ];
-
     constructor(
         private documents: TextDocuments,
         private yamlLanguageService: YamlLanguageServiceWrapper,
-        private yamlIncludeDiscovery: YamlIncludeDiscovery,
+        private haConfig: HomeAssistantConfiguration,
         private haConnection: HaConnection,
         private definitionProvider: DefinitionProvider
     ) {
@@ -36,7 +32,8 @@ export class HomeAssistantLanguageService {
         this.pendingSchemaUpdate = setTimeout(async () => {
             console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
             try {
-                var yamlIncludes = await this.yamlIncludeDiscovery.discoverFiles(this.rootFiles);
+                await this.haConfig.discoverFiles();
+                var yamlIncludes = await this.haConfig.getIncludes();
                 if (yamlIncludes && Object.keys(yamlIncludes).length > 0) {
                     console.log(`Applying schema's to ${Object.keys(yamlIncludes).length} of your configuration files...`);
                 }
@@ -170,7 +167,7 @@ export class HomeAssistantLanguageService {
 
     public onDefinition = async (textDocumentPositionParams: TextDocumentPositionParams): Promise<Definition | DefinitionLink[] | undefined> => {
         let textDocument = this.documents.get(textDocumentPositionParams.textDocument.uri);
-
+        await this.haConfig.getScripts();
         if (!textDocument) {
             return;
         }
