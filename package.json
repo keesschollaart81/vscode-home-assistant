@@ -2,7 +2,7 @@
   "name": "vscode-home-assistant",
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
-  "version": "0.5.5",
+  "version": "0.5.7",
   "preview": true,
   "engines": {
     "vscode": "^1.32.0"
@@ -79,19 +79,19 @@
     "snippets": [
       {
         "language": "home-assistant",
-        "path": "./src/snippets/homeassistant_automation.json"
+        "path": "./out/snippets/homeassistant_automation.json"
       },
       {
         "language": "home-assistant",
-        "path": "./src/snippets/homeassistant_group.json"
+        "path": "./out/snippets/homeassistant_group.json"
       },
       {
         "language": "home-assistant",
-        "path": "./src/snippets/homeassistant_script.json"
+        "path": "./out/snippets/homeassistant_script.json"
       },
       {
         "language": "home-assistant",
-        "path": "./src/snippets/homeassistant_sensor.json"
+        "path": "./out/snippets/homeassistant_sensor.json"
       }
     ],
     "languages": [
@@ -113,7 +113,19 @@
         "scopeName": "source.yaml",
         "path": "./yaml-language/yaml.tmLanguage.json"
       }
-    ]
+    ],
+    "configurationDefaults": {
+      "[home-assistant]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.quickSuggestions": {
+          "other": true,
+          "comments": false,
+          "strings": true
+        },
+        "editor.autoIndent": false
+      }
+    }
   },
   "scripts": {
     "compile": "tsc -p ./",

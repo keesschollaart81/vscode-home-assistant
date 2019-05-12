@@ -62,6 +62,11 @@ export function activate(context: vscode.ExtensionContext) {
         console.error(JSON.stringify(reason));
         reporter.sendTelemetryEvent('extension.languageserver.onReadyError', { 'reason': JSON.stringify(reason) });
     });
+
+    var fileAssociations = vscode.workspace.getConfiguration().get("files.associations");
+    if (!fileAssociations["*.yaml"]) {
+        vscode.workspace.getConfiguration().update("files.associations", { "*.yaml": "home-assistant" }, false);
+    }
 }
 
 export function deactivate() {
