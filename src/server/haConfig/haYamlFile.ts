@@ -170,7 +170,7 @@ export class HomeAssistantYamlFile {
       return;
     }
 
-    value = x.value.toString().slice(7, -1).replace("\\", "/"); // \ to / on windows
+    value = x.value.toString().slice(7, -1).replace(/\\/g, "/"); // \ to / on windows
 
     let files: string[] = [];
 
@@ -186,7 +186,8 @@ export class HomeAssistantYamlFile {
     }
 
     for (var i in files) {
-      this.includes[files[i].replace("\\", "/")] = {
+      var key = files[i].replace(/\\/g, "/");
+      this.includes[key] = {
         path: currentPath,
         includeType: includeType,
         start: x.range[0],

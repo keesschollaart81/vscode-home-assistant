@@ -320,7 +320,7 @@ export interface ShoppingListCardConfig extends LovelaceCardConfig {
 
 export interface StackCardConfig extends LovelaceCardConfig {
   type: "vertical-stack" | "horizontal-stack"; //Updated
-  cards: LovelaceCardConfig[];
+  cards: Array<LovelaceCardConfig | IncludeTags>;
 }
 
 export interface ThermostatCardConfig extends LovelaceCardConfig {

@@ -181,7 +181,7 @@ export class HomeAssistantLanguageService {
             let provider = this.definitionProviders[p];
             var providerResults = await provider.onDefinition(thisLine, textDocument.uri);
             if (providerResults) {
-                definitions.push(providerResults);
+                definitions = definitions.concat(providerResults);
             }
         }
         return definitions;

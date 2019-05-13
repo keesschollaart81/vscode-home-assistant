@@ -8,20 +8,20 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
     constructor(private fileAccessor: FileAccessor) {
     }
 
-    public onDefinition = async (line: string, uri: string): Promise<Definition | DefinitionLink[] | undefined> => {
+    public onDefinition = async (line: string, uri: string): Promise<Definition[]> => {
         let matches = /(.*)(!include([\S]*))([\s]*)*(.*)/.exec(line);
         if (!matches || matches.length !== 6) {
-            return;
+            return [];
         }
         let includeType = matches[2];
         let whatToInclude = `${matches[5]}`.trim();
         switch (includeType) {
             case "!include":
                 let destination = this.fileAccessor.getRelativePathAsFileUri(uri, whatToInclude);
-                return Location.create(destination, {
+                return [Location.create(destination, {
                     start: { line: 0, character: 0 },
                     end: { line: 0, character: 0 }
-                });
+                })];
             case "!include_dir_list":
             case "!include_dir_named":
             case "!include_dir_merge_list":
@@ -33,7 +33,7 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
                     end: { line: 0, character: 0 }
                 }));
             default:
-                return;
+                return [];
         }
     };
 }
