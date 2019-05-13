@@ -167,7 +167,7 @@ export class HomeAssistantLanguageService {
 
     public onDefinition = async (textDocumentPositionParams: TextDocumentPositionParams): Promise<Definition | DefinitionLink[] | undefined> => {
         let textDocument = this.documents.get(textDocumentPositionParams.textDocument.uri);
-        await this.haConfig.getScripts();
+
         if (!textDocument) {
             return;
         }

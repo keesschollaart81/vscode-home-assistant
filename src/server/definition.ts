@@ -11,6 +11,10 @@ export class DefinitionProvider {
 
         let matches = /(.*)(!include([\S]*))([\s]*)*(.*)/.exec(line);
         if (!matches || matches.length !== 6) {
+            var matches2 = /(.*)(script\.([\S]*))([\s]*)*(.*)/.exec(line);
+            if(matches2 && matches2.length === 6){
+                console.log("yes");
+            }
             return;
         }
         let includeType = matches[2];

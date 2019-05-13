@@ -1,13 +1,13 @@
-import * as YAML from "yaml"; 
+import * as path from "path";
+import * as YAML from "yaml";
 import { FileAccessor } from "../fileAccessor";
-import { IncludeReferences, Includetype, YamlIncludePlaceholder } from "./dto";
-import { IncludeParser } from "./includeParser";
-import { ScriptParser, ScriptReferences } from "./scriptParser";
+import { IncludeReferences, Includetype, ScriptReferences } from "./dto";
 
 export class HomeAssistantYamlFile {
 
   private yaml: YAML.ast.Document | undefined;
-  private includes: IncludeReferences | undefined;
+  private includes: IncludeReferences = {};
+  private scripts: ScriptReferences = {};
 
   constructor(private fileAccessor: FileAccessor, private filename: string, private path: string) { }
 
@@ -21,8 +21,9 @@ export class HomeAssistantYamlFile {
     try {
       this.yaml = YAML.parseDocument(fileContents, {
         // @ts-ignore the typings of this library are not up to date
-        customTags: this.getCustomTags(this.filename)
+        customTags: this.getCustomTags()
       });
+      await this.parseAstRecursive(this.yaml.contents, this.path);
     }
     catch (err) {
       var message = `${this.filename} could not be parsed, it was referenced from path '${this.path}'. This file will be ignored. Internal error: ${err}`;
@@ -44,10 +45,6 @@ export class HomeAssistantYamlFile {
     if (!this.yaml) {
       return;
     }
-    var includeParser = new IncludeParser(this.fileAccessor);
-    if (!this.includes) {
-      this.includes = await includeParser.parse(this.yaml, this.path);
-    }
     return this.includes;
   }
 
@@ -58,62 +55,70 @@ export class HomeAssistantYamlFile {
     if (!this.yaml) {
       return;
     }
-    var a = new ScriptParser();
-    return await a.parse(this.yaml, this.path);
+    return this.scripts;
   }
 
-  private getCustomTags(filename: string): YAML.Tag[] {
-    return <YAML.Tag[]>[
+  private getCustomTags(): YAML.Tag[] {
+
+    return [
+      `secret`,
+      `${Includetype[Includetype.include]}`,
+      `${Includetype[Includetype.include_dir_list]}`,
+      `${Includetype[Includetype.include_dir_merge_list]}`,
+      `${Includetype[Includetype.include_dir_merge_named]}`,
+      `${Includetype[Includetype.include_dir_named]}`
+      //@ts-ignore
+    ].map(x => <YAML.Tag>
       {
-        tag: "!secret",
+        tag: `!${x}`,
         resolve: (doc, cst) => Symbol.for(cst.strValue)
-      },
-      {
-        tag: `!${Includetype[Includetype.include]}`,
-        resolve: (doc, cst) => Symbol.for(cst.strValue)
-        // resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
-      },
-      {
-        tag: `!${Includetype[Includetype.include_dir_list]}`,
-        resolve: (doc, cst) => Symbol.for(cst.strValue)
-        // resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
-      },
-      {
-        tag: `!${Includetype[Includetype.include_dir_named]}`,
-        resolve: (doc, cst) => Symbol.for(cst.strValue)
-        // resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
-      },
-      {
-        tag: `!${Includetype[Includetype.include_dir_merge_list]}`,
-        resolve: (doc, cst) => Symbol.for(cst.strValue)
-        // resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
-      },
-      {
-        tag: `!${Includetype[Includetype.include_dir_merge_named]}`,
-        resolve: (doc, cst) => Symbol.for(cst.strValue)
-        // resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
-      },
-      {
-        tag: `!asdasd`,
-        resolve: (doc, cstNode) => this.includeResolver(filename, doc, cstNode)
-      }
-    ];
+      });
   }
 
-  /**
-   * Custom Resolver for the tags set in `this.getCustomTags()`
-   * This gets called as part of the `YAML.parse()` operatin
-   * both the `!include***` and the `filename.yaml` part are replaced in the final YAML result
-   * they are replaced by a `YamlIncludePlaceholder` object containing both the from- and to filenames 
-   */
-  private includeResolver = (filename: string, doc: YAML.ast.Document, cstNode: YAML.cst.Node): YAML.ast.Node => {
-    var fromFile = filename;
-    var toFileOrFolder = `${cstNode.rawValue}`.trim();
-    toFileOrFolder = this.fileAccessor.getRelativePath(filename, toFileOrFolder);
+  private parseAstRecursive = async (node: YAML.ast.AstNode | null, currentPath: string) => {
+    if (!node) {
+      // null object like 'frontent:'
+      return;
+    }
+    switch (node.type) {
+      case "MAP":
+      case "SEQ":
+        if (currentPath === "configuration.yaml/script") {
+          this.collectScripts(node);
+        }
+        for (let i in node.items) {
+          var item = node.items[i];
+          switch (item.type) {
+            case "PAIR":
+              this.parseAstRecursive(item.value, `${currentPath}/${item.key.toJSON()}`);
+              break;
+            case "SEQ":
+            case "MAP":
+            case "PLAIN":
+              this.parseAstRecursive(item, currentPath);
+              break;
+            default:
+              console.log(`huh ${currentPath}`);
+              break;
+          }
+        }
+        break;
+      case "BLOCK_FOLDED":
+      case "BLOCK_LITERAL":
+      case "PLAIN":
+      case "QUOTE_DOUBLE":
+      case "QUOTE_SINGLE":
+        if (node.tag) {
+          await this.collectInclude(node, currentPath);
+        }
+        break;
+    }
+  }
+
+  private getIncludeType = (str: string): Includetype | null => {
 
     var includeType: Includetype;
-    // @ts-ignore
-    switch (cstNode.tag.suffix) {
+    switch (str) {
       case `${Includetype[Includetype.include]}`:
         includeType = Includetype.include;
         break;
@@ -130,17 +135,55 @@ export class HomeAssistantYamlFile {
         includeType = Includetype.include_dir_named;
         break;
       default:
-        throw new Error("Unknown include tag");
+        return null;
+    }
+    return includeType;
+  }
+
+  private async collectInclude(x: YAML.ast.ScalarNode, currentPath: string) {
+    var value: null | boolean | number | string = "";
+    var includeType = this.getIncludeType(`${x.tag}`.slice(1).toLowerCase());
+    if (includeType === null) {
+      // secrets and other tags
+      return;
     }
 
-    return YAML.createNode(<YamlIncludePlaceholder>{
-      isInclude: true,
-      fromFile: fromFile,
-      includeType: includeType,
-      toFileOrFolder: toFileOrFolder,
-      start: cstNode.range.start,
-      end: cstNode.range.end
-    });
+    value = x.value.toString().slice(7, -1).replace("\\", "/"); // \ to / on windows
+
+    let files: string[] = [];
+
+    if (includeType === Includetype.include) {
+      // single file include
+      files.push(value);
+    }
+    else {
+      // multiple file include
+      var filesInThisFolder = await this.fileAccessor.getFilesInFolder(value);
+      files = filesInThisFolder.filter(f => path.extname(f) === ".yaml");
+    }
+
+    for (var i in files) {
+      this.includes[files[i]] = {
+        path: currentPath,
+        includeType: includeType,
+        start: x.range[0],
+        end: x.range[1]
+      };
+    }
+  }
+
+  private collectScripts(node: YAML.ast.Map | YAML.ast.Seq) {
+    for (var i in node.items) {
+      var item = node.items[i];
+      if (item.type === "PAIR") {
+        console.log();
+        this.scripts[item.key.toJSON()] = {
+          filename: this.filename,
+          start: item.value.range[0],
+          end: item.value.range[1]
+        };
+      }
+    }
   }
 }
 

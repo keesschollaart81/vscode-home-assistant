@@ -4,28 +4,15 @@ export interface IncludeReferences {
         includeType: Includetype;
         start: number;
         end: number;
-    }
+    };
+}export interface ScriptReferences {
+    [scriptFilename: string]: {
+        filename: string;
+        start: number;
+        end: number;
+    };
 }
-
-export class YamlIncludes {
-    [filename: string]: YamlInclude;
-}
-
-export class YamlInclude {
-    includedFrom: IncludedFrom = new IncludedFrom();
-}
-
-export class IncludedFrom {
-    [filename: string]: IncludedFromEntry;
-}
-
-export class IncludedFromEntry {
-    path: string | null;
-    includeType?: Includetype;
-    start: number;
-    end: number;
-}
-
+ 
 export enum Includetype {
     include,
     include_dir_list,
