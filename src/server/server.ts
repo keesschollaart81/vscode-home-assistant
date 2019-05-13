@@ -6,8 +6,10 @@ import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { ConfigurationService } from "./configuration";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { DefinitionProvider, IncludeDefinitionProvider, ScriptDefinitionProvider } from "./definition";
-import { HomeAssistantConfiguration } from "./yamlIncludes/haConfig";
+import { DefinitionProvider } from "./definition/definition";
+import { IncludeDefinitionProvider } from "./definition/includes";
+import { ScriptDefinitionProvider } from "./definition/scripts";
+import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -30,7 +32,7 @@ connection.onInitialize(async params => {
   
   var definitionProviders = [
     new IncludeDefinitionProvider(fileAccessor),
-    new ScriptDefinitionProvider(fileAccessor, haConfig)
+    new ScriptDefinitionProvider(haConfig)
   ];
 
   var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([

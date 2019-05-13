@@ -7,9 +7,9 @@ import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { Includetype } from "./yamlIncludes/dto";
-import { DefinitionProvider } from "./definition";
-import { HomeAssistantConfiguration } from "./yamlIncludes/haConfig";
+import { Includetype } from "./haConfig/dto";
+import { DefinitionProvider } from "./definition/definition";
+import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 export class HomeAssistantLanguageService {
 
     private schemaServiceForIncludes: SchemaServiceForIncludes;
@@ -180,7 +180,9 @@ export class HomeAssistantLanguageService {
         for (var p in this.definitionProviders) {
             let provider = this.definitionProviders[p];
             var providerResults = await provider.onDefinition(thisLine, textDocument.uri);
-            definitions.push(providerResults);
+            if (providerResults) {
+                definitions.push(providerResults);
+            }
         }
         return definitions;
     }

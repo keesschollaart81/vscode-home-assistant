@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
-import { IncludeReferences } from "../yamlIncludes/dto";
+import { IncludeReferences } from "../haConfig/dto";
 
 export class SchemaServiceForIncludes {
     private schemaContributions: any;

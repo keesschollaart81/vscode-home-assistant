@@ -1,10 +1,13 @@
 import * as path from "path";
 import * as YAML from "yaml";
+import getLinePos from "yaml/dist/cst/getLinePos";
 import { FileAccessor } from "../fileAccessor";
 import { IncludeReferences, Includetype, ScriptReferences } from "./dto";
+import Uri from 'vscode-uri';
 
 export class HomeAssistantYamlFile {
 
+  private cst: YAML.ParsedCST | undefined;
   private yaml: YAML.ast.Document | undefined;
   private includes: IncludeReferences = {};
   private scripts: ScriptReferences = {};
@@ -19,10 +22,16 @@ export class HomeAssistantYamlFile {
     }
 
     try {
-      this.yaml = YAML.parseDocument(fileContents, {
+      this.cst = YAML.parseCST(fileContents);
+      this.yaml = new YAML.Document({
         // @ts-ignore the typings of this library are not up to date
         customTags: this.getCustomTags()
-      });
+      }).parse(this.cst[0]);
+
+      // this.yaml = YAML.parseDocument(fileContents, {
+      //   // @ts-ignore the typings of this library are not up to date
+      //   customTags: this.getCustomTags()
+      // });
       await this.parseAstRecursive(this.yaml.contents, this.path);
     }
     catch (err) {
@@ -94,7 +103,11 @@ export class HomeAssistantYamlFile {
               break;
             case "SEQ":
             case "MAP":
+            case "BLOCK_FOLDED":
+            case "BLOCK_LITERAL":
             case "PLAIN":
+            case "QUOTE_DOUBLE":
+            case "QUOTE_SINGLE":
               this.parseAstRecursive(item, currentPath);
               break;
             default:
@@ -175,12 +188,16 @@ export class HomeAssistantYamlFile {
   private collectScripts(node: YAML.ast.Map | YAML.ast.Seq) {
     for (var i in node.items) {
       var item = node.items[i];
+      let filepath = Uri.file(path.resolve(this.filename)).fsPath;
       if (item.type === "PAIR") {
-        console.log();
+        //@ts-ignore
+        var lp = getLinePos(item.key.range[0], this.cst);
+        var lp2 = getLinePos(item.value.range[1], this.cst);
+
         this.scripts[item.key.toJSON()] = {
-          filename: this.filename,
-          start: item.value.range[0],
-          end: item.value.range[1]
+          fileUri: Uri.file(filepath).toString(),
+          start: [lp.line - 1, lp.col - 1],
+          end: [lp2.line - 1, lp2.col - 1]
         };
       }
     }

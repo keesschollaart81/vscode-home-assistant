@@ -7,9 +7,9 @@ export interface IncludeReferences {
     };
 }export interface ScriptReferences {
     [scriptFilename: string]: {
-        filename: string;
-        start: number;
-        end: number;
+        fileUri: string;
+        start: [number, number];
+        end: [number, number];
     };
 }
  
