@@ -84,22 +84,22 @@ export class HomeAssistantYamlFile {
       });
   }
 
-  private parseAstRecursive = async (node: YAML.ast.AstNode | null, currentPath: string) => {
+  private parseAstRecursive = async (node: YAML.ast.AstNode | null, currentPath: string) : Promise<void> => {
     if (!node) {
-      // null object like 'frontent:'
+      // null object like 'frontend:'
       return;
     }
     switch (node.type) {
       case "MAP":
       case "SEQ":
-        if (currentPath === "configuration.yaml/script") {
+        if (currentPath === "configuration.yaml/script" || currentPath === "configuration.yaml/homeassistant/packages/script") {
           this.collectScripts(node);
         }
         for (let i in node.items) {
           var item = node.items[i];
           switch (item.type) {
             case "PAIR":
-              this.parseAstRecursive(item.value, `${currentPath}/${item.key.toJSON()}`);
+              await this.parseAstRecursive(item.value, `${currentPath}/${this.getKeyName(item.key)}`);
               break;
             case "SEQ":
             case "MAP":
@@ -108,7 +108,7 @@ export class HomeAssistantYamlFile {
             case "PLAIN":
             case "QUOTE_DOUBLE":
             case "QUOTE_SINGLE":
-              this.parseAstRecursive(item, currentPath);
+            await this.parseAstRecursive(item, currentPath);
               break;
             default:
               console.log(`huh ${currentPath}`);
@@ -125,6 +125,15 @@ export class HomeAssistantYamlFile {
           await this.collectInclude(node, currentPath);
         }
         break;
+    }
+  }
+
+  private getKeyName = (node: YAML.ast.AstNode):string =>{
+    if (node.tag && node.type === "PLAIN"){
+      return node.value.toString().slice(7, -1);
+    }
+    else{
+      return node.toJSON();
     }
   }
 
@@ -166,8 +175,9 @@ export class HomeAssistantYamlFile {
     let files: string[] = [];
 
     if (includeType === Includetype.include) {
+      var relativeFilePath = this.fileAccessor.getRelativePath(this.filename, value);
       // single file include
-      files.push(value);
+      files.push(relativeFilePath);
     }
     else {
       // multiple file include
@@ -176,7 +186,7 @@ export class HomeAssistantYamlFile {
     }
 
     for (var i in files) {
-      this.includes[files[i]] = {
+      this.includes[files[i].replace("\\", "/")] = {
         path: currentPath,
         includeType: includeType,
         start: x.range[0],

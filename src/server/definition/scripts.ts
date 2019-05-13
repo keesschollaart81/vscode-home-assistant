@@ -14,7 +14,8 @@ export class ScriptDefinitionProvider implements DefinitionProvider {
             return;
         }
         let scripts = await this.haConfig.getScripts();
-        let ourScript = scripts[matches[3]];
+        var scriptName = matches[3].replace(":",""); // might be possible in regex!?
+        let ourScript = scripts[scriptName];
         if (!ourScript) {
             return;
         }

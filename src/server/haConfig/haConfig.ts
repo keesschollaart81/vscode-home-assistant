@@ -1,6 +1,6 @@
 import { FileAccessor } from "../fileAccessor";
 import { HomeAssistantYamlFile } from "./haYamlFile";
-import { IncludeReferences, ScriptReferences } from "./dto"; 
+import { IncludeReferences, ScriptReferences } from "./dto";
 
 export class HomeAssistantConfiguration {
 
@@ -46,7 +46,8 @@ export class HomeAssistantConfiguration {
         continue;
       }
       var currentPath = `${includes[filenameKey].path}`;
-      await this.discoverCore(filenameKey, currentPath);
-    }
+
+      await this.discoverCore(filenameKey, currentPath); 
+    } 
   }
 }
