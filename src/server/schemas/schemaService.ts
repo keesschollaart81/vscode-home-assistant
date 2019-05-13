@@ -35,7 +35,7 @@ export class SchemaServiceForIncludes {
             var sourceFileMapping = haFiles[sourceFile];
             var relatedPathToSchemaMapping = pathToSchemaFileMappings.find(x => {
                 let sourceFileMappingPath = sourceFileMapping.path.replace("homeassistant/packages/", "");
-                sourceFileMappingPath = sourceFileMapping.path.replace(/cards\/cards/g, "cards");
+                sourceFileMappingPath = sourceFileMappingPath.replace(/cards\/cards/g, "cards");
                 var samePath = x.path === sourceFileMappingPath;
                 if (!samePath) {
                     return false;

@@ -181,7 +181,7 @@ export class HomeAssistantYamlFile {
     }
     else {
       // multiple file include
-      var filesInThisFolder = await this.fileAccessor.getFilesInFolder(value);
+      var filesInThisFolder = await this.fileAccessor.getFilesInFolderRelativeFrom(value, this.filename);
       files = filesInThisFolder.filter(f => path.extname(f) === ".yaml");
     }
 

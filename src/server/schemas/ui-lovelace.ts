@@ -28,7 +28,7 @@ export interface LovelaceConfig {
 export type LovelaceViewConfigs = LovelaceViewConfig | Array<LovelaceViewConfig>;
 
 export interface LovelaceViewConfig {
-  id?: string; //Updated
+  id?: string | number; //Updated
   index?: number;
   title?: string;
   badges?: string[];

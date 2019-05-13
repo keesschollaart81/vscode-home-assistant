@@ -37,7 +37,7 @@ export interface HomeAssistantComponent {
     name?: string;
     latitude?: string | number;
     longitude?: string | number;
-    elevation?: number;
+    elevation?: string | number;
     unit_system?: "metric" | "imperial";
     time_zone?: string;
     whitelist_external_dirs?: string[];
