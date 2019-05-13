@@ -1,6 +1,6 @@
 import { FileAccessor } from "../fileAccessor";
 import { HomeAssistantYamlFile } from "./haYamlFile";
-import { IncludeReferences, ScriptReferences } from "./dto";
+import { IncludeReferences, ScriptReferences, HaFileInfo } from "./dto";
 
 export class HomeAssistantConfiguration {
 
@@ -8,6 +8,19 @@ export class HomeAssistantConfiguration {
 
   public constructor(private fileAccessor: FileAccessor) {
     this.files = {};
+  }
+
+  public getAllFiles = async (): Promise<HaFileInfo[]> => {
+    let allFiles: HaFileInfo[] = [];
+
+    for (var filename in this.files) {
+
+      allFiles.push(<HaFileInfo>{
+        filename: filename,
+        path: this.files[filename].path
+      });
+    }
+    return allFiles;
   }
 
   public getIncludes = async (): Promise<IncludeReferences> => {
@@ -47,7 +60,7 @@ export class HomeAssistantConfiguration {
       }
       var currentPath = `${includes[filenameKey].path}`;
 
-      await this.discoverCore(filenameKey, currentPath); 
-    } 
+      await this.discoverCore(filenameKey, currentPath);
+    }
   }
 }

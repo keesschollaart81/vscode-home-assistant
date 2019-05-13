@@ -12,7 +12,7 @@ export class HomeAssistantYamlFile {
   private includes: IncludeReferences = {};
   private scripts: ScriptReferences = {};
 
-  constructor(private fileAccessor: FileAccessor, private filename: string, private path: string) { }
+  constructor(private fileAccessor: FileAccessor, private filename: string, public path: string) { }
 
   private async parse(): Promise<void> {
 

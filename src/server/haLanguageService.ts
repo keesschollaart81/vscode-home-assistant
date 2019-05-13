@@ -33,11 +33,11 @@ export class HomeAssistantLanguageService {
             console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
             try {
                 await this.haConfig.discoverFiles();
-                var yamlIncludes = await this.haConfig.getIncludes();
-                if (yamlIncludes && Object.keys(yamlIncludes).length > 0) {
-                    console.log(`Applying schema's to ${Object.keys(yamlIncludes).length} of your configuration files...`);
+                var haFiles = await this.haConfig.getAllFiles();
+                if (haFiles && haFiles.length > 0) {
+                    console.log(`Applying schema's to ${haFiles.length} of your configuration files...`);
                 }
-                this.schemaServiceForIncludes.onUpdate(yamlIncludes);
+                this.schemaServiceForIncludes.onUpdate(haFiles);
                 this.documents.all().forEach(async d => {
                     var diagnostics = await this.getDiagnostics(d);
                     this.sendDiagnostics(d.uri, diagnostics, connection);

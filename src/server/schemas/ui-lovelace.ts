@@ -13,6 +13,10 @@ The generated schema (lovelace-ui.json) is also (committed) in this folder and
  
 */
 
+
+/**
+ * @TJS-additionalProperties true 
+ */
 export interface LovelaceConfig {
   title?: string;
   views: Array<LovelaceViewConfig | IncludeTags>;

@@ -1,3 +1,8 @@
+export interface HaFileInfo {
+    filename: string;
+    path: string;
+}
+
 export interface IncludeReferences {
     [filename: string]: {
         path: string;
@@ -12,7 +17,7 @@ export interface IncludeReferences {
         end: [number, number];
     };
 }
- 
+
 export enum Includetype {
     include,
     include_dir_list,
