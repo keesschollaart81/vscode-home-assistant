@@ -1,6 +1,5 @@
 import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection, Diagnostic } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
-import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
@@ -8,22 +7,19 @@ import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { Includetype } from "./yamlIncludes/dto";
-import { DefinitionProvider } from "./definition";
+import { Includetype } from "./haConfig/dto";
+import { DefinitionProvider } from "./definition/definition";
+import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 export class HomeAssistantLanguageService {
 
     private schemaServiceForIncludes: SchemaServiceForIncludes;
 
-    private rootFiles = [
-        "configuration.yaml", "ui-lovelace.yaml"
-    ];
-
     constructor(
         private documents: TextDocuments,
         private yamlLanguageService: YamlLanguageServiceWrapper,
-        private yamlIncludeDiscovery: YamlIncludeDiscovery,
+        private haConfig: HomeAssistantConfiguration,
         private haConnection: HaConnection,
-        private definitionProvider: DefinitionProvider
+        private definitionProviders: DefinitionProvider[]
     ) {
         this.schemaServiceForIncludes = new SchemaServiceForIncludes(this.yamlLanguageService.jsonSchemaService);
     }
@@ -36,7 +32,8 @@ export class HomeAssistantLanguageService {
         this.pendingSchemaUpdate = setTimeout(async () => {
             console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
             try {
-                var yamlIncludes = await this.yamlIncludeDiscovery.discoverFiles(this.rootFiles);
+                await this.haConfig.discoverFiles();
+                var yamlIncludes = await this.haConfig.getIncludes();
                 if (yamlIncludes && Object.keys(yamlIncludes).length > 0) {
                     console.log(`Applying schema's to ${Object.keys(yamlIncludes).length} of your configuration files...`);
                 }
@@ -179,7 +176,15 @@ export class HomeAssistantLanguageService {
         const end: number = lineOffsets[textDocumentPositionParams.position.line + 1];
         let thisLine = textDocument.getText().substring(start, end);
 
-        return await this.definitionProvider.onDefinition(thisLine, textDocument.uri);
+        var definitions = [];
+        for (var p in this.definitionProviders) {
+            let provider = this.definitionProviders[p];
+            var providerResults = await provider.onDefinition(thisLine, textDocument.uri);
+            if (providerResults) {
+                definitions.push(providerResults);
+            }
+        }
+        return definitions;
     }
 
     private getValidYamlTags(): string[] {

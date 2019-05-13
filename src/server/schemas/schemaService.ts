@@ -1,13 +1,13 @@
 import * as path from "path";
 import * as fs from "fs";
-import { FilePathMapping } from "../yamlIncludes/dto";
+import { IncludeReferences } from "../haConfig/dto";
 
 export class SchemaServiceForIncludes {
     private schemaContributions: any;
     constructor(private jsonSchemaService: any) { }
 
-    public onUpdate(fileMappings: FilePathMapping) {
-        this.schemaContributions = this.getSchemaContributions(fileMappings);
+    public onUpdate(includeReferences: IncludeReferences) {
+        this.schemaContributions = this.getSchemaContributions(includeReferences);
         this.jsonSchemaService.clearExternalSchemas(); // otherwise it will stack the schemes in memory for every file change
         this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
     }
@@ -19,7 +19,7 @@ export class SchemaServiceForIncludes {
         return pathToSchemaMappings;
     }
 
-    private getSchemaContributions(fileMappings: FilePathMapping) {
+    private getSchemaContributions(includeReferences: IncludeReferences) {
         var schemas = {};
         var schemaAssociations = {};
         var pathToSchemaFileMappings = this.getPathToSchemaFileMappings();
@@ -31,8 +31,8 @@ export class SchemaServiceForIncludes {
             schemas[`http://schemas.home-assistant.io/${pathToSchemaMapping.key}`] = schema;
         });
 
-        for (var sourceFile in fileMappings) {
-            var sourceFileMapping = fileMappings[sourceFile];
+        for (var sourceFile in includeReferences) {
+            var sourceFileMapping = includeReferences[sourceFile];
             var relatedPathToSchemaMapping = pathToSchemaFileMappings.find(x => {
                 var sourceFileMappingPath = sourceFileMapping.path.replace("homeassistant/packages/", "");
                 var samePath = x.path === sourceFileMappingPath;

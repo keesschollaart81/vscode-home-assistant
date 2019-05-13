@@ -183,7 +183,7 @@ export interface ServiceAction {
     service_template?: string;
     data?: any;
     data_template?: any;
-    entity_id?: string;
+    entity_id?: string | string[];
 }
 export interface DelayAction {
     delay: string | number | TimePeriod;
