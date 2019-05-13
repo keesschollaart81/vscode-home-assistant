@@ -1,8 +1,13 @@
 import { FileAccessor } from "./fileAccessor";
 import { Definition, DefinitionLink, Location } from "vscode-languageserver";
 import * as path from "path";
+import { HomeAssistantConfiguration } from "./yamlIncludes/haConfig";
 
-export class DefinitionProvider {
+export interface DefinitionProvider {
+    onDefinition(line: string, uri: string): Promise<Definition | DefinitionLink[] | undefined>;
+}
+
+export class IncludeDefinitionProvider implements DefinitionProvider {
     constructor(private fileAccessor: FileAccessor) {
 
     }
@@ -11,10 +16,6 @@ export class DefinitionProvider {
 
         let matches = /(.*)(!include([\S]*))([\s]*)*(.*)/.exec(line);
         if (!matches || matches.length !== 6) {
-            var matches2 = /(.*)(script\.([\S]*))([\s]*)*(.*)/.exec(line);
-            if(matches2 && matches2.length === 6){
-                console.log("yes");
-            }
             return;
         }
         let includeType = matches[2];
@@ -40,5 +41,29 @@ export class DefinitionProvider {
             default:
                 return;
         }
+    }
+}
+export class ScriptDefinitionProvider implements DefinitionProvider {
+    private root: string;
+    constructor(private fileAccessor: FileAccessor, private haConfig: HomeAssistantConfiguration) {
+        this.root = fileAccessor.getRelativePath("configuration.yaml");
+    }
+
+    public onDefinition = async (line: string, uri: string): Promise<Definition | DefinitionLink[] | undefined> => {
+
+        let matches = /(.*)(script\.([\S]*))([\s]*)*(.*)/.exec(line);
+        if (!matches || matches.length !== 6) {
+            return;
+        }
+        let scripts = await this.haConfig.getScripts();
+        let ourScript = scripts[matches[3]];
+        if (!ourScript) {
+            return;
+        }
+        let destination = this.fileAccessor.getRelativePathAsFileUri(uri, ourScript.filename);
+        return Location.create(destination, {
+            start: { line: 0, character: 0 },
+            end: { line: 0, character: 0 }
+        });
     }
 } 

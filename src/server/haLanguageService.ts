@@ -19,7 +19,7 @@ export class HomeAssistantLanguageService {
         private yamlLanguageService: YamlLanguageServiceWrapper,
         private haConfig: HomeAssistantConfiguration,
         private haConnection: HaConnection,
-        private definitionProvider: DefinitionProvider
+        private definitionProviders: DefinitionProvider[]
     ) {
         this.schemaServiceForIncludes = new SchemaServiceForIncludes(this.yamlLanguageService.jsonSchemaService);
     }
@@ -176,7 +176,13 @@ export class HomeAssistantLanguageService {
         const end: number = lineOffsets[textDocumentPositionParams.position.line + 1];
         let thisLine = textDocument.getText().substring(start, end);
 
-        return await this.definitionProvider.onDefinition(thisLine, textDocument.uri);
+        var definitions = [];
+        for (var p in this.definitionProviders) {
+            let provider = this.definitionProviders[p];
+            var providerResults = await provider.onDefinition(thisLine, textDocument.uri);
+            definitions.push(providerResults);
+        }
+        return definitions;
     }
 
     private getValidYamlTags(): string[] {

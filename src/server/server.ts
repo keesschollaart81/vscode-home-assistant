@@ -6,7 +6,7 @@ import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { ConfigurationService } from "./configuration";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { DefinitionProvider } from "./definition";
+import { DefinitionProvider, IncludeDefinitionProvider, ScriptDefinitionProvider } from "./definition";
 import { HomeAssistantConfiguration } from "./yamlIncludes/haConfig";
 
 let connection = createConnection(ProposedFeatures.all);
@@ -21,13 +21,17 @@ documents.listen(connection);
 
 connection.onInitialize(async params => {
 
-  connection.console.log(`[Server(${process.pid})] Started and initialize received`);
+  connection.console.log(`[Home Assistant Language Server(${process.pid})] Started and initialize received`);
 
   var configurationService = new ConfigurationService();
   var haConnection = new HaConnection(configurationService);
   var fileAccessor = new VsCodeFileAccessor(params.rootUri, connection, documents);
   var haConfig = new HomeAssistantConfiguration(fileAccessor);
-  var definitionProvider = new DefinitionProvider(fileAccessor);
+  
+  var definitionProviders = [
+    new IncludeDefinitionProvider(fileAccessor),
+    new ScriptDefinitionProvider(fileAccessor, haConfig)
+  ];
 
   var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([
     new EntityIdCompletionContribution(haConnection),
@@ -39,10 +43,10 @@ connection.onInitialize(async params => {
     yamlLanguageServiceWrapper,
     haConfig,
     haConnection,
-    definitionProvider
+    definitionProviders
   );
 
-  // await haConfig.discoverFiles();
+  await haConfig.discoverFiles();
   await homeAsisstantLanguageService.triggerSchemaLoad(connection);
 
   documents.onDidChangeContent((e) => homeAsisstantLanguageService.onDocumentChange(e, connection));
