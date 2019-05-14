@@ -21,30 +21,29 @@ export class HomeAssistantYamlFile {
       return;
     }
 
-    try {
-      this.cst = YAML.parseCST(fileContents);
-      this.yaml = new YAML.Document({
-        // @ts-ignore the typings of this library are not up to date
-        customTags: this.getCustomTags()
-      }).parse(this.cst[0]);
+    this.cst = YAML.parseCST(fileContents);
+    this.yaml = new YAML.Document({
+      // @ts-ignore the typings of this library are not up to date
+      customTags: this.getCustomTags()
+    }).parse(this.cst[0]);
 
-      // this.yaml = YAML.parseDocument(fileContents, {
-      //   // @ts-ignore the typings of this library are not up to date
-      //   customTags: this.getCustomTags()
-      // });
-      await this.parseAstRecursive(this.yaml.contents, this.path);
+    await this.parseAstRecursive(this.yaml.contents, this.path);
+  }
+
+  public isValid = async (): Promise<boolean> => {
+    try {
+      await this.parse();
     }
-    catch (err) {
-      var message = `${this.filename} could not be parsed, it was referenced from path '${this.path}'. This file will be ignored. Internal error: ${err}`;
-      if (this.filename === this.path) {
-        // root file has more impact
-        console.warn(message);
-      }
-      else {
-        console.log(message);
-      }
-      return;
+    catch (e) {
+      return false;
     }
+    if (!this.yaml){
+      return false;
+    }
+    if (this.yaml.errors && this.yaml.errors.length > 0) {
+      return false;
+    }
+    return true;
   }
 
   public getIncludes = async (): Promise<IncludeReferences> => {
@@ -84,7 +83,7 @@ export class HomeAssistantYamlFile {
       });
   }
 
-  private parseAstRecursive = async (node: YAML.ast.AstNode | null, currentPath: string) : Promise<void> => {
+  private parseAstRecursive = async (node: YAML.ast.AstNode | null, currentPath: string): Promise<void> => {
     if (!node) {
       // null object like 'frontend:'
       return;
@@ -108,7 +107,7 @@ export class HomeAssistantYamlFile {
             case "PLAIN":
             case "QUOTE_DOUBLE":
             case "QUOTE_SINGLE":
-            await this.parseAstRecursive(item, currentPath);
+              await this.parseAstRecursive(item, currentPath);
               break;
             default:
               console.log(`huh ${currentPath}`);
@@ -128,11 +127,11 @@ export class HomeAssistantYamlFile {
     }
   }
 
-  private getKeyName = (node: YAML.ast.AstNode):string =>{
-    if (node.tag && node.type === "PLAIN"){
+  private getKeyName = (node: YAML.ast.AstNode): string => {
+    if (node.tag && node.type === "PLAIN") {
       return node.value.toString().slice(7, -1);
     }
-    else{
+    else {
       return node.toJSON();
     }
   }

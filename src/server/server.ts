@@ -49,10 +49,11 @@ connection.onInitialize(async params => {
   );
 
   await haConfig.discoverFiles();
-  await homeAsisstantLanguageService.triggerSchemaLoad(connection);
+  await homeAsisstantLanguageService.findAndApplySchemas(connection);
 
   documents.onDidChangeContent((e) => homeAsisstantLanguageService.onDocumentChange(e, connection));
   documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e, connection));
+  documents.onDidSave((e) => homeAsisstantLanguageService.onDidSave(e, connection));
 
   connection.onDocumentSymbol(homeAsisstantLanguageService.onDocumentSymbol);
   connection.onDocumentFormatting(homeAsisstantLanguageService.onDocumentFormatting);

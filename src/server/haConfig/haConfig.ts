@@ -4,7 +4,7 @@ import { IncludeReferences, ScriptReferences, HaFileInfo } from "./dto";
 
 export class HomeAssistantConfiguration {
 
-  private files: { [filename: string]: HomeAssistantYamlFile };
+  private files: FilesCollection;
 
   public constructor(private fileAccessor: FileAccessor) {
     this.files = {};
@@ -21,6 +21,44 @@ export class HomeAssistantConfiguration {
       });
     }
     return allFiles;
+  }
+
+  public updateFile = async (uri: string): Promise<FileUpdateResult> => {
+    let filename = this.fileAccessor.fromUriToLocalPath(uri);
+
+    let ourFile = this.files[filename];
+    if (!ourFile) {
+      return {
+        isValidYaml: true,
+        newFilesFound: true
+      };
+    }
+    var homeAssistantYamlFile = new HomeAssistantYamlFile(this.fileAccessor, filename, ourFile.path);
+    this.files[filename] = homeAssistantYamlFile;
+
+    if (!await homeAssistantYamlFile.isValid()) {
+      return {
+        isValidYaml: false,
+        newFilesFound: false
+      };
+    }
+
+    let files = await this.discoverCore(filename, ourFile.path, {});
+    ourFile = files[filename];
+    this.files[filename] = ourFile;
+
+    for (let filename in files) {
+      if (!this.files[filename]) {
+        return {
+          isValidYaml: true,
+          newFilesFound: true
+        };
+      }
+    }
+    return {
+      isValidYaml: true,
+      newFilesFound: false
+    };
   }
 
   public getIncludes = async (): Promise<IncludeReferences> => {
@@ -41,26 +79,63 @@ export class HomeAssistantConfiguration {
     return allScripts;
   }
 
-  public discoverFiles = async (files: string[] = ["configuration.yaml", "ui-lovelace.yaml"]): Promise<void> => {
+  private getRootFiles = (): string[] => {
+    var filesInRoot = this.fileAccessor.getFilesInFolder("");
+    let files = ["configuration.yaml", "ui-lovelace.yaml"].filter(f => filesInRoot.some(y => y === f));
+    return files;
+  }
+
+  public discoverFiles = async (): Promise<void> => {
+    let rootFiles = this.getRootFiles();
     this.files = {};
-    for (var index in files) {
-      await this.discoverCore(files[index], files[index]);
+    for (var index in rootFiles) {
+      this.files = await this.discoverCore(rootFiles[index], rootFiles[index], this.files);
     }
   }
 
-  private discoverCore = async (filename: string, path: string): Promise<void> => {
-    var homeAssistantYamlFile = new HomeAssistantYamlFile(this.fileAccessor, filename, path);
-    this.files[filename] = homeAssistantYamlFile;
+  private discoverCore = async (filename: string, path: string, files: FilesCollection): Promise<FilesCollection> => {
 
-    var includes = await homeAssistantYamlFile.getIncludes();
+    var homeAssistantYamlFile = new HomeAssistantYamlFile(this.fileAccessor, filename, path);
+    files[filename] = homeAssistantYamlFile;
+
+    let error = false;
+    var errorMessage = `File '${filename}' could not be parsed, it was referenced from path '${path}'. This file will be ignored.`;
+    try {
+      var includes = await homeAssistantYamlFile.getIncludes();
+    }
+    catch (err) {
+      error = true;
+      errorMessage += ` Error message: ${err}`;
+    }
+
+    if (!await homeAssistantYamlFile.isValid() || error) {
+      if (filename === path) {
+        // root file has more impact
+        console.warn(errorMessage);
+      }
+      else {
+        console.log(errorMessage);
+      }
+      return files;
+    }
+
     for (var filenameKey in includes) {
-      if (Object.keys(this.files).some(x => x === filenameKey)) {
+      if (Object.keys(files).some(x => x === filenameKey)) {
         /// we already know this file
         continue;
       }
       var currentPath = `${includes[filenameKey].path}`;
 
-      await this.discoverCore(filenameKey, currentPath);
+      files = await this.discoverCore(filenameKey, currentPath, files);
     }
+    return files;
   }
+}
+
+export interface FilesCollection {
+  [filename: string]: HomeAssistantYamlFile;
+}
+export interface FileUpdateResult {
+  isValidYaml: boolean;
+  newFilesFound: boolean;
 }

@@ -24,38 +24,55 @@ export class HomeAssistantLanguageService {
         this.schemaServiceForIncludes = new SchemaServiceForIncludes(this.yamlLanguageService.jsonSchemaService);
     }
 
-    private pendingSchemaUpdate: NodeJS.Timer;
+    public findAndApplySchemas = async (connection: IConnection) => {
 
-    public triggerSchemaLoad = async (connection: IConnection, becauseOfFilename?: string) => {
-        // working with a timeout to debounce while typing
-        clearTimeout(this.pendingSchemaUpdate);
-        this.pendingSchemaUpdate = setTimeout(async () => {
-            console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
-            try {
-                await this.haConfig.discoverFiles();
-                var haFiles = await this.haConfig.getAllFiles();
-                if (haFiles && haFiles.length > 0) {
-                    console.log(`Applying schema's to ${haFiles.length} of your configuration files...`);
-                }
-                this.schemaServiceForIncludes.onUpdate(haFiles);
-                this.documents.all().forEach(async d => {
-                    var diagnostics = await this.getDiagnostics(d);
-                    this.sendDiagnostics(d.uri, diagnostics, connection);
-                });
+        try {
+            var haFiles = await this.haConfig.getAllFiles();
+            if (haFiles && haFiles.length > 0) {
+                console.log(`Applying schema's to ${haFiles.length} of your configuration files...`);
             }
-            catch (err) {
-                console.error(`Unexpected error updating the schema, message: ${err}`, err);
-            }
-            console.log(`Schema's updated!`);
-        }, 200);
+            this.schemaServiceForIncludes.onUpdate(haFiles);
+            this.documents.all().forEach(async d => {
+                var diagnostics = await this.getDiagnostics(d);
+                this.sendDiagnostics(d.uri, diagnostics, connection);
+            });
+        }
+        catch (err) {
+            console.error(`Unexpected error updating the schema's, message: ${err}`, err);
+        }
+        console.log(`Schema's updated!`);
     }
 
+    private onDocumentChangeDebounce: NodeJS.Timer;
+
     public onDocumentChange = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
-        await this.triggerSchemaLoad(connection, textDocumentChangeEvent.document.uri);
 
-        var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
+        clearTimeout(this.onDocumentChangeDebounce);
 
-        this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics, connection);
+        this.onDocumentChangeDebounce = setTimeout(async () => {
+            var singleFileUpdate = await this.haConfig.updateFile(textDocumentChangeEvent.document.uri);
+            if (singleFileUpdate.isValidYaml && singleFileUpdate.newFilesFound) {
+                console.log(`Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`);
+                await this.haConfig.discoverFiles();
+                await this.findAndApplySchemas(connection);
+            }
+
+            var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
+
+            this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics, connection);
+        }, 600);
+
+    }
+
+    private onDidSaveDebounce: NodeJS.Timer;
+
+    public onDidSave = async (e: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
+        clearTimeout(this.onDidSaveDebounce);
+
+        this.onDidSaveDebounce = setTimeout(async () => {
+            await this.haConfig.discoverFiles();
+            await this.findAndApplySchemas(connection);
+        }, 100);
     }
 
     public onDocumentOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
