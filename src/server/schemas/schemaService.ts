@@ -43,7 +43,7 @@ export class SchemaServiceForIncludes {
                 return true;
             });
             if (relatedPathToSchemaMapping) {
-                schemaAssociations[`**/${haFiles[sourceFile].filename}`] = [`http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`];
+                schemaAssociations[`**/${encodeURI(haFiles[sourceFile].filename)}`] = [`http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`];
             }
         }
         return {
