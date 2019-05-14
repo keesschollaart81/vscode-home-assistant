@@ -125,7 +125,9 @@ export interface HomeAssistantAuthProvider {
 export interface TrustedNetworksAuthProvider {
     type: "trusted_networks";
     trusted_networks: string | string[] | any[];
-    trusted_users?: string | string[] | any[];
+    trusted_users?: {
+        [key: string]: string | Array<string | { [key: string]: string }>
+    };
     allow_bypass_login?: boolean;
 }
 export interface CommandLineAuthProvider {
