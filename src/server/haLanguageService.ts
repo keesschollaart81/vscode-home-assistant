@@ -1,6 +1,5 @@
 import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection, Diagnostic } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
-import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
 import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
@@ -8,57 +7,72 @@ import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { Includetype } from "./yamlIncludes/dto";
-import { DefinitionProvider } from "./definition";
+import { Includetype } from "./haConfig/dto";
+import { DefinitionProvider } from "./definition/definition";
+import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 export class HomeAssistantLanguageService {
 
     private schemaServiceForIncludes: SchemaServiceForIncludes;
 
-    private rootFiles = [
-        "configuration.yaml", "ui-lovelace.yaml"
-    ];
-
     constructor(
         private documents: TextDocuments,
         private yamlLanguageService: YamlLanguageServiceWrapper,
-        private yamlIncludeDiscovery: YamlIncludeDiscovery,
+        private haConfig: HomeAssistantConfiguration,
         private haConnection: HaConnection,
-        private definitionProvider: DefinitionProvider
+        private definitionProviders: DefinitionProvider[]
     ) {
         this.schemaServiceForIncludes = new SchemaServiceForIncludes(this.yamlLanguageService.jsonSchemaService);
     }
 
-    private pendingSchemaUpdate: NodeJS.Timer;
+    public findAndApplySchemas = async (connection: IConnection) => {
 
-    public triggerSchemaLoad = async (connection: IConnection, becauseOfFilename?: string) => {
-        // working with a timeout to debounce while typing
-        clearTimeout(this.pendingSchemaUpdate);
-        this.pendingSchemaUpdate = setTimeout(async () => {
-            console.log(`Updating schema's ${(becauseOfFilename) ? ` because ${becauseOfFilename} got updated` : ""}...`);
-            try {
-                var yamlIncludes = await this.yamlIncludeDiscovery.discoverFiles(this.rootFiles);
-                if (yamlIncludes && Object.keys(yamlIncludes).length > 0) {
-                    console.log(`Applying schema's to ${Object.keys(yamlIncludes).length} of your configuration files...`);
-                }
-                this.schemaServiceForIncludes.onUpdate(yamlIncludes);
-                this.documents.all().forEach(async d => {
-                    var diagnostics = await this.getDiagnostics(d);
-                    this.sendDiagnostics(d.uri, diagnostics, connection);
-                });
+        try {
+            var haFiles = await this.haConfig.getAllFiles();
+            if (haFiles && haFiles.length > 0) {
+                console.log(`Applying schema's to ${haFiles.length} of your configuration files...`);
             }
-            catch (err) {
-                console.error(`Unexpected error updating the schema, message: ${err}`, err);
-            }
-            console.log(`Schema's updated!`);
-        }, 200);
+            this.schemaServiceForIncludes.onUpdate(haFiles);
+            this.documents.all().forEach(async d => {
+                var diagnostics = await this.getDiagnostics(d);
+                this.sendDiagnostics(d.uri, diagnostics, connection);
+            });
+        }
+        catch (err) {
+            console.error(`Unexpected error updating the schema's, message: ${err}`, err);
+        }
+        console.log(`Schema's updated!`);
     }
 
+    private onDocumentChangeDebounce: NodeJS.Timer;
+
     public onDocumentChange = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
-        await this.triggerSchemaLoad(connection, textDocumentChangeEvent.document.uri);
 
-        var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
+        clearTimeout(this.onDocumentChangeDebounce);
 
-        this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics, connection);
+        this.onDocumentChangeDebounce = setTimeout(async () => {
+            var singleFileUpdate = await this.haConfig.updateFile(textDocumentChangeEvent.document.uri);
+            if (singleFileUpdate.isValidYaml && singleFileUpdate.newFilesFound) {
+                console.log(`Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`);
+                await this.haConfig.discoverFiles();
+                await this.findAndApplySchemas(connection);
+            }
+
+            var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
+
+            this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics, connection);
+        }, 600);
+
+    }
+
+    private onDidSaveDebounce: NodeJS.Timer;
+
+    public onDidSave = async (e: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
+        clearTimeout(this.onDidSaveDebounce);
+
+        this.onDidSaveDebounce = setTimeout(async () => {
+            await this.haConfig.discoverFiles();
+            await this.findAndApplySchemas(connection);
+        }, 100);
     }
 
     public onDocumentOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
@@ -179,7 +193,15 @@ export class HomeAssistantLanguageService {
         const end: number = lineOffsets[textDocumentPositionParams.position.line + 1];
         let thisLine = textDocument.getText().substring(start, end);
 
-        return await this.definitionProvider.onDefinition(thisLine, textDocument.uri);
+        var definitions = [];
+        for (var p in this.definitionProviders) {
+            let provider = this.definitionProviders[p];
+            var providerResults = await provider.onDefinition(thisLine, textDocument.uri);
+            if (providerResults) {
+                definitions = definitions.concat(providerResults);
+            }
+        }
+        return definitions;
     }
 
     private getValidYamlTags(): string[] {

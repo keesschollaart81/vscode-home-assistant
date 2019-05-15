@@ -37,7 +37,7 @@ export interface HomeAssistantComponent {
     name?: string;
     latitude?: string | number;
     longitude?: string | number;
-    elevation?: number;
+    elevation?: string | number;
     unit_system?: "metric" | "imperial";
     time_zone?: string;
     whitelist_external_dirs?: string[];
@@ -181,11 +181,11 @@ export interface SequencedAction {
 export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
 
 export interface ServiceAction {
-    service: string;
+    service?: string;
     service_template?: string;
     data?: any;
     data_template?: any;
-    entity_id?: string;
+    entity_id?: string | string[];
 }
 export interface DelayAction {
     delay: string | number | TimePeriod;

@@ -10,6 +10,7 @@ export interface FileAccessor {
     getFilesInFolderRelativeFromAsFileUri(subFolder: string, relativeFrom: string): string[];
     getRelativePath(relativeFrom: string, filename: string): string;
     getRelativePathAsFileUri(relativeFrom: string, filename: string): string;
+    fromUriToLocalPath(uri: string): string;
 }
 
 export class VsCodeFileAccessor implements FileAccessor {
@@ -74,5 +75,17 @@ export class VsCodeFileAccessor implements FileAccessor {
 
     public getRelativePathAsFileUri = (relativeFrom: string, filename: string): string => {
         return Uri.file(this.getRelativePath(relativeFrom, filename)).toString();
+    }
+
+    public fromUriToLocalPath = (uri: string): string => {
+        let workspaceFolderUri = Uri.parse(this.workspaceFolder);
+        let fileUri = Uri.parse(uri);
+        let local = fileUri.fsPath.replace(workspaceFolderUri.fsPath, "");
+        if (local[0] === "/" || local[0] === "\\"){
+            local = local.substring(1);
+        }
+        // let joined = path.join(workspaceFolderUri.fsPath, uri);
+        // let normalized = path.normalize(joined);
+        return local;
     }
 }

@@ -1,13 +1,13 @@
 import * as path from "path";
 import * as fs from "fs";
-import { FilePathMapping } from "../yamlIncludes/dto";
+import { IncludeReferences, HaFileInfo } from "../haConfig/dto";
 
 export class SchemaServiceForIncludes {
     private schemaContributions: any;
     constructor(private jsonSchemaService: any) { }
 
-    public onUpdate(fileMappings: FilePathMapping) {
-        this.schemaContributions = this.getSchemaContributions(fileMappings);
+    public onUpdate(haFiles: HaFileInfo[]) {
+        this.schemaContributions = this.getSchemaContributions(haFiles);
         this.jsonSchemaService.clearExternalSchemas(); // otherwise it will stack the schemes in memory for every file change
         this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
     }
@@ -19,7 +19,7 @@ export class SchemaServiceForIncludes {
         return pathToSchemaMappings;
     }
 
-    private getSchemaContributions(fileMappings: FilePathMapping) {
+    private getSchemaContributions(haFiles: HaFileInfo[]) {
         var schemas = {};
         var schemaAssociations = {};
         var pathToSchemaFileMappings = this.getPathToSchemaFileMappings();
@@ -31,10 +31,11 @@ export class SchemaServiceForIncludes {
             schemas[`http://schemas.home-assistant.io/${pathToSchemaMapping.key}`] = schema;
         });
 
-        for (var sourceFile in fileMappings) {
-            var sourceFileMapping = fileMappings[sourceFile];
+        for (var sourceFile in haFiles) {
+            var sourceFileMapping = haFiles[sourceFile];
             var relatedPathToSchemaMapping = pathToSchemaFileMappings.find(x => {
-                var sourceFileMappingPath = sourceFileMapping.path.replace("homeassistant/packages/", "");
+                let sourceFileMappingPath = sourceFileMapping.path.replace("homeassistant/packages/", "");
+                sourceFileMappingPath = sourceFileMappingPath.replace(/cards\/cards/g, "cards");
                 var samePath = x.path === sourceFileMappingPath;
                 if (!samePath) {
                     return false;
@@ -42,7 +43,7 @@ export class SchemaServiceForIncludes {
                 return true;
             });
             if (relatedPathToSchemaMapping) {
-                schemaAssociations[`**/${sourceFile}`] = [`http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`];
+                schemaAssociations[`**/${encodeURI(haFiles[sourceFile].filename)}`] = [`http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`];
             }
         }
         return {

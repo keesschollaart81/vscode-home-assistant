@@ -13,6 +13,10 @@ The generated schema (lovelace-ui.json) is also (committed) in this folder and
  
 */
 
+
+/**
+ * @TJS-additionalProperties true 
+ */
 export interface LovelaceConfig {
   title?: string;
   views: Array<LovelaceViewConfig | IncludeTags>;
@@ -24,7 +28,7 @@ export interface LovelaceConfig {
 export type LovelaceViewConfigs = LovelaceViewConfig | Array<LovelaceViewConfig>;
 
 export interface LovelaceViewConfig {
-  id?: string; //Updated
+  id?: string | number; //Updated
   index?: number;
   title?: string;
   badges?: string[];
@@ -320,7 +324,7 @@ export interface ShoppingListCardConfig extends LovelaceCardConfig {
 
 export interface StackCardConfig extends LovelaceCardConfig {
   type: "vertical-stack" | "horizontal-stack"; //Updated
-  cards: LovelaceCardConfig[];
+  cards: Array<LovelaceCardConfig | IncludeTags>;
 }
 
 export interface ThermostatCardConfig extends LovelaceCardConfig {

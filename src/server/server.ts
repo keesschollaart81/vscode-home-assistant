@@ -6,8 +6,10 @@ import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { ConfigurationService } from "./configuration";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { YamlIncludeDiscovery } from "./yamlIncludes/discovery";
-import { DefinitionProvider } from "./definition";
+import { DefinitionProvider } from "./definition/definition";
+import { IncludeDefinitionProvider } from "./definition/includes";
+import { ScriptDefinitionProvider } from "./definition/scripts";
+import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -21,13 +23,17 @@ documents.listen(connection);
 
 connection.onInitialize(async params => {
 
-  connection.console.log(`[Server(${process.pid})] Started and initialize received`);
+  connection.console.log(`[Home Assistant Language Server(${process.pid})] Started and initialize received`);
 
   var configurationService = new ConfigurationService();
   var haConnection = new HaConnection(configurationService);
   var fileAccessor = new VsCodeFileAccessor(params.rootUri, connection, documents);
-  var yamlIncludeDiscovery = new YamlIncludeDiscovery(fileAccessor);
-  var definitionProvider = new DefinitionProvider(fileAccessor);
+  var haConfig = new HomeAssistantConfiguration(fileAccessor);
+
+  var definitionProviders = [
+    new IncludeDefinitionProvider(fileAccessor),
+    new ScriptDefinitionProvider(haConfig)
+  ];
 
   var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([
     new EntityIdCompletionContribution(haConnection),
@@ -37,15 +43,14 @@ connection.onInitialize(async params => {
   var homeAsisstantLanguageService = new HomeAssistantLanguageService(
     documents,
     yamlLanguageServiceWrapper,
-    yamlIncludeDiscovery,
+    haConfig,
     haConnection,
-    definitionProvider
+    definitionProviders
   );
-
-  await homeAsisstantLanguageService.triggerSchemaLoad(connection);
 
   documents.onDidChangeContent((e) => homeAsisstantLanguageService.onDocumentChange(e, connection));
   documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e, connection));
+  documents.onDidSave((e) => homeAsisstantLanguageService.onDidSave(e, connection));
 
   connection.onDocumentSymbol(homeAsisstantLanguageService.onDocumentSymbol);
   connection.onDocumentFormatting(homeAsisstantLanguageService.onDocumentFormatting);
@@ -62,6 +67,17 @@ connection.onInitialize(async params => {
       connection.sendNotification("no-config");
     }
   });
+
+  //fire and forget
+  setTimeout(async () => {
+    try {
+      await haConfig.discoverFiles();
+      await homeAsisstantLanguageService.findAndApplySchemas(connection);
+    }
+    catch (e) {
+      console.error(`Unexpected error during initial configuration discover: ${e}`);
+    }
+  }, 0);
 
   return {
     capabilities: <ServerCapabilities>{
