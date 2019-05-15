@@ -81,7 +81,7 @@ export class VsCodeFileAccessor implements FileAccessor {
         let workspaceFolderUri = Uri.parse(this.workspaceFolder);
         let fileUri = Uri.parse(uri);
         let local = fileUri.fsPath.replace(workspaceFolderUri.fsPath, "");
-        if (local[0] === "/"){
+        if (local[0] === "/" || local[0] === "\\"){
             local = local.substring(1);
         }
         // let joined = path.join(workspaceFolderUri.fsPath, uri);

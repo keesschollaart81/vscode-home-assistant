@@ -30,20 +30,39 @@ export class HomeAssistantYamlFile {
     await this.parseAstRecursive(this.yaml.contents, this.path);
   }
 
-  public isValid = async (): Promise<boolean> => {
+  public isValid = async (): Promise<ValidationResults> => {
     try {
       await this.parse();
     }
     catch (e) {
-      return false;
+      return {
+        isValid: false,
+        errors: [e]
+      };
     }
-    if (!this.yaml){
-      return false;
+    if (!this.yaml) {
+      return {
+        isValid: false,
+        errors: ["Empty yaml"]
+      };
     }
     if (this.yaml.errors && this.yaml.errors.length > 0) {
-      return false;
+      var errors = this.yaml.errors.slice(0,3).map(x => {
+        //@ts-ignore
+        let line = (x.source && x.source.rangeAsLinePos && x.source.rangeAsLinePos.start) ? ` (Line: ${x.source.rangeAsLinePos.start.line})` : "";
+        return `${x.name}: ${x.message}${line}`;
+      });
+      if (this.yaml.errors.length > 3){
+        errors.push(` - And ${this.yaml.errors.length - 3} more errors...`)
+      }
+      return {
+        isValid: false,
+        errors: errors
+      };
     }
-    return true;
+    return {
+      isValid: true
+    };
   }
 
   public getIncludes = async (): Promise<IncludeReferences> => {
@@ -214,3 +233,7 @@ export class HomeAssistantYamlFile {
   }
 }
 
+export interface ValidationResults {
+  isValid: boolean;
+  errors?: string[];
+}

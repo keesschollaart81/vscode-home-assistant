@@ -36,7 +36,8 @@ export class HomeAssistantConfiguration {
     var homeAssistantYamlFile = new HomeAssistantYamlFile(this.fileAccessor, filename, ourFile.path);
     this.files[filename] = homeAssistantYamlFile;
 
-    if (!await homeAssistantYamlFile.isValid()) {
+    var validationResult = await homeAssistantYamlFile.isValid();
+    if (!validationResult.isValid) {
       return {
         isValidYaml: false,
         newFilesFound: false
@@ -108,7 +109,15 @@ export class HomeAssistantConfiguration {
       errorMessage += ` Error message: ${err}`;
     }
 
-    if (!await homeAssistantYamlFile.isValid() || error) {
+    var validationResult = await homeAssistantYamlFile.isValid();
+    if (!validationResult.isValid) {
+      error = true;
+      if (validationResult.errors && validationResult.errors.length > 0) {
+        errorMessage += " Error(s): ";
+        validationResult.errors.forEach(e => errorMessage += `\r\n - ${e}`);
+      }
+    }
+    if (error) {
       if (filename === path) {
         // root file has more impact
         console.warn(errorMessage);

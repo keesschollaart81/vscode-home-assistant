@@ -29,7 +29,7 @@ connection.onInitialize(async params => {
   var haConnection = new HaConnection(configurationService);
   var fileAccessor = new VsCodeFileAccessor(params.rootUri, connection, documents);
   var haConfig = new HomeAssistantConfiguration(fileAccessor);
-  
+
   var definitionProviders = [
     new IncludeDefinitionProvider(fileAccessor),
     new ScriptDefinitionProvider(haConfig)
@@ -47,9 +47,6 @@ connection.onInitialize(async params => {
     haConnection,
     definitionProviders
   );
-
-  await haConfig.discoverFiles();
-  await homeAsisstantLanguageService.findAndApplySchemas(connection);
 
   documents.onDidChangeContent((e) => homeAsisstantLanguageService.onDocumentChange(e, connection));
   documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e, connection));
@@ -70,6 +67,17 @@ connection.onInitialize(async params => {
       connection.sendNotification("no-config");
     }
   });
+
+  //fire and forget
+  setTimeout(async () => {
+    try {
+      await haConfig.discoverFiles();
+      await homeAsisstantLanguageService.findAndApplySchemas(connection);
+    }
+    catch (e) {
+      console.error(`Unexpected error during initial configuration discover: ${e}`);
+    }
+  }, 0);
 
   return {
     capabilities: <ServerCapabilities>{
