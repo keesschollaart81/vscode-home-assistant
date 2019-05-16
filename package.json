@@ -67,7 +67,7 @@
           },
           "vscode-home-assistant.longLivedAccessToken": {
             "type": "string",
-            "description": "The Long Lived Access-Token for Home Assistant. Obtain a token via your user profile page in Home Assitant."
+            "description": "The Long Lived Access-Token for Home Assistant. Obtain a token via your user profile page in Home Assistant."
           },
           "vscode-home-assistant.ignoreCertificates": {
             "type": "boolean",
