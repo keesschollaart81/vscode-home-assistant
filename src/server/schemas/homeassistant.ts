@@ -164,7 +164,7 @@ export interface InputBooleanEntry {
         name?: string;
         initial?: boolean;
         icon?: string
-    };
+    } | null;
 }
 
 export type ScriptFile = Script | Script[];
