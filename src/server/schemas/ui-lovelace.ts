@@ -163,6 +163,7 @@ export interface EntityButtonCardConfig extends LovelaceCardConfig {
   theme?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
+  icon_height?: string | number;
 }
 
 export interface EntityFilterCardConfig extends LovelaceCardConfig {
