@@ -63,7 +63,7 @@
         "properties": {
           "vscode-home-assistant.hostUrl": {
             "type": "string",
-            "description": "The Host URL of your Home Assistant Host, only protocol, host and port (no path or querystring)"
+            "description": "The Host URL of your Home Assistant Host"
           },
           "vscode-home-assistant.longLivedAccessToken": {
             "type": "string",
