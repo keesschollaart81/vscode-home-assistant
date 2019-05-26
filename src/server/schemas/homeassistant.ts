@@ -193,7 +193,7 @@ export interface DelayAction {
 export interface WaitAction {
     wait_template: string;
     timeout?: string;
-    continue_on_timeout?: boolean;
+    continue_on_timeout?: boolean | string;
 }
 export interface EventAction {
     event: string;
