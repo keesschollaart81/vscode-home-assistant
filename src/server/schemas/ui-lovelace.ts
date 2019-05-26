@@ -422,7 +422,7 @@ export interface CustomElement {
   style: any;
 }
 export interface ElementCondition {
-  entity: EntityConfig;
+  entity: EntityConfig | string;
   state?: string;
   state_not?: string;
 }
