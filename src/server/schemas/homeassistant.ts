@@ -167,7 +167,7 @@ export interface InputBooleanEntry {
     } | null;
 }
 
-export type ScriptFile = Script | Script[];
+export type ScriptFile = SequencedAction | ScriptAction | Script | Script[];
 
 export interface Script {
     [name: string]: SequencedAction | ScriptAction;
@@ -193,7 +193,7 @@ export interface DelayAction {
 export interface WaitAction {
     wait_template: string;
     timeout?: string;
-    continue_on_timeout?: boolean;
+    continue_on_timeout?: boolean | string;
 }
 export interface EventAction {
     event: string;

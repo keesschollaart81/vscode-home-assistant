@@ -27,6 +27,9 @@ export interface LovelaceConfig {
 
 export type LovelaceViewConfigs = LovelaceViewConfig | Array<LovelaceViewConfig>;
 
+/**
+ * @TJS-additionalProperties true 
+ */
 export interface LovelaceViewConfig {
   id?: string | number; //Updated
   index?: number;
@@ -163,7 +166,7 @@ export interface EntityButtonCardConfig extends LovelaceCardConfig {
   theme?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
-  icon_height?: string | number;
+  icon_height?: string;
 }
 
 export interface EntityFilterCardConfig extends LovelaceCardConfig {
@@ -422,7 +425,7 @@ export interface CustomElement {
   style: any;
 }
 export interface ElementCondition {
-  entity: EntityConfig;
+  entity: EntityConfig | string;
   state?: string;
   state_not?: string;
 }

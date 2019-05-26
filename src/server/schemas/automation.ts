@@ -131,7 +131,7 @@ export interface ServiceActionTemplateSchema extends Action {
 export interface WaitTemplateSchema extends Action{
   wait_template: string;
   timeout?: string;
-  continue_on_timeout?: boolean;
+  continue_on_timeout?: boolean | string;
 }
 
 export interface NumericStateConditionSchema {
