@@ -27,6 +27,9 @@ export interface LovelaceConfig {
 
 export type LovelaceViewConfigs = LovelaceViewConfig | Array<LovelaceViewConfig>;
 
+/**
+ * @TJS-additionalProperties true 
+ */
 export interface LovelaceViewConfig {
   id?: string | number; //Updated
   index?: number;
