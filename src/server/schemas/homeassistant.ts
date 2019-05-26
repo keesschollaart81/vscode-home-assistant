@@ -167,7 +167,7 @@ export interface InputBooleanEntry {
     } | null;
 }
 
-export type ScriptFile = Script | Script[];
+export type ScriptFile = SequencedAction | ScriptAction | Script | Script[];
 
 export interface Script {
     [name: string]: SequencedAction | ScriptAction;

@@ -28,6 +28,9 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
             case "!include_dir_merge_named":
                 var files = this.fileAccessor.getFilesInFolderRelativeFromAsFileUri(whatToInclude, uri);
                 files = files.filter(f => path.extname(f) === ".yaml");
+                if (files.length === 0){
+                    console.warn(`There were no files found in folder '${whatToInclude}' referenced with '${includeType}' from '${uri}'`);
+                }
                 return files.map(f => Location.create(f, {
                     start: { line: 0, character: 0 },
                     end: { line: 0, character: 0 }

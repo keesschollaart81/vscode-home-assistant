@@ -47,12 +47,12 @@ export class HomeAssistantYamlFile {
       };
     }
     if (this.yaml.errors && this.yaml.errors.length > 0) {
-      var errors = this.yaml.errors.slice(0,3).map(x => {
+      var errors = this.yaml.errors.slice(0, 3).map(x => {
         //@ts-ignore
         let line = (x.source && x.source.rangeAsLinePos && x.source.rangeAsLinePos.start) ? ` (Line: ${x.source.rangeAsLinePos.start.line})` : "";
         return `${x.name}: ${x.message}${line}`;
       });
-      if (this.yaml.errors.length > 3){
+      if (this.yaml.errors.length > 3) {
         errors.push(` - And ${this.yaml.errors.length - 3} more errors...`)
       }
       return {
@@ -109,8 +109,9 @@ export class HomeAssistantYamlFile {
     }
     switch (node.type) {
       case "MAP":
+      case "FLOW_SEQ":
       case "SEQ":
-        if (currentPath === "configuration.yaml/script" || currentPath === "configuration.yaml/homeassistant/packages/script") {
+        if (node.type !== "FLOW_SEQ" && (currentPath === "configuration.yaml/script" || currentPath === "configuration.yaml/homeassistant/packages/script")) {
           this.collectScripts(node);
         }
         for (let i in node.items) {
@@ -126,6 +127,7 @@ export class HomeAssistantYamlFile {
             case "PLAIN":
             case "QUOTE_DOUBLE":
             case "QUOTE_SINGLE":
+            case "FLOW_SEQ":
               await this.parseAstRecursive(item, currentPath);
               break;
             default:
@@ -203,6 +205,10 @@ export class HomeAssistantYamlFile {
       files = filesInThisFolder.filter(f => path.extname(f) === ".yaml");
     }
 
+    if (files.length === 0) {
+      console.log(`The include could not be resolved because no file(s) found in '${value}' included with '${Includetype[includeType]}' from '${this.filename}'`);
+    }
+
     for (var i in files) {
       var key = files[i].replace(/\\/g, "/");
       this.includes[key] = {
@@ -217,13 +223,21 @@ export class HomeAssistantYamlFile {
   private collectScripts(node: YAML.ast.Map | YAML.ast.Seq) {
     for (var i in node.items) {
       var item = node.items[i];
+      //@ts-ignore
+      let isNamed = item.value && item.value.type === "MAP";
+
       let filepath = Uri.file(path.resolve(this.filename)).fsPath;
+      let filename = path.parse(filepath).base.replace(".yaml", "");
+
+      //@ts-ignore
+      var key = isNamed ? item.key.toJSON() : filename;
+
       if (item.type === "PAIR") {
         //@ts-ignore
         var lp = getLinePos(item.key.range[0], this.cst);
         var lp2 = getLinePos(item.value.range[1], this.cst);
 
-        this.scripts[item.key.toJSON()] = {
+        this.scripts[key] = {
           fileUri: Uri.file(filepath).toString(),
           start: [lp.line - 1, lp.col - 1],
           end: [lp2.line - 1, lp2.col - 1]
