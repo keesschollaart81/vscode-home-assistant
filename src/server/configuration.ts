@@ -51,6 +51,6 @@ export class ConfigurationService implements IConfigurationService {
     private getUri =(value: string) : string =>{
         if (!value) return "";
         var uri = Uri.parse(value);
-        return `${uri.scheme}://${uri.authority}.${uri.path.replace(/\/$/, "")}`;
+        return `${uri.scheme}://${uri.authority}${uri.path.replace(/\/$/, "")}`;
     }
 }
