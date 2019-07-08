@@ -3,7 +3,7 @@
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
   "version": "1.0.0",
-  "preview": true,
+  "preview": false,
   "engines": {
     "vscode": "^1.32.0"
   },
