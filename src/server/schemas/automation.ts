@@ -7,7 +7,7 @@ export interface Automation {
   initial_state?: string | boolean;
   hide_entity?: boolean;
   trigger: Triggers | Array<Triggers>;
-  condition?: ConditionsConfig;
+  condition?:  null | ConditionsConfig;
   action: Actions | Array<Actions | ConditionsConfig>;
 }
 export type Actions = EventActionSchema | ServiceActionSchema | DelayActionSchema | ServiceActionTemplateSchema | WaitTemplateSchema;
@@ -131,7 +131,7 @@ export interface ServiceActionTemplateSchema extends Action {
 
 export interface WaitTemplateSchema extends Action{
   wait_template: string;
-  timeout?: string;
+  timeout?: string | TimePeriod;
   continue_on_timeout?: boolean | string;
 }
 

@@ -173,7 +173,7 @@ export interface EntityFilterCardConfig extends LovelaceCardConfig {
   type: "entity-filter"; //Updated
   entities: Array<EntityConfig | string>;
   state_filter: string[];
-  card: Partial<LovelaceCardConfig>;
+  card: Partial<LoveLaceCard>;
   show_empty?: boolean;
 }
 
@@ -273,6 +273,7 @@ export interface PictureEntityCardConfig extends LovelaceCardConfig {
   name?: string;
   image?: string;
   camera_image?: string;
+  camera_view?: string;
   state_image?: {};
   aspect_ratio?: string;
   tap_action?: ActionConfig;
