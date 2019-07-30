@@ -28,6 +28,7 @@ export interface TimeTrigger {
 export interface TemplateTrigger {
   platform: "template";
   value_template: string;
+  for?: string | TimePeriod;
 }
 export interface WebhookTrigger {
   platform: "webhook";
