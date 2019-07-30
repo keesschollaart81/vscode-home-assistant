@@ -1,6 +1,6 @@
 import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection, Diagnostic } from "vscode-languageserver";
 import { completionHelper } from "./completionHelpers/utils";
-import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
+import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser04";
 import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";

@@ -8,7 +8,7 @@ import { YAMLFormatter } from "yaml-language-server/out/server/src/languageservi
 import * as path from "path";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { TextDocument, TextEdit, Diagnostic } from "vscode-languageserver-types";
-import { JSONWorkerContribution } from "vscode-json-languageservice";
+import { JSONWorkerContribution, getLanguageService } from "vscode-json-languageservice"; 
 
 export class YamlLanguageServiceWrapper {
 
@@ -20,6 +20,9 @@ export class YamlLanguageServiceWrapper {
     public jsonSchemaService: JSONSchemaService;
 
     constructor(completionContributions: JSONWorkerContribution[]) {
+        
+        var jsonLanguageService = getLanguageService(null);
+
         this.jsonSchemaService = new JSONSchemaService(null, {
             resolveRelativePath: (relativePath: string, resource: string) => {
                 return path.resolve(resource, relativePath);
@@ -27,14 +30,14 @@ export class YamlLanguageServiceWrapper {
         }, null);
 
 
-        this.yamlValidation = new YAMLValidation(this.jsonSchemaService);
+        this.yamlValidation = new YAMLValidation(Promise, jsonLanguageService);
         this.yamlValidation.configure({ validate: true });
-        this.yamlDocumentSymbols = new YAMLDocumentSymbols();
+        this.yamlDocumentSymbols = new YAMLDocumentSymbols(jsonLanguageService);
         this.yamlCompletion = new YAMLCompletion(this.jsonSchemaService, completionContributions);
         // enables auto completion suggestions for tags like !include ()
         // commeted because they end up at the top of the list which does not look nice :-)
         // this.yamlCompletion.configure(null, this.getValidYamlTags()); 
-        this.yamlHover = new YAMLHover(this.jsonSchemaService);
+        this.yamlHover = new YAMLHover(Promise, jsonLanguageService);
         this.yamlFormatter = new YAMLFormatter();
     }
 
