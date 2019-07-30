@@ -151,7 +151,7 @@
     "ws": "6.2.0",
     "vscode-json-languageservice": "3.2.0",
     "vscode-languageclient": "5.2.1",
-    "vscode-languageserver": "5.3.0-next.1",
+    "vscode-languageserver": "5.3.0-next.8",
     "yaml-language-server": "0.4.0",
     "yaml": "1.5.0",
     "vscode-extension-telemetry": "0.1.1"
