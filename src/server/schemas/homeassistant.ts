@@ -198,7 +198,7 @@ export interface WaitAction {
 export interface EventAction {
     event: string;
     event_data: EventActionData;
-    event_data_template: any;
+    event_data_template?: any;
 }
 
 /**
