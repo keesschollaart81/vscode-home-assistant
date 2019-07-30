@@ -136,7 +136,7 @@
     "vscode:prepublish": "tsc -p ./"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.42",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^12.6.8",
     "@types/ws": "6.0.1",
     "@types/yaml": "1.0.2",
