@@ -144,7 +144,7 @@
     "tslint": "^5.16.0",
     "typescript": "^3.4.5",
     "typescript-json-schema": "0.39.0",
-    "vscode": "^1.1.33"
+    "vscode": "^1.1.35"
   },
   "dependencies": {
     "home-assistant-js-websocket": "4.0.0",
