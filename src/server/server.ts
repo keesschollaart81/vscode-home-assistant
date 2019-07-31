@@ -2,14 +2,17 @@ import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities }
 import { VsCodeFileAccessor } from "./fileAccessor";
 import { HomeAssistantLanguageService } from "./haLanguageService";
 import { HaConnection } from "./home-assistant/haConnection";
-import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
+import { JsonLanguageService } from "./jsonLanguageService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { ConfigurationService } from "./configuration";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { DefinitionProvider } from "./definition/definition";
 import { IncludeDefinitionProvider } from "./definition/includes";
 import { ScriptDefinitionProvider } from "./definition/scripts";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
+import { JSONSchemaService } from "yaml-language-server/out/server/src/languageservice/services/jsonSchemaService";
+import * as path from "path";
+import { YamlLanguageService } from "./yamlLanguageService";
+import { SchemaServiceForIncludes } from "./schemas/schemaService";
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -35,17 +38,33 @@ connection.onInitialize(async params => {
     new ScriptDefinitionProvider(haConfig)
   ];
 
-  var yamlLanguageServiceWrapper = new YamlLanguageServiceWrapper([
+  let jsonSchemaService = new JSONSchemaService(null, {
+    resolveRelativePath: (relativePath: string, resource: string) => {
+      return path.resolve(resource, relativePath);
+    }
+  }, Promise);
+
+  var jsonWorkerContributions = [
     new EntityIdCompletionContribution(haConnection),
     new ServicesCompletionContribution(haConnection)
-  ]);
+  ];
+
+  var jsonLanguageService = new JsonLanguageService(jsonSchemaService, jsonWorkerContributions);
+
+  var yamlLanguageServiceWrapper = new YamlLanguageService(
+    jsonSchemaService,
+    jsonLanguageService,
+    jsonWorkerContributions);
+
+  let schemaServiceForIncludes = new SchemaServiceForIncludes(jsonSchemaService);
 
   var homeAsisstantLanguageService = new HomeAssistantLanguageService(
     documents,
     yamlLanguageServiceWrapper,
     haConfig,
     haConnection,
-    definitionProviders
+    definitionProviders,
+    schemaServiceForIncludes
   );
 
   documents.onDidChangeContent((e) => homeAsisstantLanguageService.onDocumentChange(e, connection));
