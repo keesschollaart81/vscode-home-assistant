@@ -37,8 +37,8 @@
   "license": "MIT",
   "icon": "assets/logo.png",
   "activationEvents": [
-    "workspaceContains:/configuration.yaml",
-    "workspaceContains:/ui-lovelace.yaml",
+    "workspaceContains:**/configuration.yaml",
+    "workspaceContains:**/ui-lovelace.yaml",
     "onFileSystem:ftp",
     "onFileSystem:ssh",
     "onFileSystem:sftp"
