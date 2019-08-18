@@ -1,6 +1,4 @@
 import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection, Diagnostic, Hover } from "vscode-languageserver";
-import { completionHelper } from "./completionHelpers/utils";
-import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser07";
 import { YamlLanguageService } from "./yamlLanguageService";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
@@ -9,7 +7,6 @@ import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
-
 
 export class HomeAssistantLanguageService {
 

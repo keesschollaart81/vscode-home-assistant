@@ -136,24 +136,24 @@
     "vscode:prepublish": "tsc -p ./"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.7",
-    "@types/node": "^12.6.8",
-    "@types/ws": "6.0.1",
+    "@types/mocha": "5.2.7",
+    "@types/node": "12.7.2",
+    "@types/ws": "6.0.2",
     "@types/yaml": "1.0.2",
     "ts-node": "8.3.0",
     "tslint": "^5.18.0",
-    "typescript": "^3.4.5",
+    "typescript": "3.5.3",
     "typescript-json-schema": "0.39.0",
-    "vscode": "^1.1.35"
+    "vscode": "^1.1.36"
   },
   "dependencies": {
-    "home-assistant-js-websocket": "4.0.0",
-    "ws": "6.2.0",
+    "home-assistant-js-websocket": "4.3.1",
+    "ws": "7.1.2",
     "vscode-json-languageservice": "3.3.1",
     "vscode-languageclient": "5.2.1",
-    "vscode-languageserver": "5.3.0-next.8",
+    "vscode-languageserver": "5.2.1",
     "yaml-language-server": "0.5.3",
-    "yaml": "1.5.0",
+    "yaml": "1.6.0", 
     "vscode-extension-telemetry": "0.1.2"
   }
 }
