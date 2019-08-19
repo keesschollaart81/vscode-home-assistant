@@ -35,7 +35,7 @@ stages:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: 'src/language-service/dist' 
+        targetPath: 'src/language-service' 
         artifact: language-service 
 
 - stage: publish_language_service
