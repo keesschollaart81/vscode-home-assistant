@@ -11,20 +11,13 @@ pr:
 - dev
   
 stages:
-- stage: build_language_service
-  displayName: 'Build Language Service'
-  jobs:
-
+- stage: build
+  displayName: 'Build'
+  jobs: 
   - job: BuildExtension
     pool:
-      vmImage: 'ubuntu-latest'
-          
-    steps:
-
-    # - task: NodeTool@0
-    #   inputs:
-    #     versionSpec: '10.x'
-    #   displayName: 'Install Node.js' 
+      vmImage: 'ubuntu-latest' 
+    steps: 
 
     - script: |
         rm package-lock.json # this is weird is should not be needd
@@ -34,21 +27,20 @@ stages:
         cd package
         npm pack ../
       workingDirectory: src/language-service
-      displayName: 'npm install and compile' 
+      displayName: 'NPM Install, Compile and Pack' 
 
     - task: PublishPipelineArtifact@1
+      displayName: Publish package as Artifact
       inputs:
         targetPath: 'src/language-service/package' 
         artifact: language-service 
 
-- stage: publish_language_service
-  displayName: 'Publish Language Service'
-  condition: succeeded('build_language_service')
-  
+- stage: publish
+  displayName: 'Publish to NPM'
+  condition: succeeded('build')
   jobs:
-
-  - deployment: publish_language_service
-    displayName: Publish Language Service to NPM
+  - deployment: publish_to_npm
+    displayName: Publish to NPM
     pool:
       vmImage: 'ubuntu-latest' 
     environment: Production
@@ -58,12 +50,14 @@ stages:
           steps:  
 
           - task: DownloadPipelineArtifact@2
+            displayName: Download package from build artifacts
             inputs:
               artifactName: language-service 
               buildType: 'current'
               targetPath: '$(Pipeline.Workspace)'
  
           - task: Npm@1
+            displayName: Publish to NPMjs.org
             inputs:
               command: 'custom'
               customCommand: 'publish *.tgz'
