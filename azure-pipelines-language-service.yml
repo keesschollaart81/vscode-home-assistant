@@ -33,6 +33,11 @@ stages:
       workingDirectory: src/language-service
       displayName: 'npm install and compile' 
 
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: 'src/language-service/dist' 
+        artifact: language-service 
+
 - stage: publish_language_service
   displayName: 'Publish Language Service'
   condition: succeeded('build_language_service')
@@ -49,15 +54,22 @@ stages:
         deploy:  
           steps: 
           
-          - checkout: self 
+          # - checkout: self 
 
-          - task: NodeTool@0
+          - task: DownloadPipelineArtifact@2
             inputs:
-              versionSpec: '10.x'
-            displayName: 'Install Node.js' 
+              artifactName: language-service 
+              buildType: 'current'
+              targetPath: '$(Pipeline.Workspace)'
+
+          # - task: NodeTool@0
+          #   inputs:
+          #     versionSpec: '10.x'
+          #   displayName: 'Install Node.js' 
 
           # - script: |
           #     rm package-lock.json # this is weird is should not be needed 
+          #     npm install
           #   workingDirectory: src/language-service
           #   displayName: 'remove package-lock.json'
 
@@ -65,4 +77,4 @@ stages:
             inputs:
               command: publish
               publishEndpoint: 'npmjs.org' 
-              workingDir: src/language-service 
+              workingDir: '$(Pipeline.Workspace)'
