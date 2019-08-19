@@ -63,7 +63,9 @@ stages:
     strategy:
       runOnce:
         deploy:  
-          steps:  
+          steps:   
+
+          - checkout: self # for GitHub task to get latest tag
 
           - task: DownloadPipelineArtifact@2
             displayName: Download package from build artifacts
