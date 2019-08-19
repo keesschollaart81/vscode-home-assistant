@@ -1,0 +1,53 @@
+
+trigger:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - '*'  
+    exclude:
+    - 'src/language-service/*'
+pr:
+- dev
+  
+stages:
+- stage: build_extension
+  displayName: 'Build Extension'
+  condition: 
+    
+  jobs:
+
+  - job: BuildExtension
+    pool:
+      vmImage: 'ubuntu-latest'
+          
+    steps:
+
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '8.x'
+      displayName: 'Install Node.js' 
+
+    - script: |
+        npm install
+        npm run compile
+      displayName: 'npm install and compile'
+
+    - script: |
+        sudo npm install -g vsce
+        vsce package
+      displayName: Create VSIX
+ 
+    - task: CopyFiles@2
+      displayName: Stage VSIX for publishing
+      inputs:
+        contents: |-
+          *.vsix
+        targetFolder: $(Build.ArtifactStagingDirectory)
+ 
+    - task: PublishBuildArtifacts@1
+      displayName: Publish VSIX
+      inputs:
+        pathToPublish: $(Build.ArtifactStagingDirectory)
+        artifactName: vscode-home-assistant

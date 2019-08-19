@@ -1,0 +1,55 @@
+
+trigger:
+  branches:
+    include:
+    - '*'
+  paths:
+    include:
+    - 'src/language-service/*'  
+pr:
+- dev
+  
+stages:
+- stage: build_language_service
+  displayName: 'Build Language Service'
+  jobs:
+
+  - job: BuildExtension
+    pool:
+      vmImage: 'ubuntu-latest'
+          
+    steps:
+
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '8.x'
+      displayName: 'Install Node.js' 
+
+    - script: |
+        npm install
+        npm run compile
+      workingDirectory: src/language-service
+      displayName: 'npm install and compile' 
+
+- stage: publish_language_service
+  displayName: 'Publish Language Service'
+  
+  jobs:
+
+  - job: publish_language_service
+    environment: Production
+    pool:
+      vmImage: 'ubuntu-latest'
+          
+    steps:
+
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '8.x'
+      displayName: 'Install Node.js' 
+
+    - script: |
+        npm install
+        npm publish
+      workingDirectory: src/language-service
+      displayName: 'npm publish'  

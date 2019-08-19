@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "CommonJS",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "declaration": true,
+    "rootDir": "src", 
+    "skipLibCheck": true, /* todo: remove when WebSocket error is solved*/
+    "lib": [
+      "es6"
+    ],
+    "sourceMap": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.json"
+  ]
+}

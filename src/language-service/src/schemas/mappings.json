@@ -1,0 +1,72 @@
+[
+  {
+    "key": "homeassistant",
+    "path": "configuration.yaml", 
+    "file": "homeassistant.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "HomeAssistantRoot"
+  },
+  {
+    "key": "homeassistant-packages",
+    "path": "configuration.yaml/homeassistant/packages", 
+    "file": "homeassistant-packages.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "HomeAssistantRoot"
+  },
+  {
+    "key": "homeassistant-customize",
+    "path": "configuration.yaml/homeassistant/customize", 
+    "file": "homeassistant-customize.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "CustomizeFile"
+  },
+  {
+    "key": "homeassistant-scene",
+    "path": "configuration.yaml/scene", 
+    "file": "homeassistant-scene.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "SceneComponentEntries"
+  },
+  {
+    "key": "homeassistant-input-boolean",
+    "path": "configuration.yaml/input_boolean", 
+    "file": "homeassistant-input-boolean.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "InputBooleanEntry"
+  },
+  {
+    "key": "homeassistant-script",
+    "path": "configuration.yaml/script", 
+    "file": "homeassistant-script.json",
+    "tsFile": "homeassistant.ts",
+    "fromType": "ScriptFile"
+  }, 
+  {
+    "key": "automations",
+    "path": "configuration.yaml/automation", 
+    "file": "automations.json",
+    "tsFile": "automation.ts",
+    "fromType": "AutomationsFile"
+  },
+  {
+    "key": "ui-lovelace",
+    "path": "ui-lovelace.yaml", 
+    "file": "ui-lovelace.json",
+    "tsFile": "ui-lovelace.ts",
+    "fromType": "LovelaceConfig"
+  },
+  {
+    "key": "lovelace-views",
+    "path": "ui-lovelace.yaml/views", 
+    "file": "lovelace-views.json",
+    "tsFile": "ui-lovelace.ts",
+    "fromType": "LovelaceViewConfigs"
+  },
+  {
+    "key": "lovelace-cards",
+    "path": "ui-lovelace.yaml/views/cards", 
+    "file": "lovelace-cards.json",
+    "tsFile": "ui-lovelace.ts",
+    "fromType": "LoveLaceCardFile"
+  }
+]
