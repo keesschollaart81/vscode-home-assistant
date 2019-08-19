@@ -29,27 +29,24 @@ stages:
         npm install
         npm run compile
       workingDirectory: src/language-service
-      displayName: 'npm install and compile' 
+      displayName: 'npm install and compile'  
 
-- stage: publish_language_service
-  displayName: 'Publish Language Service'
-  
-  jobs:
-
-  - job: publish_language_service
-    environment: Production
+  - deployment: publish_language_service
+    displayName: Publish Language Service to NPM
     pool:
-      vmImage: 'ubuntu-latest'
-          
-    steps:
+      vmImage: 'ubuntu-latest' 
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:  
+          steps: 
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '8.x'
+            displayName: 'Install Node.js' 
 
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '8.x'
-      displayName: 'Install Node.js' 
-
-    - script: |
-        npm install
-        npm publish
-      workingDirectory: src/language-service
-      displayName: 'npm publish'  
+          - script: |
+              npm install
+              npm publish
+            workingDirectory: src/language-service
+            displayName: 'npm publish'  
