@@ -26,7 +26,7 @@ stages:
       displayName: 'Install Node.js' 
 
     - script: |
-        rm package-lock.json
+        rm package-lock.json # this is weird is should not be needd
         npm install
         npm run compile
       workingDirectory: src/language-service
@@ -49,11 +49,16 @@ stages:
           steps: 
           - task: NodeTool@0
             inputs:
-              versionSpec: '8.x'
+              versionSpec: '10.x'
             displayName: 'Install Node.js' 
+          - task: Npm@1
+            inputs:
+              command: publish
+              publishRegistry: useFeed
+              publishFeed: "https://registry.npmjs.org"
 
-          - script: |
-              npm install --verbose
-              npm publish
+          # - script: |
+          #     npm install --verbose
+          #     npm publish
             workingDirectory: src/language-service
             displayName: 'npm publish'  
