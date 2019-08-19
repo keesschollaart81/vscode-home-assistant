@@ -30,13 +30,15 @@ stages:
         rm package-lock.json # this is weird is should not be needd
         npm install
         npm run compile
-        npm pack
+        mkdir package
+        cd package
+        npm pack ../
       workingDirectory: src/language-service
       displayName: 'npm install and compile' 
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: 'src/language-service/*.tgz' 
+        targetPath: 'src/language-service/package' 
         artifact: language-service 
 
 - stage: publish_language_service
