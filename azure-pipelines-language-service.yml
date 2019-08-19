@@ -55,8 +55,10 @@ stages:
           - task: Npm@1
             inputs:
               command: publish
-              publishRegistry: useFeed
-              publishFeed: "https://registry.npmjs.org"
+              publishEndpoint: 'npmjs.org'
+              # publishRegistry: useFeed
+              # publishFeed: "https://registry.npmjs.org"
+              workingDirectory: src/language-service
 
           # - script: |
           #     npm install --verbose
