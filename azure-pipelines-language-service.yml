@@ -66,4 +66,4 @@ stages:
               command: 'custom'
               customCommand: 'publish *.tgz'
               publishEndpoint: 'npmjs.org' 
-              workingDir: '$(Pipeline.Workspace)'/ 
+              workingDir: '$(Pipeline.Workspace)'
