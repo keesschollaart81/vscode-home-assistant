@@ -33,6 +33,7 @@ stages:
 
 - stage: publish_language_service
   displayName: 'Publish Language Service'
+  condition: succeeded('build_language_service')
   
   jobs:
 
@@ -51,7 +52,7 @@ stages:
             displayName: 'Install Node.js' 
 
           - script: |
-              npm install
+              npm install --verbose
               npm publish
             workingDirectory: src/language-service
             displayName: 'npm publish'  
