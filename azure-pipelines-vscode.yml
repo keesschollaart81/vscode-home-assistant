@@ -81,8 +81,6 @@ stages:
               assets: '$(Pipeline.Workspace)/**/*.vsix'
            
           - script: |
-              echo "test"
-              echo $MARKETPLACETOKEN
               sudo npm install -g vsce
             
               find . -name \*.vsix -type f -exec vsce publish --pat $MARKETPLACETOKEN --packagePath {} \;
