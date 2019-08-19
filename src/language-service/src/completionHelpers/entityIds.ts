@@ -1,4 +1,4 @@
-import { MarkedString, CompletionItem, CompletionItemKind } from 'vscode-languageserver';
+import { MarkedString } from 'vscode-languageserver-protocol';
 import { JSONWorkerContribution, JSONPath, CompletionsCollector } from 'vscode-json-languageservice';
 import { IHaConnection } from '../home-assistant/haConnection';
 

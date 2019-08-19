@@ -1,5 +1,5 @@
 import * as ha from "home-assistant-js-websocket";
-import { CompletionItem, CompletionItemKind, MarkupContent } from 'vscode-languageserver';
+import { CompletionItem, CompletionItemKind, MarkupContent } from 'vscode-languageserver-protocol';
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
 

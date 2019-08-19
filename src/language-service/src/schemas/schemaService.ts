@@ -1,10 +1,12 @@
 import * as path from "path";
 import * as fs from "fs";
-import { IncludeReferences, HaFileInfo } from "../haConfig/dto";
+import { HaFileInfo } from "../haConfig/dto";
+import { JSONSchemaService, ISchemaContributions } from "yaml-language-server/out/server/src/languageservice/services/jsonSchemaService";
 
 export class SchemaServiceForIncludes {
-    private schemaContributions: any;
-    constructor(private jsonSchemaService: any) { }
+    private schemaContributions: ISchemaContributions;
+
+    constructor(private jsonSchemaService: JSONSchemaService) { }
 
     public onUpdate(haFiles: HaFileInfo[]) {
         this.schemaContributions = this.getSchemaContributions(haFiles);
@@ -19,7 +21,7 @@ export class SchemaServiceForIncludes {
         return pathToSchemaMappings;
     }
 
-    private getSchemaContributions(haFiles: HaFileInfo[]) {
+    private getSchemaContributions(haFiles: HaFileInfo[]): ISchemaContributions {
         var schemas = {};
         var schemaAssociations = {};
         var pathToSchemaFileMappings = this.getPathToSchemaFileMappings();

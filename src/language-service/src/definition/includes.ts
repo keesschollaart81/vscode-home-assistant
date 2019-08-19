@@ -1,5 +1,5 @@
 import { FileAccessor } from "../fileAccessor";
-import { Definition, DefinitionLink, Location } from "vscode-languageserver";
+import { Definition, DefinitionLink, Location } from "vscode-languageserver-protocol";
 import { DefinitionProvider } from "./definition";
 import * as path from 'path';
 

@@ -3,7 +3,8 @@ import * as YAML from "yaml";
 import getLinePos from "yaml/dist/cst/getLinePos";
 import { FileAccessor } from "../fileAccessor";
 import { IncludeReferences, Includetype, ScriptReferences } from "./dto";
-import Uri from 'vscode-uri';
+import * as vscodeUri from 'vscode-uri'
+
 
 export class HomeAssistantYamlFile {
 
@@ -225,8 +226,8 @@ export class HomeAssistantYamlFile {
       var item = node.items[i];
       //@ts-ignore
       let isNamed = item.value && item.value.type === "MAP";
-
-      let filepath = Uri.file(path.resolve(this.filename)).fsPath;
+ 
+      let filepath = vscodeUri.URI.file(path.resolve(this.filename)).fsPath;
       let filename = path.parse(filepath).base.replace(".yaml", "");
 
       //@ts-ignore
@@ -238,7 +239,7 @@ export class HomeAssistantYamlFile {
         var lp2 = getLinePos(item.value.range[1], this.cst);
 
         this.scripts[key] = {
-          fileUri: Uri.file(filepath).toString(),
+          fileUri: vscodeUri.URI.file(filepath).toString(),
           start: [lp.line - 1, lp.col - 1],
           end: [lp2.line - 1, lp2.col - 1]
         };

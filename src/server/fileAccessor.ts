@@ -1,4 +1,4 @@
-import { IConnection, TextDocument, TextDocuments } from "vscode-languageserver";
+import { TextDocuments } from "vscode-languageserver";
 import * as fs from "fs";
 import * as path from "path";
 import Uri from 'vscode-uri';
@@ -15,7 +15,11 @@ export interface FileAccessor {
 
 export class VsCodeFileAccessor implements FileAccessor {
 
-    constructor(private workspaceFolder: string, private connection: IConnection, private documents: TextDocuments) { }
+    private ourRoot: string;
+
+    constructor(private workspaceFolder: string, private documents: TextDocuments) {
+        this.ourRoot = path.resolve();
+    }
 
     public async getFileContents(uri: string): Promise<string> {
         var fullUri = Uri.file(path.resolve(uri));
@@ -38,6 +42,7 @@ export class VsCodeFileAccessor implements FileAccessor {
 
     public getFilesInFolder(subFolder: string, filelist: string[] = []): string[] {
         subFolder = path.normalize(subFolder);
+
         try {
             fs.readdirSync(subFolder).forEach(file => {
                 filelist = fs.statSync(path.join(subFolder, file)).isDirectory()
@@ -51,8 +56,21 @@ export class VsCodeFileAccessor implements FileAccessor {
         return filelist;
     }
 
+    private dealtWithRelativeFrom = (relativeFrom: string): string => {
+        if (relativeFrom.startsWith("file://")) {
+            relativeFrom = Uri.parse(relativeFrom).fsPath;
+        }
+        else {
+            if (!relativeFrom.startsWith(this.ourRoot)) {
+                relativeFrom = path.resolve(relativeFrom);
+            }
+            relativeFrom = Uri.file(relativeFrom).fsPath;
+        }
+        return relativeFrom;
+    }
+
     public getFilesInFolderRelativeFrom(subFolder: string, relativeFrom: string): string[] {
-        relativeFrom = Uri.parse(relativeFrom).fsPath;
+        relativeFrom = this.dealtWithRelativeFrom(relativeFrom);
 
         var dirOfFile = path.dirname(relativeFrom);
         subFolder = path.join(dirOfFile, subFolder);
@@ -65,7 +83,7 @@ export class VsCodeFileAccessor implements FileAccessor {
     }
 
     public getRelativePath = (relativeFrom: string, filename: string): string => {
-        relativeFrom = Uri.parse(relativeFrom).fsPath;
+        relativeFrom = this.dealtWithRelativeFrom(relativeFrom);
 
         var dirOfFile = path.dirname(relativeFrom);
         let joinedPath = path.join(dirOfFile, filename);
@@ -81,7 +99,7 @@ export class VsCodeFileAccessor implements FileAccessor {
         let workspaceFolderUri = Uri.parse(this.workspaceFolder);
         let fileUri = Uri.parse(uri);
         let local = fileUri.fsPath.replace(workspaceFolderUri.fsPath, "");
-        if (local[0] === "/" || local[0] === "\\"){
+        if (local[0] === "/" || local[0] === "\\") {
             local = local.substring(1);
         }
         // let joined = path.join(workspaceFolderUri.fsPath, uri);

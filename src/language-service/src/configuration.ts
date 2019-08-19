@@ -1,5 +1,5 @@
-import { DidChangeConfigurationParams } from "vscode-languageserver";
-import Uri from 'vscode-uri';
+import { DidChangeConfigurationParams } from "vscode-languageserver-protocol";
+import * as vscodeUri from 'vscode-uri';
 
 export interface IConfigurationService {
     isConfigured: boolean;
@@ -52,7 +52,7 @@ export class ConfigurationService implements IConfigurationService {
         if (!value) {
             return "";
         }
-        var uri = Uri.parse(value);
+        var uri = vscodeUri.URI.parse(value);
         return `${uri.scheme}://${uri.authority}${uri.path.replace(/\/$/, "")}`;
     }
 }

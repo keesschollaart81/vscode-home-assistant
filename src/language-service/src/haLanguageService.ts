@@ -1,30 +1,27 @@
-import { TextDocuments, CompletionList, TextDocumentChangeEvent, DidChangeWatchedFilesParams, DidOpenTextDocumentParams, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Location, IConnection, Diagnostic } from "vscode-languageserver";
-import { completionHelper } from "./completionHelpers/utils";
-import { parse as parseYAML } from "yaml-language-server/out/server/src/languageservice/parser/yamlParser";
-import { YamlLanguageServiceWrapper } from "./yamlLanguageServiceWrapper";
+import { CompletionList, TextDocumentChangeEvent, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Diagnostic, Hover } from "vscode-languageserver-protocol";
+import { YamlLanguageService } from "./yamlLanguageService";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
-import { Includetype } from "./haConfig/dto";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
+
+
 export class HomeAssistantLanguageService {
 
-    private schemaServiceForIncludes: SchemaServiceForIncludes;
-
     constructor(
-        private documents: TextDocuments,
-        private yamlLanguageService: YamlLanguageServiceWrapper,
+        private yamlLanguageService: YamlLanguageService,
         private haConfig: HomeAssistantConfiguration,
         private haConnection: HaConnection,
-        private definitionProviders: DefinitionProvider[]
-    ) {
-        this.schemaServiceForIncludes = new SchemaServiceForIncludes(this.yamlLanguageService.jsonSchemaService);
-    }
+        private definitionProviders: DefinitionProvider[],
+        private schemaServiceForIncludes: SchemaServiceForIncludes,
+        private sendDiagnostics: (fileUri: string, diagnostics: Diagnostic[]) => Promise<void>,
+        private diagnoseAllFiles: () => Promise<void>
+    ) { }
 
-    public findAndApplySchemas = async (connection: IConnection) => {
+    public findAndApplySchemas = async () => {
 
         try {
             var haFiles = await this.haConfig.getAllFiles();
@@ -32,10 +29,7 @@ export class HomeAssistantLanguageService {
                 console.log(`Applying schema's to ${haFiles.length} of your configuration files...`);
             }
             this.schemaServiceForIncludes.onUpdate(haFiles);
-            this.documents.all().forEach(async d => {
-                var diagnostics = await this.getDiagnostics(d);
-                this.sendDiagnostics(d.uri, diagnostics, connection);
-            });
+            this.diagnoseAllFiles(); 
         }
         catch (err) {
             console.error(`Unexpected error updating the schema's, message: ${err}`, err);
@@ -45,7 +39,7 @@ export class HomeAssistantLanguageService {
 
     private onDocumentChangeDebounce: NodeJS.Timer;
 
-    public onDocumentChange = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
+    public onDocumentChange = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<void> => {
 
         clearTimeout(this.onDocumentChangeDebounce);
 
@@ -54,39 +48,22 @@ export class HomeAssistantLanguageService {
             if (singleFileUpdate.isValidYaml && singleFileUpdate.newFilesFound) {
                 console.log(`Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`);
                 await this.haConfig.discoverFiles();
-                await this.findAndApplySchemas(connection);
+                await this.findAndApplySchemas();
             }
 
             var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
 
-            this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics, connection);
+            this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
         }, 600);
 
     }
 
-    private onDidSaveDebounce: NodeJS.Timer;
-
-    public onDidSave = async (e: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
-        clearTimeout(this.onDidSaveDebounce);
-
-        this.onDidSaveDebounce = setTimeout(async () => {
-            await this.haConfig.discoverFiles();
-            await this.findAndApplySchemas(connection);
-        }, 100);
-    }
-
-    public onDocumentOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent, connection: IConnection): Promise<void> => {
+    public onDocumentOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<void> => {
         var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
 
-        this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics, connection);
+        this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
     }
 
-    private sendDiagnostics(uri: string, diagnostics: Diagnostic[], connection: IConnection) {
-        connection.sendDiagnostics({
-            uri: uri,
-            diagnostics: diagnostics
-        });
-    }
 
     public getDiagnostics = async (document: TextDocument): Promise<Diagnostic[]> => {
 
@@ -94,15 +71,7 @@ export class HomeAssistantLanguageService {
             return;
         }
 
-        let yamlDocument = parseYAML(document.getText(), this.getValidYamlTags());
-        if (!yamlDocument) {
-            return;
-        }
-
-        var diagnosticResults = await this.yamlLanguageService.doValidation(
-            document,
-            yamlDocument
-        );
+        var diagnosticResults = await this.yamlLanguageService.doValidation(document);
 
         if (!diagnosticResults) {
             return;
@@ -117,32 +86,26 @@ export class HomeAssistantLanguageService {
         return diagnostics;
     }
 
-    public onDocumentSymbol = (documentSymbolParams) => {
-        let document = this.documents.get(documentSymbolParams.textDocument.uri);
+    public onDocumentSymbol = (document: TextDocument) => {
 
         if (!document) {
             return;
         }
 
-        let jsonDocument = parseYAML(document.getText());
-        return this.yamlLanguageService.findDocumentSymbols(document, jsonDocument);
+        return this.yamlLanguageService.findDocumentSymbols(document);
     }
 
-    public onDocumentFormatting = (formatParams): TextEdit[] => {
-        let document = this.documents.get(formatParams.textDocument.uri);
+    public onDocumentFormatting = (document: TextDocument, options): TextEdit[] => { 
 
         if (!document) {
             return;
         }
 
-        return this.yamlLanguageService.format(document, formatParams.options);
+        return this.yamlLanguageService.format(document, options);
     }
 
-    public onCompletion = async (textDocumentPosition): Promise<CompletionList> => {
-        let textDocument = this.documents.get(
-            textDocumentPosition.textDocument.uri
-        );
-
+    public onCompletion = async (textDocument: TextDocument, position: Position): Promise<CompletionList> => {
+        
         let result: CompletionList = {
             items: [],
             isIncomplete: false
@@ -152,45 +115,36 @@ export class HomeAssistantLanguageService {
             return Promise.resolve(result);
         }
 
-        let completionFix = completionHelper(textDocument, textDocumentPosition.position);
+        var completions: CompletionList = await this.yamlLanguageService.doComplete(textDocument, position);
 
-        let newText = completionFix.newText;
-        let jsonDocument = parseYAML(newText);
-
-        var completions: CompletionList = await this.yamlLanguageService.doComplete(textDocument, textDocumentPosition.position, jsonDocument);
-
-        var additionalCompletions = await this.getServiceAndEntityCompletions(textDocument, textDocumentPosition.position, completions);
+        var additionalCompletions = await this.getServiceAndEntityCompletions(textDocument, position, completions);
         if (additionalCompletions.length > 0) {
             completions.items.push(...additionalCompletions);
         }
         return completions;
     }
 
-    public onCompletionResolve = (completionItem) => {
-        return this.yamlLanguageService.doResolve(completionItem);
+    public onCompletionResolve = async (completionItem): Promise<CompletionItem> => {
+        return await this.yamlLanguageService.doResolve(completionItem);
     }
 
-    public onHover = (textDocumentPositionParams) => {
-        let document = this.documents.get(textDocumentPositionParams.textDocument.uri);
+    public onHover = async (document: TextDocument, position: Position): Promise<Hover> => { 
 
         if (!document) {
-            return Promise.resolve(void 0);
+            return;
         }
 
-        let jsonDocument = parseYAML(document.getText());
-
-        return this.yamlLanguageService.doHover(document, textDocumentPositionParams.position, jsonDocument);
+        return await this.yamlLanguageService.doHover(document, position);
     }
 
-    public onDefinition = async (textDocumentPositionParams: TextDocumentPositionParams): Promise<Definition | DefinitionLink[] | undefined> => {
-        let textDocument = this.documents.get(textDocumentPositionParams.textDocument.uri);
+    public onDefinition = async (textDocument: TextDocument, position: Position): Promise<Definition | DefinitionLink[] | undefined> => {
 
         if (!textDocument) {
             return;
         }
         const lineOffsets: number[] = getLineOffsets(textDocument.getText());
-        const start: number = lineOffsets[textDocumentPositionParams.position.line];
-        const end: number = lineOffsets[textDocumentPositionParams.position.line + 1];
+        const start: number = lineOffsets[position.line];
+        const end: number = lineOffsets[position.line + 1];
         let thisLine = textDocument.getText().substring(start, end);
 
         var definitions = [];
@@ -202,17 +156,6 @@ export class HomeAssistantLanguageService {
             }
         }
         return definitions;
-    }
-
-    private getValidYamlTags(): string[] {
-        var validTags: string[] = [];
-        for (let item in Includetype) {
-            if (isNaN(Number(item))) {
-                validTags.push(`!${item} scalar`);
-            }
-        }
-        validTags.push("!secret scalar");
-        return validTags;
     }
 
     private getServiceAndEntityCompletions = async (document: TextDocument, textDocumentPosition: Position, currentCompletions: CompletionList): Promise<CompletionItem[]> => {
