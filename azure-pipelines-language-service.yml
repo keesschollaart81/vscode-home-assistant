@@ -56,15 +56,13 @@ stages:
               versionSpec: '10.x'
             displayName: 'Install Node.js' 
 
-          - script: |
-              rm package-lock.json # this is weird is should not be needed 
-            workingDirectory: src/language-service
-            displayName: 'remove package-lock.json'
+          # - script: |
+          #     rm package-lock.json # this is weird is should not be needed 
+          #   workingDirectory: src/language-service
+          #   displayName: 'remove package-lock.json'
 
           - task: Npm@1
             inputs:
               command: publish
-              publishEndpoint: 'npmjs.org'
-              # publishRegistry: useFeed
-              # publishFeed: "https://registry.npmjs.org"
-              workingDirectory: src/language-service 
+              publishEndpoint: 'npmjs.org' 
+              workingDir: src/language-service 
