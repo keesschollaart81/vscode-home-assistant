@@ -37,7 +37,7 @@ stages:
 
 - stage: publish
   displayName: 'Publish to NPM'
-  condition: succeeded('build')
+  condition: and(succeeded('build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: publish_to_npm
     displayName: Publish to NPM
