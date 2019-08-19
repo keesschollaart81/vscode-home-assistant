@@ -29,7 +29,12 @@ stages:
         npm install
         npm run compile
       workingDirectory: src/language-service
-      displayName: 'npm install and compile'  
+      displayName: 'npm install and compile' 
+
+- stage: publish_language_service
+  displayName: 'Publish Language Service'
+  
+  jobs:
 
   - deployment: publish_language_service
     displayName: Publish Language Service to NPM
