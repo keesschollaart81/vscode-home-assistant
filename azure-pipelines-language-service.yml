@@ -21,21 +21,22 @@ stages:
           
     steps:
 
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '10.x'
-      displayName: 'Install Node.js' 
+    # - task: NodeTool@0
+    #   inputs:
+    #     versionSpec: '10.x'
+    #   displayName: 'Install Node.js' 
 
     - script: |
         rm package-lock.json # this is weird is should not be needd
         npm install
         npm run compile
+        npm pack
       workingDirectory: src/language-service
       displayName: 'npm install and compile' 
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: 'src/language-service' 
+        targetPath: 'src/language-service/*.tgz' 
         artifact: language-service 
 
 - stage: publish_language_service
@@ -52,29 +53,17 @@ stages:
     strategy:
       runOnce:
         deploy:  
-          steps: 
-          
-          # - checkout: self 
+          steps:  
 
           - task: DownloadPipelineArtifact@2
             inputs:
               artifactName: language-service 
               buildType: 'current'
               targetPath: '$(Pipeline.Workspace)'
-
-          # - task: NodeTool@0
-          #   inputs:
-          #     versionSpec: '10.x'
-          #   displayName: 'Install Node.js' 
-
-          # - script: |
-          #     rm package-lock.json # this is weird is should not be needed 
-          #     npm install
-          #   workingDirectory: src/language-service
-          #   displayName: 'remove package-lock.json'
-
+ 
           - task: Npm@1
             inputs:
-              command: publish
+              command: 'custom'
+              customCommand: 'publish *.tgz'
               publishEndpoint: 'npmjs.org' 
-              workingDir: '$(Pipeline.Workspace)'
+              workingDir: '$(Pipeline.Workspace)'/ 
