@@ -1,4 +1,4 @@
-name: Node CI
+name: Language Sevice
 
 on: [push]
 
@@ -19,6 +19,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - run: |
         rm package-lock.json
