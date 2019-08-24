@@ -30,12 +30,11 @@ jobs:
       working-directory: src/language-service
       
     - name: Publish
-      uses: actions/npm@master
-      working-directory: src/language-service
+      uses: actions/npm@master 
       env:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       with:
-        args: publish
+        args: publish src/language-service
 
     # - run: npm publish
     #   working-directory: src/language-service
