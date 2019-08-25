@@ -16,7 +16,7 @@ jobs:
       with:
         node-version: 12.x 
 
-    - name: NPM Install & Compiule
+    - name: NPM Install & Compile
       run: | 
         npm install
         npm run compile 
