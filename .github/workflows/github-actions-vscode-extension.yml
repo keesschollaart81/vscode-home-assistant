@@ -28,3 +28,8 @@ jobs:
         vsce publish -p $VSCE_TOKEN
       env: 
         VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+
+    # - name: VSCE
+    #   uses: lannonbr/vsce-action@1.0.1 
+    #   with:
+    #     args: publish -p ${{ secrets.VSCE_TOKEN }}
