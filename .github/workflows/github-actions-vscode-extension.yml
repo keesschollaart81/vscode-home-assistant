@@ -1,4 +1,4 @@
-name: Language Sevice
+name: VS Code Extension
 
 on: [ push, pull_request]
 
