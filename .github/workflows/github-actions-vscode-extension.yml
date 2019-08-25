@@ -21,8 +21,15 @@ jobs:
         npm install
         npm run compile 
 
-    - name: VSCE
-      uses: lannonbr/vsce-action@1.0.1
-      if: success() && github.ref == 'refs/heads/master'
-      with:
-        args: publish -p ${{ secrets.VSCE_TOKEN }}
+    - name: NPM Publish
+      run: | 
+        npm install -g vsce
+        vsce publish -p $VSCE_TOKEN
+      env: 
+        VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+
+    # - name: VSCE
+    #   uses: lannonbr/vsce-action@1.0.1
+    #   if: success() && github.ref == 'refs/heads/master'
+    #   with:
+    #     args: publish -p ${{ secrets.VSCE_TOKEN }}
