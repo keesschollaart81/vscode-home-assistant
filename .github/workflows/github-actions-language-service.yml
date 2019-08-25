@@ -4,11 +4,11 @@ on:
   push:
     paths:
       - 'src/language-service/*'  
-      - 'azure-pipelines-language-service.yml'  
+      - '.github/*'  
   pull_request:
     paths:
       - 'src/language-service/*'  
-      - 'azure-pipelines-language-service.yml'  
+      - '.github/*'  
 
 jobs:
   language-service:
