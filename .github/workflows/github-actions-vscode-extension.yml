@@ -11,10 +11,10 @@ jobs:
     
     - uses: actions/checkout@v1
 
-    - name: Use Node.js 12.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x 
+    # - name: Use Node.js 12.x
+    #   uses: actions/setup-node@v1
+    #   with:
+    #     node-version: 12.x 
 
     - name: NPM Install & Compile
       run: | 
@@ -22,14 +22,9 @@ jobs:
         npm run compile 
 
     - name: NPM Publish
+      if: success() && github.ref == 'refs/heads/master'
       run: | 
         npm install -g vsce
         vsce publish -p $VSCE_TOKEN
       env: 
         VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
-
-    # - name: VSCE
-    #   uses: lannonbr/vsce-action@1.0.1
-    #   if: success() && github.ref == 'refs/heads/master'
-    #   with:
-    #     args: publish -p ${{ secrets.VSCE_TOKEN }}
