@@ -34,6 +34,7 @@ jobs:
       
     - name: NPM Publish to Registry
       uses: actions/npm@master 
+      if: success() && github.ref == 'refs/heads/master'
       env:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       with:
