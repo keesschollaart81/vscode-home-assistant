@@ -1,7 +1,11 @@
 name: Language Sevice
 
 on: 
-  [push, pull_request]:
+  push:
+    paths:
+      - 'src/language-service/*'  
+      - 'azure-pipelines-language-service.yml'  
+  pull_request:
     paths:
       - 'src/language-service/*'  
       - 'azure-pipelines-language-service.yml'  
