@@ -21,7 +21,7 @@ jobs:
         npm install
         npm run compile 
 
-    - name: NPM Publish
+    - name: VS Marketplace Publish
       if: success() && github.ref == 'refs/heads/master'
       run: | 
         npm install -g vsce
