@@ -1,0 +1,30 @@
+name: Language Sevice
+
+on: [ push, pull_request]
+
+jobs:
+  vscode-extension:
+    name: VS Code Extension
+    runs-on: ubuntu-latest 
+
+    steps:
+    
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x 
+
+    - name: NPM Install & Compiule
+      run: | 
+        npm install
+        npm run compile 
+
+    - name: VSCE
+      uses: lannonbr/vsce-action@vmaster
+      if: success() && github.ref == 'refs/heads/master'
+      with:
+        args: publish -p $VSCE_TOKEN
+      env:
+        VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }} 

@@ -23,7 +23,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12.x
-        # NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - name: NPM Install
       run: |
