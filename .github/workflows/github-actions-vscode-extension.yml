@@ -22,7 +22,7 @@ jobs:
         npm run compile 
 
     - name: VSCE
-      uses: lannonbr/vsce-action@vmaster
+      uses: lannonbr/vsce-action@1.0.1
       if: success() && github.ref == 'refs/heads/master'
       with:
         args: publish -p $VSCE_TOKEN
