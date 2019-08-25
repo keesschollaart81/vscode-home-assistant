@@ -1,44 +1,40 @@
 name: Language Sevice
 
-on: [push]
+on: 
+  [push, pull_request]:
+    paths:
+      - 'src/language-service/*'  
+      - 'azure-pipelines-language-service.yml'  
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
+  language-service:
+    name: Language Service
+    runs-on: ubuntu-latest 
 
     steps:
     
     - uses: actions/checkout@v1
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 12.x
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        node-version: 12.x
+        # NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-    - run: |
+    - name: NPM Install
+      run: |
         rm package-lock.json
         npm install
       working-directory: src/language-service
+      
 
-    - run: npm run compile
+    - name: NPM Compile
+      run: npm run compile
       working-directory: src/language-service
       
-    - name: Publish
+    - name: NPM Publish to Registry
       uses: actions/npm@master 
       env:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       with:
-        args: publish src/language-service
-
-    # - run: npm publish
-    #   working-directory: src/language-service
-    #   if: success() && github.ref == 'refs/heads/master'
-    #   env:
-    #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        args: publish src/language-service 
