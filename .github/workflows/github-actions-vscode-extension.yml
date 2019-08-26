@@ -21,15 +21,15 @@ jobs:
         npm install
         npm run compile 
 
-    # - name: VS Marketplace Publish
-    #   if: success() && github.ref == 'refs/heads/master'
-    #   run: | 
-    #     npm install -g vsce
-    #     vsce publish -p $VSCE_TOKEN
-    #   env: 
-    #     VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+    - name: VS Marketplace Publish
+      if: success() && github.ref == 'refs/heads/master'
+      run: | 
+        npm install -g vsce
+        vsce publish -p $VSCE_TOKEN
+      env: 
+        VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
-    - name: VSCE
-      uses: lannonbr/vsce-action@1.0.1 
-      with:
-        args: publish -p ${{ secrets.VSCE_TOKEN }}
+    # - name: VSCE
+    #   uses: lannonbr/vsce-action@1.0.1 
+    #   with:
+    #     args: publish -p ${{ secrets.VSCE_TOKEN }}
