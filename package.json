@@ -136,7 +136,7 @@
     "vscode": "^1.1.36"
   },
   "dependencies": {
-    "home-assistant-language-service": "1.0.9",
+    "home-assistant-language-service": "1.0.10",
     "vscode-languageserver": "5.2.1",
     "vscode-languageclient": "5.2.1",
     "vscode-extension-telemetry": "0.1.2"
