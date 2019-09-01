@@ -1,0 +1,35 @@
+name: VS Code Extension
+
+on: [ push, pull_request]
+
+jobs:
+  vscode-extension:
+    name: VS Code Extension
+    runs-on: ubuntu-latest 
+
+    steps:
+    
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x 
+
+    - name: NPM Install & Compile
+      run: | 
+        npm install
+        npm run compile 
+
+    - name: VS Marketplace Publish
+      if: success() && github.ref == 'refs/heads/master'
+      run: | 
+        npm install -g vsce
+        vsce publish -p $VSCE_TOKEN
+      env: 
+        VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
+
+    # - name: VSCE
+    #   uses: lannonbr/vsce-action@1.0.1 
+    #   with:
+    #     args: publish -p ${{ secrets.VSCE_TOKEN }}

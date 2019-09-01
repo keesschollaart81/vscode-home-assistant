@@ -53,7 +53,7 @@ stages:
 
 - stage: publish
   displayName: 'Publish'
-  condition: succeeded('build')
+  condition: and(succeeded('build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   jobs:
   - deployment: publish
     displayName: Publish
@@ -63,7 +63,9 @@ stages:
     strategy:
       runOnce:
         deploy:  
-          steps:  
+          steps:   
+
+          - checkout: self # for GitHub task to get latest tag
 
           - task: DownloadPipelineArtifact@2
             displayName: Download package from build artifacts
@@ -85,4 +87,4 @@ stages:
             workingDirectory: '$(Pipeline.Workspace)'
             displayName: 'Publish Extension to Marketplace'
             env:
-                MarketplaceToken: $(MarketplaceToken)
+                MARKETPLACETOKEN: $(MarketplaceToken)

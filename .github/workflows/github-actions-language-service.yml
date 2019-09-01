@@ -1,0 +1,44 @@
+name: Language Sevice
+
+on: 
+  push:
+    paths:
+      - 'src/language-service/*'  
+      - '.github/*'  
+  pull_request:
+    paths:
+      - 'src/language-service/*'  
+      - '.github/*'  
+
+jobs:
+  language-service:
+    name: Language Service
+    runs-on: ubuntu-latest 
+
+    steps:
+    
+    - uses: actions/checkout@v1
+
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+
+    - name: NPM Install
+      run: |
+        rm package-lock.json
+        npm install
+      working-directory: src/language-service
+      
+
+    - name: NPM Compile
+      run: npm run compile
+      working-directory: src/language-service
+      
+    - name: NPM Publish to Registry
+      uses: actions/npm@master 
+      if: success() && github.ref == 'refs/heads/master'
+      env:
+        NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      with:
+        args: publish src/language-service 
