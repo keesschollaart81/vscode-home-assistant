@@ -129,7 +129,7 @@
     "schema": "ts-node src/server/schemas/generateSchemas.ts"
   },
   "devDependencies": {
-    "@types/node": "12.7.2",
+    "@types/node": "12.7.3",
     "ts-node": "8.3.0",
     "tslint": "^5.19.0",
     "typescript": "3.6.2",
