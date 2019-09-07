@@ -18,7 +18,7 @@ var filecontents = fs.readFileSync(jsonPath, "utf-8");
 
 var pathToSchemaMappings: PathToSchemaMapping[] = JSON.parse(filecontents); 
 pathToSchemaMappings.forEach(mapping => {
-    let program = TJS.getProgramFromFiles([resolve(path.join("src/server/schemas/", mapping.tsFile))], compilerOptions);
+    let program = TJS.getProgramFromFiles([resolve(path.join("src/schemas/", mapping.tsFile))], compilerOptions);
     let schema = TJS.generateSchema(program, mapping.fromType, settings);
-    fs.writeFileSync(path.join("src/server/schemas/json/", mapping.file), JSON.stringify(schema));
+    fs.writeFileSync(path.join("src/schemas/json/", mapping.file), JSON.stringify(schema));
 });
