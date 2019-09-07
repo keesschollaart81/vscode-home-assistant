@@ -1,4 +1,4 @@
-import { CompletionList, TextDocumentChangeEvent, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Diagnostic, Hover } from "vscode-languageserver-protocol";
+import { CompletionList, TextDocumentChangeEvent, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Diagnostic, Hover, FormattingOptions } from "vscode-languageserver-protocol";
 import { YamlLanguageService } from "./yamlLanguageService";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
@@ -95,13 +95,23 @@ export class HomeAssistantLanguageService {
         return this.yamlLanguageService.findDocumentSymbols(document);
     }
 
-    public onDocumentFormatting = (document: TextDocument, options): TextEdit[] => { 
+    public onDocumentFormatting = (document: TextDocument, options: FormattingOptions): TextEdit[] => { 
 
         if (!document) {
             return;
         }
 
-        return this.yamlLanguageService.format(document, options);
+        // copied defaults from YAML Language Service
+        let settings = {
+            tabWidth: options.tabSize,
+            singleQuote: false,
+            bracketSpacing: true,
+            proseWrap: 'preserve',
+            printWidth: 80,
+            enable: true
+        };
+
+        return this.yamlLanguageService.format(document, settings);
     }
 
     public onCompletion = async (textDocument: TextDocument, position: Position): Promise<CompletionList> => {
