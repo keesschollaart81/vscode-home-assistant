@@ -1,6 +1,6 @@
 {
   "name": "home-assistant-language-service",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Home Assistant Language Service",
   "source": "src/haLanguageService.ts",
   "main": "dist/haLanguageService.js",
@@ -27,7 +27,8 @@
   "scripts": {
     "clean": "rimraf lib",
     "compile": "tsc -p .",
-    "prepublishOnly": "npm run clean && npm run compile"
+    "prepublishOnly": "npm run clean && npm run compile",
+    "schema": "ts-node src/schemas/generateSchemas.ts"
   },
   "devDependencies": {
     "@types/mocha": "5.2.7",

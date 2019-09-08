@@ -44,11 +44,14 @@ export interface HomeAssistantComponent {
     customize?: CustomizeComponent | IncludeTags;
     customize_domain?: any;
     customize_glob?: any;
-    packages?: Array<HomeAssistantComponent> | IncludeTags;
+    packages?: Array<HomeAssistantRoot> | NamedPackageInclude | IncludeTags;
     auth_providers?: AuthProviders[];
     auth_mfa_modules?: Array<any> | IncludeTags;
 }
 
+export interface NamedPackageInclude {
+    [key: string]: HomeAssistantRoot | IncludeTags;
+}
 
 /**
  * @TJS-type string
