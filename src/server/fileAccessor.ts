@@ -1,7 +1,7 @@
 import { TextDocuments } from "vscode-languageserver";
 import * as fs from "fs";
 import * as path from "path";
-import Uri from 'vscode-uri';
+import * as vscodeUri from 'vscode-uri';
 
 export interface FileAccessor {
     getFileContents(fileName: string): Promise<string>;
@@ -22,7 +22,7 @@ export class VsCodeFileAccessor implements FileAccessor {
     }
 
     public async getFileContents(uri: string): Promise<string> {
-        var fullUri = Uri.file(path.resolve(uri));
+        var fullUri = vscodeUri.URI.file(path.resolve(uri));
         var textDocument = this.documents.get(fullUri.toString());
         if (textDocument) {
             // open file in editor, might not be saved yet
@@ -58,13 +58,13 @@ export class VsCodeFileAccessor implements FileAccessor {
 
     private dealtWithRelativeFrom = (relativeFrom: string): string => {
         if (relativeFrom.startsWith("file://")) {
-            relativeFrom = Uri.parse(relativeFrom).fsPath;
+            relativeFrom = vscodeUri.URI.parse(relativeFrom).fsPath;
         }
         else {
             if (!relativeFrom.startsWith(this.ourRoot)) {
                 relativeFrom = path.resolve(relativeFrom);
             }
-            relativeFrom = Uri.file(relativeFrom).fsPath;
+            relativeFrom = vscodeUri.URI.file(relativeFrom).fsPath;
         }
         return relativeFrom;
     }
@@ -79,7 +79,7 @@ export class VsCodeFileAccessor implements FileAccessor {
 
     public getFilesInFolderRelativeFromAsFileUri(subFolder: string, relativeFrom: string): string[] {
         var files = this.getFilesInFolderRelativeFrom(subFolder, relativeFrom);
-        return files.map(f => Uri.file(f).toString());
+        return files.map(f => vscodeUri.URI.file(f).toString());
     }
 
     public getRelativePath = (relativeFrom: string, filename: string): string => {
@@ -92,12 +92,12 @@ export class VsCodeFileAccessor implements FileAccessor {
     }
 
     public getRelativePathAsFileUri = (relativeFrom: string, filename: string): string => {
-        return Uri.file(this.getRelativePath(relativeFrom, filename)).toString();
+        return vscodeUri.URI.file(this.getRelativePath(relativeFrom, filename)).toString();
     }
 
     public fromUriToLocalPath = (uri: string): string => {
-        let workspaceFolderUri = Uri.parse(this.workspaceFolder);
-        let fileUri = Uri.parse(uri);
+        let workspaceFolderUri = vscodeUri.URI.parse(this.workspaceFolder);
+        let fileUri = vscodeUri.URI.parse(uri);
         let local = fileUri.fsPath.replace(workspaceFolderUri.fsPath, "");
         if (local[0] === "/" || local[0] === "\\") {
             local = local.substring(1);
