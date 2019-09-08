@@ -155,7 +155,7 @@ export interface SceneComponentEntry {
  * @TJS-additionalProperties true
  */
 export interface EntitySceneConfig {
-    state?: boolean;
+    state?: boolean | string;
     brightness?: number | string;
     source?: string;
     color_temp?: number | string;
