@@ -128,7 +128,7 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/node": "12.7.4",
+    "@types/node": "12.7.12",
     "ts-node": "8.3.0",
     "tslint": "^5.19.0",
     "typescript": "3.6.2",
