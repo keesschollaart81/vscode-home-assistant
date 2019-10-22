@@ -4,6 +4,7 @@ export type AutomationsFile = Automation |  Array<Automation>;
 export interface Automation {
   id?: string;
   alias?: string;
+  description?: string;
   initial_state?: string | boolean;
   hide_entity?: boolean;
   trigger: Triggers | Array<Triggers>;
