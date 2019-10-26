@@ -1,10 +1,9 @@
 import * as path from "path";
 import * as YAML from "yaml";
-import getLinePos from "yaml/dist/cst/getLinePos";
+import getLinePos from "yaml/dist/cst/source-utils";
 import { FileAccessor } from "../fileAccessor";
 import { IncludeReferences, Includetype, ScriptReferences } from "./dto";
-import * as vscodeUri from 'vscode-uri'
-
+import * as vscodeUri from 'vscode-uri';
 
 export class HomeAssistantYamlFile {
 
