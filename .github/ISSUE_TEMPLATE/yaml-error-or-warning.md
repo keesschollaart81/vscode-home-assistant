@@ -1,10 +1,7 @@
 ---
-name: YAML Error or Warning
-about: VS Code complains over your YAML
-title: ''
-labels: ''
-assignees: ''
-
+name: Bug
+about: VS Code complains over your YAML 
+labels: 'yaml' 
 ---
 
 <!-- 
