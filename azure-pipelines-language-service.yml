@@ -23,6 +23,7 @@ stages:
         rm package-lock.json # this is weird is should not be needd
         npm install
         npm run compile
+        npm run schema
         mkdir package
         cd package
         npm pack ../
