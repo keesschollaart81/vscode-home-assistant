@@ -74,6 +74,11 @@ There are 2 ways to get this done:
 
     Remember the scope of your environment variables differs per OS. Usually for this to work, you need to start VS Code from the from the prompt where the environment variables are set.
 
+# Contribution
+
+- [How to update the schema's](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's)
+- [Local Development](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Local-development)
+
 # Release Notes
 
 ## v0.5 - 10-05-2019
