@@ -13,7 +13,7 @@ export class SchemaServiceForIncludes {
         this.jsonSchemaService.clearExternalSchemas(); // otherwise it will stack the schemes in memory for every file change
         this.jsonSchemaService.setSchemaContributions(this.schemaContributions);
     }
-
+    
     private getPathToSchemaFileMappings(): PathToSchemaMapping[] {
         var jsonPath = path.join(__dirname, "mappings.json");
         var filecontents = fs.readFileSync(jsonPath, "utf-8");

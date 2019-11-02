@@ -1,91 +1,86 @@
-
 trigger:
   branches:
     include:
-    - '*'
+      - "*"
   paths:
     include:
-    - '*'  
+      - "*"
     exclude:
-    - 'src/language-service/*'
+      - "src/language-service/*"
 pr:
-- dev
-  
+  - dev
+
 stages:
-- stage: build
-  displayName: 'Build'
-  condition:  
-  jobs:
+  - stage: build
+    displayName: "Build"
+    condition:
+    jobs:
+      - job: BuildExtension
+        pool:
+          vmImage: "ubuntu-latest"
 
-  - job: BuildExtension
-    pool:
-      vmImage: 'ubuntu-latest'
-          
-    steps:
-
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '8.x'
-      displayName: 'Install Node.js' 
-
-    - script: |
-        npm install
-        npm run compile
-        npm run schema
-      displayName: 'npm install and compile'
-
-    - script: |
-        sudo npm install -g vsce
-        vsce package
-      displayName: Create VSIX
- 
-    - task: CopyFiles@2
-      displayName: Stage VSIX for publishing
-      inputs:
-        contents: |-
-          *.vsix
-        targetFolder: $(Build.ArtifactStagingDirectory)
-
-    - task: PublishPipelineArtifact@1
-      displayName: Publish VSIX as Artifact
-      inputs:
-        targetPath: '$(Build.ArtifactStagingDirectory)' 
-        artifact: vscode-home-assistant 
-
-- stage: publish
-  displayName: 'Publish'
-  condition: and(succeeded('build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  jobs:
-  - deployment: publish
-    displayName: Publish
-    pool:
-      vmImage: 'ubuntu-latest' 
-    environment: Production
-    strategy:
-      runOnce:
-        deploy:  
-          steps:   
-
-          - checkout: self # for GitHub task to get latest tag
-
-          - task: DownloadPipelineArtifact@2
-            displayName: Download package from build artifacts
+        steps:
+          - task: NodeTool@0
             inputs:
-              artifactName: vscode-home-assistant 
-              buildType: 'current'
-              targetPath: '$(Pipeline.Workspace)'
-            
-          - task: GitHubRelease@0
-            displayName: 'GitHub release (create)'
-            inputs:
-              gitHubConnection: GitHub
-              assets: '$(Pipeline.Workspace)/**/*.vsix'
-           
+              versionSpec: "8.x"
+            displayName: "Install Node.js"
+
+          - script: |
+              npm install
+              npm run compile
+            displayName: "npm install and compile"
+
           - script: |
               sudo npm install -g vsce
-            
-              find . -name \*.vsix -type f -exec vsce publish --pat $MARKETPLACETOKEN --packagePath {} \;
-            workingDirectory: '$(Pipeline.Workspace)'
-            displayName: 'Publish Extension to Marketplace'
-            env:
-                MARKETPLACETOKEN: $(MarketplaceToken)
+              vsce package
+            displayName: Create VSIX
+
+          - task: CopyFiles@2
+            displayName: Stage VSIX for publishing
+            inputs:
+              contents: |-
+                *.vsix
+              targetFolder: $(Build.ArtifactStagingDirectory)
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish VSIX as Artifact
+            inputs:
+              targetPath: "$(Build.ArtifactStagingDirectory)"
+              artifact: vscode-home-assistant
+
+  - stage: publish
+    displayName: "Publish"
+    condition: and(succeeded('build'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+      - deployment: publish
+        displayName: Publish
+        pool:
+          vmImage: "ubuntu-latest"
+        environment: Production
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self # for GitHub task to get latest tag
+
+                - task: DownloadPipelineArtifact@2
+                  displayName: Download package from build artifacts
+                  inputs:
+                    artifactName: vscode-home-assistant
+                    buildType: "current"
+                    targetPath: "$(Pipeline.Workspace)"
+
+                - task: GitHubRelease@0
+                  displayName: "GitHub release (create)"
+                  inputs:
+                    gitHubConnection: GitHub
+                    assets: "$(Pipeline.Workspace)/**/*.vsix"
+
+                - script: |
+                    sudo npm install -g vsce
+
+                    find . -name \*.vsix -type f -exec vsce publish --pat $MARKETPLACETOKEN --packagePath {} \;
+                  workingDirectory: "$(Pipeline.Workspace)"
+                  displayName: "Publish Extension to Marketplace"
+                  env:
+                    MARKETPLACETOKEN: $(MarketplaceToken)

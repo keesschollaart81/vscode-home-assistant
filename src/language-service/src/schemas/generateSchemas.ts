@@ -11,14 +11,26 @@ const settings: TJS.PartialArgs = {
 
 const compilerOptions: TJS.CompilerOptions = {
     strictNullChecks: true
-}
+};
 
 var jsonPath = path.join(__dirname, "mappings.json");
 var filecontents = fs.readFileSync(jsonPath, "utf-8");
 
-var pathToSchemaMappings: PathToSchemaMapping[] = JSON.parse(filecontents); 
-pathToSchemaMappings.forEach(mapping => {
-    let program = TJS.getProgramFromFiles([resolve(path.join("src/schemas/", mapping.tsFile))], compilerOptions);
-    let schema = TJS.generateSchema(program, mapping.fromType, settings);
-    fs.writeFileSync(path.join("src/schemas/json/", mapping.file), JSON.stringify(schema));
-});
+var outputFolder = path.join(__dirname, "json");
+
+if (!fs.existsSync(outputFolder)) {
+    fs.mkdirSync(outputFolder);
+}
+
+if (fs.readdirSync(outputFolder).length > 0 && process.argv[2] === "--quick") {
+    console.debug("Skipping schema generation becasue there already schema files");
+}
+else {
+    console.log("Generating schema's...");
+    var pathToSchemaMappings: PathToSchemaMapping[] = JSON.parse(filecontents);
+    pathToSchemaMappings.forEach(mapping => {
+        let program = TJS.getProgramFromFiles([resolve(path.join(__dirname, mapping.tsFile))], compilerOptions);
+        let schema = TJS.generateSchema(program, mapping.fromType, settings);
+        fs.writeFileSync(path.join(outputFolder, mapping.file), JSON.stringify(schema));
+    });
+}
