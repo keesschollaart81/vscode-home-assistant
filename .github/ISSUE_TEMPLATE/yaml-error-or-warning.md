@@ -17,3 +17,12 @@ labels: 'yaml'
    https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's
 
 -->
+
+Please include the related YAML code
+
+```YAML
+your:
+   - yaml
+```
+
+or point to a repository containing your Home Assistant Configuration

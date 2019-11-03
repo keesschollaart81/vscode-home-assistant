@@ -1,6 +1,6 @@
 {
   "name": "home-assistant-language-service",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Home Assistant Language Service",
   "source": "src/haLanguageService.ts",
   "main": "dist/haLanguageService.js",
@@ -26,7 +26,7 @@
   "homepage": "https://github.com/keesschollaart81/home-assistant-language-service#readme",
   "scripts": {
     "clean": "rimraf lib",
-    "compile": "tsc -p .",
+    "compile": "tsc -p . && ts-node src/schemas/generateSchemas.ts --quick",
     "prepublishOnly": "npm run clean && npm run compile",
     "schema": "ts-node src/schemas/generateSchemas.ts"
   },
