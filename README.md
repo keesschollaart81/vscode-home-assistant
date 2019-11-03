@@ -8,11 +8,12 @@
 
 # Getting started
       
-1. [Get/Install from the VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)
+1. Install via the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)
 
-2. Work with your local copy of your Home Assistant Configuration
+2. Open your (local copy of the) Home Assistant Configuration with VS Code
 
-3. Configure the connection to Home Assistant via the HA Section in the VS Code Settings, more details in [the How-To in the Wiki](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
+3. Configure the connection to Home Assistant via the HA Section in the VS Code Settings UI
+   More details in [the How-To in the Wiki](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
 
 4. Enjoy the features showcased below or continue reading [the troubleshooting guide](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Troubleshooting)
 
@@ -49,17 +50,11 @@ Snippets allow you to create commonly used data structures very quickly.
 
 # Release Notes
 
-## v0.5 - 10-05-2019
-
-- New: Schema Validation/completion for most data structures
-- New: Go to Definition for include-references
-- New: HA As a Language Server (enabling other IDE's in later stage)
-
-For older release information visit the releases section at [GitHub](https://github.com/keesschollaart81/vscode-home-assistant/releases)
+Read all the recent changes in the [GitHub releases section](https://github.com/keesschollaart81/vscode-home-assistant/releases) 
 
 # Feedback / Ideas
 
-Reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home Assistant Discord](https://discord.gg/c5DvZ4e).
+Create an [issue](https://github.com/keesschollaart81/vscode-home-assistant/issues/new/choose), reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home Assistant Discord](https://discord.gg/c5DvZ4e).
 
 # Things to do / up for grabs
 
