@@ -1,5 +1,5 @@
 ---
-name: Bug
+name: YAML Error/Warning
 about: VS Code complains over your YAML 
 labels: 'yaml' 
 ---
