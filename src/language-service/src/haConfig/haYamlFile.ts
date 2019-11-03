@@ -1,6 +1,6 @@
 import * as path from "path";
 import * as YAML from "yaml";
-import getLinePos from "yaml/dist/cst/source-utils";
+import * as sourceUtils from "yaml/dist/cst/source-utils";
 import { FileAccessor } from "../fileAccessor";
 import { IncludeReferences, Includetype, ScriptReferences } from "./dto";
 import * as vscodeUri from 'vscode-uri';
@@ -233,9 +233,8 @@ export class HomeAssistantYamlFile {
       var key = isNamed ? item.key.toJSON() : filename;
 
       if (item.type === "PAIR") {
-        //@ts-ignore
-        var lp = getLinePos(item.key.range[0], this.cst);
-        var lp2 = getLinePos(item.value.range[1], this.cst);
+        var lp = sourceUtils.getLinePos(item.key.range[0], this.cst);
+        var lp2 = sourceUtils.getLinePos(item.value.range[1], this.cst);
 
         this.scripts[key] = {
           fileUri: vscodeUri.URI.file(filepath).toString(),
