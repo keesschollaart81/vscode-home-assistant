@@ -142,7 +142,6 @@
     "typescript-json-schema": "0.39.0"
   },
   "dependencies": {
-    "home-assistant-language-service": "file:src/language-service",
     "vscode-languageserver": "5.2.1",
     "vscode-languageclient": "5.2.1",
     "vscode-extension-telemetry": "0.1.2",
