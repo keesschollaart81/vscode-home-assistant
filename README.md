@@ -13,6 +13,7 @@
 2. Open your (local copy of the) Home Assistant Configuration with VS Code
 
 3. Configure the connection to Home Assistant via the HA Section in the VS Code Settings UI
+   
    More details in [the How-To in the Wiki](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
 
 4. Enjoy the features showcased below or continue reading [the troubleshooting guide](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Troubleshooting)
