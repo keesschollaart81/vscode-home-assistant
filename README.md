@@ -10,23 +10,11 @@
       
 1. [Get/Install from the VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)
 
-2. Make sure the Language is set to 'Home Assistant' using the language picker:
+2. Work with your local copy of your Home Assistant Configuration
 
-    <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/select_language.png" width="250"/>
+3. Configure the connection to Home Assistant via the HA Section in the VS Code Settings, more details in [the How-To in the Wiki](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
 
-    and/or pin it via a `./vscode/settings.json` file in your Home Assistant configuration folder:
-
-    ``` yaml
-    {
-        "files.associations": {
-            "*.yaml": "home-assistant"
-        }
-    }
-    ```
-    
-    [The VS Code docs](https://code.visualstudio.com/docs/languages/overview#_changing-the-language-for-the-selected-file) also explain how to set the 'Home Assistant' language as default for '.yaml' or for a workspace (via a settings file).
-
-3. Configure the connection to Home Assistant (more info in the [Configuration section below](#Configuration))
+4. Enjoy the features showcased below or continue reading [the troubleshooting guide](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Troubleshooting)
 
 # Features
 
@@ -53,26 +41,6 @@ Easy navigate between your files references via the different !include... tags u
 Snippets allow you to create commonly used data structures very quickly. 
 
 <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif"   > 
-
-# Configuration
-
-After installation, this extension needs your...
-- **Home Assistant Root URL** and a
-- **Long Lived Access Token**
-
-...to be able to connect to your Home Assistant Server.
-
-There are 2 ways to get this done:
-
-1. Via the default VS Code Settings UI
-
-    Set the values with the default settings editor of VS Code: to open the VS Code settings, go to (cmd+shift+p) *'Preferences: Open Settings (UI)'*, then go to *'Extensions'* and then *'Home Assistant'*. Please note the difference between 'User Settings' and 'Workspace Settings', by default the extension sets them on User-level but they can be overridden at workspace level.
-
-2. Via Environment Variables
-
-    Set the `HASS_SERVER` and `HASS_TOKEN` Environment Variables. This is convenient when you're using both this extension and the [Home Assistant CLI](https://github.com/home-assistant/home-assistant-cli). The extension will only use these Environment Variables when you have not set any setting in VS Code.
-
-    Remember the scope of your environment variables differs per OS. Usually for this to work, you need to start VS Code from the from the prompt where the environment variables are set.
 
 # Contribution
 
