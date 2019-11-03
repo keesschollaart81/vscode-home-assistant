@@ -83,9 +83,9 @@ export class HomeAssistantConfiguration {
   }
 
   private getRootFiles = (): string[] => {
-    var configFolder = this.configurationService.configRoot || "";
-    var filesInRoot = this.fileAccessor.getFilesInFolder(configFolder);
-    let files = ["configuration.yaml", "ui-lovelace.yaml"].map(f => path.join(configFolder, f)).filter(f => filesInRoot.some(y => y === f));
+    var configRootPath = this.configurationService.configRootPath || "";
+    var filesInRoot = this.fileAccessor.getFilesInFolder(configRootPath);
+    let files = ["configuration.yaml", "ui-lovelace.yaml"].map(f => path.join(configRootPath, f)).filter(f => filesInRoot.some(y => y === f));
     return files;
   }
 
