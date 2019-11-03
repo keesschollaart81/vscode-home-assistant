@@ -78,6 +78,12 @@ export interface LovelaceCardConfig {
   view_index?: number;
   type: string;
   [key: string]: any;
+
+  /**
+   * This property allows you to set custom CSS styles to your cards
+   * Only available when https://github.com/thomasloven/lovelace-card-mod is installed!
+   */
+  style?: string;
 }
 
 // updated
