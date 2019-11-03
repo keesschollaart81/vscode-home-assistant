@@ -66,6 +66,10 @@
           "vscode-home-assistant.ignoreCertificates": {
             "type": "boolean",
             "description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
+          },
+          "vscode-home-assistant.configRoot": {
+            "type": "string",
+            "description": "The relative folder containing the configuration.yaml file"
           }
         }
       }

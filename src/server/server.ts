@@ -31,7 +31,7 @@ connection.onInitialize(async params => {
   var configurationService = new ConfigurationService();
   var haConnection = new HaConnection(configurationService);
   var fileAccessor = new VsCodeFileAccessor(params.rootUri, documents);
-  var haConfig = new HomeAssistantConfiguration(fileAccessor);
+  var haConfig = new HomeAssistantConfiguration(fileAccessor, configurationService);
 
   var definitionProviders = [
     new IncludeDefinitionProvider(fileAccessor),
@@ -113,10 +113,10 @@ connection.onInitialize(async params => {
     if (!configurationService.isConfigured) {
       connection.sendNotification("no-config");
     }
-  });
 
-  //fire and forget
-  setTimeout(discoverFilesAndUpdateSchemas, 0);
+    //fire and forget
+    setTimeout(discoverFilesAndUpdateSchemas, 0);
+  });
 
   return {
     capabilities: <ServerCapabilities>{
