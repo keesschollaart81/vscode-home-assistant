@@ -146,7 +146,7 @@
     "vscode-languageclient": "5.2.1",
     "vscode-extension-telemetry": "0.1.2",
     "home-assistant-js-websocket": "4.3.1",
-    "vscode-json-languageservice": "3.3.1",
+    "vscode-json-languageservice": "3.4.5",
     "vscode-languageserver-protocol": "3.14.1",
     "vscode-uri": "2.0.3",
     "ws": "7.1.2",
