@@ -6,23 +6,29 @@ labels: 'yaml'
 
 <!-- 
 
-- Is it an YAML parsing error?
-  This extension relies on https://github.com/eemeli/yaml to parse and validate
-  the raw YAML. To test this, update the language of the file to YAML 
-  using ⌘K M or Ctrl+K M. If the error is still there, please report to that repo
-  and then report back when it gets fixed there
+!! Read 1 & 2 first !!
 
-- Is a HA scheme error?
-   Feel free to fix this yourself, it's quite easy, HowTo here:
-   https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's
+1.  Is it an YAML parsing error?
+
+    This extension depends on another package to parse and validate
+    the raw YAML. If it's a generic YAML Parser error, please report it here:
+    https://github.com/eemeli/yaml
+
+    In doubt? Read more: 
+    https://github.com/keesschollaart81/vscode-home-assistant/wiki/Is-it-the-YAML-parser%3F
+
+2.  Is a HA scheme error?
+
+    Feel free to fix this yourself, it's quite easy, HowTo here:
+    https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's
 
 -->
 
-Please include the related YAML code
+After reading 1 & 2 👆, type your issue here and please include the related YAML code like this:
 
 ```YAML
 your:
    - yaml
 ```
 
-or point to a repository containing your Home Assistant Configuration
+and/or point to a repository containing your Home Assistant Configuration
