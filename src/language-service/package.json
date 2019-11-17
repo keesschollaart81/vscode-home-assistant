@@ -26,7 +26,7 @@
   "homepage": "https://github.com/keesschollaart81/home-assistant-language-service#readme",
   "scripts": {
     "clean": "rimraf lib",
-    "compile": "tsc -p . && ts-node src/schemas/generateSchemas.ts --quick",
+    "compile": "ts-node src/schemas/generateSchemas.ts --quick && tsc -p .",
     "prepublishOnly": "npm run clean && npm run compile",
     "schema": "ts-node src/schemas/generateSchemas.ts"
   },
