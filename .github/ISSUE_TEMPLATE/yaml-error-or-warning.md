@@ -12,7 +12,7 @@ labels: 'yaml'
 
     This extension depends on another package to parse and validate
     the raw YAML. If it's a generic YAML Parser error, please report it here:
-    https://github.com/eemeli/yaml
+    https://github.com/JPinkney/yaml-ast-parser
 
     In doubt? Read more: 
     https://github.com/keesschollaart81/vscode-home-assistant/wiki/Is-it-the-YAML-parser%3F

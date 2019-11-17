@@ -1,6 +1,8 @@
 
 export type Sensors = MqttSensor | TemplateSensor | OtherSensor;
 
+export type SensorFile = Sensors | Sensors[];
+
 /**
  * @TJS-additionalProperties true
  */
@@ -45,5 +47,9 @@ export interface TemplateSensorEntry {
     value_template?: string;
     icon_template?: string;
     entity_picture_template?: string;
+    attribute_templates?: {
+        [key: string]: string
+    },
+    availability_template?: string | boolean;
     device_class?: string;
 }
