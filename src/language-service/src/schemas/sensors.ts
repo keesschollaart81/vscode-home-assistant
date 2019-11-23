@@ -49,7 +49,7 @@ export interface TemplateSensorEntry {
     entity_picture_template?: string;
     attribute_templates?: {
         [key: string]: string
-    },
+    };
     availability_template?: string | boolean;
     device_class?: string;
 }

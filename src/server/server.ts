@@ -1,18 +1,15 @@
 import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities, Diagnostic } from "vscode-languageserver";
-import { JSONSchemaService } from "yaml-language-server/out/server/src/languageservice/services/jsonSchemaService";
-import * as path from "path" 
 import { HaConnection } from "../language-service/src/home-assistant/haConnection";
 import { ConfigurationService } from "../language-service/src/configuration";
 import { HomeAssistantConfiguration } from "../language-service/src/haConfig/haConfig";
 import { HomeAssistantLanguageService } from "../language-service/src/haLanguageService";
-import { JsonLanguageService } from "../language-service/src/jsonLanguageService";
-import { YamlLanguageService } from "../language-service/src/yamlLanguageService";
 import { SchemaServiceForIncludes } from "../language-service/src/schemas/schemaService";
 import { IncludeDefinitionProvider } from "../language-service/src/definition/includes";
 import { ScriptDefinitionProvider } from "../language-service/src/definition/scripts";
 import { EntityIdCompletionContribution } from "../language-service/src/completionHelpers/entityIds";
 import { ServicesCompletionContribution } from "../language-service/src/completionHelpers/services";
 import { VsCodeFileAccessor } from "./fileAccessor";
+import { getLanguageService } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
 
 let connection = createConnection(ProposedFeatures.all);
 
@@ -37,26 +34,19 @@ connection.onInitialize(async params => {
     new ScriptDefinitionProvider(haConfig)
   ];
 
-  let jsonSchemaService = new JSONSchemaService(null, {
-    resolveRelativePath: (relativePath: string, resource: string) => {
-      return path.resolve(resource, relativePath);
-    }
-  }, Promise);
-
   var jsonWorkerContributions = [
     new EntityIdCompletionContribution(haConnection),
     new ServicesCompletionContribution(haConnection)
   ];
 
-  var jsonLanguageService = new JsonLanguageService(jsonSchemaService, jsonWorkerContributions);
+  let schemaServiceForIncludes = new SchemaServiceForIncludes();
 
-  var yamlLanguageServiceWrapper = new YamlLanguageService(
-    jsonSchemaService,
-    jsonLanguageService,
-    jsonWorkerContributions);
-
-  let schemaServiceForIncludes = new SchemaServiceForIncludes(jsonSchemaService);
-
+  let yamlLanguageService = getLanguageService(
+    async () => "",
+    null,
+    jsonWorkerContributions
+  );
+ 
   var sendDiagnostics = async (uri: string, diagnostics: Diagnostic[]) => {
     connection.sendDiagnostics({
       uri: uri,
@@ -75,7 +65,7 @@ connection.onInitialize(async params => {
   };
 
   var homeAsisstantLanguageService = new HomeAssistantLanguageService(
-    yamlLanguageServiceWrapper,
+    yamlLanguageService,
     haConfig,
     haConnection,
     definitionProviders,
@@ -93,7 +83,7 @@ connection.onInitialize(async params => {
   documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e));
 
   let onDidSaveDebounce: NodeJS.Timer;
-  documents.onDidSave((e) => {
+  documents.onDidSave(() => {
     clearTimeout(onDidSaveDebounce);
     onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 100);
   });
