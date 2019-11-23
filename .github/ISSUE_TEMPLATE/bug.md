@@ -4,14 +4,15 @@ about: Report something that is not working (other than YAML related)
 labels: 'bug' 
 ---
 
-Please include the related YAML code
+Please include the related YAML code:
 
 ```YAML
 your:
    - yaml
 ```
 
-or point to a repository containing your Home Assistant Configuration
+Find my Home Assistant Configuration here:
+[Link to Home Assistant Configuration](<link to repo here>)
 
 Extension runs in:
 - [X] VS Code for Desktop 
