@@ -7,6 +7,7 @@ import { IConfigurationService } from "../configuration";
 export class HomeAssistantConfiguration {
 
   private files: FilesCollection;
+  private subFolder: string = "";
 
   public constructor(private fileAccessor: FileAccessor, private configurationService: IConfigurationService) {
     this.files = {};
@@ -83,27 +84,41 @@ export class HomeAssistantConfiguration {
   }
 
   private getRootFiles = (): string[] => {
-    var configRootPath = this.configurationService.configRootPath || "";
-    var filesInRoot = this.fileAccessor.getFilesInFolder(configRootPath);
-    let files = ["configuration.yaml", "ui-lovelace.yaml"].map(f => path.join(configRootPath, f)).filter(f => filesInRoot.some(y => y === f));
-    return files;
+    var filesInRoot = this.fileAccessor.getFilesInFolder("");
+    let ourFiles = ["configuration.yaml", "ui-lovelace.yaml"];
+
+    let files = ourFiles.filter(f => filesInRoot.some(y => y === f));
+
+    if (files.length === 0) {
+      let areOurFilesSomehwere = filesInRoot.filter(f => ourFiles.some(ourFile => f.endsWith(ourFile)));
+      if (areOurFilesSomehwere.length > 0) {
+        this.subFolder = areOurFilesSomehwere[0].substr(0, areOurFilesSomehwere[0].lastIndexOf('/'));
+        return areOurFilesSomehwere;
+      }
+    }
+
+    return files.map(x => path.join(this.subFolder, x));
   }
 
   public discoverFiles = async (): Promise<void> => {
     let rootFiles = this.getRootFiles();
     this.files = {};
     for (var index in rootFiles) {
-      this.files = await this.discoverCore(rootFiles[index], rootFiles[index], this.files);
+      this.files = await this.discoverCore(rootFiles[index], rootFiles[index].substring(this.subFolder.length), this.files);
     }
   }
 
   private discoverCore = async (filename: string, path: string, files: FilesCollection): Promise<FilesCollection> => {
 
+    if (path.startsWith("/")) {
+      path = path.substring(1);
+    }
+
     var homeAssistantYamlFile = new HomeAssistantYamlFile(this.fileAccessor, filename, path);
     files[filename] = homeAssistantYamlFile;
 
     let error = false;
-    var errorMessage = `File '${filename}' could not be parsed, it was referenced from path '${path}'. This file will be ignored.`;
+    var errorMessage = `File '${filename}' could not be parsed, it was referenced from path '${path}'.This file will be ignored.`;
     try {
       var includes = await homeAssistantYamlFile.getIncludes();
     }
