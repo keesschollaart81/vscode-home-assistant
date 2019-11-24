@@ -46,7 +46,7 @@ connection.onInitialize(async params => {
     null,
     jsonWorkerContributions
   );
- 
+
   var sendDiagnostics = async (uri: string, diagnostics: Diagnostic[]) => {
     connection.sendDiagnostics({
       uri: uri,
@@ -102,6 +102,18 @@ connection.onInitialize(async params => {
     if (!configurationService.isConfigured) {
       connection.sendNotification("no-config");
     }
+  });
+
+  connection.onRequest("callService", (args: { domain: string, service: string, serviceData?: any }) => {
+    haConnection.callService(args.domain, args.service, args.serviceData);
+  });
+  connection.onRequest("checkConfig", async _ => {
+    var result = await haConnection.callApi('post', 'config/core/check_config');
+    connection.sendNotification("configuration_check_completed", result);
+  });
+  connection.onRequest("getErrorLog", async _ => {
+    var result = await haConnection.callApi('get', 'error_log');
+    connection.sendNotification("get_eror_log_completed", result);
   });
 
   //fire and forget

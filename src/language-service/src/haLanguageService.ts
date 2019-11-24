@@ -226,13 +226,13 @@ export class HomeAssistantLanguageService {
             const start: number = lineOffsets[currentLine];
             var end = 0;
             if (lineOffsets[currentLine + 1] !== undefined) {
-                end = lineOffsets[currentLine + 1];
+                end = lineOffsets[currentLine + 1] -1;
             } else {
                 end = document.getText().length;
             }
             let thisLine = document.getText().substring(start, end);
 
-            let isOtherItemInList = thisLine.match(/-\s*([-\w]+)?(\.)?([-\w]+?)?\s*$/);
+            let isOtherItemInList = thisLine.match(/-\s*([-"\w]+)?(\.)?([-"\w]+?)?\s*$/);
             if (isOtherItemInList) {
                 currentLine--;
                 continue;

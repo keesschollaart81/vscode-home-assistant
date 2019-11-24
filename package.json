@@ -108,6 +108,53 @@
         "path": "./yaml-language/yaml.tmLanguage.json"
       }
     ],
+    "commands": [
+      {
+        "command": "vscode-home-assistant.scriptReload",
+        "title": "Reload Scripts",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.groupReload",
+        "title": "Reload Groups",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.homeassistantCheckConfig",
+        "title": "Check Configuration (remote!)",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.homeassistantReloadCoreConfig",
+        "title": "Reload Configuration",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.homeassistantRestart",
+        "title": "Restart Home Assistant",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.automationReload",
+        "title": "Reload Automations",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.hassioAddonRestartGitPull",
+        "title": "Restart 'Git Pull' Hassio Add-on",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.hassioHostReboot",
+        "title": "Reboot Hassio Host",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.getErrorLog",
+        "title": "Get Error Logs",
+        "category": "Home Assistant"
+      }
+    ],
     "configurationDefaults": {
       "[home-assistant]": {
         "editor.insertSpaces": true,
@@ -130,6 +177,7 @@
   },
   "devDependencies": {
     "@types/node": "12.12.3",
+    "@types/request": "2.48.3",
     "ts-node": "8.4.1",
     "tslint": "^5.20.0",
     "typescript": "3.6.4",
@@ -142,11 +190,13 @@
     "typescript-json-schema": "0.39.0"
   },
   "dependencies": {
-    "vscode-languageserver": "5.2.1",
-    "vscode-languageclient": "5.2.1",
-    "vscode-extension-telemetry": "0.1.2",
     "home-assistant-js-websocket": "4.3.1",
+    "request": "2.88.0",
+    "request-promise": "^4.2.5",
+    "vscode-extension-telemetry": "0.1.2",
     "vscode-json-languageservice": "3.3.1",
+    "vscode-languageclient": "5.2.1",
+    "vscode-languageserver": "5.2.1",
     "vscode-languageserver-protocol": "3.14.1",
     "vscode-uri": "2.0.3",
     "ws": "7.1.2",
