@@ -16,7 +16,14 @@
    
    More details in [the How-To in the Wiki](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
 
-4. Enjoy the features showcased below or continue reading [the troubleshooting guide](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Troubleshooting)
+4. Enjoy the features showcased below 👇
+
+5. Continue reading in the Wiki:
+
+    - [Configure connection to HA](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
+    - [VS Code Remote SSH](https://github.com/keesschollaart81/vscode-home-assistant/wiki/VS-Code-Remote-SSH)
+    - [Your config, local or remote?](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Your-config,-local-or-remote%3F)
+    - [The troubleshooting guide](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Troubleshooting)
 
 # Features
 

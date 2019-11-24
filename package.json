@@ -2,7 +2,7 @@
   "name": "vscode-home-assistant",
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "preview": false,
   "engines": {
     "vscode": "^1.32.0"
@@ -37,8 +37,8 @@
   "license": "MIT",
   "icon": "assets/logo.png",
   "activationEvents": [
-    "workspaceContains:/configuration.yaml",
-    "workspaceContains:/ui-lovelace.yaml",
+    "workspaceContains:**/configuration.yaml",
+    "workspaceContains:**/ui-lovelace.yaml",
     "onFileSystem:ftp",
     "onFileSystem:ssh",
     "onFileSystem:sftp"
@@ -108,6 +108,53 @@
         "path": "./yaml-language/yaml.tmLanguage.json"
       }
     ],
+    "commands": [
+      {
+        "command": "vscode-home-assistant.scriptReload",
+        "title": "Reload Scripts",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.groupReload",
+        "title": "Reload Groups",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.homeassistantCheckConfig",
+        "title": "Check Configuration (remote!)",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.homeassistantReloadCoreConfig",
+        "title": "Reload Configuration",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.homeassistantRestart",
+        "title": "Restart Home Assistant",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.automationReload",
+        "title": "Reload Automations",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.hassioAddonRestartGitPull",
+        "title": "Restart 'Git Pull' Hassio Add-on",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.hassioHostReboot",
+        "title": "Reboot Hassio Host",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.getErrorLog",
+        "title": "Get Error Logs",
+        "category": "Home Assistant"
+      }
+    ],
     "configurationDefaults": {
       "[home-assistant]": {
         "editor.insertSpaces": true,
@@ -129,28 +176,31 @@
     "schema": "ts-node src/language-service/src/schemas/generateSchemas.ts"
   },
   "devDependencies": {
-    "@types/node": "12.12.3",
-    "ts-node": "8.4.1",
-    "tslint": "^5.20.0",
+    "@types/node": "12.12.12",
+    "@types/request": "2.48.3",
+    "ts-node": "8.5.2",
+    "tslint": "^5.20.1",
     "typescript": "3.6.4",
     "vscode": "^1.1.36",
     "@types/mocha": "5.2.7",
-    "@types/ws": "6.0.2",
+    "@types/ws": "6.0.3",
     "@types/yaml": "1.2.0",
     "rimraf": "3.0.0",
     "ts-loader": "^6.0.4",
-    "typescript-json-schema": "0.39.0"
+    "typescript-json-schema": "0.40.0"
   },
   "dependencies": {
-    "vscode-languageserver": "5.2.1",
-    "vscode-languageclient": "5.2.1",
+    "home-assistant-js-websocket": "4.4.0",
+    "request": "2.88.0",
+    "request-promise": "^4.2.5",
     "vscode-extension-telemetry": "0.1.2",
-    "home-assistant-js-websocket": "4.3.1",
-    "vscode-json-languageservice": "3.3.1",
+    "vscode-json-languageservice": "3.4.7",
+    "vscode-languageclient": "5.2.1",
+    "vscode-languageserver": "5.2.1",
     "vscode-languageserver-protocol": "3.14.1",
-    "vscode-uri": "2.0.3",
-    "ws": "7.1.2",
+    "vscode-uri": "2.1.1",
+    "ws": "7.2.0",
     "yaml": "1.7.2",
-    "yaml-language-server": "0.5.3"
+    "yaml-language-server": "0.6.1"
   }
 }

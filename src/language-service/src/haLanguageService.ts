@@ -1,5 +1,4 @@
 import { CompletionList, TextDocumentChangeEvent, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Diagnostic, Hover, FormattingOptions } from "vscode-languageserver-protocol";
-import { YamlLanguageService } from "./yamlLanguageService";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
@@ -7,12 +6,14 @@ import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
+import { LanguageService, LanguageSettings } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
+import { Includetype } from "./haConfig/dto";
 
 
 export class HomeAssistantLanguageService {
 
     constructor(
-        private yamlLanguageService: YamlLanguageService,
+        private yamlLanguageService: LanguageService,
         private haConfig: HomeAssistantConfiguration,
         private haConnection: HaConnection,
         private definitionProviders: DefinitionProvider[],
@@ -27,14 +28,35 @@ export class HomeAssistantLanguageService {
             var haFiles = await this.haConfig.getAllFiles();
             if (haFiles && haFiles.length > 0) {
                 console.log(`Applying schema's to ${haFiles.length} of your configuration files...`);
-            }
-            this.schemaServiceForIncludes.onUpdate(haFiles);
-            this.diagnoseAllFiles(); 
+            }  
+            
+            this.yamlLanguageService.configure(<LanguageSettings>{
+                validate: true,
+                customTags: this.getValidYamlTags(),
+                completion: true,
+                format: true,
+                hover: true,
+                isKubernetes: false,
+                schemas: this.schemaServiceForIncludes.getSchemaContributions(haFiles)
+            });
+
+            this.diagnoseAllFiles();
         }
         catch (err) {
             console.error(`Unexpected error updating the schema's, message: ${err}`, err);
         }
         console.log(`Schema's updated!`);
+    }
+    
+    private getValidYamlTags(): string[] {
+        var validTags: string[] = [];
+        for (let item in Includetype) {
+            if (isNaN(Number(item))) {
+                validTags.push(`!${item} scalar`);
+            }
+        }
+        validTags.push("!secret scalar");
+        return validTags;
     }
 
     private onDocumentChangeDebounce: NodeJS.Timer;
@@ -71,7 +93,7 @@ export class HomeAssistantLanguageService {
             return;
         }
 
-        var diagnosticResults = await this.yamlLanguageService.doValidation(document);
+        var diagnosticResults = await this.yamlLanguageService.doValidation(document, false);
 
         if (!diagnosticResults) {
             return;
@@ -95,7 +117,7 @@ export class HomeAssistantLanguageService {
         return this.yamlLanguageService.findDocumentSymbols(document);
     }
 
-    public onDocumentFormatting = (document: TextDocument, options: FormattingOptions): TextEdit[] => { 
+    public onDocumentFormatting = (document: TextDocument, options: FormattingOptions): TextEdit[] => {
 
         if (!document) {
             return;
@@ -111,11 +133,11 @@ export class HomeAssistantLanguageService {
             enable: true
         };
 
-        return this.yamlLanguageService.format(document, settings);
+        return this.yamlLanguageService.doFormat(document, settings);
     }
 
     public onCompletion = async (textDocument: TextDocument, position: Position): Promise<CompletionList> => {
-        
+
         let result: CompletionList = {
             items: [],
             isIncomplete: false
@@ -125,7 +147,7 @@ export class HomeAssistantLanguageService {
             return Promise.resolve(result);
         }
 
-        var completions: CompletionList = await this.yamlLanguageService.doComplete(textDocument, position);
+        var completions: CompletionList = await this.yamlLanguageService.doComplete(textDocument, position, false);
 
         var additionalCompletions = await this.getServiceAndEntityCompletions(textDocument, position, completions);
         if (additionalCompletions.length > 0) {
@@ -138,7 +160,7 @@ export class HomeAssistantLanguageService {
         return await this.yamlLanguageService.doResolve(completionItem);
     }
 
-    public onHover = async (document: TextDocument, position: Position): Promise<Hover> => { 
+    public onHover = async (document: TextDocument, position: Position): Promise<Hover> => {
 
         if (!document) {
             return;
@@ -204,13 +226,13 @@ export class HomeAssistantLanguageService {
             const start: number = lineOffsets[currentLine];
             var end = 0;
             if (lineOffsets[currentLine + 1] !== undefined) {
-                end = lineOffsets[currentLine + 1];
+                end = lineOffsets[currentLine + 1] -1;
             } else {
                 end = document.getText().length;
             }
             let thisLine = document.getText().substring(start, end);
 
-            let isOtherItemInList = thisLine.match(/-\s*([-\w]+)?(\.)?([-\w]+?)?\s*$/);
+            let isOtherItemInList = thisLine.match(/-\s*([-"\w]+)?(\.)?([-"\w]+?)?\s*$/);
             if (isOtherItemInList) {
                 currentLine--;
                 continue;
