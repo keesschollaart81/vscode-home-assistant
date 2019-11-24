@@ -198,7 +198,7 @@
     "vscode-languageclient": "5.2.1",
     "vscode-languageserver": "5.2.1",
     "vscode-languageserver-protocol": "3.14.1",
-    "vscode-uri": "2.0.3",
+    "vscode-uri": "2.1.1",
     "ws": "7.2.0",
     "yaml": "1.7.2",
     "yaml-language-server": "0.6.1"
