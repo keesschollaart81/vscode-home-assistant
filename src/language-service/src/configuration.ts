@@ -6,6 +6,7 @@ export interface IConfigurationService {
     token?: string;
     url?: string;
     ignoreCertificates: boolean;
+    configRootPath?: string;
     updateConfiguration(config: DidChangeConfigurationParams): void;
 }
 
@@ -13,6 +14,7 @@ export interface HomeAssistantConfiguration {
     longLivedAccessToken?: string;
     hostUrl?: string;
     ignoreCertificates: boolean;
+    configRootPath?: string;
 }
 
 export class ConfigurationService implements IConfigurationService {
@@ -20,6 +22,7 @@ export class ConfigurationService implements IConfigurationService {
     public token?: string;
     public url?: string;
     public ignoreCertificates: boolean = false;
+    public configRootPath?: string;
 
     constructor() {
         this.setConfigViaEnvironmentVariables();
@@ -33,6 +36,7 @@ export class ConfigurationService implements IConfigurationService {
         this.token = incoming.longLivedAccessToken;
         this.url = this.getUri(incoming.hostUrl);
         this.ignoreCertificates = !!incoming.ignoreCertificates;
+        this.configRootPath = incoming.configRootPath;
 
         this.setConfigViaEnvironmentVariables();
 

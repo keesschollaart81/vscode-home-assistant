@@ -37,8 +37,8 @@
   "license": "MIT",
   "icon": "assets/logo.png",
   "activationEvents": [
-    "workspaceContains:/configuration.yaml",
-    "workspaceContains:/ui-lovelace.yaml",
+    "workspaceContains:**/configuration.yaml",
+    "workspaceContains:**/ui-lovelace.yaml",
     "onFileSystem:ftp",
     "onFileSystem:ssh",
     "onFileSystem:sftp"
@@ -66,6 +66,10 @@
           "vscode-home-assistant.ignoreCertificates": {
             "type": "boolean",
             "description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
+          },
+          "vscode-home-assistant.configRootPath": {
+            "type": "string",
+            "description": "The relative path to the folder containing your Home Assistant configuration.yaml file."
           }
         }
       }

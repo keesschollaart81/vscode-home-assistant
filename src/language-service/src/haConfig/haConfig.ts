@@ -1,12 +1,14 @@
+import * as path from "path";
 import { FileAccessor } from "../fileAccessor";
 import { HomeAssistantYamlFile } from "./haYamlFile";
 import { IncludeReferences, ScriptReferences, HaFileInfo } from "./dto";
+import { IConfigurationService } from "../configuration";
 
 export class HomeAssistantConfiguration {
 
   private files: FilesCollection;
 
-  public constructor(private fileAccessor: FileAccessor) {
+  public constructor(private fileAccessor: FileAccessor, private configurationService: IConfigurationService) {
     this.files = {};
   }
 
@@ -81,8 +83,9 @@ export class HomeAssistantConfiguration {
   }
 
   private getRootFiles = (): string[] => {
-    var filesInRoot = this.fileAccessor.getFilesInFolder("");
-    let files = ["configuration.yaml", "ui-lovelace.yaml"].filter(f => filesInRoot.some(y => y === f));
+    var configRootPath = this.configurationService.configRootPath || "";
+    var filesInRoot = this.fileAccessor.getFilesInFolder(configRootPath);
+    let files = ["configuration.yaml", "ui-lovelace.yaml"].map(f => path.join(configRootPath, f)).filter(f => filesInRoot.some(y => y === f));
     return files;
   }
 
