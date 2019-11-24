@@ -32,6 +32,7 @@ export class SchemaServiceForIncludes {
             if (relatedPathToSchemaMapping) {
                 let id = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
                 let relativePath = path.relative(process.cwd(), haFiles[sourceFile].filename);
+                relativePath = relativePath.replace("\\","/");
                 let fileass = `**/${encodeURI(relativePath)}`;
                 let resultEntry = results.find(x => x.uri === id);
 
