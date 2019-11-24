@@ -8,25 +8,22 @@
 
 # Getting started
       
-1. [Get/Install from the VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)
+1. Install via the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)
 
-2. Make sure the Language is set to 'Home Assistant' using the language picker:
+2. Open your (local copy of the) Home Assistant Configuration with VS Code
 
-    <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/select_language.png" width="250"/>
+3. Configure the connection to Home Assistant via the HA Section in the VS Code Settings UI
+   
+   More details in [the How-To in the Wiki](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
 
-    and/or pin it via a `./vscode/settings.json` file in your Home Assistant configuration folder:
+4. Enjoy the features showcased below 👇
 
-    ``` yaml
-    {
-        "files.associations": {
-            "*.yaml": "home-assistant"
-        }
-    }
-    ```
-    
-    [The VS Code docs](https://code.visualstudio.com/docs/languages/overview#_changing-the-language-for-the-selected-file) also explain how to set the 'Home Assistant' language as default for '.yaml' or for a workspace (via a settings file).
+5. Continue reading in the Wiki:
 
-3. Configure the connection to Home Assistant (more info in the [Configuration section below](#Configuration))
+    - [Configure connection to HA](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
+    - [VS Code Remote SSH](https://github.com/keesschollaart81/vscode-home-assistant/wiki/VS-Code-Remote-SSH)
+    - [Your config, local or remote?](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Your-config,-local-or-remote%3F)
+    - [The troubleshooting guide](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Troubleshooting)
 
 # Features
 
@@ -54,39 +51,18 @@ Snippets allow you to create commonly used data structures very quickly.
 
 <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif"   > 
 
-# Configuration
+# Contribution
 
-After installation, this extension needs your...
-- **Home Assistant Root URL** and a
-- **Long Lived Access Token**
-
-...to be able to connect to your Home Assistant Server.
-
-There are 2 ways to get this done:
-
-1. Via the default VS Code Settings UI
-
-    Set the values with the default settings editor of VS Code: to open the VS Code settings, go to (cmd+shift+p) *'Preferences: Open Settings (UI)'*, then go to *'Extensions'* and then *'Home Assistant'*. Please note the difference between 'User Settings' and 'Workspace Settings', by default the extension sets them on User-level but they can be overridden at workspace level.
-
-2. Via Environment Variables
-
-    Set the `HASS_SERVER` and `HASS_TOKEN` Environment Variables. This is convenient when you're using both this extension and the [Home Assistant CLI](https://github.com/home-assistant/home-assistant-cli). The extension will only use these Environment Variables when you have not set any setting in VS Code.
-
-    Remember the scope of your environment variables differs per OS. Usually for this to work, you need to start VS Code from the from the prompt where the environment variables are set.
+- [How to update the schema's](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's)
+- [Local Development](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Local-development)
 
 # Release Notes
 
-## v0.5 - 10-05-2019
-
-- New: Schema Validation/completion for most data structures
-- New: Go to Definition for include-references
-- New: HA As a Language Server (enabling other IDE's in later stage)
-
-For older release information visit the releases section at [GitHub](https://github.com/keesschollaart81/vscode-home-assistant/releases)
+Read all the recent changes in the [GitHub releases section](https://github.com/keesschollaart81/vscode-home-assistant/releases) 
 
 # Feedback / Ideas
 
-Reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home Assistant Discord](https://discord.gg/c5DvZ4e).
+Create an [issue](https://github.com/keesschollaart81/vscode-home-assistant/issues/new/choose), reach out to me on [Twitter](https://twitter.com/keesschollaart) or the [Home Assistant Discord](https://discord.gg/c5DvZ4e).
 
 # Things to do / up for grabs
 

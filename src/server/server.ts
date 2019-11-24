@@ -1,23 +1,19 @@
 import { createConnection, TextDocuments, ProposedFeatures, ServerCapabilities, Diagnostic } from "vscode-languageserver";
-import { JSONSchemaService } from "yaml-language-server/out/server/src/languageservice/services/jsonSchemaService";
-import * as path from "path";
-import * as hals from "home-assistant-language-service";
-import { HaConnection } from "home-assistant-language-service/dist/home-assistant/haConnection";
-import { ConfigurationService } from "home-assistant-language-service/dist/configuration";
-import { HomeAssistantConfiguration } from "home-assistant-language-service/dist/haConfig/haConfig";
-import { JsonLanguageService } from "home-assistant-language-service/dist/jsonLanguageService";
-import { YamlLanguageService } from "home-assistant-language-service/dist/yamlLanguageService";
-import { SchemaServiceForIncludes } from "home-assistant-language-service/dist/schemas/schemaService";
-import { IncludeDefinitionProvider } from "home-assistant-language-service/dist/definition/includes";
-import { ScriptDefinitionProvider } from "home-assistant-language-service/dist/definition/scripts";
-import { EntityIdCompletionContribution } from "home-assistant-language-service/dist/completionHelpers/entityIds";
-import { ServicesCompletionContribution } from "home-assistant-language-service/dist/completionHelpers/services";
+import { HaConnection } from "../language-service/src/home-assistant/haConnection";
+import { ConfigurationService } from "../language-service/src/configuration";
+import { HomeAssistantConfiguration } from "../language-service/src/haConfig/haConfig";
+import { HomeAssistantLanguageService } from "../language-service/src/haLanguageService";
+import { SchemaServiceForIncludes } from "../language-service/src/schemas/schemaService";
+import { IncludeDefinitionProvider } from "../language-service/src/definition/includes";
+import { ScriptDefinitionProvider } from "../language-service/src/definition/scripts";
+import { EntityIdCompletionContribution } from "../language-service/src/completionHelpers/entityIds";
+import { ServicesCompletionContribution } from "../language-service/src/completionHelpers/services";
 import { VsCodeFileAccessor } from "./fileAccessor";
+import { getLanguageService } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
 
 let connection = createConnection(ProposedFeatures.all);
 
 console.log = connection.console.log.bind(connection.console);
-// console.error = connection.console.error.bind(connection.console);
 console.warn = connection.window.showWarningMessage.bind(connection.window);
 console.error = connection.window.showErrorMessage.bind(connection.window);
 
@@ -38,25 +34,18 @@ connection.onInitialize(async params => {
     new ScriptDefinitionProvider(haConfig)
   ];
 
-  let jsonSchemaService = new JSONSchemaService(null, {
-    resolveRelativePath: (relativePath: string, resource: string) => {
-      return path.resolve(resource, relativePath);
-    }
-  }, Promise);
-
   var jsonWorkerContributions = [
     new EntityIdCompletionContribution(haConnection),
     new ServicesCompletionContribution(haConnection)
   ];
 
-  var jsonLanguageService = new JsonLanguageService(jsonSchemaService, jsonWorkerContributions);
+  let schemaServiceForIncludes = new SchemaServiceForIncludes();
 
-  var yamlLanguageServiceWrapper = new YamlLanguageService(
-    jsonSchemaService,
-    jsonLanguageService,
-    jsonWorkerContributions);
-
-  let schemaServiceForIncludes = new SchemaServiceForIncludes(jsonSchemaService);
+  let yamlLanguageService = getLanguageService(
+    async () => "",
+    null,
+    jsonWorkerContributions
+  );
 
   var sendDiagnostics = async (uri: string, diagnostics: Diagnostic[]) => {
     connection.sendDiagnostics({
@@ -75,8 +64,8 @@ connection.onInitialize(async params => {
     }
   };
 
-  var homeAsisstantLanguageService = new hals.HomeAssistantLanguageService(
-    yamlLanguageServiceWrapper,
+  var homeAsisstantLanguageService = new HomeAssistantLanguageService(
+    yamlLanguageService,
     haConfig,
     haConnection,
     definitionProviders,
@@ -94,7 +83,7 @@ connection.onInitialize(async params => {
   documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e));
 
   let onDidSaveDebounce: NodeJS.Timer;
-  documents.onDidSave((e) => {
+  documents.onDidSave(() => {
     clearTimeout(onDidSaveDebounce);
     onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 100);
   });
@@ -112,11 +101,23 @@ connection.onInitialize(async params => {
 
     if (!configurationService.isConfigured) {
       connection.sendNotification("no-config");
-    }
-
-    //fire and forget
-    setTimeout(discoverFilesAndUpdateSchemas, 0);
+    } 
   });
+  
+  connection.onRequest("callService", (args: { domain: string, service: string, serviceData?: any }) => {
+    haConnection.callService(args.domain, args.service, args.serviceData);
+  });
+  connection.onRequest("checkConfig", async _ => {
+    var result = await haConnection.callApi('post', 'config/core/check_config');
+    connection.sendNotification("configuration_check_completed", result);
+  });
+  connection.onRequest("getErrorLog", async _ => {
+    var result = await haConnection.callApi('get', 'error_log');
+    connection.sendNotification("get_eror_log_completed", result);
+  });
+
+  //fire and forget
+  setTimeout(discoverFilesAndUpdateSchemas, 0); 
 
   return {
     capabilities: <ServerCapabilities>{

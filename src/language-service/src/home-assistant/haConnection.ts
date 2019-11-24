@@ -2,6 +2,7 @@ import * as ha from "home-assistant-js-websocket";
 import { CompletionItem, CompletionItemKind, MarkupContent } from 'vscode-languageserver-protocol';
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
+var rp = require('request-promise');
 
 export interface IHaConnection {
     tryConnect(): Promise<void>;
@@ -218,5 +219,54 @@ export class HaConnection implements IHaConnection {
         console.log(`Disconnecting from Home Assistant`);
         this.connection.close();
         this.connection = undefined;
+    }
+
+    public callApi = async (method: string, api: string): Promise<string> => {
+        const options = {
+            method: method,
+            url: `${this.configurationService.url}/api/${api}`,
+            headers: {
+                'Authorization': `Bearer ${this.configurationService.token}`
+            },
+            json: true
+        };
+
+        function callback(error, response, body) {
+            if (!error && response.statusCode === 200) {
+                return body;
+            }
+            else {
+                console.error('HA Api Call request failed!', error);
+            }
+        }
+
+        return await rp(options, callback);
+    }
+
+    public async callService(domain: string, service: string, serviceData: any) {
+        // over websockets (no response)
+        //callService(this.connection, domain, service, serviceData);
+
+        const options = {
+            method: "POST",
+            url: `${this.configurationService.url}/api/services/${domain}/${service}`,
+            headers: {
+                'Authorization': `Bearer ${this.configurationService.token}`
+            },
+            body: serviceData,
+            json: true
+        };
+
+        function callback(error, response, body) {
+            if (!error && response.statusCode === 200) {
+                console.log(`Service Call ${domain}.${service} made succesfully, response:`);
+                console.log(body);
+            }
+            else {
+                console.error(error);
+            }
+        }
+
+        return await rp(options, callback);
     }
 }

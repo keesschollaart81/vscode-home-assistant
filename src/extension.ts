@@ -58,15 +58,52 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.commands.executeCommand("workbench.action.openSettings2");
             }
         });
+        client.onNotification("configuration_check_completed", async (result) => {
+            if (result && result.result === "valid") {
+                vscode.window.showInformationMessage("Home Assistant Configuration Checked, result: 'Valid'!");
+            }
+            else {
+                vscode.window.showErrorMessage(`Home Assistant Configuration check resulted in an error: ${result.error}`);
+            }
+        });
+        var haOutputChannel: vscode.OutputChannel;
+        client.onNotification("get_eror_log_completed", async (result) => {
+            if (!haOutputChannel) {
+                haOutputChannel = vscode.window.createOutputChannel("Home Assistant Error Log");
+            }
+            haOutputChannel.appendLine(result);
+            haOutputChannel.show();
+        });
+
     }).catch((reason) => {
         console.error(JSON.stringify(reason));
         reporter.sendTelemetryEvent('extension.languageserver.onReadyError', { 'reason': JSON.stringify(reason) });
     });
 
+    let commandMappings = [
+        new CommandMappings('vscode-home-assistant.scriptReload', "script", "reload"),
+        new CommandMappings('vscode-home-assistant.groupReload', "group", "reload"),
+        new CommandMappings('vscode-home-assistant.homeassistantReloadCoreConfig', "homeassistant", "reload_core_config"),
+        new CommandMappings('vscode-home-assistant.homeassistantRestart', "homeassistant", "restart"),
+        new CommandMappings('vscode-home-assistant.automationReload', "automation", "reload"),
+        new CommandMappings('vscode-home-assistant.hassioAddonRestartGitPull', "hassio", "addon_restart", { addon: "core_git_pull" }),
+        new CommandMappings('vscode-home-assistant.hassioHostReboot', "hassio", "host_reboot")
+    ];
+
+    commandMappings.forEach(mapping => {
+        context.subscriptions.push(vscode.commands.registerCommand(mapping.commandId, _ => {
+            client.sendRequest("callService", { domain: mapping.domain, service: mapping.service, serviceData: mapping.serviceData });
+        }));
+    });
+
+    context.subscriptions.push(vscode.commands.registerCommand("vscode-home-assistant.homeassistantCheckConfig", _ => client.sendRequest("checkConfig")));
+    context.subscriptions.push(vscode.commands.registerCommand("vscode-home-assistant.getErrorLog", _ => client.sendRequest("getErrorLog")));
+
     var fileAssociations = vscode.workspace.getConfiguration().get("files.associations");
     if (!fileAssociations["*.yaml"]) {
         vscode.workspace.getConfiguration().update("files.associations", { "*.yaml": "home-assistant" }, false);
     }
+
 }
 
 export function deactivate() {
@@ -79,4 +116,10 @@ function generateVersionString(extension: vscode.Extension<any>): string {
     const baseVersion: string = extension ? extension.packageJSON.version : "0.0.0";
 
     return isDevMode ? `${baseVersion}-dev` : baseVersion;
+}
+
+export class CommandMappings {
+    constructor(public commandId: string, public domain: string, public service: string, public serviceData?: any) {
+
+    }
 }

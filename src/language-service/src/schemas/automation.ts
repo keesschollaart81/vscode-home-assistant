@@ -87,6 +87,15 @@ export interface NumericStateTrigger {
   value_template?: string;
   for?: string | TimePeriod;
 }
+
+/**
+ * @TJS-additionalProperties true
+ */
+export interface DeviceTrigger {
+  platform: "device"; 
+  domain: string;
+  device_id: string;
+}
  
 export type Triggers =
   HaTrigger
@@ -100,7 +109,8 @@ export type Triggers =
   | GeoLocationTrigger
   | StateTrigger
   | ZoneTrigger
-  | NumericStateTrigger;
+  | NumericStateTrigger
+  | DeviceTrigger;
 
 export interface Action {
 }

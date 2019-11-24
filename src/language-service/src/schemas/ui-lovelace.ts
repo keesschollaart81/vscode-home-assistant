@@ -78,6 +78,12 @@ export interface LovelaceCardConfig {
   view_index?: number;
   type: string;
   [key: string]: any;
+
+  /**
+   * This property allows you to set custom CSS styles to your cards
+   * Only available when https://github.com/thomasloven/lovelace-card-mod is installed!
+   */
+  style?: string;
 }
 
 // updated
@@ -141,11 +147,20 @@ export interface EmptyStateCardConfig extends LovelaceCardConfig {
   content: string;
   title?: string;
 }
-
+export interface EntityFilterEntityConfig extends EntityConfig {
+  state_filter?: Array<{ key: string } | string>;
+}
 export interface EntitiesCardEntityConfig extends EntityConfig {
   type?: string;
   secondary_info?: "entity-id" | "last-changed";
   format?: "relative" | "total" | "date" | "time" | "datetime";
+  action_name?: string;
+  service?: string;
+  service_data?: object;
+  url?: string;
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
 }
 
 export interface EntitiesCardConfig extends LovelaceCardConfig {
@@ -154,6 +169,7 @@ export interface EntitiesCardConfig extends LovelaceCardConfig {
   title?: string;
   entities: Array<EntitiesCardEntityConfig | WebLinkEntityConfig | CallServiceEntityConfig | DividerEntityConfig | SectionEntityConfig | CustomEntityConfig | string>;
   theme?: string;
+  icon?: string;
 }
 
 export interface EntityButtonCardConfig extends LovelaceCardConfig {
@@ -167,13 +183,13 @@ export interface EntityButtonCardConfig extends LovelaceCardConfig {
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   icon_height?: string;
+  double_tap_action?: ActionConfig;
 }
 
 export interface EntityFilterCardConfig extends LovelaceCardConfig {
   type: "entity-filter"; //Updated
-  entities: Array<EntityConfig | string>;
-  state_filter: string[];
-  card: Partial<LoveLaceCard>;
+  entities: Array<EntityFilterEntityConfig | string>;
+  state_filter: Array<{ key: string } | string>;  card: Partial<LoveLaceCard>;
   show_empty?: boolean;
 }
 
@@ -202,6 +218,7 @@ export interface GaugeCardConfig extends LovelaceCardConfig {
 export interface ConfigEntity extends EntityConfig {
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
 }
 
 export interface GlanceCardConfig extends LovelaceCardConfig {
@@ -227,22 +244,26 @@ export interface LightCardConfig extends LovelaceCardConfig {
   entity: string;
   name?: string;
   theme?: string;
+  icon?: string;
 }
 
 export interface MapCardConfig extends LovelaceCardConfig {
-  type: "map"; //Updated
-  title?: string;
-  aspect_ratio?: string;
-  dark_mode?: boolean;
+  type: "map";
+  title: string;
+  aspect_ratio: string;
   default_zoom?: number;
   entities?: Array<EntityConfig | string>;
   geo_location_sources?: string[];
+  dark_mode?: boolean;
 }
 
 export interface MarkdownCardConfig extends LovelaceCardConfig {
-  type: "markdown"; //Updated
+  type: "markdown";
   content: string;
   title?: string;
+  card_size?: number;
+  entity_ids?: string | string[];
+  theme?: string;
 }
 
 export interface MediaControlCardConfig extends LovelaceCardConfig {
@@ -255,6 +276,8 @@ export interface PictureCardConfig extends LovelaceCardConfig {
   image?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
+  theme?: string;
 }
 
 export interface PictureElementsCardConfig extends LovelaceCardConfig {
@@ -262,10 +285,13 @@ export interface PictureElementsCardConfig extends LovelaceCardConfig {
   title?: string;
   image?: string;
   camera_image?: string;
+  camera_view?: any;
   state_image?: {};
+  state_filter: string[];
   aspect_ratio?: string;
   entity?: string;
   elements: Elements;
+  theme?: string;
 }
 
 export interface PictureEntityCardConfig extends LovelaceCardConfig {
@@ -274,13 +300,16 @@ export interface PictureEntityCardConfig extends LovelaceCardConfig {
   name?: string;
   image?: string;
   camera_image?: string;
-  camera_view?: string;
+  camera_view?: any;
   state_image?: {};
+  state_filter: string[];
   aspect_ratio?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
   show_name?: boolean;
   show_state?: boolean;
+  theme?: string;
 }
 
 export interface PictureGlanceCardConfig extends LovelaceCardConfig {
@@ -289,18 +318,23 @@ export interface PictureGlanceCardConfig extends LovelaceCardConfig {
   title?: string;
   image?: string;
   camera_image?: string;
-  camera_view?: "live" | "auto"; //updated
+  camera_view?: any;
   state_image?: {};
+  state_filter: string[];
   aspect_ratio?: string;
   entity?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
+  show_state?: boolean;
+  theme?: string;
 }
 
 export interface PlantStatusCardConfig extends LovelaceCardConfig {
   type: "plant-status"; //Updated
   name?: string;
   entity: string;
+  theme?: string;
 }
 
 export interface SensorCardConfig extends LovelaceCardConfig {
