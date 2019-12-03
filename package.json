@@ -194,7 +194,7 @@
     "request": "2.88.0",
     "request-promise": "^4.2.5",
     "vscode-extension-telemetry": "0.1.2",
-    "vscode-json-languageservice": "3.4.7",
+    "vscode-json-languageservice": "3.4.8",
     "vscode-languageclient": "5.2.1",
     "vscode-languageserver": "5.2.1",
     "vscode-languageserver-protocol": "3.14.1",
