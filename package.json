@@ -187,7 +187,7 @@
     "@types/yaml": "1.2.0",
     "rimraf": "3.0.0",
     "ts-loader": "^6.0.4",
-    "typescript-json-schema": "0.40.0"
+    "typescript-json-schema": "0.41.0"
   },
   "dependencies": {
     "home-assistant-js-websocket": "4.4.0",
