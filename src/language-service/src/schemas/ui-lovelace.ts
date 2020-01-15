@@ -320,7 +320,7 @@ export interface PictureGlanceCardConfig extends LovelaceCardConfig {
   camera_image?: string;
   camera_view?: any;
   state_image?: {};
-  state_filter: string[];
+  state_filter?: string[];
   aspect_ratio?: string;
   entity?: string;
   tap_action?: ActionConfig;
