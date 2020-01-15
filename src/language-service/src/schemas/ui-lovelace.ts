@@ -167,7 +167,7 @@ export interface EntitiesCardConfig extends LovelaceCardConfig {
   type: "entities"; //Updated
   show_header_toggle?: boolean;
   title?: string;
-  entities: Array<EntitiesCardEntityConfig | WebLinkEntityConfig | CallServiceEntityConfig | DividerEntityConfig | SectionEntityConfig | CustomEntityConfig | string>;
+  entities: Array<EntitiesCardEntityConfig | WebLinkEntityConfig | CallServiceEntityConfig | DividerEntityConfig | SectionEntityConfig | CastEntityConfig | CustomEntityConfig | string>;
   theme?: string;
   icon?: string;
 }
@@ -189,7 +189,7 @@ export interface EntityButtonCardConfig extends LovelaceCardConfig {
 export interface EntityFilterCardConfig extends LovelaceCardConfig {
   type: "entity-filter"; //Updated
   entities: Array<EntityFilterEntityConfig | string>;
-  state_filter: Array<{ key: string } | string>;  card: Partial<LoveLaceCard>;
+  state_filter: Array<{ key: string } | string>; card: Partial<LoveLaceCard>;
   show_empty?: boolean;
 }
 
@@ -393,11 +393,6 @@ export interface EntityConfig {
   icon?: string;
 }
 
-// export interface LovelaceElementConfig {
-//   type: string;
-//   style: object;
-// }
-
 export interface StateBadgeElement {
   type: "state-badge";
   entity: EntityConfig | string;
@@ -501,6 +496,14 @@ export interface SectionEntityConfig {
   type: "section";
   label?: string;
 }
+
+export interface CastEntityConfig {
+  type: "cast";
+  name?: string;
+  view: string | number;
+  hide_if_unavailable?: boolean;
+}
+
 /**
  * @TJS-additionalProperties true
  */
@@ -510,4 +513,4 @@ export interface CustomEntityConfig {
    */
   type: string;
   label?: string;
-}
+}  
