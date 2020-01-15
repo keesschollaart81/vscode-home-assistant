@@ -167,7 +167,7 @@ export interface EntitiesCardConfig extends LovelaceCardConfig {
   type: "entities"; //Updated
   show_header_toggle?: boolean;
   title?: string;
-  entities: Array<EntitiesCardEntityConfig | WebLinkEntityConfig | CallServiceEntityConfig | DividerEntityConfig | SectionEntityConfig | CustomEntityConfig | string>;
+  entities: Array<EntitiesCardEntityConfig | WebLinkEntityConfig | CallServiceEntityConfig | DividerEntityConfig | SectionEntityConfig | CastEntityConfig | CustomEntityConfig | string>;
   theme?: string;
   icon?: string;
 }
@@ -189,7 +189,7 @@ export interface EntityButtonCardConfig extends LovelaceCardConfig {
 export interface EntityFilterCardConfig extends LovelaceCardConfig {
   type: "entity-filter"; //Updated
   entities: Array<EntityFilterEntityConfig | string>;
-  state_filter: Array<{ key: string } | string>;  card: Partial<LoveLaceCard>;
+  state_filter: Array<{ key: string } | string>; card: Partial<LoveLaceCard>;
   show_empty?: boolean;
 }
 
@@ -320,7 +320,7 @@ export interface PictureGlanceCardConfig extends LovelaceCardConfig {
   camera_image?: string;
   camera_view?: any;
   state_image?: {};
-  state_filter: string[];
+  state_filter?: string[];
   aspect_ratio?: string;
   entity?: string;
   tap_action?: ActionConfig;
@@ -393,11 +393,6 @@ export interface EntityConfig {
   icon?: string;
 }
 
-// export interface LovelaceElementConfig {
-//   type: string;
-//   style: object;
-// }
-
 export interface StateBadgeElement {
   type: "state-badge";
   entity: EntityConfig | string;
@@ -407,9 +402,11 @@ export interface StateBadgeElement {
 export interface StateIconElement {
   type: "state-icon";
   entity: EntityConfig | string;
+  double_tap_action?: ActionConfig;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   style?: any;
+  icon?: string;
 }
 export interface StateLabelElement {
   type: "state-label";
@@ -442,6 +439,7 @@ export interface ImageElement {
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   style?: any;
+  icon?: string;
 }
 export interface ConditionalElement {
   type: "conditional";
@@ -501,6 +499,14 @@ export interface SectionEntityConfig {
   type: "section";
   label?: string;
 }
+
+export interface CastEntityConfig {
+  type: "cast";
+  name?: string;
+  view: string | number;
+  hide_if_unavailable?: boolean;
+}
+
 /**
  * @TJS-additionalProperties true
  */
@@ -510,4 +516,4 @@ export interface CustomEntityConfig {
    */
   type: string;
   label?: string;
-}
+}  

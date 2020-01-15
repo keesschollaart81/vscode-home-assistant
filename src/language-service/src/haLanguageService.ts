@@ -56,6 +56,8 @@ export class HomeAssistantLanguageService {
             }
         }
         validTags.push("!secret scalar");
+        validTags.push("!env_var scalar");
+        
         return validTags;
     }
 

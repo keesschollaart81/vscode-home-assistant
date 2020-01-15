@@ -147,6 +147,7 @@ export interface LegacyApiPasswordAuthProvider {
 export type SceneComponentEntries = SceneComponentEntry | Array<SceneComponentEntry>;
 
 export interface SceneComponentEntry {
+    id?: string;
     name: string;
     entities: { [name: string]: string | boolean | EntitySceneConfig };
 }
