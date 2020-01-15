@@ -402,9 +402,11 @@ export interface StateBadgeElement {
 export interface StateIconElement {
   type: "state-icon";
   entity: EntityConfig | string;
+  double_tap_action?: ActionConfig;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   style?: any;
+  icon?: string;
 }
 export interface StateLabelElement {
   type: "state-label";
@@ -437,6 +439,7 @@ export interface ImageElement {
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   style?: any;
+  icon?: string;
 }
 export interface ConditionalElement {
   type: "conditional";
