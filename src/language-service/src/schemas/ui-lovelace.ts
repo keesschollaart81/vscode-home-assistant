@@ -10,12 +10,12 @@ Updated properties are marked with '//Updated'
 Types are serialized via 'npm run schema' using the 'typescript-json-schema' package
 The generated schema (lovelace-ui.json) is also (committed) in this folder and
  used as a 'yamlValidation' in the package.json
- 
+
 */
 
 
 /**
- * @TJS-additionalProperties true 
+ * @TJS-additionalProperties true
  */
 export interface LovelaceConfig {
   title?: string;
@@ -28,7 +28,7 @@ export interface LovelaceConfig {
 export type LovelaceViewConfigs = LovelaceViewConfig | Array<LovelaceViewConfig>;
 
 /**
- * @TJS-additionalProperties true 
+ * @TJS-additionalProperties true
  */
 export interface LovelaceViewConfig {
   id?: string | number; //Updated
@@ -161,6 +161,21 @@ export interface EntitiesCardEntityConfig extends EntityConfig {
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   double_tap_action?: ActionConfig;
+  header?: HeaderFooterPictureWidgetConfig | HeaderFooterButtonWidgetConfig;
+  footer?: HeaderFooterPictureWidgetConfig | HeaderFooterButtonWidgetConfig;
+}
+
+export interface HeaderFooterPictureWidgetConfig extends LovelaceCardConfig {
+  type: "picture"
+  image: string
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
+}
+
+export interface HeaderFooterButtonWidgetConfig extends LovelaceCardConfig {
+  type: "buttons"
+  entities: EntityConfig | string;
 }
 
 export interface EntitiesCardConfig extends LovelaceCardConfig {
@@ -516,4 +531,4 @@ export interface CustomEntityConfig {
    */
   type: string;
   label?: string;
-}  
+}
