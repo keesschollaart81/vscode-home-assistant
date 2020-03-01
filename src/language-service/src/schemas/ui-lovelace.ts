@@ -34,7 +34,7 @@ export interface LovelaceViewConfig {
   id?: string | number; //Updated
   index?: number;
   title?: string;
-  badges?: Array<string | EntityConfig>;
+  badges?: string[];
   cards?: Array<LoveLaceCard | IncludeTags>; // updated
   path?: string;
   icon?: string;
