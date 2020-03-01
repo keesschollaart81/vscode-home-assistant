@@ -164,7 +164,7 @@
           "comments": false,
           "strings": true
         },
-        "editor.autoIndent": false
+        "editor.autoIndent": "none"
       }
     }
   },
@@ -190,7 +190,7 @@
     "typescript-json-schema": "0.40.0"
   },
   "dependencies": {
-    "home-assistant-js-websocket": "4.4.0",
+    "home-assistant-js-websocket": "4.4.1",
     "request": "2.88.0",
     "request-promise": "^4.2.5",
     "vscode-extension-telemetry": "0.1.2",

@@ -26,8 +26,9 @@ export interface MqttSensor {
     availability_topic?: string;
     payload_available?: string;
     payload_not_available?: string;
-    json_attributes_topic?: string;
     json_attributes?: string | string[];
+    json_attributes_template?: string;
+    json_attributes_topic?: string;
     unique_id?: string;
     device_class?: string;
     device?: any;

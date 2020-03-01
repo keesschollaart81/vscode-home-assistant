@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import { HaFileInfo } from "../haConfig/dto";
 import { ISchemaContributions } from 'vscode-json-languageservice/lib/umd/services/jsonSchemaService';
-import { JSONSchema } from "yaml-language-server/out/server/src/languageservice/jsonSchema07";
+import { JSONSchema } from "yaml-language-server/out/server/src/languageservice/jsonSchema";
 
 export class SchemaServiceForIncludes {
 
