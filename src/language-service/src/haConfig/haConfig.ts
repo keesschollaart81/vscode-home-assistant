@@ -135,6 +135,9 @@ export class HomeAssistantConfiguration {
         validationResult.errors.forEach(e => errorMessage += `\r\n - ${e}`);
       }
     }
+    if (validationResult.warnings && validationResult.warnings.length > 0) {
+      // validationResult.warnings.forEach(w => console.debug(`Warning parsing file ${filename}: ${w}`));
+    }
     if (error) {
       if (filename === path) {
         // root file has more impact

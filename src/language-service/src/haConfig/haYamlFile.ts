@@ -42,8 +42,8 @@ export class HomeAssistantYamlFile {
     }
     if (!this.yaml) {
       return {
-        isValid: false,
-        errors: ["Empty yaml"]
+        isValid: true,
+        warnings: ["Empty yaml"]
       };
     }
     if (this.yaml.errors && this.yaml.errors.length > 0) {
@@ -249,4 +249,5 @@ export class HomeAssistantYamlFile {
 export interface ValidationResults {
   isValid: boolean;
   errors?: string[];
+  warnings?: string[];
 }
