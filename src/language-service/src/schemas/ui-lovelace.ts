@@ -34,13 +34,18 @@ export interface LovelaceViewConfig {
   id?: string | number; //Updated
   index?: number;
   title?: string;
-  badges?: string[];
+  badges?: Array<string | LovelaceBadgeConfig>;
   cards?: Array<LoveLaceCard | IncludeTags>; // updated
   path?: string;
   icon?: string;
   theme?: string;
   panel?: boolean;
   background?: string;
+}
+
+export interface LovelaceBadgeConfig {
+  type?: string;
+  [key: string]: any;
 }
 
 export type LoveLaceCardFile = LoveLaceCard | Array<LoveLaceCard>;
