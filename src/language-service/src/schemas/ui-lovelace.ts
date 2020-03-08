@@ -371,6 +371,7 @@ export interface ShoppingListCardConfig extends LovelaceCardConfig {
 
 export interface StackCardConfig extends LovelaceCardConfig {
   type: "vertical-stack" | "horizontal-stack"; //Updated
+  title?: string;
   cards: Array<LovelaceCardConfig | IncludeTags>;
 }
 
