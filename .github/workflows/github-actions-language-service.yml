@@ -41,7 +41,6 @@ jobs:
     #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}      
 
     - name: NPM Publish to Registry
-      working-directory: src/language-service
       if: success() && github.ref == 'refs/heads/master'
       env:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
