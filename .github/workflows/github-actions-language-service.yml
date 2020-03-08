@@ -17,27 +17,36 @@ jobs:
 
     steps:
     
-    - uses: actions/checkout@v1 
+    - uses: actions/checkout@master
 
     - name: Use Node.js 12.x
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@master
       with:
         node-version: 12.x
+        registry-url: https://registry.npmjs.org/
 
     - name: NPM Install
-      working-directory: src/language-service
+      working-directory: ./src/language-service
       run: |
         rm package-lock.json
         npm install
 
     - name: NPM Compile
-      working-directory: src/language-service
+      working-directory: ./src/language-service
       run: npm run compile
       
     - name: NPM Publish to Registry
-      uses: actions/npm@master 
-      if: success() && github.ref == 'refs/heads/master'
+      working-directory: ./src/language-service
       env:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      with:
-        args: publish src/language-service 
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: |
+        npm publish src/language-service
+
+    # - name: NPM Publish to Registry
+    #   uses: actions/npm@master 
+    #   if: success() && github.ref == 'refs/heads/master'
+    #   env:
+    #     NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    #   with:
+    #     args: publish src/language-service 
