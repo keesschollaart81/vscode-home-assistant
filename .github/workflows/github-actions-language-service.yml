@@ -23,7 +23,6 @@ jobs:
       uses: actions/setup-node@master
       with:
         node-version: 12.x
-        registry-url: https://registry.npmjs.org/
 
     - name: NPM Install
       working-directory: ./src/language-service
@@ -34,7 +33,13 @@ jobs:
     - name: NPM Compile
       working-directory: ./src/language-service
       run: npm run compile
-      
+
+    - name: Create .npmrc
+      working-directory: ./src/language-service
+      run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> ~/.npmrc
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}      
+
     - name: NPM Publish to Registry
       working-directory: ./src/language-service
       if: success() && github.ref == 'refs/heads/master'

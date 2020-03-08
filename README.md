@@ -51,6 +51,11 @@ Snippets allow you to create commonly used data structures very quickly.
 
 <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif"   > 
 
+## Commands
+Commands allow you to quickly interact with Home Assistant! Find them using Cmd+shift+P and type 'Home Assistant'
+
+![image](https://user-images.githubusercontent.com/6755359/69496084-6b089d80-0ece-11ea-8496-50251b91732f.png)
+
 # Contribution
 
 - [How to update the schema's](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's)
