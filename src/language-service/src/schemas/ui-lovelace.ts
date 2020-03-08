@@ -10,12 +10,12 @@ Updated properties are marked with '//Updated'
 Types are serialized via 'npm run schema' using the 'typescript-json-schema' package
 The generated schema (lovelace-ui.json) is also (committed) in this folder and
  used as a 'yamlValidation' in the package.json
- 
+
 */
 
 
 /**
- * @TJS-additionalProperties true 
+ * @TJS-additionalProperties true
  */
 export interface LovelaceConfig {
   title?: string;
@@ -28,7 +28,7 @@ export interface LovelaceConfig {
 export type LovelaceViewConfigs = LovelaceViewConfig | Array<LovelaceViewConfig>;
 
 /**
- * @TJS-additionalProperties true 
+ * @TJS-additionalProperties true
  */
 export interface LovelaceViewConfig {
   id?: string | number; //Updated
@@ -157,7 +157,7 @@ export interface EntityFilterEntityConfig extends EntityConfig {
 }
 export interface EntitiesCardEntityConfig extends EntityConfig {
   type?: string;
-  secondary_info?: "entity-id" | "last-changed";
+  secondary_info?: "entity-id" | "last-changed" | "last-triggered";
   format?: "relative" | "total" | "date" | "time" | "datetime";
   action_name?: string;
   service?: string;
@@ -166,6 +166,22 @@ export interface EntitiesCardEntityConfig extends EntityConfig {
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   double_tap_action?: ActionConfig;
+  state_color?: boolean; 
+  header?: HeaderFooterPictureWidgetConfig | HeaderFooterButtonWidgetConfig;
+  footer?: HeaderFooterPictureWidgetConfig | HeaderFooterButtonWidgetConfig;
+}
+
+export interface HeaderFooterPictureWidgetConfig extends LovelaceCardConfig {
+  type: "picture"
+  image: string
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
+}
+
+export interface HeaderFooterButtonWidgetConfig extends LovelaceCardConfig {
+  type: "buttons"
+  entities: EntityConfig | string;
 }
 
 export interface EntitiesCardConfig extends LovelaceCardConfig {
@@ -175,6 +191,7 @@ export interface EntitiesCardConfig extends LovelaceCardConfig {
   entities: Array<EntitiesCardEntityConfig | WebLinkEntityConfig | CallServiceEntityConfig | DividerEntityConfig | SectionEntityConfig | CastEntityConfig | CustomEntityConfig | string>;
   theme?: string;
   icon?: string;
+  state_color?: boolean;
 }
 
 export interface EntityButtonCardConfig extends LovelaceCardConfig {
@@ -254,8 +271,8 @@ export interface LightCardConfig extends LovelaceCardConfig {
 
 export interface MapCardConfig extends LovelaceCardConfig {
   type: "map";
-  title: string;
-  aspect_ratio: string;
+  title?: string;
+  aspect_ratio?: string;
   default_zoom?: number;
   entities?: Array<EntityConfig | string>;
   geo_location_sources?: string[];
@@ -307,7 +324,7 @@ export interface PictureEntityCardConfig extends LovelaceCardConfig {
   camera_image?: string;
   camera_view?: any;
   state_image?: {};
-  state_filter: string[];
+  state_filter?: string[];
   aspect_ratio?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
@@ -369,6 +386,7 @@ export interface ShoppingListCardConfig extends LovelaceCardConfig {
 
 export interface StackCardConfig extends LovelaceCardConfig {
   type: "vertical-stack" | "horizontal-stack"; //Updated
+  title?: string;
   cards: Array<LovelaceCardConfig | IncludeTags>;
 }
 
@@ -521,4 +539,4 @@ export interface CustomEntityConfig {
    */
   type: string;
   label?: string;
-}  
+}
