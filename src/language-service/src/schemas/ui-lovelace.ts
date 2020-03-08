@@ -166,6 +166,7 @@ export interface EntitiesCardEntityConfig extends EntityConfig {
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
   double_tap_action?: ActionConfig;
+  state_color?: boolean;
 }
 
 export interface EntitiesCardConfig extends LovelaceCardConfig {
@@ -175,6 +176,7 @@ export interface EntitiesCardConfig extends LovelaceCardConfig {
   entities: Array<EntitiesCardEntityConfig | WebLinkEntityConfig | CallServiceEntityConfig | DividerEntityConfig | SectionEntityConfig | CastEntityConfig | CustomEntityConfig | string>;
   theme?: string;
   icon?: string;
+  state_color?: boolean;
 }
 
 export interface EntityButtonCardConfig extends LovelaceCardConfig {
