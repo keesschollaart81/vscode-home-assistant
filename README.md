@@ -66,7 +66,7 @@ Create an [issue](https://github.com/keesschollaart81/vscode-home-assistant/issu
 
 # Things to do / up for grabs
 
-- [ ] Go to Definition for sntities, scripts and automations
+- [ ] Go to Definition for entities, scripts and automations
 - [ ] Render Jinja2 template locally (like/via CLI?) in preview pane 
 - [ ] Autocomplete !secrets
 - [ ] Autocomplete triggers
