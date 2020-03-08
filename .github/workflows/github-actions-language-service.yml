@@ -25,23 +25,23 @@ jobs:
         node-version: 12.x
 
     - name: NPM Install
-      working-directory: ./src/language-service
+      working-directory: src/language-service
       run: |
         rm package-lock.json
         npm install
 
     - name: NPM Compile
-      working-directory: ./src/language-service
+      working-directory: src/language-service
       run: npm run compile
 
-    - name: Create .npmrc
-      working-directory: ./src/language-service
-      run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> ~/.npmrc
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}      
+    # - name: Create .npmrc
+    #   working-directory: src/language-service
+    #   run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> ~/.npmrc
+    #   env:
+    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}      
 
     - name: NPM Publish to Registry
-      working-directory: ./src/language-service
+      working-directory: src/language-service
       if: success() && github.ref == 'refs/heads/master'
       env:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
