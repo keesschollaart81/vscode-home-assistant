@@ -25,7 +25,7 @@ export function createSocket(auth: ha.Auth, ignoreCertificates: boolean): Promis
         promResolve: (socket: any) => void,
         promReject: (err: number) => void
     ) {
-        console.log("[Auth Phase] Connecting to Home Assistant...", url);
+        console.log(`[Auth Phase] Connecting to Home Assistant... Tries left: ${triesLeft}`, url);
 
         const socket = new WebSocket(url, {
             rejectUnauthorized: !ignoreCertificates
