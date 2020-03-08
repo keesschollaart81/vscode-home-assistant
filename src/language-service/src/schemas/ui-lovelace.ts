@@ -256,8 +256,8 @@ export interface LightCardConfig extends LovelaceCardConfig {
 
 export interface MapCardConfig extends LovelaceCardConfig {
   type: "map";
-  title: string;
-  aspect_ratio: string;
+  title?: string;
+  aspect_ratio?: string;
   default_zoom?: number;
   entities?: Array<EntityConfig | string>;
   geo_location_sources?: string[];
@@ -309,7 +309,7 @@ export interface PictureEntityCardConfig extends LovelaceCardConfig {
   camera_image?: string;
   camera_view?: any;
   state_image?: {};
-  state_filter: string[];
+  state_filter?: string[];
   aspect_ratio?: string;
   tap_action?: ActionConfig;
   hold_action?: ActionConfig;
