@@ -25,7 +25,7 @@ export interface MqttSensor {
     force_update?: boolean;
     availability_topic?: string;
     payload_available?: string;
-    payload_not_available?: string;
+    payload_not_available?: string; 
     json_attributes?: string | string[];
     json_attributes_template?: string;
     json_attributes_topic?: string;
