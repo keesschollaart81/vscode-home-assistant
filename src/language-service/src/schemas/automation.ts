@@ -131,6 +131,7 @@ export interface ServiceActionSchema extends Action {
   entity_id?: string | string[];
   data?: any;
   data_template?: any;
+  alias?: string;
 }  
 
 export interface ServiceActionTemplateSchema extends Action {

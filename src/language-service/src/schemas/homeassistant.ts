@@ -149,6 +149,7 @@ export type SceneComponentEntries = SceneComponentEntry | Array<SceneComponentEn
 export interface SceneComponentEntry {
     id?: string;
     name: string;
+    icon?: string;
     entities: { [name: string]: string | boolean | EntitySceneConfig };
 }
 
