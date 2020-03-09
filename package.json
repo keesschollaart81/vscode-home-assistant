@@ -191,7 +191,7 @@
   },
   "dependencies": {
     "home-assistant-js-websocket": "4.5.0",
-    "request": "2.88.0",
+    "request": "2.88.2",
     "request-promise": "^4.2.5",
     "vscode-extension-telemetry": "0.1.2",
     "vscode-json-languageservice": "3.5.1",
