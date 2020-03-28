@@ -168,7 +168,7 @@ export interface InputBooleanEntry {
     [name: string]: {
         name?: string;
         initial?: boolean;
-        icon?: string
+        icon?: string;
     } | null;
 }
 
@@ -180,6 +180,7 @@ export interface Script {
 
 export interface SequencedAction {
     alias?: string;
+    icon?: string;
     sequence: ScriptAction | Array<ScriptAction | ConditionsConfig>;
 }
 
