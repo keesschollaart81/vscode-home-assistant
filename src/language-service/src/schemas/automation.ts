@@ -11,7 +11,7 @@ export interface Automation {
   condition?:  null | ConditionsConfig;
   action: Actions | Array<Actions | ConditionsConfig>;
 }
-export type Actions = EventActionSchema | ServiceActionSchema | DelayActionSchema | ServiceActionTemplateSchema | WaitTemplateSchema;
+export type Actions = EventActionSchema | ServiceActionSchema | DelayActionSchema | ServiceActionTemplateSchema | WaitTemplateSchema | DeviceActionTemplateSchema;
 
 export interface HaTrigger {
   platform: "homeassistant";
@@ -145,6 +145,15 @@ export interface WaitTemplateSchema extends Action{
   wait_template: string;
   timeout?: string | TimePeriod;
   continue_on_timeout?: boolean | string;
+}
+
+export interface DeviceActionTemplateSchema extends Action {
+  platform: "device"; 
+  domain: string;
+  device_id: string;
+  entity_id: string;
+  type: string;
+  brightness_pct: string | number;
 }
 
 export interface NumericStateConditionSchema {
