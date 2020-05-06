@@ -140,6 +140,21 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.sceneReload",
+        "title": "Reload Scenes",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.themeReload",
+        "title": "Reload Themes",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.inputReload",
+        "title": "Reload Inputs",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Hassio Add-on",
         "category": "Home Assistant"

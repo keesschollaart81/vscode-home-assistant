@@ -86,6 +86,8 @@ export function activate(context: vscode.ExtensionContext) {
         new CommandMappings('vscode-home-assistant.homeassistantReloadCoreConfig', "homeassistant", "reload_core_config"),
         new CommandMappings('vscode-home-assistant.homeassistantRestart', "homeassistant", "restart"),
         new CommandMappings('vscode-home-assistant.automationReload', "automation", "reload"),
+        new CommandMappings('vscode-home-assistant.sceneReload', "scene", "reload"),
+        new CommandMappings('vscode-home-assistant.themeReload', "frontend", "reload_themes"),
         new CommandMappings('vscode-home-assistant.hassioAddonRestartGitPull', "hassio", "addon_restart", { addon: "core_git_pull" }),
         new CommandMappings('vscode-home-assistant.hassioHostReboot', "hassio", "host_reboot")
     ];
@@ -95,6 +97,16 @@ export function activate(context: vscode.ExtensionContext) {
             client.sendRequest("callService", { domain: mapping.domain, service: mapping.service, serviceData: mapping.serviceData });
         }));
     });
+
+    let inputReloadDomains = [
+        'input_boolean', 'input_datetime', 'input_number', 'input_select', 'input_text'
+    ];
+
+    context.subscriptions.push(vscode.commands.registerCommand("vscode-home-assistant.inputReload", _ => {
+        inputReloadDomains.forEach((domain) => {
+            client.sendRequest("callService", { domain, service: 'reload' })
+        })
+    }))
 
     context.subscriptions.push(vscode.commands.registerCommand("vscode-home-assistant.homeassistantCheckConfig", _ => client.sendRequest("checkConfig")));
     context.subscriptions.push(vscode.commands.registerCommand("vscode-home-assistant.getErrorLog", _ => client.sendRequest("getErrorLog")));
