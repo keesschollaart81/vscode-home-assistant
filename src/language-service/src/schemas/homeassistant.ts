@@ -168,7 +168,7 @@ export interface InputBooleanEntry {
     [name: string]: {
         name?: string;
         initial?: boolean;
-        icon?: string
+        icon?: string;
     } | null;
 }
 
@@ -179,8 +179,18 @@ export interface Script {
 }
 
 export interface SequencedAction {
-    alias?: string;
-    sequence: ScriptAction | Array<ScriptAction | ConditionsConfig>;
+  alias?: string;
+  icon?: string;
+  description?: string;
+  fields?: Array<ScriptField>;
+  sequence: ScriptAction | Array<ScriptAction | ConditionsConfig>;
+}
+
+export interface ScriptField {
+  [name: string]: {
+    description: string;
+    example: string;
+  };
 }
 
 export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
