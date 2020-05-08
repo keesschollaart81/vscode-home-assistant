@@ -7,7 +7,7 @@ import { Sensors } from "./sensors";
 export interface HomeAssistantRoot {
     homeassistant?: HomeAssistantComponent | IncludeTags;
     automation?: Automations | IncludeTags;
-    group?: GroupComponent | IncludeTags;
+    group?: GroupComponent | IncludeTags | null;
     panel_iframe?: PanelIframeComponent | IncludeTags;
     sensor?: null | Array<Sensors> | IncludeTags;
     scene?: SceneComponentEntry[] | IncludeTags;
@@ -45,7 +45,7 @@ export interface HomeAssistantComponent {
     customize_domain?: any;
     customize_glob?: any;
     packages?: Array<HomeAssistantRoot> | NamedPackageInclude | IncludeTags;
-    auth_providers?: AuthProviders[];
+    auth_providers?: AuthProviders[] | IncludeTags;
     auth_mfa_modules?: Array<any> | IncludeTags;
 }
 
@@ -168,7 +168,7 @@ export interface InputBooleanEntry {
     [name: string]: {
         name?: string;
         initial?: boolean;
-        icon?: string
+        icon?: string;
     } | null;
 }
 
@@ -179,8 +179,18 @@ export interface Script {
 }
 
 export interface SequencedAction {
-    alias?: string;
-    sequence: ScriptAction | Array<ScriptAction | ConditionsConfig>;
+  alias?: string;
+  icon?: string;
+  description?: string;
+  fields?: Array<ScriptField> | ScriptField;
+  sequence: ScriptAction | Array<ScriptAction | ConditionsConfig>;
+}
+
+export interface ScriptField {
+  [name: string]: {
+    description: string;
+    example: string;
+  };
 }
 
 export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
