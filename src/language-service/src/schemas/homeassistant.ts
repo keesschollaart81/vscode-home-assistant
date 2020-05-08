@@ -182,7 +182,7 @@ export interface SequencedAction {
   alias?: string;
   icon?: string;
   description?: string;
-  fields?: Array<ScriptField>;
+  fields?: Array<ScriptField> | ScriptField;
   sequence: ScriptAction | Array<ScriptAction | ConditionsConfig>;
 }
 
