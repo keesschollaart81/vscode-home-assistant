@@ -277,6 +277,7 @@ export interface MapCardConfig extends LovelaceCardConfig {
   entities?: Array<EntityConfig | string>;
   geo_location_sources?: string[];
   dark_mode?: boolean;
+  hours_to_show?: number;
 }
 
 export interface MarkdownCardConfig extends LovelaceCardConfig {
