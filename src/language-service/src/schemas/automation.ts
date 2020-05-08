@@ -155,6 +155,15 @@ export interface WaitTemplateSchema extends Action{
   continue_on_timeout?: boolean | string;
 }
 
+/**
+ * @TJS-additionalProperties true
+ */
+export interface DeviceConditionSchema {
+  condition: "device";
+  device_id: string;
+  domain: string;
+}
+
 export interface NumericStateConditionSchema {
   condition: "numeric_state";
   entity_id: string;
@@ -210,6 +219,7 @@ export interface OrConditionSchema {
 
 export type ConditionsConfig =
   NumericStateConditionSchema
+  | DeviceConditionSchema
   | StateConditionSchema
   | SunConditionSchema
   | TemplateConditionSchema
@@ -219,6 +229,7 @@ export type ConditionsConfig =
   | OrConditionSchema
   | Array<
     NumericStateConditionSchema
+    | DeviceConditionSchema
     | StateConditionSchema
     | SunConditionSchema
     | TemplateConditionSchema
