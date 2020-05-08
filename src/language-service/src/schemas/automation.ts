@@ -11,7 +11,7 @@ export interface Automation {
   condition?:  null | ConditionsConfig;
   action: Actions | Array<Actions | ConditionsConfig>;
 }
-export type Actions = EventActionSchema | ServiceActionSchema | DelayActionSchema | ServiceActionTemplateSchema | WaitTemplateSchema;
+export type Actions = EventActionSchema | ServiceActionSchema | DelayActionSchema | ServiceActionTemplateSchema | WaitTemplateSchema | DeviceActionSchema;
 
 export interface HaTrigger {
   platform: "homeassistant";
@@ -113,6 +113,14 @@ export type Triggers =
   | DeviceTrigger;
 
 export interface Action {
+}
+
+export interface DeviceActionSchema extends Action {
+  platform?: "device";
+  domain: string;
+  device_id: string;
+  entity_id: string;
+  type: string;
 }
 
 export interface EventActionSchema extends Action {
