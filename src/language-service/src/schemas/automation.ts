@@ -149,7 +149,7 @@ export interface WaitTemplateSchema extends Action{
 
 export interface NumericStateConditionSchema {
   condition: "numeric_state";
-  entity_id: string | string[];
+  entity_id: string;
   below?: string | number;
   above?: string | number;
   value_template?: string;
@@ -157,7 +157,7 @@ export interface NumericStateConditionSchema {
 
 export interface StateConditionSchema {
   condition: "state";
-  entity_id: string | string[];
+  entity_id: string;
   state: string | boolean;
   for?: string | TimePeriod;
   from?: string;
