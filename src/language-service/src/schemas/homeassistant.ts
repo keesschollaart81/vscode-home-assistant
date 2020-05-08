@@ -7,7 +7,7 @@ import { Sensors } from "./sensors";
 export interface HomeAssistantRoot {
     homeassistant?: HomeAssistantComponent | IncludeTags;
     automation?: Automations | IncludeTags;
-    group?: GroupComponent | IncludeTags;
+    group?: GroupComponent | IncludeTags | null;
     panel_iframe?: PanelIframeComponent | IncludeTags;
     sensor?: null | Array<Sensors> | IncludeTags;
     scene?: SceneComponentEntry[] | IncludeTags;
