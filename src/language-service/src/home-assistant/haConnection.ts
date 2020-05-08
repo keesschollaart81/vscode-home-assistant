@@ -221,13 +221,14 @@ export class HaConnection implements IHaConnection {
         this.connection = undefined;
     }
 
-    public callApi = async (method: string, api: string): Promise<string> => {
+    public callApi = async (method: string, api: string, body?: any): Promise<string> => {
         const options = {
             method: method,
             url: `${this.configurationService.url}/api/${api}`,
             headers: {
                 'Authorization': `Bearer ${this.configurationService.token}`
             },
+            body,
             json: true
         };
 

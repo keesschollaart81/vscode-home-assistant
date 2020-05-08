@@ -66,15 +66,26 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.window.showErrorMessage(`Home Assistant Configuration check resulted in an error: ${result.error}`);
             }
         });
-        var haOutputChannel: vscode.OutputChannel;
+        var haErrorOutputChannel: vscode.OutputChannel;
         client.onNotification("get_eror_log_completed", async (result) => {
-            if (!haOutputChannel) {
-                haOutputChannel = vscode.window.createOutputChannel("Home Assistant Error Log");
+            if (!haErrorOutputChannel) {
+                haErrorOutputChannel = vscode.window.createOutputChannel("Home Assistant Error Log");
             }
-            haOutputChannel.appendLine(result);
-            haOutputChannel.show();
+            haErrorOutputChannel.appendLine(result);
+            haErrorOutputChannel.show();
         });
 
+        var haTemplateRendererChannel: vscode.OutputChannel;
+        client.onNotification("render_template_completed", async (result) => {
+            if (!haTemplateRendererChannel) {
+                haTemplateRendererChannel = vscode.window.createOutputChannel("Home Assistant Template Renderer");
+            }
+
+            haTemplateRendererChannel.clear();
+            haTemplateRendererChannel.appendLine(result);
+            haTemplateRendererChannel.show();
+
+        });
     }).catch((reason) => {
         console.error(JSON.stringify(reason));
         reporter.sendTelemetryEvent('extension.languageserver.onReadyError', { 'reason': JSON.stringify(reason) });
@@ -110,6 +121,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.commands.registerCommand("vscode-home-assistant.homeassistantCheckConfig", _ => client.sendRequest("checkConfig")));
     context.subscriptions.push(vscode.commands.registerCommand("vscode-home-assistant.getErrorLog", _ => client.sendRequest("getErrorLog")));
+
+    context.subscriptions.push(vscode.commands.registerCommand("vscode-home-assistant.renderTemplate", _ => {
+        const editor = vscode.window.activeTextEditor;
+        const selectedText = editor.document.getText(editor.selection);
+        client.sendRequest("renderTemplate", { template: selectedText })
+    }));
 
     var fileAssociations = vscode.workspace.getConfiguration().get("files.associations");
     if (!fileAssociations["*.yaml"]) {

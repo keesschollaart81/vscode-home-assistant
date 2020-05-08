@@ -101,9 +101,9 @@ connection.onInitialize(async params => {
 
     if (!configurationService.isConfigured) {
       connection.sendNotification("no-config");
-    } 
+    }
   });
-  
+
   connection.onRequest("callService", (args: { domain: string, service: string, serviceData?: any }) => {
     haConnection.callService(args.domain, args.service, args.serviceData);
   });
@@ -115,9 +115,18 @@ connection.onInitialize(async params => {
     var result = await haConnection.callApi('get', 'error_log');
     connection.sendNotification("get_eror_log_completed", result);
   });
+  connection.onRequest('renderTemplate', async (args: { template: string }) => {
+    var result = await haConnection.callApi('post', 'template', { template: args.template });
+
+    const timePrefix = `[${new Date().toLocaleTimeString()}] `;
+    var outputString = `${timePrefix}Rendering template:\n${args.template}\n\n`
+    outputString += `Result:\n${result}`;
+
+    connection.sendNotification("render_template_completed", outputString);
+  })
 
   //fire and forget
-  setTimeout(discoverFilesAndUpdateSchemas, 0); 
+  setTimeout(discoverFilesAndUpdateSchemas, 0);
 
   return {
     capabilities: <ServerCapabilities>{

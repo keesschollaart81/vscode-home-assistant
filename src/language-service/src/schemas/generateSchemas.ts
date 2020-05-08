@@ -23,7 +23,7 @@ if (!fs.existsSync(outputFolder)) {
 }
 
 if (fs.readdirSync(outputFolder).length > 0 && process.argv[2] === "--quick") {
-    console.debug("Skipping schema generation becasue there already schema files");
+    console.debug("Skipping schema generation because the schema files are already there");
 }
 else {
     console.log("Generating schema's...");

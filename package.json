@@ -168,8 +168,28 @@
         "command": "vscode-home-assistant.getErrorLog",
         "title": "Get Error Logs",
         "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.renderTemplate",
+        "title": "Render Template",
+        "category": "Home Assistant"
       }
     ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "vscode-home-assistant.renderTemplate",
+          "when": "editorHasSelection"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "vscode-home-assistant.renderTemplate",
+          "group": "home-assistant",
+          "when": "editorHasSelection"
+        }
+      ]
+    },
     "configurationDefaults": {
       "[home-assistant]": {
         "editor.insertSpaces": true,
