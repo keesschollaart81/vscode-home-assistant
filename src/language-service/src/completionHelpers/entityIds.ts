@@ -10,7 +10,8 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
         "entities",
         "include_entities",
         "exclude_entities",
-        "badges"
+        "badges",
+        "devices"
     ];
 
     constructor(private haConnection: IHaConnection) {
