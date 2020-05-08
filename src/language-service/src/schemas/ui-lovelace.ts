@@ -195,7 +195,7 @@ export interface EntitiesCardConfig extends LovelaceCardConfig {
 }
 
 export interface EntityButtonCardConfig extends LovelaceCardConfig {
-  type: "entity-button"; //Updated
+  type: "entity-button" | "button"; //Updated
   entity: string;
   name?: string;
   show_name?: boolean;
@@ -207,6 +207,7 @@ export interface EntityButtonCardConfig extends LovelaceCardConfig {
   icon_height?: string;
   double_tap_action?: ActionConfig;
 }
+ 
 
 export interface EntityFilterCardConfig extends LovelaceCardConfig {
   type: "entity-filter"; //Updated
