@@ -215,7 +215,7 @@
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-uri": "2.1.1",
     "ws": "7.2.0",
-    "yaml": "1.7.2",
+    "yaml": "1.10.0",
     "yaml-language-server": "0.7.2"
   }
 }
