@@ -36,6 +36,63 @@
         ],
         "description": "Add a Home Assistant state trigger for automation"
     },
+    "trigger numeric state": {
+        "prefix": "trigger-numeric-state",
+        "body": [
+            "  - platform: numeric_state",
+            "    entity_id: ${1:entity id}",
+            "    value_template: \"{{ ${2: template} }}\"",
+            "    above: 17",
+            "    below: 25",
+            "    for: \"01:10:05\""
+        ],
+        "description": "Add a Home Assistant numeric_state trigger for automation"
+    },
+    "trigger sunset": {
+        "prefix": "trigger-sunset",
+        "body": [
+            "  - platform: sun",
+            "    event: sunset",
+            "    offset: \"00:00:00\""
+        ],
+        "description": "Add a Home Assistant sunset trigger for automation"
+    },
+    "trigger sunrise": {
+        "prefix": "trigger-sunrise",
+        "body": [
+            "  - platform: sun",
+            "    event: sunrise",
+            "    offset: \"00:00:00\""
+        ],
+        "description": "Add a Home Assistant sunrise trigger for automation"
+    },
+    "trigger template": {
+        "prefix": "trigger-template",
+        "body": [
+            "  - platform: template",
+            "    value_template: \"{{ ${1: value_template} }}\"",
+            "    for: \"00:00:00\""
+        ],
+        "description": "Add a Home Assistant template trigger for automation"
+    },
+    "trigger time": {
+        "prefix": "trigger-time",
+        "body": [
+            "  - platform: time",
+            "    at: \"12:34:56\""
+        ],
+        "description": "Add a Home Assistant time trigger for automation"
+    },
+    "trigger time_pattern": {
+        "prefix": "trigger-time-pattern",
+        "body": [
+            "  - platform: time_pattern",
+            "    hours: \"12\"",
+            "    minutes: \"/5\"",
+            "    seconds: \"*\""
+        ],
+        "description": "Add a Home Assistant time_pattern trigger for automation"
+    },
     "action service": {
         "prefix": "action-service",
         "body": [
