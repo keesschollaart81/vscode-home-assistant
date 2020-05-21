@@ -217,6 +217,11 @@ export interface OrConditionSchema {
   conditions: ConditionsConfig;
 }
 
+export interface NotConditionSchema {
+  condition: "not";
+  conditions: ConditionsConfig;
+}
+
 export type ConditionsConfig =
   NumericStateConditionSchema
   | DeviceConditionSchema
@@ -227,6 +232,7 @@ export type ConditionsConfig =
   | ZoneConditionSchema
   | AndConditionSchema
   | OrConditionSchema
+  | NotConditionSchema
   | Array<
     NumericStateConditionSchema
     | DeviceConditionSchema
