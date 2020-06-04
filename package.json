@@ -198,7 +198,7 @@
     "typescript": "3.8.3",
     "vscode": "^1.1.36",
     "@types/mocha": "5.2.7",
-    "@types/ws": "7.2.2",
+    "@types/ws": "7.2.5",
     "@types/yaml": "1.2.0",
     "rimraf": "3.0.0",
     "ts-loader": "^6.0.4",
