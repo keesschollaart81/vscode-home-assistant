@@ -44,6 +44,8 @@ export interface HomeAssistantComponent {
     customize?: CustomizeComponent | IncludeTags;
     customize_domain?: any;
     customize_glob?: any;
+    external_url?: any;
+    internal_url?: any;
     packages?: Array<HomeAssistantRoot> | NamedPackageInclude | IncludeTags;
     auth_providers?: AuthProviders[] | IncludeTags;
     auth_mfa_modules?: Array<any> | IncludeTags;
