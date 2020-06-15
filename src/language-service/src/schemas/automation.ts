@@ -62,7 +62,7 @@ export interface StateTrigger {
   platform: "state";
   entity_id: string | string[];
   from?: string | boolean;
-  to?: string | boolean;
+  to?: string | string[] | boolean;
   for?: string | TimePeriod;
 }
 export interface TimePeriod {
