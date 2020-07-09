@@ -40,8 +40,8 @@ export interface HomeAssistantComponent {
     elevation?: string | number;
     unit_system?: "metric" | "imperial";
     time_zone?: string;
-    external_url?: string;
-    internal_url?: string;
+    external_url?: string | null;
+    internal_url?: string | null;
     whitelist_external_dirs?: string[];
     customize?: CustomizeComponent | IncludeTags;
     customize_domain?: any;
