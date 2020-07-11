@@ -2,7 +2,7 @@ import { Core } from "./core";
 import { Sensors } from "./sensors";
 // eslint-disable-next-line import/extensions
 import * as integrations from "./integrations";
-import { IncludeList, IncludeNamed, Deprecated } from "./types";
+import { IncludeList, IncludeNamed } from "./types";
 
 /**
  * @TJS-additionalProperties true

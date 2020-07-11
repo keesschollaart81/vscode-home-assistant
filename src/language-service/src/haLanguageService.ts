@@ -6,7 +6,6 @@ import {
   CompletionItem,
   TextEdit,
   Definition,
-  Location,
   DefinitionLink,
   Diagnostic,
   Hover,
@@ -229,7 +228,7 @@ export class HomeAssistantLanguageService {
     position: Position
   ): Promise<Definition | DefinitionLink[] | undefined> => {
     if (!textDocument) {
-      return;
+      return undefined;
     }
     const lineOffsets: number[] = getLineOffsets(textDocument.getText());
     const start: number = lineOffsets[position.line];

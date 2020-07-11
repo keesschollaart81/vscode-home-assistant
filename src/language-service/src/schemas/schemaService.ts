@@ -1,6 +1,5 @@
 import * as path from "path";
 import * as fs from "fs";
-import { ISchemaContributions } from "vscode-json-languageservice/lib/umd/services/jsonSchemaService";
 import { JSONSchema } from "yaml-language-server/out/server/src/languageservice/jsonSchema";
 import { HaFileInfo } from "../haConfig/dto";
 
@@ -19,7 +18,7 @@ export class SchemaServiceForIncludes {
     });
   }
 
-  public getSchemaContributions(haFiles: HaFileInfo[]): ISchemaContributions {
+  public getSchemaContributions(haFiles: HaFileInfo[]): any {
     const results: Array<{
       uri: string;
       fileMatch?: string[];

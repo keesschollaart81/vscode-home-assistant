@@ -329,40 +329,6 @@ export class HomeAssistantYamlFile {
   }
 
   /**
-   * Get a specified line from the source.
-   *
-   * Accepts a source string or a CST document as the second parameter. With
-   * the latter, starting indices for lines are cached in the document as
-   * `lineStarts: number[]`.
-   *
-   * Returns the line as a string if found, or `null` otherwise.
-   *
-   * This function is copied from the YAML library, as it is not exposed.
-   *
-   * @source https://github.com/eemeli/yaml/blob/master/src/cst/source-utils.js
-   */
-  private getLine(
-    line: number,
-    cst: string | ParsedCST | undefined
-  ): string | null {
-    if (cst === undefined) {
-      return null;
-    }
-
-    const { lineStarts, src } = this.getSrcInfo(cst);
-    if (!lineStarts || !(line >= 1) || line > lineStarts.length) {
-      return null;
-    }
-
-    const start = lineStarts[line - 1];
-    let end = lineStarts[line]; // undefined for last line; that's ok for slice()
-    // eslint-disable-next-line no-plusplus
-    while (end && end > start && src[end - 1] === "\n") --end;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-    return src.slice(start, end);
-  }
-
-  /**
    * Determine the line/col position matching a character offset.
    *
    * Accepts a source string or a CST document as the second parameter. With
