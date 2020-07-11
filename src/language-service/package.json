@@ -31,25 +31,37 @@
     "schema": "ts-node src/schemas/generateSchemas.ts"
   },
   "devDependencies": {
-    "@types/mocha": "5.2.7",
-    "@types/node": "13.9.0",
-    "@types/ws": "7.2.2",
-    "@types/yaml": "1.2.0",
-    "rimraf": "3.0.0",
-    "ts-loader": "^6.0.4",
-    "ts-node": "8.6.2",
-    "tslint": "^5.20.1",
-    "typescript": "3.8.3",
+    "@types/mocha": "7.0.2",
+    "@types/node": "14.0.20",
+    "@types/ws": "7.2.6",
+    "@types/yaml": "1.9.7",
+    "rimraf": "3.0.2",
+    "ts-loader": "^8.0.0",
+    "ts-node": "8.10.2",
+    "tslint": "^6.1.2",
+    "typescript": "3.9.6",
     "typescript-json-schema": "0.42.0",
-    "vscode": "^1.1.36"
+    "vscode": "^1.1.37",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-typescript": "^7.2.1",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-disable": "^2.0.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-lit": "^1.2.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-wc": "^1.2.0",
+    "prettier": "^2.0.4"
   },
   "dependencies": {
-    "home-assistant-js-websocket": "4.5.0",
-    "vscode-json-languageservice": "3.5.1",
+    "home-assistant-js-websocket": "5.4.1",
+    "vscode-json-languageservice": "3.7.0",
     "vscode-languageserver-protocol": "3.15.3",
-    "vscode-uri": "2.1.1",
-    "ws": "7.2.0",
-    "yaml": "1.7.2",
-    "yaml-language-server": "0.7.2"
+    "vscode-uri": "2.1.2",
+    "ws": "7.3.1",
+    "yaml": "1.10.0",
+    "yaml-language-server": "0.8.0"
+  },
+  "resolutions": {
+    "minimist": ">=0.2.1 <1.0.0 || >=1.2.3"
   }
 }

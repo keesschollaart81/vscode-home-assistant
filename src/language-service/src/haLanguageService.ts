@@ -1,251 +1,336 @@
-import { CompletionList, TextDocumentChangeEvent, TextDocument, Position, CompletionItem, TextEdit, Definition, DefinitionLink, TextDocumentPositionParams, Diagnostic, Hover, FormattingOptions } from "vscode-languageserver-protocol";
+import {
+  CompletionList,
+  TextDocumentChangeEvent,
+  TextDocument,
+  Position,
+  CompletionItem,
+  TextEdit,
+  Definition,
+  Location,
+  DefinitionLink,
+  Diagnostic,
+  Hover,
+  FormattingOptions,
+  SymbolInformation,
+} from "vscode-languageserver-protocol";
+import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
+import {
+  LanguageService,
+  LanguageSettings,
+} from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
-import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
-import { LanguageService, LanguageSettings } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
 import { Includetype } from "./haConfig/dto";
 
-
 export class HomeAssistantLanguageService {
+  constructor(
+    private yamlLanguageService: LanguageService,
+    private haConfig: HomeAssistantConfiguration,
+    private haConnection: HaConnection,
+    private definitionProviders: DefinitionProvider[],
+    private schemaServiceForIncludes: SchemaServiceForIncludes,
+    private sendDiagnostics: (
+      fileUri: string,
+      diagnostics: Diagnostic[]
+    ) => void,
+    private diagnoseAllFiles: () => void
+  ) {}
 
-    constructor(
-        private yamlLanguageService: LanguageService,
-        private haConfig: HomeAssistantConfiguration,
-        private haConnection: HaConnection,
-        private definitionProviders: DefinitionProvider[],
-        private schemaServiceForIncludes: SchemaServiceForIncludes,
-        private sendDiagnostics: (fileUri: string, diagnostics: Diagnostic[]) => Promise<void>,
-        private diagnoseAllFiles: () => Promise<void>
-    ) { }
+  public findAndApplySchemas = (): void => {
+    try {
+      const haFiles = this.haConfig.getAllFiles();
+      if (haFiles && haFiles.length > 0) {
+        console.log(
+          `Applying schema's to ${haFiles.length} of your configuration files...`
+        );
+      }
 
-    public findAndApplySchemas = async () => {
+      this.yamlLanguageService.configure(<LanguageSettings>{
+        validate: true,
+        customTags: this.getValidYamlTags(),
+        completion: true,
+        format: true,
+        hover: true,
+        isKubernetes: false,
+        schemas: this.schemaServiceForIncludes.getSchemaContributions(haFiles),
+      });
 
-        try {
-            var haFiles = await this.haConfig.getAllFiles();
-            if (haFiles && haFiles.length > 0) {
-                console.log(`Applying schema's to ${haFiles.length} of your configuration files...`);
-            }  
-            
-            this.yamlLanguageService.configure(<LanguageSettings>{
-                validate: true,
-                customTags: this.getValidYamlTags(),
-                completion: true,
-                format: true,
-                hover: true,
-                isKubernetes: false,
-                schemas: this.schemaServiceForIncludes.getSchemaContributions(haFiles)
-            });
-
-            this.diagnoseAllFiles();
-        }
-        catch (err) {
-            console.error(`Unexpected error updating the schema's, message: ${err}`, err);
-        }
-        console.log(`Schema's updated!`);
+      this.diagnoseAllFiles();
+    } catch (error) {
+      const message: string = error.message;
+      console.error(
+        `Unexpected error updating the schema's, message: ${message}`,
+        error
+      );
     }
-    
-    private getValidYamlTags(): string[] {
-        var validTags: string[] = [];
-        for (let item in Includetype) {
-            if (isNaN(Number(item))) {
-                validTags.push(`!${item} scalar`);
-            }
-        }
-        validTags.push("!secret scalar");
-        validTags.push("!env_var scalar");
-        
-        return validTags;
+    console.log(`Schema's updated!`);
+  };
+
+  private getValidYamlTags(): string[] {
+    const validTags: string[] = [];
+    for (const item in Includetype) {
+      if (Number.isNaN(Number(item))) {
+        validTags.push(`!${item} scalar`);
+      }
     }
+    validTags.push("!secret scalar");
+    validTags.push("!env_var scalar");
 
-    private onDocumentChangeDebounce: NodeJS.Timer;
+    return validTags;
+  }
 
-    public onDocumentChange = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<void> => {
+  private onDocumentChangeDebounce: NodeJS.Timer | undefined;
 
-        clearTimeout(this.onDocumentChangeDebounce);
-
-        this.onDocumentChangeDebounce = setTimeout(async () => {
-            var singleFileUpdate = await this.haConfig.updateFile(textDocumentChangeEvent.document.uri);
-            if (singleFileUpdate.isValidYaml && singleFileUpdate.newFilesFound) {
-                console.log(`Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`);
-                await this.haConfig.discoverFiles();
-                await this.findAndApplySchemas();
-            }
-
-            var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
-
-            this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
-        }, 600);
-
+  public onDocumentChange = (
+    textDocumentChangeEvent: TextDocumentChangeEvent
+  ): void => {
+    if (this.onDocumentChangeDebounce !== undefined) {
+      clearTimeout(this.onDocumentChangeDebounce);
     }
 
-    public onDocumentOpen = async (textDocumentChangeEvent: TextDocumentChangeEvent): Promise<void> => {
-        var diagnostics = await this.getDiagnostics(textDocumentChangeEvent.document);
+    this.onDocumentChangeDebounce = setTimeout(async (): Promise<void> => {
+      const singleFileUpdate = await this.haConfig.updateFile(
+        textDocumentChangeEvent.document.uri
+      );
+      if (singleFileUpdate.isValidYaml && singleFileUpdate.newFilesFound) {
+        console.log(
+          `Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`
+        );
+        await this.haConfig.discoverFiles();
+        this.findAndApplySchemas();
+      }
 
-        this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
+      const diagnostics = await this.getDiagnostics(
+        textDocumentChangeEvent.document
+      );
+
+      this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
+    }, 600);
+  };
+
+  public onDocumentOpen = async (
+    textDocumentChangeEvent: TextDocumentChangeEvent
+  ): Promise<void> => {
+    const diagnostics = await this.getDiagnostics(
+      textDocumentChangeEvent.document
+    );
+
+    this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
+  };
+
+  public getDiagnostics = async (
+    document: TextDocument
+  ): Promise<Diagnostic[]> => {
+    if (!document || document.getText().length === 0) {
+      return [];
     }
 
+    const diagnosticResults = await this.yamlLanguageService.doValidation(
+      document,
+      false
+    );
 
-    public getDiagnostics = async (document: TextDocument): Promise<Diagnostic[]> => {
-
-        if (!document || document.getText().length === 0) {
-            return;
-        }
-
-        var diagnosticResults = await this.yamlLanguageService.doValidation(document, false);
-
-        if (!diagnosticResults) {
-            return;
-        }
-        let diagnostics = [];
-
-        for (let diagnosticItem in diagnosticResults) {
-            diagnosticResults[diagnosticItem].severity = 1; //Convert all warnings to errors
-            diagnostics.push(diagnosticResults[diagnosticItem]);
-        }
-
-        return diagnostics;
+    if (!diagnosticResults) {
+      return [];
+    }
+    const diagnostics: Diagnostic[] = [];
+    for (const diagnosticItem of diagnosticResults) {
+      diagnosticItem.severity = 1; // Convert all warnings to errors
+      diagnostics.push(diagnosticItem);
     }
 
-    public onDocumentSymbol = (document: TextDocument) => {
+    return diagnostics;
+  };
 
-        if (!document) {
-            return;
-        }
-
-        return this.yamlLanguageService.findDocumentSymbols(document);
+  public onDocumentSymbol = (document: TextDocument): SymbolInformation[] => {
+    if (!document) {
+      return [];
     }
 
-    public onDocumentFormatting = (document: TextDocument, options: FormattingOptions): TextEdit[] => {
+    return this.yamlLanguageService.findDocumentSymbols(document);
+  };
 
-        if (!document) {
-            return;
-        }
-
-        // copied defaults from YAML Language Service
-        let settings = {
-            tabWidth: options.tabSize,
-            singleQuote: false,
-            bracketSpacing: true,
-            proseWrap: 'preserve',
-            printWidth: 80,
-            enable: true
-        };
-
-        return this.yamlLanguageService.doFormat(document, settings);
+  public onDocumentFormatting = (
+    document: TextDocument,
+    options: FormattingOptions
+  ): TextEdit[] => {
+    if (!document) {
+      return [];
     }
 
-    public onCompletion = async (textDocument: TextDocument, position: Position): Promise<CompletionList> => {
+    // copied defaults from YAML Language Service
+    const settings = {
+      tabWidth: options.tabSize,
+      singleQuote: false,
+      bracketSpacing: true,
+      proseWrap: "preserve",
+      printWidth: 80,
+      enable: true,
+    };
 
-        let result: CompletionList = {
-            items: [],
-            isIncomplete: false
-        };
+    return this.yamlLanguageService.doFormat(document, settings);
+  };
 
-        if (!textDocument) {
-            return Promise.resolve(result);
-        }
+  public onCompletion = async (
+    textDocument: TextDocument,
+    position: Position
+  ): Promise<CompletionList> => {
+    const result: CompletionList = {
+      items: [],
+      isIncomplete: false,
+    };
 
-        var completions: CompletionList = await this.yamlLanguageService.doComplete(textDocument, position, false);
-
-        var additionalCompletions = await this.getServiceAndEntityCompletions(textDocument, position, completions);
-        if (additionalCompletions.length > 0) {
-            completions.items.push(...additionalCompletions);
-        }
-        return completions;
+    if (!textDocument) {
+      return Promise.resolve(result);
     }
 
-    public onCompletionResolve = async (completionItem): Promise<CompletionItem> => {
-        return await this.yamlLanguageService.doResolve(completionItem);
+    const currentCompletions: CompletionList = await this.yamlLanguageService.doComplete(
+      textDocument,
+      position,
+      false
+    );
+
+    const additionalCompletions = await this.getServiceAndEntityCompletions(
+      textDocument,
+      position,
+      currentCompletions
+    );
+
+    if (additionalCompletions.length === 0) {
+      return currentCompletions;
     }
 
-    public onHover = async (document: TextDocument, position: Position): Promise<Hover> => {
+    return CompletionList.create(additionalCompletions, false);
+  };
 
-        if (!document) {
-            return;
-        }
+  public onCompletionResolve = async (
+    completionItem: CompletionItem
+  ): Promise<CompletionItem> => {
+    return this.yamlLanguageService.doResolve(completionItem);
+  };
 
-        return await this.yamlLanguageService.doHover(document, position);
+  public onHover = async (
+    document: TextDocument,
+    position: Position
+  ): Promise<Hover | null> => {
+    if (!document) {
+      return null;
     }
 
-    public onDefinition = async (textDocument: TextDocument, position: Position): Promise<Definition | DefinitionLink[] | undefined> => {
+    return this.yamlLanguageService.doHover(document, position);
+  };
 
-        if (!textDocument) {
-            return;
-        }
-        const lineOffsets: number[] = getLineOffsets(textDocument.getText());
-        const start: number = lineOffsets[position.line];
-        const end: number = lineOffsets[position.line + 1];
-        let thisLine = textDocument.getText().substring(start, end);
-
-        var definitions = [];
-        for (var p in this.definitionProviders) {
-            let provider = this.definitionProviders[p];
-            var providerResults = await provider.onDefinition(thisLine, textDocument.uri);
-            if (providerResults) {
-                definitions = definitions.concat(providerResults);
-            }
-        }
-        return definitions;
+  public onDefinition = async (
+    textDocument: TextDocument,
+    position: Position
+  ): Promise<Definition | DefinitionLink[] | undefined> => {
+    if (!textDocument) {
+      return;
     }
+    const lineOffsets: number[] = getLineOffsets(textDocument.getText());
+    const start: number = lineOffsets[position.line];
+    const end: number = lineOffsets[position.line + 1];
+    const thisLine = textDocument.getText().substring(start, end);
 
-    private getServiceAndEntityCompletions = async (document: TextDocument, textDocumentPosition: Position, currentCompletions: CompletionList): Promise<CompletionItem[]> => {
-        // sadly this is needed here. 
-        // the normal completion engine cannot provide completions for type `string | string[]`
-        // updating the type to only one of the 2 types will break the yaml-validation.
-        // so we tap in here, iterate over the lines of the text file to see if this if 
-        // we need to add entity_id's to the completion list
-
-        var properties: { [provider: string]: string[] } = {};
-        properties["entities"] = EntityIdCompletionContribution.propertyMatches;
-        properties["services"] = ServicesCompletionContribution.propertyMatches;
-
-        var additionalCompletionProvider = this.findAutoCompletionProperty(document, textDocumentPosition, properties);
-        let additionalCompletion: CompletionItem[] = [];
-        switch (additionalCompletionProvider) {
-            case "entities":
-                // sometimes the entities are already added, do not add them twice
-                if (!currentCompletions.items.some(x => x.data && x.data.isEntity)) {
-                    additionalCompletion = await this.haConnection.getEntityCompletions();
-                }
-                break;
-            case "services":
-                if (!currentCompletions.items.some(x => x.data && x.data.isService)) {
-                    additionalCompletion = await this.haConnection.getServiceCompletions();
-                }
-                break;
-        }
-        return additionalCompletion;
+    let results = [];
+    for (const provider of this.definitionProviders) {
+      results.push(provider.onDefinition(thisLine, textDocument.uri));
     }
+    results = await Promise.all(results);
 
-    private findAutoCompletionProperty = (document: TextDocument, textDocumentPosition: Position, properties: { [provider: string]: string[] }): string => {
-        let currentLine = textDocumentPosition.line;
-        while (currentLine >= 0) {
-            const lineOffsets: number[] = getLineOffsets(document.getText());
-            const start: number = lineOffsets[currentLine];
-            var end = 0;
-            if (lineOffsets[currentLine + 1] !== undefined) {
-                end = lineOffsets[currentLine + 1] -1;
-            } else {
-                end = document.getText().length;
-            }
-            let thisLine = document.getText().substring(start, end);
-
-            let isOtherItemInList = thisLine.match(/-\s*([-"\w]+)?(\.)?([-"\w]+?)?\s*$/);
-            if (isOtherItemInList) {
-                currentLine--;
-                continue;
-            }
-            for (var key in properties) {
-                if (properties[key].some(propertyName => new RegExp(`(.*)${propertyName}(:)([\s]*)([\w]*)(\s*)`).test(thisLine))) {
-                    return key;
-                }
-            }
-            return undefined;
-        }
-        return undefined;
+    let definitions: any = [];
+    for (const result of results) {
+      if (result) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        definitions = definitions.concat(result);
+      }
     }
+    // eslint-disable-next-line consistent-return, @typescript-eslint/no-unsafe-return
+    return definitions;
+  };
+
+  private getServiceAndEntityCompletions = async (
+    document: TextDocument,
+    textDocumentPosition: Position,
+    currentCompletions: CompletionList
+  ): Promise<CompletionItem[]> => {
+    // sadly this is needed here.
+    // the normal completion engine cannot provide completions for type `string | string[]`
+    // updating the type to only one of the 2 types will break the yaml-validation.
+    // so we tap in here, iterate over the lines of the text file to see if this if
+    // we need to add entity_id's to the completion list
+
+    const properties: { [provider: string]: string[] } = {};
+    properties.entities = EntityIdCompletionContribution.propertyMatches;
+    properties.services = ServicesCompletionContribution.propertyMatches;
+
+    const additionalCompletionProvider = this.findAutoCompletionProperty(
+      document,
+      textDocumentPosition,
+      properties
+    );
+    let additionalCompletion: CompletionItem[] = [];
+    switch (additionalCompletionProvider) {
+      case "entities":
+        // sometimes the entities are already added, do not add them twice
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isEntity)) {
+          additionalCompletion = await this.haConnection.getEntityCompletions();
+        }
+        break;
+      case "services":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isService)) {
+          additionalCompletion = await this.haConnection.getServiceCompletions();
+        }
+        break;
+    }
+    return additionalCompletion;
+  };
+
+  private findAutoCompletionProperty = (
+    document: TextDocument,
+    textDocumentPosition: Position,
+    properties: { [provider: string]: string[] }
+  ): string | null => {
+    let currentLine = textDocumentPosition.line;
+    while (currentLine >= 0) {
+      const lineOffsets: number[] = getLineOffsets(document.getText());
+      const start: number = lineOffsets[currentLine];
+      let end = 0;
+      if (lineOffsets[currentLine + 1] !== undefined) {
+        end = lineOffsets[currentLine + 1] - 1;
+      } else {
+        end = document.getText().length;
+      }
+      const thisLine = document.getText().substring(start, end);
+
+      // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+      const isOtherItemInList = thisLine.match(
+        /-\s*([-"\w]+)?(\.)?([-"\w]+?)?\s*$/
+      );
+      if (isOtherItemInList) {
+        currentLine -= 1;
+        continue;
+      }
+      for (const key in properties) {
+        if (
+          properties[key].some((propertyName) =>
+            // eslint-disable-next-line no-useless-escape
+            new RegExp(`(.*)${propertyName}(:)([\s]*)([\w]*)(\s*)`).test(
+              thisLine
+            )
+          )
+        ) {
+          return key;
+        }
+      }
+      return null;
+    }
+    return null;
+  };
 }

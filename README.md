@@ -7,13 +7,13 @@
 </h1>
 
 # Getting started
-      
+
 1. Install via the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)
 
 2. Open your (local copy of the) Home Assistant Configuration with VS Code
 
 3. Configure the connection to Home Assistant via the HA Section in the VS Code Settings UI
-   
+
    More details in [the How-To in the Wiki](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
 
 4. Enjoy the features showcased below 👇
@@ -30,28 +30,29 @@
 ## Completion for Entity ID's & Services
 
 When connected with your Home Assistant server, entity id' and services will be auto-completed.
- 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/entity_service_completion.gif"   > 
+
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/entity_service_completion.gif">
 
 ## Completion & Validation for Configuration & Lovelace Schema
 
 Most of the scheme's of Home Assistant will be validated and things like properties, values and enums will be auto-completed. This extension understands the behaviour of Home Assistant '!include...' behaviour and use this to provide scoped validation for all your files.
- 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema_validation_completion.gif"  > 
+
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema_validation_completion.gif">
 
 ## Go to Definition for Includes
 
 Easy navigate between your files references via the different !include... tags using 'f12' / 'Go to Definition'.
- 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/go_to_definition.gif"  > 
+
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/go_to_definition.gif">
 
 ## Snippets
 
-Snippets allow you to create commonly used data structures very quickly. 
+Snippets allow you to create commonly used data structures very quickly.
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif"   > 
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/snippet.gif">
 
 ## Commands
+
 Commands allow you to quickly interact with Home Assistant! Find them using Cmd+shift+P and type 'Home Assistant'
 
 ![image](https://user-images.githubusercontent.com/6755359/69496084-6b089d80-0ece-11ea-8496-50251b91732f.png)
@@ -63,7 +64,7 @@ Commands allow you to quickly interact with Home Assistant! Find them using Cmd+
 
 # Release Notes
 
-Read all the recent changes in the [GitHub releases section](https://github.com/keesschollaart81/vscode-home-assistant/releases) 
+Read all the recent changes in the [GitHub releases section](https://github.com/keesschollaart81/vscode-home-assistant/releases)
 
 # Feedback / Ideas
 
@@ -72,9 +73,8 @@ Create an [issue](https://github.com/keesschollaart81/vscode-home-assistant/issu
 # Things to do / up for grabs
 
 - [ ] Go to Definition for entities, scripts and automations
-- [ ] Render Jinja2 template locally (like/via CLI?) in preview pane 
+- [ ] Render Jinja2 template locally (like/via CLI?) in preview pane
 - [ ] Autocomplete !secrets
-- [ ] Autocomplete triggers
 - [ ] Check local config with HA Server
 
 # Build & Deployment status

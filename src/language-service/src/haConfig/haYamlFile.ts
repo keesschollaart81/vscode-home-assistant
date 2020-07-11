@@ -1,30 +1,37 @@
 import * as path from "path";
 import * as YAML from "yaml";
-import * as sourceUtils from "yaml/dist/cst/source-utils";
+import { Schema, Node, Collection, Scalar } from "yaml/types";
+import { ParsedCST, CST } from "yaml/parse-cst";
+import { Type, LinePos } from "yaml/util";
+import * as vscodeUri from "vscode-uri";
 import { FileAccessor } from "../fileAccessor";
 import { IncludeReferences, Includetype, ScriptReferences } from "./dto";
-import * as vscodeUri from 'vscode-uri';
 
 export class HomeAssistantYamlFile {
+  private cst: ParsedCST | undefined;
 
-  private cst: YAML.ParsedCST | undefined;
-  private yaml: YAML.ast.Document | undefined;
+  private yaml: YAML.Document | undefined;
+
   private includes: IncludeReferences = {};
+
   private scripts: ScriptReferences = {};
 
-  constructor(private fileAccessor: FileAccessor, private filename: string, public path: string) { }
+  constructor(
+    private fileAccessor: FileAccessor,
+    private filename: string,
+    // eslint-disable-next-line no-shadow
+    public path: string
+  ) {}
 
   private async parse(): Promise<void> {
-
-    var fileContents = await this.fileAccessor.getFileContents(this.filename);
+    const fileContents = await this.fileAccessor.getFileContents(this.filename);
     if (!fileContents) {
       return;
     }
 
     this.cst = YAML.parseCST(fileContents);
     this.yaml = new YAML.Document({
-      // @ts-ignore the typings of this library are not up to date
-      customTags: this.getCustomTags()
+      customTags: this.getCustomTags(),
     }).parse(this.cst[0]);
 
     await this.parseAstRecursive(this.yaml.contents, this.path);
@@ -33,107 +40,132 @@ export class HomeAssistantYamlFile {
   public isValid = async (): Promise<ValidationResults> => {
     try {
       await this.parse();
-    }
-    catch (e) {
+    } catch (error) {
       return {
         isValid: false,
-        errors: [e]
+        errors: [String(error)],
       };
     }
     if (!this.yaml) {
       return {
         isValid: true,
-        warnings: ["Empty yaml"]
+        warnings: ["Empty YAML"],
       };
     }
     if (this.yaml.errors && this.yaml.errors.length > 0) {
-      var errors = this.yaml.errors.slice(0, 3).map(x => {
-        //@ts-ignore
-        let line = (x.source && x.source.rangeAsLinePos && x.source.rangeAsLinePos.start) ? ` (Line: ${x.source.rangeAsLinePos.start.line})` : "";
+      const errors = this.yaml.errors.slice(0, 3).map((x) => {
+        const line =
+          x.linePos && x.linePos.start
+            ? ` (Line: ${x.linePos.start.line})`
+            : "";
         return `${x.name}: ${x.message}${line}`;
       });
       if (this.yaml.errors.length > 3) {
-        errors.push(` - And ${this.yaml.errors.length - 3} more errors...`)
+        errors.push(` - And ${this.yaml.errors.length - 3} more errors...`);
       }
       return {
         isValid: false,
-        errors: errors
+        errors,
       };
     }
     return {
-      isValid: true
+      isValid: true,
     };
-  }
+  };
 
   public getIncludes = async (): Promise<IncludeReferences> => {
     if (!this.yaml) {
       await this.parse();
     }
     if (!this.yaml) {
-      return;
+      return {};
     }
     return this.includes;
-  }
+  };
 
   public getScripts = async (): Promise<ScriptReferences> => {
     if (!this.yaml) {
       await this.parse();
     }
     if (!this.yaml) {
-      return;
+      return {};
     }
     return this.scripts;
-  }
+  };
 
-  private getCustomTags(): YAML.Tag[] {
-
+  private getCustomTags(): Schema.Tag[] {
     return [
       `secret`,
       `${Includetype[Includetype.include]}`,
       `${Includetype[Includetype.include_dir_list]}`,
       `${Includetype[Includetype.include_dir_merge_list]}`,
       `${Includetype[Includetype.include_dir_merge_named]}`,
-      `${Includetype[Includetype.include_dir_named]}`
-      //@ts-ignore
-    ].map(x => <YAML.Tag>
-      {
-        tag: `!${x}`,
-        resolve: (doc, cst) => Symbol.for(cst.strValue)
-      });
+      `${Includetype[Includetype.include_dir_named]}`,
+    ].map(
+      (x) =>
+        <Schema.Tag>{
+          tag: `!${x}`,
+          resolve: (_doc: any, cst: any) => Symbol.for(cst.strValue),
+        }
+    );
   }
 
-  private parseAstRecursive = async (node: YAML.ast.AstNode | null, currentPath: string): Promise<void> => {
+  private parseAstRecursive = async (
+    node: Collection | Node | null,
+    currentPath: string
+  ): Promise<void> => {
     if (!node) {
       // null object like 'frontend:'
       return;
     }
     switch (node.type) {
-      case "MAP":
-      case "FLOW_SEQ":
-      case "SEQ":
-        if (node.type !== "FLOW_SEQ" && (currentPath === "configuration.yaml/script" || currentPath === "configuration.yaml/homeassistant/packages/script")) {
-          this.collectScripts(node);
-        }
-        for (let i in node.items) {
-          var item = node.items[i];
-          switch (item.type) {
-            case "PAIR":
-              await this.parseAstRecursive(item.value, `${currentPath}/${this.getKeyName(item.key)}`);
-              break;
-            case "SEQ":
-            case "MAP":
-            case "BLOCK_FOLDED":
-            case "BLOCK_LITERAL":
-            case "PLAIN":
-            case "QUOTE_DOUBLE":
-            case "QUOTE_SINGLE":
-            case "FLOW_SEQ":
-              await this.parseAstRecursive(item, currentPath);
-              break;
-            default:
-              console.log(`huh ${currentPath}`);
-              break;
+      case Type.FLOW_SEQ:
+      case Type.MAP:
+      case Type.SEQ:
+        if (node instanceof Collection) {
+          if (
+            node.type !== Type.FLOW_SEQ &&
+            (currentPath === "configuration.yaml/script" ||
+              currentPath ===
+                "configuration.yaml/homeassistant/packages/script")
+          ) {
+            this.collectScripts(node);
+            break;
           }
+          const results = [];
+          for (const item of node.items) {
+            if (item == null) {
+              // This can happen if the list contains 1 item without a value, e.g.:
+              // entity_id:
+              //   -
+              continue;
+            }
+
+            switch (item.type) {
+              case "PAIR":
+                results.push(
+                  this.parseAstRecursive(
+                    item.value,
+                    `${currentPath}/${this.getKeyName(item.key)}`
+                  )
+                );
+                break;
+              case Type.BLOCK_FOLDED:
+              case Type.BLOCK_LITERAL:
+              case Type.FLOW_SEQ:
+              case Type.MAP:
+              case Type.PLAIN:
+              case Type.QUOTE_DOUBLE:
+              case Type.QUOTE_SINGLE:
+              case Type.SEQ:
+                results.push(this.parseAstRecursive(item, currentPath));
+                break;
+              default:
+                console.log(`huh ${currentPath}`);
+                break;
+            }
+          }
+          await Promise.all(results);
         }
         break;
       case "BLOCK_FOLDED":
@@ -141,25 +173,24 @@ export class HomeAssistantYamlFile {
       case "PLAIN":
       case "QUOTE_DOUBLE":
       case "QUOTE_SINGLE":
-        if (node.tag) {
-          await this.collectInclude(node, currentPath);
+        if (node instanceof Scalar && node.tag) {
+          this.collectInclude(node, currentPath);
         }
         break;
     }
-  }
+  };
 
-  private getKeyName = (node: YAML.ast.AstNode): string => {
-    if (node.tag && node.type === "PLAIN") {
+  private getKeyName = (node: Scalar): string => {
+    if (node.tag && node.type === Type.PLAIN) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
       return node.value.toString().slice(7, -1);
     }
-    else {
-      return node.toJSON();
-    }
-  }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return node.toJSON();
+  };
 
   private getIncludeType = (str: string): Includetype | null => {
-
-    var includeType: Includetype;
+    let includeType: Includetype;
     switch (str) {
       case `${Includetype[Includetype.include]}`:
         includeType = Includetype.include;
@@ -180,69 +211,198 @@ export class HomeAssistantYamlFile {
         return null;
     }
     return includeType;
-  }
+  };
 
-  private async collectInclude(x: YAML.ast.ScalarNode, currentPath: string) {
-    var value: null | boolean | number | string = "";
-    var includeType = this.getIncludeType(`${x.tag}`.slice(1).toLowerCase());
+  private collectInclude(x: Scalar, currentPath: string) {
+    let value: null | boolean | number | string = "";
+    const includeType = this.getIncludeType(`${x.tag}`.slice(1).toLowerCase());
     if (includeType === null) {
       // secrets and other tags
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     value = x.value.toString().slice(7, -1).replace(/\\/g, "/"); // \ to / on windows
 
     let files: string[] = [];
 
     if (includeType === Includetype.include) {
-      var relativeFilePath = this.fileAccessor.getRelativePath(this.filename, value);
+      const relativeFilePath = this.fileAccessor.getRelativePath(
+        this.filename,
+        String(value)
+      );
       // single file include
       files.push(relativeFilePath);
-    }
-    else {
+    } else {
       // multiple file include
-      var filesInThisFolder = await this.fileAccessor.getFilesInFolderRelativeFrom(value, this.filename);
-      files = filesInThisFolder.filter(f => path.extname(f) === ".yaml");
+      const filesInThisFolder = this.fileAccessor.getFilesInFolderRelativeFrom(
+        String(value),
+        this.filename
+      );
+      files = filesInThisFolder.filter((f) => path.extname(f) === ".yaml");
     }
 
     if (files.length === 0) {
-      console.log(`The include could not be resolved because no file(s) found in '${value}' included with '${Includetype[includeType]}' from '${this.filename}'`);
+      console.log(
+        `The include could not be resolved because no file(s) found in '${value}' included with '${Includetype[includeType]}' from '${this.filename}'`
+      );
     }
 
-    for (var i in files) {
-      var key = files[i].replace(/\\/g, "/");
+    for (const file of files) {
+      const key = file.replace(/\\/g, "/");
       this.includes[key] = {
         path: currentPath,
-        includeType: includeType,
+        includeType,
         start: x.range[0],
-        end: x.range[1]
+        end: x.range[1],
       };
     }
   }
 
-  private collectScripts(node: YAML.ast.Map | YAML.ast.Seq) {
-    for (var i in node.items) {
-      var item = node.items[i];
-      //@ts-ignore
-      let isNamed = item.value && item.value.type === "MAP";
- 
-      let filepath = vscodeUri.URI.file(path.resolve(this.filename)).fsPath;
-      let filename = path.parse(filepath).base.replace(".yaml", "");
+  private collectScripts(node: Collection) {
+    for (const item of node.items) {
+      // @ts-ignore
+      const isNamed = item.value && item.value.type === Type.MAP;
 
-      //@ts-ignore
-      var key = isNamed ? item.key.toJSON() : filename;
+      const filepath = vscodeUri.URI.file(path.resolve(this.filename)).fsPath;
+      const filename = path.parse(filepath).base.replace(".yaml", "");
+
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      const key = isNamed ? item.key.toJSON() : filename;
 
       if (item.type === "PAIR") {
-        var lp = sourceUtils.getLinePos(item.key.range[0], this.cst);
-        var lp2 = sourceUtils.getLinePos(item.value.range[1], this.cst);
+        const lp = this.getLinePos(item.key.range[0], this.cst);
+        const lp2 = this.getLinePos(item.value.range[1], this.cst);
 
-        this.scripts[key] = {
-          fileUri: vscodeUri.URI.file(filepath).toString(),
-          start: [lp.line - 1, lp.col - 1],
-          end: [lp2.line - 1, lp2.col - 1]
-        };
+        if (lp !== null && lp2 !== null) {
+          this.scripts[key] = {
+            fileUri: vscodeUri.URI.file(filepath).toString(),
+            start: [lp.line - 1, lp.col - 1],
+            end: [lp2.line - 1, lp2.col - 1],
+          };
+        }
       }
     }
+  }
+
+  /**
+   * This function is copied from the YAML library, as it is not exposed.
+   *
+   * @source https://github.com/eemeli/yaml/blob/master/src/cst/source-utils.js
+   */
+  private findLineStarts(src: string): number[] {
+    const ls = [0];
+    let offset = src.indexOf("\n");
+    while (offset !== -1) {
+      offset += 1;
+      ls.push(offset);
+      offset = src.indexOf("\n", offset);
+    }
+    return ls;
+  }
+
+  /**
+   * Get YAML source information.
+   *
+   * This function is copied from the YAML library, as it is not exposed.
+   *
+   * @source https://github.com/eemeli/yaml/blob/master/src/cst/source-utils.js
+   */
+  private getSrcInfo(cst: string | ParsedCST | CST.Document | CST.Document[]) {
+    let lineStarts;
+    let src;
+    if (typeof cst === "string") {
+      lineStarts = this.findLineStarts(cst);
+      src = cst;
+    } else {
+      if (Array.isArray(cst)) {
+        cst = cst[0];
+      }
+
+      if (cst && cst.context) {
+        lineStarts = this.findLineStarts(cst.context.src);
+        src = cst.context.src;
+      }
+    }
+    return { lineStarts, src };
+  }
+
+  /**
+   * Get a specified line from the source.
+   *
+   * Accepts a source string or a CST document as the second parameter. With
+   * the latter, starting indices for lines are cached in the document as
+   * `lineStarts: number[]`.
+   *
+   * Returns the line as a string if found, or `null` otherwise.
+   *
+   * This function is copied from the YAML library, as it is not exposed.
+   *
+   * @source https://github.com/eemeli/yaml/blob/master/src/cst/source-utils.js
+   */
+  private getLine(
+    line: number,
+    cst: string | ParsedCST | undefined
+  ): string | null {
+    if (cst === undefined) {
+      return null;
+    }
+
+    const { lineStarts, src } = this.getSrcInfo(cst);
+    if (!lineStarts || !(line >= 1) || line > lineStarts.length) {
+      return null;
+    }
+
+    const start = lineStarts[line - 1];
+    let end = lineStarts[line]; // undefined for last line; that's ok for slice()
+    // eslint-disable-next-line no-plusplus
+    while (end && end > start && src[end - 1] === "\n") --end;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+    return src.slice(start, end);
+  }
+
+  /**
+   * Determine the line/col position matching a character offset.
+   *
+   * Accepts a source string or a CST document as the second parameter. With
+   * the latter, starting indices for lines are cached in the document as
+   * `lineStarts: number[]`.
+   *
+   * Returns a one-indexed `{ line, col }` location if found, or
+   * `undefined` otherwise.
+   *
+   * This function is copied from the YAML library, as it is not exposed.
+   *
+   * @source https://github.com/eemeli/yaml/blob/master/src/cst/source-utils.js
+   */
+  private getLinePos(
+    offset: number,
+    cst: string | ParsedCST | undefined
+  ): LinePos | null {
+    if (typeof offset !== "number" || offset < 0) {
+      return null;
+    }
+
+    if (cst === undefined) {
+      return null;
+    }
+
+    const { lineStarts, src } = this.getSrcInfo(cst);
+    if (!lineStarts || !src || offset > src.length) {
+      return null;
+    }
+
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < lineStarts.length; ++i) {
+      const start = lineStarts[i];
+      if (offset < start) {
+        return { line: i, col: offset - lineStarts[i - 1] + 1 };
+      }
+      if (offset === start) return { line: i + 1, col: 1 };
+    }
+    const line = lineStarts.length;
+    return { line, col: offset - lineStarts[line - 1] + 1 };
   }
 }
 

@@ -1,36 +1,45 @@
 import { resolve } from "path";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import * as TJS from "typescript-json-schema";
 import * as fs from "fs";
-import { PathToSchemaMapping } from "./schemaService";
 import * as path from "path";
+import { PathToSchemaMapping } from "./schemaService";
 
 const settings: TJS.PartialArgs = {
-    required: true,
-    noExtraProps: true
+  required: true,
+  noExtraProps: true,
 };
 
 const compilerOptions: TJS.CompilerOptions = {
-    strictNullChecks: true
+  strictNullChecks: true,
 };
 
-var jsonPath = path.join(__dirname, "mappings.json");
-var filecontents = fs.readFileSync(jsonPath, "utf-8");
+const jsonPath = path.join(__dirname, "mappings.json");
+const filecontents = fs.readFileSync(jsonPath, "utf-8");
 
-var outputFolder = path.join(__dirname, "json");
+const outputFolder = path.join(__dirname, "json");
 
 if (!fs.existsSync(outputFolder)) {
-    fs.mkdirSync(outputFolder);
+  fs.mkdirSync(outputFolder);
 }
 
 if (fs.readdirSync(outputFolder).length > 0 && process.argv[2] === "--quick") {
-    console.debug("Skipping schema generation becasue there already schema files");
-}
-else {
-    console.log("Generating schema's...");
-    var pathToSchemaMappings: PathToSchemaMapping[] = JSON.parse(filecontents);
-    pathToSchemaMappings.forEach(mapping => {
-        let program = TJS.getProgramFromFiles([resolve(path.join(__dirname, mapping.tsFile))], compilerOptions);
-        let schema = TJS.generateSchema(program, mapping.fromType, settings);
-        fs.writeFileSync(path.join(outputFolder, mapping.file), JSON.stringify(schema));
-    });
+  console.debug(
+    "Skipping schema generation because there already schema files"
+  );
+} else {
+  console.log("Generating schema's...");
+  const pathToSchemaMappings: PathToSchemaMapping[] = JSON.parse(filecontents);
+  pathToSchemaMappings.forEach((mapping) => {
+    console.log(mapping.path);
+    const program = TJS.getProgramFromFiles(
+      [resolve(path.join(__dirname, mapping.tsFile))],
+      compilerOptions
+    );
+    const schema = TJS.generateSchema(program, mapping.fromType, settings);
+    fs.writeFileSync(
+      path.join(outputFolder, mapping.file),
+      JSON.stringify(schema)
+    );
+  });
 }

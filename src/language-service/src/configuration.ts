@@ -1,58 +1,66 @@
 import { DidChangeConfigurationParams } from "vscode-languageserver-protocol";
-import * as vscodeUri from 'vscode-uri';
+import * as vscodeUri from "vscode-uri";
 
 export interface IConfigurationService {
-    isConfigured: boolean;
-    token?: string;
-    url?: string;
-    ignoreCertificates: boolean;
-    updateConfiguration(config: DidChangeConfigurationParams): void;
+  isConfigured: boolean;
+  token?: string;
+  url?: string;
+  ignoreCertificates: boolean;
+  updateConfiguration(config: DidChangeConfigurationParams): void;
 }
 
 export interface HomeAssistantConfiguration {
-    longLivedAccessToken?: string;
-    hostUrl?: string;
-    ignoreCertificates: boolean;
+  longLivedAccessToken?: string;
+  hostUrl?: string;
+  ignoreCertificates: boolean;
 }
 
 export class ConfigurationService implements IConfigurationService {
-    public isConfigured: boolean = false;
-    public token?: string;
-    public url?: string;
-    public ignoreCertificates: boolean = false;
+  public isConfigured = false;
 
-    constructor() {
-        this.setConfigViaEnvironmentVariables();
-        
-        this.isConfigured = `${this.url}` !== "";
+  public token?: string;
+
+  public url?: string;
+
+  public ignoreCertificates = false;
+
+  constructor() {
+    this.setConfigViaEnvironmentVariables();
+
+    this.isConfigured = `${this.url}` !== "";
+  }
+
+  public updateConfiguration = (config: DidChangeConfigurationParams): void => {
+    const incoming = <HomeAssistantConfiguration>(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      config.settings["vscode-home-assistant"]
+    );
+
+    this.token = incoming.longLivedAccessToken;
+    if (incoming.hostUrl !== undefined) {
+      this.url = this.getUri(incoming.hostUrl);
     }
+    this.ignoreCertificates = !!incoming.ignoreCertificates;
 
-    public updateConfiguration = (config: DidChangeConfigurationParams): void => {
-        var incoming = <HomeAssistantConfiguration>config.settings["vscode-home-assistant"];
+    this.setConfigViaEnvironmentVariables();
 
-        this.token = incoming.longLivedAccessToken;
-        this.url = this.getUri(incoming.hostUrl);
-        this.ignoreCertificates = !!incoming.ignoreCertificates;
+    this.isConfigured = `${this.url}` !== "";
+  };
 
-        this.setConfigViaEnvironmentVariables();
-
-        this.isConfigured = `${this.url}` !== "";
+  private setConfigViaEnvironmentVariables() {
+    if (!this.url && process.env.HASS_SERVER) {
+      this.url = this.getUri(process.env.HASS_SERVER);
     }
-
-    private setConfigViaEnvironmentVariables() {
-        if (!this.url && process.env.HASS_SERVER) {
-            this.url = this.getUri(process.env.HASS_SERVER);
-        }
-        if (!this.token && process.env.HASS_TOKEN) {
-            this.token = process.env.HASS_TOKEN;
-        }
+    if (!this.token && process.env.HASS_TOKEN) {
+      this.token = process.env.HASS_TOKEN;
     }
+  }
 
-    private getUri =(value: string) : string =>{
-        if (!value) {
-            return "";
-        }
-        var uri = vscodeUri.URI.parse(value);
-        return `${uri.scheme}://${uri.authority}${uri.path.replace(/\/$/, "")}`;
+  private getUri = (value: string): string => {
+    if (!value) {
+      return "";
     }
+    const uri = vscodeUri.URI.parse(value);
+    return `${uri.scheme}://${uri.authority}${uri.path.replace(/\/$/, "")}`;
+  };
 }
