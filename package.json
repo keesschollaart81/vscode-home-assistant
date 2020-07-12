@@ -179,7 +179,7 @@
           "comments": false,
           "strings": true
         },
-        "editor.autoIndent": "none"
+        "editor.autoIndent": "full"
       }
     }
   },
