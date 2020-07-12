@@ -241,13 +241,14 @@ export class HaConnection implements IHaConnection {
     this.connection = undefined;
   }
 
-  public callApi = (method: string, api: string): string => {
+  public callApi = (method: string, api: string, requestBody?: any): string => {
     const options = {
       method,
       url: `${this.configurationService.url}/api/${api}`,
       headers: {
         Authorization: `Bearer ${this.configurationService.token}`,
       },
+      body: requestBody,
       json: true,
     };
 

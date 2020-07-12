@@ -119,6 +119,18 @@ export async function activate(
         haOutputChannel.appendLine(result);
         haOutputChannel.show();
       });
+
+      let haTemplateRendererChannel: vscode.OutputChannel;
+      client.onNotification("render_template_completed", (result) => {
+        if (!haTemplateRendererChannel) {
+          haTemplateRendererChannel = vscode.window.createOutputChannel(
+            "Home Assistant Template Renderer"
+          );
+        }
+        haTemplateRendererChannel.clear();
+        haTemplateRendererChannel.appendLine(result);
+        haTemplateRendererChannel.show();
+      });
     })
     .catch((reason) => {
       console.error(JSON.stringify(reason));
@@ -213,6 +225,17 @@ export async function activate(
   context.subscriptions.push(
     vscode.commands.registerCommand("vscode-home-assistant.getErrorLog", (_) =>
       client.sendRequest("getErrorLog")
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.renderTemplate",
+      async () => {
+        const editor = vscode.window.activeTextEditor;
+        const selectedText = editor.document.getText(editor.selection);
+        await client.sendRequest("renderTemplate", { template: selectedText });
+      }
     )
   );
 

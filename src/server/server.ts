@@ -155,6 +155,7 @@ connection.onInitialize((params) => {
       );
     }
   );
+
   connection.onRequest("checkConfig", (_) => {
     const result = haConnection.callApi("post", "config/core/check_config");
     connection.sendNotification("configuration_check_completed", result);
@@ -162,6 +163,17 @@ connection.onInitialize((params) => {
   connection.onRequest("getErrorLog", (_) => {
     const result = haConnection.callApi("get", "error_log");
     connection.sendNotification("get_eror_log_completed", result);
+  });
+  connection.onRequest("renderTemplate", (args: { template: string }) => {
+    const result = haConnection.callApi("post", "template", {
+      template: args.template,
+    });
+
+    const timePrefix = `[${new Date().toLocaleTimeString()}] `;
+    let outputString = `${timePrefix}Rendering template:\n${args.template}\n\n`;
+    outputString += `Result:\n${result}`;
+
+    connection.sendNotification("render_template_completed", outputString);
   });
 
   // fire and forget

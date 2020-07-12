@@ -63,6 +63,9 @@ Snippets allow you to create commonly used data structures very quickly.
 
 Commands allow you to quickly interact with Home Assistant! Find them using Cmd+shift+P and type 'Home Assistant'
 
+## Render templates
+Evaluate jinja templates via Home Assistant's API and see how they would render.
+
 ![image](https://user-images.githubusercontent.com/6755359/69496084-6b089d80-0ece-11ea-8496-50251b91732f.png)
 
 # Contribution
@@ -90,9 +93,9 @@ Create an [issue](https://github.com/keesschollaart81/vscode-home-assistant/issu
 |                     | Master   | Dev  |
 |--------------------------------|-----------------|-----------------|
 | Build status |  [![Build Status](https://caseonline.visualstudio.com/vscode-home-assistant/_apis/build/status/keesschollaart81.vscode-home-assistant?branchName=master)](https://caseonline.visualstudio.com/vscode-home-assistant/_build/index?definitionId=23)   | [![Build Status](https://caseonline.visualstudio.com/vscode-home-assistant/_apis/build/status/keesschollaart81.vscode-home-assistant?branchName=dev)](https://caseonline.visualstudio.com/vscode-home-assistant/_build/index?definitionId=23)
-| Deployment Status | [![Deployment Status](https://caseonline.vsrm.visualstudio.com/_apis/public/Release/badge/b5e7419e-352f-433e-8690-463d52b2c4f7/1/2)](https://caseonline.visualstudio.com/vscode-home-assistant/_releases2?definitionId=1) |[![Deployment Status](https://caseonline.vsrm.visualstudio.com/_apis/public/Release/badge/b5e7419e-352f-433e-8690-463d52b2c4f7/1/1)](https://caseonline.visualstudio.com/vscode-home-assistant/_releases2?definitionId=1)|  
-| Get it | [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/keesschollaart.vscode-home-assistant.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant) | [![GitHub release](https://img.shields.io/github/release-pre/keesschollaart81/vscode-home-assistant.svg)](https://github.com/keesschollaart81/vscode-home-assistant/releases)|  
-  
+| Deployment Status | [![Deployment Status](https://caseonline.vsrm.visualstudio.com/_apis/public/Release/badge/b5e7419e-352f-433e-8690-463d52b2c4f7/1/2)](https://caseonline.visualstudio.com/vscode-home-assistant/_releases2?definitionId=1) |[![Deployment Status](https://caseonline.vsrm.visualstudio.com/_apis/public/Release/badge/b5e7419e-352f-433e-8690-463d52b2c4f7/1/1)](https://caseonline.visualstudio.com/vscode-home-assistant/_releases2?definitionId=1)|
+| Get it | [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/keesschollaart.vscode-home-assistant.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant) | [![GitHub release](https://img.shields.io/github/release-pre/keesschollaart81/vscode-home-assistant.svg)](https://github.com/keesschollaart81/vscode-home-assistant/releases)|
+
 # Telemetry
 
 This extension collects telemetry data to help us build a better experience for
