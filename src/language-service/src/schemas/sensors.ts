@@ -31,7 +31,7 @@ export interface MqttSensor {
   unique_id?: string;
   device_class?: string;
   device?: any;
-  scan_interval: number;
+  scan_interval?: number;
 }
 export interface TemplateSensor {
   platform: "template";

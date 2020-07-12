@@ -62,5 +62,5 @@ export interface ItemEntity {
    * Using transitions on scene using this property is no longer supported.
    * Alternative: https://www.home-assistant.io/docs/scene/#using-scene-transitions
    */
-  transition: Deprecated;
+  transition?: Deprecated;
 }

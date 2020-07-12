@@ -76,7 +76,7 @@ export interface EventAction {
    * https://www.home-assistant.io/docs/scripts/#fire-an-event
    */
   event_data_template?: {
-    [key: string]: Template;
+    [key: string]: any | Template;
   };
 }
 
