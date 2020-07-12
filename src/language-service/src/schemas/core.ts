@@ -1,5 +1,11 @@
 import { HomeAssistantRoot } from "./homeassistant";
-import { DeviceClasses, IncludeNamed, UnitSystem, TimeZone } from "./types";
+import {
+  DeviceClasses,
+  IncludeNamed,
+  UnitSystem,
+  Secret,
+  TimeZone,
+} from "./types";
 
 export interface Core {
   auth_mfa_modules?: Array<any> | IncludeNamed; // TODO: Extract similar as in integrations
@@ -29,7 +35,7 @@ export interface Core {
    *
    * @TJS-type integer
    */
-  elevation?: number;
+  elevation?: number | Secret;
 
   /**
    * Latitude of your location required to calculate the time the sun rises and sets.
@@ -38,7 +44,7 @@ export interface Core {
    * @minimum -90
    * @maximum 90
    */
-  latitude?: number;
+  latitude?: number | Secret;
 
   /**
    * Longitude of your location required to calculate the time the sun rises and sets.
@@ -47,13 +53,13 @@ export interface Core {
    * @minimum -180
    * @maximum 180
    */
-  longitude?: number;
+  longitude?: number | Secret;
 
   /**
    * Name of the location where Home Assistant is running.
    * https://www.home-assistant.io/docs/configuration/basic/#name
    */
-  name?: string;
+  name?: string | Secret;
 
   /**
    * Packages in Home Assistant provide a way to bundle different component’s configuration together. It allows for "splitting" your configuration.
@@ -66,20 +72,20 @@ export interface Core {
    * https://www.home-assistant.io/docs/configuration/basic/#time_zone
    * https://www.wikiwand.com/en/List_of_tz_database_time_zones
    */
-  time_zone?: TimeZone;
+  time_zone?: TimeZone | Secret;
 
   /**
    * "metric" for Metric, "imperial" for Imperial.
    * This also sets temperature unit Home Assistant will use.
    * https://www.home-assistant.io/docs/configuration/basic/#unit_system
    */
-  unit_system?: UnitSystem;
+  unit_system?: UnitSystem | Secret;
 
   /**
    * List of folders that can be used as sources for sending files.
    * https://www.home-assistant.io/docs/configuration/basic/#whitelist_external_dirs
    */
-  whitelist_external_dirs?: string[];
+  whitelist_external_dirs?: string[] | Secret;
 }
 
 export interface CoreCustomize {

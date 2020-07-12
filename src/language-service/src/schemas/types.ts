@@ -101,6 +101,11 @@ export type IncludeNamed = string;
 export type Integer = number;
 
 /**
+ * @TJS-pattern ^!secret\s([a-zA-Z0-9_-]+)$
+ */
+export type Secret = string;
+
+/**
  * @TJS-type string
  * @TJS-pattern [.]yaml|[.]yml$
  */

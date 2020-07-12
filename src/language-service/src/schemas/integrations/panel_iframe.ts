@@ -2,7 +2,7 @@
  * iframe Panel integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/panel_iframe/__init__.py
  */
-import { IncludeNamed } from "../types";
+import { IncludeNamed, Secret } from "../types";
 
 export type Domain = "panel_iframe";
 export interface Schema {
@@ -34,5 +34,5 @@ interface Item {
    *
    * @TJS-format uri
    */
-  url: string;
+  url: string | Secret;
 }
