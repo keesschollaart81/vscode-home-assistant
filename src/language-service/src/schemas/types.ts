@@ -112,7 +112,7 @@ export type Secret = string;
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface SecretTag {}
 
-export type State = string;
+export type State = number | string;
 export type Template = string;
 
 /**
