@@ -117,10 +117,6 @@ export type Time = string;
 
 export type TimePeriod = string | TimePeriodSeconds | TimePeriodMap;
 
-/**
- * @TJS-type integer
- */
-
 export interface TimePeriodMap {
   /**
    * Number of days. This must be a number.
