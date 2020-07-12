@@ -241,6 +241,7 @@ export class HaConnection implements IHaConnection {
     this.connection = undefined;
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public callApi = (method: string, api: string, requestBody?: any): string => {
     const options = {
       method,
