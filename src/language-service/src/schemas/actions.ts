@@ -2,13 +2,21 @@
  * Automation and script actions
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/config_validation.py
  */
-import { Entity, EntityScene, Template, TimePeriod } from "./types";
+import {
+  Entity,
+  EntityScene,
+  IncludeList,
+  Integer,
+  Template,
+  TimePeriod,
+} from "./types";
 import { Condition } from "./conditions";
 
 export type Action =
   | DelayAction
   | DeviceAction
   | EventAction
+  | RepeatAction
   | SceneAction
   | ServiceAction
   | WaitTemplateAction
@@ -69,6 +77,43 @@ export interface EventAction {
    */
   event_data_template?: {
     [key: string]: Template;
+  };
+}
+
+export interface RepeatAction {
+  /**
+   * Alias for the repeat action.
+   */
+  alias?: string;
+
+  /**
+   * This action allows you to repeat a sequence of other actions.
+   * https://www.home-assistant.io/docs/scripts/#repeat-a-group-of-actions
+   */
+  repeat: {
+    /**
+     * This form accepts a count value. The value may be specified by a template, in which case the template is rendered when the repeat step is reached.
+     * https://www.home-assistant.io/docs/scripts/#counted-repeat
+     */
+    count?: Integer | Template;
+
+    /**
+     * The sequence of actions to be repeatedly performed in the script.
+     * https://www.home-assistant.io/integrations/script/#sequence
+     */
+    sequence: Action | Action[] | IncludeList;
+
+    /**
+     * This form accepts a list of conditions that are evaluated after each time the sequence is run. Therefore the sequence will always run at least once. The sequence will be executed until the condition(s) evaluate to true.
+     * https://www.home-assistant.io/docs/scripts/#repeat-until
+     */
+    until?: Condition | Condition[] | IncludeList;
+
+    /**
+     * This form accepts a list of conditions that are evaluated before each time the sequence is run. The sequence will be repeated as long as the condition(s) evaluate to true.
+     * https://www.home-assistant.io/docs/scripts/#while-loop
+     */
+    while?: Condition | Condition[] | IncludeList;
   };
 }
 

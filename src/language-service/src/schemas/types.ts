@@ -96,6 +96,11 @@ export type IncludeList = string;
 export type IncludeNamed = string;
 
 /**
+ * @JTS-type integer
+ */
+export type Integer = number;
+
+/**
  * @TJS-type string
  * @TJS-pattern [.]yaml|[.]yml$
  */
