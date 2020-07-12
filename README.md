@@ -41,11 +41,11 @@ Most of the scheme's of Home Assistant will be validated and things like propert
 
 Deprecation Warnings:
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/deprecation-warning.png">
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/deprecation-warnings.png">
 
 Schema Documentation
 
-<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema_documentation.png">
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema-documentation.png">
 
 ## Go to Definition for Includes
 
