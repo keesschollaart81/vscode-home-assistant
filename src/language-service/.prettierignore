@@ -1,0 +1,4 @@
+.vscode-test/
+node_modules
+dist
+src/schemas/json

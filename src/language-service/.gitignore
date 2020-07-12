@@ -1,0 +1,5 @@
+.vscode-test/
+*.vsix
+dist
+node_modules
+src/schemas/json/*.json

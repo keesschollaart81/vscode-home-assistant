@@ -1,227 +1,90 @@
-import { Automations, ConditionsConfig, TimePeriod } from "./automation";
+import { Core } from "./core";
 import { Sensors } from "./sensors";
+// eslint-disable-next-line import/extensions
+import * as integrations from "./integrations";
+import { IncludeList, IncludeNamed } from "./types";
 
 /**
  * @TJS-additionalProperties true
  */
-export interface HomeAssistantRoot {
-    homeassistant?: HomeAssistantComponent | IncludeTags;
-    automation?: Automations | IncludeTags;
-    group?: GroupComponent | IncludeTags | null;
-    panel_iframe?: PanelIframeComponent | IncludeTags;
-    sensor?: null | Array<Sensors> | IncludeTags;
-    scene?: SceneComponentEntry[] | IncludeTags;
-    input_boolean?: InputBooleanEntry | IncludeTags;
-    script?: Script | IncludeTags;
-    http?: any;
-    default_config?: any;
-    person?: any;
-    system_health?: any;
-    panel_custom?: any;
-    updater?: any;
-    discovery?: any;
-    conversation?: any;
-    history?: any;
-    config?: any;
-    logbook?: any;
-    sun?: any;
-    tts?: any;
-    recorder?: any;
-    ifttt?: any;
-    ios?: any;
-    mqtt?: any;
-    remote?: any;
-}
-
-export interface HomeAssistantComponent {
-    name?: string;
-    latitude?: string | number;
-    longitude?: string | number;
-    elevation?: string | number;
-    unit_system?: "metric" | "imperial";
-    time_zone?: string;
-    whitelist_external_dirs?: string[];
-    customize?: CustomizeComponent | IncludeTags;
-    customize_domain?: any;
-    customize_glob?: any;
-    packages?: Array<HomeAssistantRoot> | NamedPackageInclude | IncludeTags;
-    auth_providers?: AuthProviders[] | IncludeTags;
-    auth_mfa_modules?: Array<any> | IncludeTags;
-}
-
-export interface NamedPackageInclude {
-    [key: string]: HomeAssistantRoot | IncludeTags;
+export interface HomeAssistantRoot
+  extends InternalIntegrations,
+    CoreIntegrations,
+    CustomIntegrations {
+  /**
+   * Home Assistant Core configuration
+   * https://www.home-assistant.io/docs/configuration/basic
+   */
+  homeassistant?: Core | IncludeList;
 }
 
 /**
- * @TJS-type string
- * @TJS-pattern [.]yaml|[.]yml$
+ * This interface contains all integrations that are marked as "internal" to
+ * Home Assistant. Core things like light, switch, sensor, automations.
+ * These integrations generally do not connect with a device or service.
  */
-export interface IncludeTag { }
+export interface InternalIntegrations {
+  /**
+   * Automations offer the capability to call a service based on a simple or complex trigger. Automation allows a condition such as a sunset to cause an event, such as a light turning on.
+   * https://www.home-assistant.io/docs/automation/
+   */
+  automation?: integrations.Automation.Schema | IncludeList;
 
-/**
- * @TJS-type string
- */
-export interface IncludeFolderTag { }
+  /**
+   * Groups allows you to combine multiple entities into a single group entity.
+   * https://www.home-assistant.io/integrations/group
+   */
+  group?: integrations.Group.Schema | IncludeNamed;
 
-export type IncludeTags = IncludeTag | IncludeFolderTag;
+  /**
+   * The input_boolean integration allows the user to define boolean values that can be controlled via the frontend and can be used within conditions of automation. This can for example be used to disable or enable certain automations.
+   * https://www.home-assistant.io/integrations/input_boolean
+   */
+  input_boolean?: integrations.InputBoolean.Schema | IncludeNamed;
 
-/**
- * @TJS-type string
- * @TJS-pattern [.]yaml|[.]yml$
- */
-export interface SecretTag { }
+  /**
+   * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
+   * https://www.home-assistant.io/integrations/panel_iframe
+   */
+  panel_iframe?: integrations.PanelIframe.Schema | IncludeNamed;
 
+  /**
+   * The script integration allows users to specify a sequence of actions to be executed by Home Assistant. These are run when you turn the script on. The script integration will create an entity for each script and allow them to be controlled via services.
+   * https://www.home-assistant.io/integrations/script
+   */
+  script?: integrations.Script.Schema | IncludeNamed;
 
-export interface PanelIframeComponent {
-    [key: string]: PanelIframeComponentEntry;
-}
-export interface PanelIframeComponentEntry {
-    title: string;
-    url: string;
-    icon?: string;
-    require_admin?: boolean;
-}
+  /**
+   * You can create scenes that capture the states you want certain entities to be. For example, a scene can specify that light A should be turned on and light B should be bright red.
+   * https://www.home-assistant.io/integrations/scene
+   */
+  scene?: integrations.Scene.Schema | IncludeList;
 
-export type CustomizeFile = CustomizeComponent | CustomizeComponent[];
-
-export interface CustomizeComponent {
-    [key: string]: CustomizeComponentEntry;
-}
-/**
- * @TJS-additionalProperties true
- */
-export interface CustomizeComponentEntry {
-    friendly_name?: string;
-    homebridge_name?: string;
-    hidden?: boolean;
-    homebridge_hidden?: boolean;
-    emulated_hue_hidden?: boolean;
-    entity_picture?: string;
-    icon?: string;
-    assumed_state?: boolean;
-    device_class?: string;
-    unit_of_measurement?: string;
-    initial_state?: boolean;
-}
-export interface GroupComponent {
-    [key: string]: GroupComponentEntry | string[];
-}
-export interface GroupComponentEntry {
-    name?: string;
-    view?: boolean;
-    icon?: string;
-    control?: string;
-    entities: string | string[];
-    all?: boolean;
-}
-
-export type AuthProviders =
-    HomeAssistantAuthProvider |
-    TrustedNetworksAuthProvider |
-    CommandLineAuthProvider |
-    LegacyApiPasswordAuthProvider;
-
-export interface HomeAssistantAuthProvider {
-    type: "homeassistant";
-}
-export interface TrustedNetworksAuthProvider {
-    type: "trusted_networks";
-    trusted_networks: string | string[] | any[];
-    trusted_users?: {
-        [key: string]: string | Array<string | { [key: string]: string }>
-    };
-    allow_bypass_login?: boolean;
-}
-export interface CommandLineAuthProvider {
-    type: "command_line";
-    command: string;
-    args?: any;
-    meta?: boolean;
-}
-export interface LegacyApiPasswordAuthProvider {
-    type: "legacy_api_password";
-    api_password: string | SecretTag;
-}
-
-export type SceneComponentEntries = SceneComponentEntry | Array<SceneComponentEntry>;
-
-export interface SceneComponentEntry {
-    id?: string;
-    name: string;
-    icon?: string;
-    entities: { [name: string]: string | boolean | EntitySceneConfig };
+  sensor?: null | Array<Sensors> | IncludeList; // TODO: Migrate to new structure
 }
 
 /**
- * @TJS-additionalProperties true
+ * This interface contains all integrations that are not marked internal
+ * but are shipped with Home Assistant by default.
  */
-export interface EntitySceneConfig {
-    state?: boolean | string;
-    brightness?: number | string;
-    source?: string;
-    color_temp?: number | string;
-    xy_color?: any;
-}
-
-export interface InputBooleanEntry {
-    [name: string]: {
-        name?: string;
-        initial?: boolean;
-        icon?: string;
-    } | null;
-}
-
-export type ScriptFile = SequencedAction | ScriptAction | Script | Script[];
-
-export interface Script {
-    [name: string]: SequencedAction | ScriptAction;
-}
-
-export interface SequencedAction {
-  alias?: string;
-  icon?: string;
-  description?: string;
-  fields?: Array<ScriptField> | ScriptField;
-  sequence: ScriptAction | Array<ScriptAction | ConditionsConfig>;
-}
-
-export interface ScriptField {
-  [name: string]: {
-    description: string;
-    example: string;
-  };
-}
-
-export type ScriptAction = ServiceAction | DelayAction | WaitAction | EventAction;
-
-export interface ServiceAction {
-    service?: string;
-    service_template?: string;
-    data?: any;
-    data_template?: any;
-    entity_id?: string | string[];
-}
-export interface DelayAction {
-    delay: string | number | TimePeriod;
-}
-export interface WaitAction {
-    wait_template: string;
-    timeout?: string;
-    continue_on_timeout?: boolean | string;
-}
-export interface EventAction {
-    event: string;
-    event_data: EventActionData;
-    event_data_template?: any;
+export interface CoreIntegrations {
+  /**
+   * DEPRECATED as of Home Assistant 0.113.0
+   *
+   * The Philips Hue integration allows you to control and monitor the lights and motion sensors connected to your Hue bridge.
+   * https://www.home-assistant.io/integrations/hue
+   */
+  hue?: integrations.Hue.Schema | IncludeNamed;
 }
 
 /**
- * @TJS-additionalProperties true
+ * This interface contains definitions for custom integrations, also known as:
+ * custom_components.
  */
-export interface EventActionData {
-    name?: string;
-    message?: string;
-    entity_id?: string;
-    domain?: string;
+export interface CustomIntegrations {
+  /**
+   * Home Assistant Community Store
+   * https://hacs.xyz/
+   */
+  hacs?: integrations.HACS.Schema | IncludeNamed;
 }
