@@ -144,8 +144,8 @@ export class HaConnection implements IHaConnection {
       const completionItem = CompletionItem.create(`${value.entity_id}`);
       completionItem.detail = value.attributes.friendly_name;
       completionItem.kind = CompletionItemKind.Variable;
-      completionItem.filterText = `${value.entity_id}`;
-      completionItem.insertText = completionItem.filterText;
+      completionItem.filterText = `${value.entity_id} ${value.attributes.friendly_name}`;
+      completionItem.insertText = value.entity_id;
       completionItem.data = {};
       completionItem.data.isEntity = true;
 

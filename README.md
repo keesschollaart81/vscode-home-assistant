@@ -27,7 +27,7 @@
 
 # Features
 
-## Completion for Entity ID's & Services
+## Completion for Entity IDs, Services, Scenes and Triggers
 
 When connected with your Home Assistant server, entity id' and services will be auto-completed.
 
@@ -38,6 +38,14 @@ When connected with your Home Assistant server, entity id' and services will be 
 Most of the scheme's of Home Assistant will be validated and things like properties, values and enums will be auto-completed. This extension understands the behaviour of Home Assistant '!include...' behaviour and use this to provide scoped validation for all your files.
 
 <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema_validation_completion.gif">
+
+Deprecation Warnings:
+
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/deprecation-warnings.gif">
+
+Schema Documentation
+
+<img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/schema_documentation.gif">
 
 ## Go to Definition for Includes
 
