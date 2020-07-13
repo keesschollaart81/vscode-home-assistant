@@ -8,15 +8,15 @@ import {
 } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { getLanguageService } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
-import { HaConnection } from "../language-service/src/home-assistant/haConnection";
-import { ConfigurationService } from "../language-service/src/configuration";
-import { HomeAssistantConfiguration } from "../language-service/src/haConfig/haConfig";
-import { HomeAssistantLanguageService } from "../language-service/src/haLanguageService";
-import { SchemaServiceForIncludes } from "../language-service/src/schemas/schemaService";
-import { IncludeDefinitionProvider } from "../language-service/src/definition/includes";
-import { ScriptDefinitionProvider } from "../language-service/src/definition/scripts";
-import { EntityIdCompletionContribution } from "../language-service/src/completionHelpers/entityIds";
-import { ServicesCompletionContribution } from "../language-service/src/completionHelpers/services";
+import { HaConnection } from "../language-service/home-assistant/haConnection";
+import { ConfigurationService } from "../language-service/configuration";
+import { HomeAssistantConfiguration } from "../language-service/haConfig/haConfig";
+import { HomeAssistantLanguageService } from "../language-service/haLanguageService";
+import { SchemaServiceForIncludes } from "../language-service/schemas/schemaService";
+import { IncludeDefinitionProvider } from "../language-service/definition/includes";
+import { ScriptDefinitionProvider } from "../language-service/definition/scripts";
+import { EntityIdCompletionContribution } from "../language-service/completionHelpers/entityIds";
+import { ServicesCompletionContribution } from "../language-service/completionHelpers/services";
 import { VsCodeFileAccessor } from "./fileAccessor";
 
 const connection = createConnection(ProposedFeatures.all);

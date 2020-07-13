@@ -2,5 +2,4 @@ out
 node_modules
 .vscode-test/
 *.vsix
-src/language-service/dist
-src/language-service/src/schemas/json/*.json
+src/language-service/schemas/json/*.json

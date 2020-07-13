@@ -1,5 +1,4 @@
 .vscode-test/
 node_modules
 out
-src/language-service/dist
-src/language-service/src/schemas/json
+src/language-service/schemas/json

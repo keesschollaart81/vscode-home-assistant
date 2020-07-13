@@ -14,5 +14,5 @@
     "noImplicitAny": false
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
-  "exclude": ["node_modules", ".vscode-test", "server"]
+  "exclude": ["node_modules", ".vscode-test"]
 }
