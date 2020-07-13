@@ -1,3 +1,11 @@
+export type Data = {
+  [key: string]: any;
+};
+
+export type DataTemplate = {
+  [key: string]: any | Template;
+};
+
 /**
  * @TJS-pattern DEPRECATED^
  */
@@ -99,6 +107,19 @@ export type IncludeNamed = string;
  * @JTS-type integer
  */
 export type Integer = number;
+
+/**
+ * @JTS-type integer
+ * @minimum 0
+ */
+export type PositiveInteger = number;
+
+/**
+ * @JTS-type integer
+ * @minimum 1
+ * @maximum 65535
+ */
+export type Port = number;
 
 /**
  * @TJS-pattern ^!secret\s([a-zA-Z0-9_-]+)$
