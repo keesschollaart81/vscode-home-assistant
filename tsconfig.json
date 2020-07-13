@@ -1,24 +1,18 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es6",
+    "target": "es2020",
     "outDir": "out",
     "rootDir": "src",
-    "lib": [
-      "es6"
-    ],
+    "lib": ["ES2020"],
     "sourceMap": true,
-    "skipLibCheck": true, /* todo: remove when WebSocket error is solved*/
+    "skipLibCheck": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node"
+    "esModuleInterop": true,
+    "noUnusedParameters": false,
+    "noUnusedLocals": false,
+    "noImplicitAny": false
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.json"
-  ],
-  "exclude": [
-    "node_modules",
-    ".vscode-test",
-    "server"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.json"],
+  "exclude": ["node_modules", ".vscode-test", "server"]
 }
