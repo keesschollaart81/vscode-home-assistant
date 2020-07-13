@@ -20,7 +20,7 @@ import { Condition } from "../conditions";
 export type Domain = "automation";
 export type Schema = Item[] | IncludeList;
 
-type Mode = "single" | "parallel" | "queue" | "restart";
+type Mode = "single" | "parallel" | "queued" | "restart";
 
 interface Item {
   /**
