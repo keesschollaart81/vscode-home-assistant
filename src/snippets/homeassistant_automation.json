@@ -21,7 +21,7 @@
     },
     "condition template": {
         "prefix": "condition-template",
-        "body":[
+        "body": [
             "  - condition: template",
             "    value_template: \"{{ ${1: template} }}\""
         ]
