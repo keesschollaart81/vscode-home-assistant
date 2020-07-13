@@ -40,7 +40,7 @@ export interface InternalIntegrations {
    * The input_boolean integration allows the user to define boolean values that can be controlled via the frontend and can be used within conditions of automation. This can for example be used to disable or enable certain automations.
    * https://www.home-assistant.io/integrations/input_boolean
    */
-  input_boolean?: integrations.InputBoolean.Schema | IncludeNamed;
+  input_boolean?: integrations.InputBoolean.Schema | IncludeNamed | null;
 
   /**
    * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
