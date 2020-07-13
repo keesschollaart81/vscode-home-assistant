@@ -1,165 +1,205 @@
 import * as path from "path";
 import { FileAccessor } from "../fileAccessor";
 import { HomeAssistantYamlFile } from "./haYamlFile";
-import { IncludeReferences, ScriptReferences, HaFileInfo } from "./dto";
-import { IConfigurationService } from "../configuration";
+import { ScriptReferences, HaFileInfo, IncludeReferences } from "./dto";
 
 export class HomeAssistantConfiguration {
-
   private files: FilesCollection;
-  private subFolder: string = "";
 
-  public constructor(private fileAccessor: FileAccessor, private configurationService: IConfigurationService) {
+  private subFolder = "";
+
+  public constructor(private fileAccessor: FileAccessor) {
     this.files = {};
   }
 
-  public getAllFiles = async (): Promise<HaFileInfo[]> => {
-    let allFiles: HaFileInfo[] = [];
+  public getAllFiles = (): HaFileInfo[] => {
+    const allFiles: HaFileInfo[] = [];
 
-    for (var filename in this.files) {
-
+    for (const [filename, yamlFile] of Object.entries(this.files)) {
       allFiles.push(<HaFileInfo>{
-        filename: filename,
-        path: this.files[filename].path
+        filename,
+        path: yamlFile.path,
       });
     }
     return allFiles;
-  }
+  };
 
   public updateFile = async (uri: string): Promise<FileUpdateResult> => {
-    let filename = this.fileAccessor.fromUriToLocalPath(uri);
+    const filename = this.fileAccessor.fromUriToLocalPath(uri);
 
     let ourFile = this.files[filename];
     if (!ourFile) {
       return {
         isValidYaml: true,
-        newFilesFound: true
+        newFilesFound: true,
       };
     }
-    var homeAssistantYamlFile = new HomeAssistantYamlFile(this.fileAccessor, filename, ourFile.path);
+    const homeAssistantYamlFile = new HomeAssistantYamlFile(
+      this.fileAccessor,
+      filename,
+      ourFile.path
+    );
     this.files[filename] = homeAssistantYamlFile;
 
-    var validationResult = await homeAssistantYamlFile.isValid();
+    const validationResult = await homeAssistantYamlFile.isValid();
     if (!validationResult.isValid) {
       return {
         isValidYaml: false,
-        newFilesFound: false
+        newFilesFound: false,
       };
     }
 
-    let files = await this.discoverCore(filename, ourFile.path, {});
-    ourFile = files[filename];
-    this.files[filename] = ourFile;
+    const files = await this.discoverCore(filename, ourFile.path, {});
+    if (files !== undefined) {
+      ourFile = files[filename];
+      this.files[filename] = ourFile;
 
-    for (let filename in files) {
-      if (!this.files[filename]) {
-        return {
-          isValidYaml: true,
-          newFilesFound: true
-        };
+      for (const file in files) {
+        if (!this.files[file]) {
+          return {
+            isValidYaml: true,
+            newFilesFound: true,
+          };
+        }
       }
     }
+
     return {
       isValidYaml: true,
-      newFilesFound: false
+      newFilesFound: false,
     };
-  }
+  };
 
   public getIncludes = async (): Promise<IncludeReferences> => {
-    var allIncludes = {};
-    for (var filename in this.files) {
-      var includes = await this.files[filename].getIncludes();
-      allIncludes = { ...allIncludes, ...includes };
+    let results = [];
+    for (const file of Object.values(this.files)) {
+      results.push(file.getIncludes());
+    }
+    results = await Promise.all(results);
+
+    let allIncludes = {};
+    for (const result of results) {
+      allIncludes = { ...allIncludes, ...result };
     }
     return allIncludes;
-  }
+  };
 
   public getScripts = async (): Promise<ScriptReferences> => {
-    var allScripts = {};
-    for (var filename in this.files) {
-      var scripts = await this.files[filename].getScripts();
-      allScripts = { ...allScripts, ...scripts };
+    let results = [];
+    for (const filename of Object.keys(this.files)) {
+      results.push(this.files[filename].getScripts());
+    }
+    results = await Promise.all(results);
+
+    let allScripts = {};
+    for (const result of results) {
+      allScripts = { ...allScripts, ...result };
     }
     return allScripts;
-  }
+  };
 
   private getRootFiles = (): string[] => {
-    var filesInRoot = this.fileAccessor.getFilesInFolder("");
-    let ourFiles = ["configuration.yaml", "ui-lovelace.yaml"];
+    const filesInRoot = this.fileAccessor.getFilesInFolder("");
+    const ourFiles = ["configuration.yaml", "ui-lovelace.yaml"];
 
-    let files = ourFiles.filter(f => filesInRoot.some(y => y === f));
+    const files = ourFiles.filter((f) => filesInRoot.some((y) => y === f));
 
     if (files.length === 0) {
-      let areOurFilesSomehwere = filesInRoot.filter(f => ourFiles.some(ourFile => f.endsWith(ourFile)));
+      const areOurFilesSomehwere = filesInRoot.filter((f) =>
+        ourFiles.some((ourFile) => f.endsWith(ourFile))
+      );
       if (areOurFilesSomehwere.length > 0) {
-        this.subFolder = areOurFilesSomehwere[0].substr(0, areOurFilesSomehwere[0].lastIndexOf('/'));
+        this.subFolder = areOurFilesSomehwere[0].substr(
+          0,
+          areOurFilesSomehwere[0].lastIndexOf("/")
+        );
         return areOurFilesSomehwere;
       }
     }
 
-    return files.map(x => path.join(this.subFolder, x));
-  }
+    return files.map((x) => path.join(this.subFolder, x));
+  };
 
   public discoverFiles = async (): Promise<void> => {
-    let rootFiles = this.getRootFiles();
-    this.files = {};
-    for (var index in rootFiles) {
-      this.files = await this.discoverCore(rootFiles[index], rootFiles[index].substring(this.subFolder.length), this.files);
+    const rootFiles = this.getRootFiles();
+
+    let results = [];
+    for (const rootFile of rootFiles) {
+      results.push(
+        this.discoverCore(
+          rootFile,
+          rootFile.substring(this.subFolder.length),
+          this.files
+        )
+      );
     }
-  }
+    results = await Promise.all(results);
+    const result = results.pop();
+    if (result !== undefined) {
+      this.files = result;
+    }
+  };
 
-  private discoverCore = async (filename: string, path: string, files: FilesCollection): Promise<FilesCollection> => {
-
+  private discoverCore = async (
+    filename: string,
+    // eslint-disable-next-line no-shadow
+    path: string,
+    files: FilesCollection
+  ): Promise<FilesCollection> => {
     if (path.startsWith("/")) {
       path = path.substring(1);
     }
 
-    var homeAssistantYamlFile = new HomeAssistantYamlFile(this.fileAccessor, filename, path);
+    const homeAssistantYamlFile = new HomeAssistantYamlFile(
+      this.fileAccessor,
+      filename,
+      path
+    );
     files[filename] = homeAssistantYamlFile;
 
     let error = false;
-    var errorMessage = `File '${filename}' could not be parsed, it was referenced from path '${path}'.This file will be ignored.`;
+    let errorMessage = `File '${filename}' could not be parsed, it was referenced from path '${path}'.This file will be ignored.`;
+    let includes: IncludeReferences = {};
     try {
-      var includes = await homeAssistantYamlFile.getIncludes();
-    }
-    catch (err) {
+      includes = await homeAssistantYamlFile.getIncludes();
+    } catch (err) {
       error = true;
       errorMessage += ` Error message: ${err}`;
     }
-
-    var validationResult = await homeAssistantYamlFile.isValid();
+    const validationResult = await homeAssistantYamlFile.isValid();
     if (!validationResult.isValid) {
       error = true;
       if (validationResult.errors && validationResult.errors.length > 0) {
         errorMessage += " Error(s): ";
-        validationResult.errors.forEach(e => errorMessage += `\r\n - ${e}`);
+        // eslint-disable-next-line no-return-assign
+        validationResult.errors.forEach((e) => (errorMessage += `\r\n - ${e}`));
       }
     }
     if (validationResult.warnings && validationResult.warnings.length > 0) {
       // validationResult.warnings.forEach(w => console.debug(`Warning parsing file ${filename}: ${w}`));
     }
+
     if (error) {
       if (filename === path) {
         // root file has more impact
         console.warn(errorMessage);
-      }
-      else {
+      } else {
         console.log(errorMessage);
       }
       return files;
     }
 
-    for (var filenameKey in includes) {
-      if (Object.keys(files).some(x => x === filenameKey)) {
+    const results = [];
+    for (const [filenameKey, include] of Object.entries(includes)) {
+      if (Object.keys(files).some((x) => x === filenameKey)) {
         /// we already know this file
         continue;
       }
-      var currentPath = `${includes[filenameKey].path}`;
-
-      files = await this.discoverCore(filenameKey, currentPath, files);
+      results.push(this.discoverCore(filenameKey, include.path, files));
     }
-    return files;
-  }
+    const fileCollections: FilesCollection[] = await Promise.all(results);
+    return fileCollections[fileCollections.length - 1];
+  };
 }
 
 export interface FilesCollection {
