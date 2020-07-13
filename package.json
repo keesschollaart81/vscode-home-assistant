@@ -2,28 +2,16 @@
   "name": "vscode-home-assistant",
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "preview": false,
   "engines": {
-    "vscode": "^1.47.0"
+    "vscode": "^1.45.1"
   },
   "categories": [
     "Other",
     "Programming Languages",
     "Formatters",
     "Snippets"
-  ],
-  "badges": [
-    {
-      "url": "https://caseonline.visualstudio.com/vscode-home-assistant/_apis/build/status/keesschollaart81.vscode-home-assistant?branchName=master",
-      "href": "https://caseonline.visualstudio.com/vscode-home-assistant/_build/index?definitionId=23",
-      "description": "Azure Pipelines | Build"
-    },
-    {
-      "url": "https://caseonline.vsrm.visualstudio.com/_apis/public/Release/badge/b5e7419e-352f-433e-8690-463d52b2c4f7/1/2",
-      "href": "https://caseonline.visualstudio.com/vscode-home-assistant/_releases2?definitionId=1",
-      "description": "Azure Pipelines | Release"
-    }
   ],
   "publisher": "keesschollaart",
   "repository": {
@@ -230,7 +218,7 @@
     "@types/mocha": "8.0.0",
     "@types/node": "14.0.22",
     "@types/request": "2.48.5",
-    "@types/vscode": "^1.47.0",
+    "@types/vscode": "1.45.1",
     "@types/ws": "7.2.6",
     "@typescript-eslint/eslint-plugin": "^3.6.0",
     "@typescript-eslint/parser": "^3.6.0",

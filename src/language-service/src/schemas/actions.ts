@@ -3,6 +3,8 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/config_validation.py
  */
 import {
+  Data,
+  DataTemplate,
   Entity,
   EntityScene,
   IncludeList,
@@ -67,17 +69,13 @@ export interface EventAction {
    * The event data to pass along.
    * https://www.home-assistant.io/docs/scripts/#fire-an-event
    */
-  event_data?: {
-    [key: string]: any;
-  };
+  event_data?: Data;
 
   /**
    * The event data to pass along, using script template.
    * https://www.home-assistant.io/docs/scripts/#fire-an-event
    */
-  event_data_template?: {
-    [key: string]: any | Template;
-  };
+  event_data_template?: DataTemplate;
 }
 
 export interface RepeatAction {
@@ -148,17 +146,13 @@ export interface ServiceAction {
    * Specify other parameters beside the entity to target. For example, the light turn on service allows specifying the brightness.
    * https://www.home-assistant.io/docs/scripts/service-calls/#passing-data-to-the-service-call
    */
-  data?: {
-    [key: string]: any;
-  };
+  data?: Data;
 
   /**
    * Specify other parameters based on templates.
    * https://www.home-assistant.io/docs/scripts/service-calls/#use-templates-to-determine-the-attributes
    */
-  data_template?: {
-    [key: string]: Template;
-  };
+  data_template?: DataTemplate;
 
   /**
    * The entity (or entities) to execute this service call on.

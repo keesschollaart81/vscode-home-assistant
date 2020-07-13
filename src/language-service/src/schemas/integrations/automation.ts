@@ -3,6 +3,7 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/__init__.py
  */
 import {
+  Data,
   Deprecated,
   Entity,
   EntityDeviceTracker,
@@ -130,9 +131,7 @@ interface TriggerEvent {
    * Additional event data that has to match before triggering.
    * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
    */
-  event_data?: {
-    [key: string]: any;
-  };
+  event_data?: Data;
 
   /**
    * The name of the event to listen for.

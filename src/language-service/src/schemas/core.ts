@@ -38,6 +38,18 @@ export interface Core {
   elevation?: number | Secret;
 
   /**
+   * The URL that Home Assistant is available on from the internet. For example: https://example.duckdns.org:8123. Note that this setting may only contain a protocol, hostname and port; using a path is not supported.
+   * https://www.home-assistant.io/docs/configuration/basic/#external_url
+   */
+  external_url?: string | Secret;
+
+  /**
+   * The URL that Home Assistant is available on from your local network. For example: http://homeassistant.local:8123. Note that this setting may only contain a protocol, hostname and port; using a path is not supported.
+   * https://www.home-assistant.io/docs/configuration/basic/#internal_url
+   */
+  internal_url?: string | Secret;
+
+  /**
    * Latitude of your location required to calculate the time the sun rises and sets.
    * https://www.home-assistant.io/docs/configuration/basic/#latitude
    *
