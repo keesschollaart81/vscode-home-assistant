@@ -37,6 +37,12 @@ export interface InternalIntegrations {
   group?: integrations.Group.Schema | IncludeNamed;
 
   /**
+   * The http integration serves all files and data required for the Home Assistant frontend. You only need to add this to your configuration file if you want to change any of the default settings.
+   * https://www.home-assistant.io/integrations/http
+   */
+  http?: integrations.HTTP.Schema | IncludeNamed | null;
+
+  /**
    * The input_boolean integration allows the user to define boolean values that can be controlled via the frontend and can be used within conditions of automation. This can for example be used to disable or enable certain automations.
    * https://www.home-assistant.io/integrations/input_boolean
    */

@@ -28,6 +28,13 @@
     "fromType": "Schema"
   },
   {
+    "key": "homeassistant-http",
+    "path": "configuration.yaml/http",
+    "file": "homeassistant-http.json",
+    "tsFile": "integrations/http.ts",
+    "fromType": "Schema"
+  },
+  {
     "key": "homeassistant-input-boolean",
     "path": "configuration.yaml/input_boolean",
     "file": "homeassistant-input-boolean.json",

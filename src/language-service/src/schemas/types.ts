@@ -109,6 +109,19 @@ export type IncludeNamed = string;
 export type Integer = number;
 
 /**
+ * @JTS-type integer
+ * @minimum 0
+ */
+export type PositiveInteger = number;
+
+/**
+ * @JTS-type integer
+ * @minimum 1
+ * @maximum 65535
+ */
+export type Port = number;
+
+/**
  * @TJS-pattern ^!secret\s([a-zA-Z0-9_-]+)$
  */
 export type Secret = string;
