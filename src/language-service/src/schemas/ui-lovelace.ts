@@ -156,7 +156,13 @@ export interface EntityFilterEntityConfig extends EntityConfig {
 }
 export interface EntitiesCardEntityConfig extends EntityConfig {
   type?: string;
-  secondary_info?: "entity-id" | "last-changed" | "last-triggered" | "position" | "tilt-position" | "brightness";
+  secondary_info?:
+    | "entity-id"
+    | "last-changed"
+    | "last-triggered"
+    | "position"
+    | "tilt-position"
+    | "brightness";
   format?: "relative" | "total" | "date" | "time" | "datetime";
   action_name?: string;
   service?: string;
