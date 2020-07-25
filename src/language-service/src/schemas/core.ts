@@ -1,15 +1,28 @@
 import { HomeAssistantRoot } from "./homeassistant";
 import {
+  Deprecated,
   DeviceClasses,
   IncludeNamed,
-  UnitSystem,
   Secret,
   TimeZone,
+  UnitSystem,
 } from "./types";
 
 export interface Core {
   auth_mfa_modules?: Array<any> | IncludeNamed; // TODO: Extract similar as in integrations
   auth_providers?: AuthProviders[] | IncludeNamed; // TODO: Extract similar as in integrations
+
+  /**
+   * List of folders that can be used as sources for files.
+   * https://www.home-assistant.io/docs/configuration/basic/#allowlist_external_dirs
+   */
+  allowlist_external_dirs?: string[] | Secret[];
+
+  /**
+   * List of URLs that can be used as sources for files.
+   * https://www.home-assistant.io/docs/configuration/basic/#allowlist_external_urls
+   */
+  allowlist_external_urls?: string[] | Secret[];
 
   /**
    * Customize entities.
@@ -94,10 +107,10 @@ export interface Core {
   unit_system?: UnitSystem | Secret;
 
   /**
-   * List of folders that can be used as sources for sending files.
-   * https://www.home-assistant.io/docs/configuration/basic/#whitelist_external_dirs
+   * DEPRECATED as of Home Assistant 0.113.0.
+   * Replace it with "allowlist_external_dirs".
    */
-  whitelist_external_dirs?: string[] | Secret;
+  whitelist_external_dirs?: Deprecated;
 }
 
 export interface CoreCustomize {
