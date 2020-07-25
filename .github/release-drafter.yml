@@ -1,0 +1,55 @@
+name-template: "v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+categories:
+  - title: "🚨 Breaking Changes"
+    labels:
+      - "breaking-change"
+  - title: "🚀 Features"
+    labels:
+      - "feature"
+      - "enhancement"
+  - title: "🐛 Bug Fixes"
+    labels:
+      - "fix"
+      - "bugfix"
+      - "bug"
+  - title: "🧬 YAML Schema Updates"
+    labels:
+      - "schema"
+      - "yaml"
+  - title: "📚 Documentation"
+    labels:
+      - "documentation"
+  - title: "🧰 Maintenance"
+    labels:
+      - "chore"
+      - "dependencies"
+exclude-labels:
+  - "invalid"
+  - "wontfix"
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
+version-resolver:
+  major:
+    labels:
+      - "major"
+      - "breaking-change"
+  minor:
+    labels:
+      - "minor"
+      - "feature"
+      - "enhancement"
+  patch:
+    labels:
+      - "patch"
+      - "bug"
+      - "bugfix"
+      - "chore"
+      - "dependencies"
+      - "documentation"
+      - "fix"
+      - "schema"
+  default: patch
+template: |
+  ## What’s Changed
+
+  $CHANGES
