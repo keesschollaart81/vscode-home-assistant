@@ -242,7 +242,10 @@ export async function activate(
   const fileAssociations = vscode.workspace
     .getConfiguration()
     .get("files.associations");
-  if (!fileAssociations["*.yaml"]) {
+  if (
+    !fileAssociations["*.yaml"] &&
+    Object.values(fileAssociations).indexOf("home-assistant") === -1
+  ) {
     await vscode.workspace
       .getConfiguration()
       .update("files.associations", { "*.yaml": "home-assistant" }, false);
