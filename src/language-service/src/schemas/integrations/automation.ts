@@ -19,6 +19,7 @@ import { Condition } from "../conditions";
 
 export type Domain = "automation";
 export type Schema = Item[] | IncludeList;
+export type File = Item | Item[];
 
 type Mode = "single" | "parallel" | "queued" | "restart";
 

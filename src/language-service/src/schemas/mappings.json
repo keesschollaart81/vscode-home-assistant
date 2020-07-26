@@ -25,7 +25,7 @@
     "path": "configuration.yaml/scene",
     "file": "homeassistant-scene.json",
     "tsFile": "integrations/scene.ts",
-    "fromType": "Schema"
+    "fromType": "File"
   },
   {
     "key": "homeassistant-http",
@@ -60,7 +60,7 @@
     "path": "configuration.yaml/automation",
     "file": "automations.json",
     "tsFile": "integrations/automation.ts",
-    "fromType": "Schema"
+    "fromType": "File"
   },
   {
     "key": "ui-lovelace",
