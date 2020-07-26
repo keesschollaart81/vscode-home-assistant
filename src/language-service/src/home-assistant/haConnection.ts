@@ -4,11 +4,9 @@ import {
   CompletionItemKind,
   MarkupContent,
 } from "vscode-languageserver-protocol";
+import axios, { Method } from "axios";
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-extraneous-dependencies
-const rp = require("request-promise");
 
 export interface IHaConnection {
   tryConnect(): Promise<void>;
@@ -241,58 +239,52 @@ export class HaConnection implements IHaConnection {
     this.connection = undefined;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public callApi = (method: string, api: string, requestBody?: any): string => {
-    const options = {
-      method,
-      url: `${this.configurationService.url}/api/${api}`,
-      headers: {
-        Authorization: `Bearer ${this.configurationService.token}`,
-      },
-      body: requestBody,
-      json: true,
-    };
-
-    function callback(error: any, response: any, body: any) {
-      if (!error && response.statusCode === 200) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return body;
-      }
-      console.error("HA Api Call request failed!", error);
-      return "";
+  public callApi = async (
+    method: Method,
+    api: string,
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    requestBody?: any
+  ): Promise<any> => {
+    try {
+      const resp = await axios.request({
+        method,
+        url: `${this.configurationService.url}/api/${api}`,
+        headers: {
+          Authorization: `Bearer ${this.configurationService.token}`,
+        },
+        data: requestBody,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return resp.data;
+    } catch (error) {
+      console.error(error);
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-    return rp(options, callback);
+    return Promise.resolve("");
   };
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  public callService(domain: string, service: string, serviceData: any): any {
-    // over websockets (no response)
-    // callService(this.connection, domain, service, serviceData);
-
-    const options = {
-      method: "POST",
-      url: `${this.configurationService.url}/api/services/${domain}/${service}`,
-      headers: {
-        Authorization: `Bearer ${this.configurationService.token}`,
-      },
-      body: serviceData,
-      json: true,
-    };
-
-    function callback(error: any, response: any, body: any) {
-      if (!error && response.statusCode === 200) {
-        console.log(
-          `Service Call ${domain}.${service} made succesfully, response:`
-        );
-        console.log(body);
-      } else {
-        console.error(error);
-      }
+  public callService = async (
+    domain: string,
+    service: string,
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+    serviceData: any
+  ): Promise<any> => {
+    try {
+      const resp = await axios.request({
+        method: "POST",
+        url: `${this.configurationService.url}/api/services/${domain}/${service}`,
+        headers: {
+          Authorization: `Bearer ${this.configurationService.token}`,
+        },
+        data: serviceData,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      console.log(
+        `Service Call ${domain}.${service} made succesfully, response:`
+      );
+      console.log(JSON.stringify(resp.data, null, 1));
+    } catch (error) {
+      console.error(error);
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-    return rp(options, callback);
-  }
+    return Promise.resolve();
+  };
 }

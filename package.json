@@ -244,10 +244,9 @@
     "vscode-test": "^1.4.0"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "bufferutil": "^4.0.1",
     "home-assistant-js-websocket": "5.4.1",
-    "request": "2.88.2",
-    "request-promise": "^4.2.6",
     "utf-8-validate": "^5.0.2",
     "vscode-extension-telemetry": "0.1.6",
     "vscode-json-languageservice": "3.7.0",

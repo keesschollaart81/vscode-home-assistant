@@ -156,16 +156,19 @@ connection.onInitialize((params) => {
     }
   );
 
-  connection.onRequest("checkConfig", (_) => {
-    const result = haConnection.callApi("post", "config/core/check_config");
+  connection.onRequest("checkConfig", async (_) => {
+    const result = await haConnection.callApi(
+      "post",
+      "config/core/check_config"
+    );
     connection.sendNotification("configuration_check_completed", result);
   });
-  connection.onRequest("getErrorLog", (_) => {
-    const result = haConnection.callApi("get", "error_log");
+  connection.onRequest("getErrorLog", async (_) => {
+    const result = await haConnection.callApi("get", "error_log");
     connection.sendNotification("get_eror_log_completed", result);
   });
-  connection.onRequest("renderTemplate", (args: { template: string }) => {
-    const result = haConnection.callApi("post", "template", {
+  connection.onRequest("renderTemplate", async (args: { template: string }) => {
+    const result = await haConnection.callApi("post", "template", {
       template: args.template,
     });
 

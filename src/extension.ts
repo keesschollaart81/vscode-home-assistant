@@ -188,6 +188,9 @@ export async function activate(
           service: mapping.service,
           serviceData: mapping.serviceData,
         });
+        await vscode.window.showInformationMessage(
+          `Home Assistant service ${mapping.domain}.${mapping.service} called!`
+        );
       })
     );
   });
@@ -212,6 +215,9 @@ export async function activate(
             });
           })
         );
+        await vscode.window.showInformationMessage(
+          `Home Assistant inputs reloaded called!`
+        );
       }
     )
   );
@@ -219,12 +225,17 @@ export async function activate(
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "vscode-home-assistant.homeassistantCheckConfig",
-      (_) => client.sendRequest("checkConfig")
+      async () => {
+        await client.sendRequest("checkConfig");
+      }
     )
   );
   context.subscriptions.push(
-    vscode.commands.registerCommand("vscode-home-assistant.getErrorLog", (_) =>
-      client.sendRequest("getErrorLog")
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.getErrorLog",
+      async () => {
+        await client.sendRequest("getErrorLog");
+      }
     )
   );
 
