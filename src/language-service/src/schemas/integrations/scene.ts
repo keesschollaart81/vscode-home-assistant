@@ -6,6 +6,7 @@ import { IncludeNamed, IncludeList, Deprecated } from "../types";
 
 export type Domain = "scene";
 export type Schema = Item[] | IncludeList;
+export type File = Item | Item[];
 
 interface Item {
   /**
