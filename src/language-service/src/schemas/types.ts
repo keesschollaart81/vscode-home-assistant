@@ -8,8 +8,9 @@ export type DataTemplate = {
 
 /**
  * @TJS-pattern DEPRECATED^
+ * @items.pattern DEPRECATED^
  */
-export type Deprecated = any;
+export type Deprecated = any | any[];
 
 export type DeviceClasses =
   | DeviceClassesBinarySensor
