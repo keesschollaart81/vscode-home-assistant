@@ -40,7 +40,7 @@
   "devDependencies": {
     "@types/mocha": "8.0.0",
     "@types/node": "14.0.26",
-    "@types/vscode": "1.45.1",
+    "@types/vscode": "1.47.0",
     "@types/ws": "7.2.6",
     "@types/yaml": "1.9.7",
     "@typescript-eslint/eslint-plugin": "^3.6.0",
