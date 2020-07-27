@@ -105,18 +105,18 @@ export type IncludeList = string;
 export type IncludeNamed = string;
 
 /**
- * @JTS-type integer
+ * @TJS-type integer
  */
 export type Integer = number;
 
 /**
- * @JTS-type integer
+ * @TJS-type integer
  * @minimum 0
  */
 export type PositiveInteger = number;
 
 /**
- * @JTS-type integer
+ * @TJS-type integer
  * @minimum 1
  * @maximum 65535
  */
