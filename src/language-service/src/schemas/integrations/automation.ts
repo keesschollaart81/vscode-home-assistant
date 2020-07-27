@@ -5,14 +5,16 @@
 import {
   Data,
   Deprecated,
-  Entity,
-  EntityDeviceTracker,
-  EntityZone,
+  DeviceTrackerEntities,
+  Entities,
   IncludeList,
+  SensorEntities,
   State,
   Template,
   Time,
   TimePeriod,
+  ZoneEntities,
+  ZoneEntity,
 } from "../types";
 import { Action } from "../actions";
 import { Condition } from "../conditions";
@@ -174,7 +176,7 @@ interface TriggerGeolocation {
    * The zone to trigger on when a entity is appearing in or disappearing from.
    * https://www.home-assistant.io/docs/automation/trigger/#geolocation-trigger
    */
-  zone: EntityZone;
+  zone: ZoneEntity;
 }
 
 interface TriggerHomeAssistant {
@@ -239,7 +241,7 @@ interface TriggerNumericState {
    * The entity ID or list of entity IDs to monitor the numeric state for.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
-  entity_id: Entity | Entity[];
+  entity_id: SensorEntities;
 
   /**
    * Fire this trigger if the numeric state of the monitored entity (or entities) is changing from above to below the given threshold.
@@ -277,7 +279,7 @@ interface TriggerState {
    * The entity ID or list of entity IDs to monitor the state for.
    * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
    */
-  entity_id: Entity | Entity[];
+  entity_id: Entities;
 
   /**
    * The amount of time the entity or entities state must be held until this trigger fires.
@@ -405,13 +407,13 @@ interface TriggerZone {
    * The entity ID(s) of the device tracker(s) to monitor on a given zone.
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
    */
-  entity_id: EntityDeviceTracker | EntityDeviceTracker[];
+  entity_id: DeviceTrackerEntities;
 
   /**
    * The zone(s) to monitor for the given device tracker(s).
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
    */
-  zone: EntityZone | EntityZone[];
+  zone: ZoneEntities;
 
   /**
    * Trigger when the entity leaves or enters the zone(s) defined.
