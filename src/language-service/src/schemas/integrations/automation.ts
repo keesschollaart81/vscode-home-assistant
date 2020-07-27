@@ -60,8 +60,16 @@ interface Item {
   initial_state?: boolean;
 
   /**
+   * For both queued and parallel modes, configuration option max controls the maximum number of runs that can be executing and/or queued up at a time. The default is 10.
+   * https://www.home-assistant.io/docs/automation/#automation-modes
+   *
+   * @minimum 2
+   */
+  max?: number;
+
+  /**
    * The automation’s mode configuration option controls what happens when the automation is triggered while the actions are still running from a previous trigger.
-   * https://next.home-assistant.io/docs/automation/#automation-modes
+   * https://www.home-assistant.io/docs/automation/#automation-modes
    */
   mode?: Mode;
 
