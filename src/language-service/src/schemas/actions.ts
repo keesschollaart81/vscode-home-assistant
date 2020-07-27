@@ -72,6 +72,9 @@ export interface DelayAction {
   delay: TimePeriod | Template;
 }
 
+/**
+ * @TJS-additionalProperties true
+ */
 export interface DeviceAction {
   /**
    * The internal ID of the device to execute an action on.
