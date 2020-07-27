@@ -69,25 +69,56 @@ export type DeviceClassesSensor =
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
  */
 export type Entity = string;
+
 /**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
  */
-export type Entities = string;
+export type Entities = string | string[];
 
 /**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
-export type EntityDeviceTracker = string;
+export type DeviceTrackerEntity = string;
+
+/**
+ * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?device_tracker\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type DeviceTrackerEntities = string | string[];
 
 /**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
  */
-export type EntityScene = string;
+export type SceneEntity = string;
+
+/**
+ * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?scene\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type SceneEntities = string | string[];
+
+/**
+ * @TJS-pattern ^sensor\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type SensorEntity = string;
+
+/**
+ * @TJS-pattern ^sensor\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?sensor\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^sensor\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type SensorEntities = string | string[];
 
 /**
  * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)$
  */
-export type EntityZone = string;
+export type ZoneEntity = string;
+
+/**
+ * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?zone\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^zone\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type ZoneEntities = string | string[];
 
 /**
  * @TJS-pattern ^\!include\s.+\.y?aml$

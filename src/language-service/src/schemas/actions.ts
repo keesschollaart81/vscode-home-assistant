@@ -5,10 +5,10 @@
 import {
   Data,
   DataTemplate,
-  Entity,
-  EntityScene,
+  Entities,
   IncludeList,
   Integer,
+  SceneEntity,
   Template,
   TimePeriod,
 } from "./types";
@@ -157,7 +157,7 @@ export interface SceneAction {
    * Activate a scene.
    * https://www.home-assistant.io/docs/scripts/#activate-a-scene
    */
-  scene: EntityScene;
+  scene: SceneEntity;
 }
 
 export interface ServiceAction {
@@ -195,7 +195,7 @@ export interface ServiceAction {
    * The entity (or entities) to execute this service call on.
    * https://www.home-assistant.io/docs/scripts/service-calls
    */
-  entity_id?: Entity | Entity[] | "all" | "none" | null;
+  entity_id?: Entities | "all" | "none" | null;
 }
 
 export interface WaitTemplateAction {

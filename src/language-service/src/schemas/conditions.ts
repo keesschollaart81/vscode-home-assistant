@@ -4,13 +4,14 @@
  */
 import {
   Deprecated,
-  Entity,
-  EntityDeviceTracker,
-  EntityZone,
+  DeviceTrackerEntities,
+  Entities,
   IncludeList,
+  SensorEntities,
   State,
   Template,
   Time,
+  ZoneEntities,
   TimePeriod,
 } from "./types";
 
@@ -50,7 +51,7 @@ export interface DeviceCondition {
    * Device conditions encompass a set of properties that are defined by an integration.
    * In contrast to state conditions, device conditions are tied to a device and not necessarily an entity. To use a device trigger, set up an automation through the browser frontend.
    */
-  condition: "device";
+  condition?: "device";
 
   /**
    * The internal ID of the device to preform a conditional test on.
@@ -100,7 +101,7 @@ export interface NumericStateCondition {
    * The entity ID or list of entity IDs to test the numeric state against.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  entity_id: Entity | Entity[];
+  entity_id: SensorEntities;
 
   /**
    * An optional value template to use as the numeric state value.
@@ -134,7 +135,7 @@ export interface StateCondition {
    * The entity ID or list of entity IDs to test the state against.
    * https://www.home-assistant.io/docs/scripts/conditions/#state-condition
    */
-  entity_id: Entity | Entity[];
+  entity_id: Entities;
 
   /**
    * The state the entity (or entities) must have for this condition to pass.
@@ -238,7 +239,7 @@ export interface ZoneCondition {
    * The entity ID(s) of the device tracker(s).
    * https://www.home-assistant.io/docs/scripts/conditions/#zone-condition
    */
-  entity_id: EntityDeviceTracker | EntityDeviceTracker[];
+  entity_id: DeviceTrackerEntities;
 
   /**
    * DEPRECATED.
@@ -251,5 +252,5 @@ export interface ZoneCondition {
    * The zone(s) conditionally check against for the given device tracker(s).
    * https://www.home-assistant.io/docs/scripts/conditions/#zone-condition
    */
-  zone: EntityZone | EntityZone[];
+  zone: ZoneEntities;
 }
