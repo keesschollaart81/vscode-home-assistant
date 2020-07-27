@@ -216,7 +216,7 @@ export async function activate(
           })
         );
         await vscode.window.showInformationMessage(
-          `Home Assistant inputs reloaded called!`
+          "Home Assistant inputs reload called!"
         );
       }
     )
