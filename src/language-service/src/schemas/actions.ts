@@ -15,6 +15,7 @@ import {
 import { Condition } from "./conditions";
 
 export type Action =
+  | ChooseAction
   | DelayAction
   | DeviceAction
   | EventAction
@@ -23,6 +24,39 @@ export type Action =
   | ServiceAction
   | WaitTemplateAction
   | Condition; // A condition is a valid action
+
+export interface ChooseAction {
+  /**
+   * Alias for the choose action.
+   */
+  alias?: string;
+
+  /**
+   * This action allows you to select a sequence of other actions from a list of sequences.
+   * https://www.home-assistant.io/docs/scripts/#choose-a-group-of-actions
+   */
+  choose: ChooseActionItem | ChooseActionItem[] | IncludeList;
+
+  /**
+   * An optional default sequence can be included which will be run if none of the sequences from the list are run.
+   * https://www.home-assistant.io/docs/scripts/#choose-a-group-of-actions
+   */
+  default?: Action | Action[] | IncludeList;
+}
+
+export interface ChooseActionItem {
+  /**
+   * Only preform the sequence of actions if this condition/these conditions match.
+   * https://www.home-assistant.io/docs/scripts/#choose-a-group-of-actions
+   */
+  conditions: Condition | Condition[] | IncludeList;
+
+  /**
+   * The sequence of actions to be performed if the condition(s) match.
+   * https://www.home-assistant.io/docs/scripts/#choose-a-group-of-actions
+   */
+  sequence: Action | Action[] | IncludeList;
+}
 
 export interface DelayAction {
   /**
