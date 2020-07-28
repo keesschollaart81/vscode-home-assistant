@@ -88,6 +88,17 @@ export type DeviceTrackerEntity = string;
 export type DeviceTrackerEntities = string | string[];
 
 /**
+ * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type PersonEntity = string;
+
+/**
+ * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?person\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^person\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type PersonEntities = string | string[];
+
+/**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
  */
 export type SceneEntity = string;
