@@ -7,7 +7,6 @@ import {
   DeviceTrackerEntities,
   Entities,
   IncludeList,
-  SensorEntities,
   State,
   Template,
   Time,
@@ -101,7 +100,7 @@ export interface NumericStateCondition {
    * The entity ID or list of entity IDs to test the numeric state against.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  entity_id: SensorEntities;
+  entity_id: Entities;
 
   /**
    * An optional value template to use as the numeric state value.
