@@ -8,6 +8,7 @@ import {
   DeviceTrackerEntities,
   Entities,
   IncludeList,
+  PersonEntities,
   SensorEntities,
   State,
   Template,
@@ -414,8 +415,11 @@ interface TriggerZone {
   /**
    * The entity ID(s) of the device tracker(s) to monitor on a given zone.
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
+   *
+   * @TJS-pattern ^(device_tracker|person)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?(device_tracker|person)\.(?!_)[\da-z_]+(?<!_))*$
+   * @items.pattern ^(device_tracker|person)\.(?!_)[\da-z_]+(?<!_)$
    */
-  entity_id: DeviceTrackerEntities;
+  entity_id: DeviceTrackerEntities | PersonEntities;
 
   /**
    * The zone(s) to monitor for the given device tracker(s).
