@@ -189,37 +189,27 @@ export type TimePeriod = string | TimePeriodSeconds | TimePeriodMap;
 export interface TimePeriodMap {
   /**
    * Number of days. This must be a number.
-   *
-   * @TJS-type integer
    */
-  days?: number;
+  days?: Integer | Template;
   /**
    * Number of hours. This must be a number.
-   *
-   * @TJS-type integer
    */
-  hours?: number;
+  hours?: Integer | Template;
 
   /**
    * Number of milliseconds. This must be a number.
-   *
-   * @TJS-type integer
    */
-  milliseconds?: number;
+  milliseconds?: Integer | Template;
 
   /**
    * Number of minutes. This must be a number.
-   *
-   * @TJS-type integer
    */
-  minutes?: number;
+  minutes?: Integer | Template;
 
   /**
    * Number of seconds. This must be a number.
-   *
-   * @TJS-type integer
    */
-  seconds?: number;
+  seconds?: Integer | Template;
 }
 
 export type TimePeriodSeconds = number;
