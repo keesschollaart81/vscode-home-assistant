@@ -3,6 +3,7 @@ import {
   Deprecated,
   DeviceClasses,
   IncludeNamed,
+  Integer,
   Secret,
   TimeZone,
   UnitSystem,
@@ -45,10 +46,8 @@ export interface Core {
   /**
    * Altitude above sea level in meters. Impacts weather/sunrise data.
    * https://www.home-assistant.io/docs/configuration/basic/#elevation
-   *
-   * @TJS-type integer
    */
-  elevation?: number | Secret;
+  elevation?: Integer | Secret;
 
   /**
    * The URL that Home Assistant is available on from the internet. For example: https://example.duckdns.org:8123. Note that this setting may only contain a protocol, hostname and port; using a path is not supported.
