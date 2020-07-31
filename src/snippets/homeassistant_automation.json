@@ -48,19 +48,11 @@
   },
   "condition or": {
     "prefix": "condition-or",
-    "body": [
-      "- condition: or",
-      "  conditions:",
-      "    "
-    ]
+    "body": ["- condition: or", "  conditions:", "    "]
   },
   "condition and": {
     "prefix": "condition-and",
-    "body": [
-      "- condition: and",
-      "  conditions:",
-      "    "
-    ]
+    "body": ["- condition: and", "  conditions:", "    "]
   },
   "trigger state": {
     "prefix": "trigger-state",
@@ -86,20 +78,12 @@
   },
   "trigger sunset": {
     "prefix": "trigger-sunset",
-    "body": [
-      "- platform: sun",
-      "  event: sunset",
-      "  offset: \"00:00:00\""
-    ],
+    "body": ["- platform: sun", "  event: sunset", "  offset: \"00:00:00\""],
     "description": "Add a Home Assistant sunset trigger for automation"
   },
   "trigger sunrise": {
     "prefix": "trigger-sunrise",
-    "body": [
-      "- platform: sun",
-      "  event: sunrise",
-      "  offset: \"00:00:00\""
-    ],
+    "body": ["- platform: sun", "  event: sunrise", "  offset: \"00:00:00\""],
     "description": "Add a Home Assistant sunrise trigger for automation"
   },
   "trigger template": {
@@ -113,10 +97,7 @@
   },
   "trigger time": {
     "prefix": "trigger-time",
-    "body": [
-      "- platform: time",
-      "  at: \"12:34:56\""
-    ],
+    "body": ["- platform: time", "  at: \"12:34:56\""],
     "description": "Add a Home Assistant time trigger for automation"
   },
   "trigger time_pattern": {
@@ -140,10 +121,7 @@
   },
   "action service script turn on": {
     "prefix": "action-script-on",
-    "body": [
-      "- service: script.turn_on",
-      "  entity_id: "
-    ]
+    "body": ["- service: script.turn_on", "  entity_id: "]
   },
   "action choose": {
     "prefix": "action-choose",
