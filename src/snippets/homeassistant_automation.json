@@ -4,6 +4,7 @@
     "body": [
       "- id: ${1:automation id}",
       "  alias: ${2:automation alias (name)}",
+      "  mode: single",
       "  trigger:",
       "  condition:",
       "  action:"
@@ -19,12 +20,40 @@
     ],
     "description": "Add a Home Assistant state condition for automation"
   },
+  "condition numeric_state": {
+    "prefix": "condition-numeric-state",
+    "body": [
+      "  - condition: numeric_state",
+      "    entity_id: ${1:entity id}",
+      "    below: ${2:below}",
+      "    above: ${3:above}"
+    ],
+    "description": "Add a Home Assistant state condition for automation"
+  },
   "condition template": {
     "prefix": "condition-template",
     "body": [
       "  - condition: template",
       "    value_template: \"{{ ${1: template} }}\""
     ]
+  },
+  "condition time": {
+    "prefix": "condition-time",
+    "body": [
+      "  - condition: time",
+      "    after: \"${1: 15:00:00}\"",
+      "    before: \"${2: 02:00:00}\"",
+      "    weekday:",
+      "      - ${3: mon}"
+    ]
+  },
+  "condition or": {
+    "prefix": "condition-or",
+    "body": ["  - condition: or", "    conditions:", "    "]
+  },
+  "condition and": {
+    "prefix": "condition-and",
+    "body": ["  - condition: and", "    conditions:", "    "]
   },
   "trigger state": {
     "prefix": "trigger-state",
@@ -95,12 +124,28 @@
     "body": [
       "  - service: ${1:service name}",
       "    data_template:",
-      "      entity_id: "
+      "      entity_id: ${2:entity_id}"
     ],
     "description": "Add a Home Assistant service action for automation"
   },
   "action service script turn on": {
     "prefix": "action-script-on",
     "body": ["  - service: script.turn_on", "    entity_id: "]
+  },
+  "action choose": {
+    "prefix": "action-choose",
+    "body": [
+      "  - choose:",
+      "      - conditions:",
+      "        ${1:condition}",
+      "        sequence:",
+      "        ${2:action}",
+      "      - conditions:",
+      "        ${3:condition}",
+      "        sequence:",
+      "        ${4:action}",
+      "      default:",
+      "        ${5:action}"
+    ]
   }
 }
