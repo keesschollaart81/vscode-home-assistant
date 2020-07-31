@@ -105,7 +105,7 @@
   },
   "trigger time": {
     "prefix": "trigger-time",
-    "body": ["  - platform: time", "    at: \"12:34:56\""],
+    "body": ["- platform: time", "  at: \"12:34:56\""],
     "description": "Add a Home Assistant time trigger for automation"
   },
   "trigger time_pattern": {
@@ -129,7 +129,7 @@
   },
   "action service script turn on": {
     "prefix": "action-script-on",
-    "body": ["  - service: script.turn_on", "    entity_id: "]
+    "body": ["- service: script.turn_on", "  entity_id: "]
   },
   "action choose": {
     "prefix": "action-choose",
