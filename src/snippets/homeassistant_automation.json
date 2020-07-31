@@ -4,7 +4,6 @@
     "body": [
       "- id: ${1:automation id}",
       "  alias: ${2:automation alias (name)}",
-      "  mode: single",
       "  trigger:",
       "  condition:",
       "  action:"
@@ -14,93 +13,93 @@
   "condition state": {
     "prefix": "condition-state",
     "body": [
-      "  - condition: state",
-      "    entity_id: ${1:entity id}",
-      "    state: ${2: state}"
+      "- condition: state",
+      "  entity_id: ${1:entity id}",
+      "  state: ${2: state}"
     ],
     "description": "Add a Home Assistant state condition for automation"
   },
   "condition numeric_state": {
     "prefix": "condition-numeric-state",
     "body": [
-      "  - condition: numeric_state",
-      "    entity_id: ${1:entity id}",
-      "    below: ${2:below}",
-      "    above: ${3:above}"
+      "- condition: numeric_state",
+      "  entity_id: ${1:entity id}",
+      "  below: ${2:below}",
+      "  above: ${3:above}"
     ],
-    "description": "Add a Home Assistant state condition for automation"
+    "description": "Add a Home Assistant numeric state condition for automation"
   },
   "condition template": {
     "prefix": "condition-template",
     "body": [
-      "  - condition: template",
-      "    value_template: \"{{ ${1: template} }}\""
+      "- condition: template",
+      "  value_template: \"{{ ${1: template} }}\""
     ]
   },
   "condition time": {
     "prefix": "condition-time",
     "body": [
-      "  - condition: time",
-      "    after: \"${1: 15:00:00}\"",
-      "    before: \"${2: 02:00:00}\"",
-      "    weekday:",
-      "      - ${3: mon}"
+      "- condition: time",
+      "  after: \"${1: 15:00:00}\"",
+      "  before: \"${2: 02:00:00}\"",
+      "  weekday:",
+      "    - ${3: mon}"
     ]
   },
   "condition or": {
     "prefix": "condition-or",
-    "body": ["  - condition: or", "    conditions:", "    "]
+    "body": ["- condition: or", "  conditions:", "    "]
   },
   "condition and": {
     "prefix": "condition-and",
-    "body": ["  - condition: and", "    conditions:", "    "]
+    "body": ["- condition: and", "  conditions:", "    "]
   },
   "trigger state": {
     "prefix": "trigger-state",
     "body": [
-      "  - platform: state",
-      "    entity_id: ${1:entity id}",
-      "    from: ${2: from state}",
-      "    to: ${3: to state}"
+      "- platform: state",
+      "  entity_id: ${1:entity id}",
+      "  from: ${2: from state}",
+      "  to: ${3: to state}"
     ],
     "description": "Add a Home Assistant state trigger for automation"
   },
   "trigger numeric state": {
     "prefix": "trigger-numeric-state",
     "body": [
-      "  - platform: numeric_state",
-      "    entity_id: ${1:entity id}",
-      "    value_template: \"{{ ${2: template} }}\"",
-      "    above: 17",
-      "    below: 25",
-      "    for: \"01:10:05\""
+      "- platform: numeric_state",
+      "  entity_id: ${1:entity id}",
+      "  value_template: \"{{ ${2: template} }}\"",
+      "  above: 17",
+      "  below: 25",
+      "  for: \"01:10:05\""
     ],
     "description": "Add a Home Assistant numeric_state trigger for automation"
   },
   "trigger sunset": {
     "prefix": "trigger-sunset",
     "body": [
-      "  - platform: sun",
-      "    event: sunset",
-      "    offset: \"00:00:00\""
+      "- platform: sun",
+      "  event: sunset",
+      "  offset: \"00:00:00\""
     ],
     "description": "Add a Home Assistant sunset trigger for automation"
   },
   "trigger sunrise": {
     "prefix": "trigger-sunrise",
     "body": [
-      "  - platform: sun",
-      "    event: sunrise",
-      "    offset: \"00:00:00\""
+      "- platform: sun",
+      "  event: sunrise",
+      "  offset: \"00:00:00\""
     ],
     "description": "Add a Home Assistant sunrise trigger for automation"
   },
   "trigger template": {
     "prefix": "trigger-template",
     "body": [
-      "  - platform: template",
-      "    value_template: \"{{ ${1: value_template} }}\"",
-      "    for: \"00:00:00\""
+      "- platform: template",
+      "  value_template: \"{{ ${1: value_template} }}\"",
+      "  for: \"00:00:00\""
     ],
     "description": "Add a Home Assistant template trigger for automation"
   },
@@ -112,19 +111,19 @@
   "trigger time_pattern": {
     "prefix": "trigger-time-pattern",
     "body": [
-      "  - platform: time_pattern",
-      "    hours: \"12\"",
-      "    minutes: \"/5\"",
-      "    seconds: \"*\""
+      "- platform: time_pattern",
+      "  hours: \"12\"",
+      "  minutes: \"/5\"",
+      "  seconds: \"*\""
     ],
     "description": "Add a Home Assistant time_pattern trigger for automation"
   },
   "action service": {
     "prefix": "action-service",
     "body": [
-      "  - service: ${1:service name}",
-      "    data_template:",
-      "      entity_id: ${2:entity_id}"
+      "- service: ${1:service name}",
+      "  data_template:",
+      "    entity_id: ${2:entity_id}"
     ],
     "description": "Add a Home Assistant service action for automation"
   },
@@ -135,17 +134,17 @@
   "action choose": {
     "prefix": "action-choose",
     "body": [
-      "  - choose:",
-      "      - conditions:",
-      "        ${1:condition}",
-      "        sequence:",
-      "        ${2:action}",
-      "      - conditions:",
-      "        ${3:condition}",
-      "        sequence:",
-      "        ${4:action}",
-      "      default:",
-      "        ${5:action}"
+      "- choose:",
+      "  - conditions:",
+      "      ${1:condition}",
+      "    sequence:",
+      "      ${2:action}",
+      "  - conditions:",
+      "      ${3:condition}",
+      "    sequence:",
+      "      ${4:action}",
+      "  default:",
+      "      ${5:action}"
     ]
   }
 }
