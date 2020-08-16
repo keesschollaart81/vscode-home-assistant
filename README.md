@@ -64,13 +64,14 @@ Snippets allow you to create commonly used data structures very quickly.
 Commands allow you to quickly interact with Home Assistant! Find them using Cmd+shift+P and type 'Home Assistant'
 
 ## Render templates
+
 Evaluate jinja templates via Home Assistant's API and see how they would render.
 
 ![image](https://user-images.githubusercontent.com/6755359/69496084-6b089d80-0ece-11ea-8496-50251b91732f.png)
 
 # Contribution
 
-- [How to update the schema's](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's)
+- [How to update the schemas](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schemas)
 - [Local Development](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Local-development)
 
 # Release Notes
