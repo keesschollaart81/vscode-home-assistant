@@ -157,7 +157,7 @@ interface CoreCustomizeItem {
    * Sets the initial state for automations, on (true) or off (false).
    * https://www.home-assistant.io/docs/configuration/customizing-devices/#initial_state
    */
-  initial_state?: boolean;
+  initial_state?: string;
 
   /**
    * Defines the units of measurement, if any. This will also influence the graphical presentation in the history visualization as continuous value. Sensors with missing unit_of_measurement are showing as discrete values.
