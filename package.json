@@ -235,7 +235,7 @@
     "eslint-plugin-wc": "^1.2.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.0",
     "rimraf": "3.0.2",
     "ts-loader": "^8.0.2",
     "ts-node": "9.0.0",
