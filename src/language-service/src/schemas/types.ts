@@ -165,7 +165,7 @@ export type PositiveInteger = number;
 export type Port = number;
 
 /**
- * @TJS-pattern ^!secret\s([a-zA-Z0-9_-]+)$
+ * @TJS-pattern ^!secret|([a-zA-Z0-9_-]+)$
  */
 export type Secret = string;
 
