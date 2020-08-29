@@ -8,11 +8,12 @@ import {
   DeviceTrackerEntities,
   Entities,
   IncludeList,
+  InputDatetimeEntities,
   PersonEntities,
   SensorEntities,
   State,
   Template,
-  Time,
+  Times,
   TimePeriod,
   ZoneEntities,
   ZoneEntity,
@@ -358,8 +359,12 @@ interface TriggerTime {
 
   /**
    * Time of day to trigger on, in HH:MM:SS, 24 hours clock format. For example: "13:30:00"
+   * Also accepts input_datetime entities (e.g., input_datetime.start_of_day)
+   *
+   * @TJS-pattern ^(input_datetime\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_datetime\.(?!_)[\da-z_]+(?<!_))*|(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d))$
+   * @items.pattern ^(input_datetime\.(?!_)[\da-z_]+(?<!_)|(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d))$
    */
-  at: Time;
+  at: Times | InputDatetimeEntities;
 }
 
 interface TriggerTimePattern {

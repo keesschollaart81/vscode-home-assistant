@@ -88,6 +88,17 @@ export type DeviceTrackerEntity = string;
 export type DeviceTrackerEntities = string | string[];
 
 /**
+ * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputDatetimeEntity = string;
+
+/**
+ * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_datetime\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputDatetimeEntities = string | string[];
+
+/**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
 export type PersonEntity = string;
@@ -183,6 +194,12 @@ export type Template = string;
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
  */
 export type Time = string;
+
+/**
+ * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
+ * @items.pattern^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
+ */
+export type Times = string | string[];
 
 export type TimePeriod = string | TimePeriodSeconds | TimePeriodMap;
 
