@@ -168,6 +168,11 @@ export async function activate(
       "reload_themes"
     ),
     new CommandMappings(
+      "vscode-home-assistant.homekitReload",
+      "homekit",
+      "reload"
+    ),
+    new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
       "addon_restart",

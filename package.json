@@ -143,6 +143,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.homekitReload",
+        "title": "Reload HomeKit",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Hassio Add-on",
         "category": "Home Assistant"
