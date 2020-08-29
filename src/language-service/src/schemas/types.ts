@@ -1,8 +1,4 @@
 export type Data = {
-  [key: string]: any;
-};
-
-export type DataTemplate = {
   [key: string]: any | Template;
 };
 

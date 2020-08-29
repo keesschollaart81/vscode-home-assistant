@@ -114,7 +114,7 @@
     "prefix": "action-service",
     "body": [
       "- service: ${1:service name}",
-      "  data_template:",
+      "  data:",
       "    entity_id: ${2:entity_id}"
     ],
     "description": "Add a Home Assistant service action for automation"
