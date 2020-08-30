@@ -174,6 +174,7 @@ export interface EntitiesCardEntityConfig extends EntityConfig {
   state_color?: boolean;
   header?: HeaderFooterPictureWidgetConfig | HeaderFooterButtonWidgetConfig;
   footer?: HeaderFooterPictureWidgetConfig | HeaderFooterButtonWidgetConfig;
+  attribute?: string;
 }
 
 export interface HeaderFooterPictureWidgetConfig extends LovelaceCardConfig {
