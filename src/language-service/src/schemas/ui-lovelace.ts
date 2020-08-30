@@ -332,7 +332,7 @@ export interface PictureElementsCardConfig extends LovelaceCardConfig {
   camera_image?: string;
   camera_view?: any;
   state_image?: any;
-  state_filter: string[];
+  state_filter?: Array<{ key: string } | string>;
   aspect_ratio?: string;
   entity?: string;
   elements: Elements;
