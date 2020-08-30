@@ -214,6 +214,7 @@ export async function activate(
       "filter",
       "reload"
     ),
+    new CommandMappings("vscode-home-assistant.restReload", "rest", "reload"),
     new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",

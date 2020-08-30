@@ -198,6 +198,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.restReload",
+        "title": "Reload REST",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Add-on",
         "category": "Home Assistant"
