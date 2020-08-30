@@ -159,12 +159,12 @@
       },      
       {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
-        "title": "Restart 'Git Pull' Hassio Add-on",
+        "title": "Restart 'Git Pull' Add-on",
         "category": "Home Assistant"
       },
       {
         "command": "vscode-home-assistant.hassioHostReboot",
-        "title": "Reboot Hassio Host",
+        "title": "Reboot Supervisor Host",
         "category": "Home Assistant"
       },
       {
