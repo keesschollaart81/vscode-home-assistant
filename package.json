@@ -183,6 +183,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.universalReload",
+        "title": "Reload Universal Media Player",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Add-on",
         "category": "Home Assistant"
