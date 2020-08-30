@@ -107,6 +107,12 @@ export interface NumericStateCondition {
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
   value_template?: Template;
+
+  /**
+   * Use the value of a specific entity attribute to test against, instead of the entity state.
+   * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
+   */
+  attribute?: string;
 }
 
 export interface OrCondition {
@@ -153,6 +159,12 @@ export interface StateCondition {
    * This option has no effect, please remove it.
    */
   from?: Deprecated;
+
+  /**
+   * Use the value of a specific entity attribute to test against, instead of the entity state.
+   * https://www.home-assistant.io/docs/scripts/conditions/#state-condition
+   */
+  attribute?: string;
 }
 
 export interface SunCondition {
