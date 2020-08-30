@@ -275,6 +275,12 @@ interface TriggerNumericState {
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
   for?: TimePeriod | Template;
+
+  /**
+   * Use the value of a specific entity attribute to trigger on, instead of the entity state.
+   * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
+   */
+  attribute?: string;
 }
 
 interface TriggerState {
@@ -307,6 +313,12 @@ interface TriggerState {
    * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
    */
   to?: State | State[];
+
+  /**
+   * Use the value of a specific entity attribute to trigger on, instead of the entity state.
+   * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
+   */
+  attribute?: string;
 }
 
 interface TriggerSun {
