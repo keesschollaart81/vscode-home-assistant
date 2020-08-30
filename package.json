@@ -156,17 +156,22 @@
         "command": "vscode-home-assistant.minMaxReload",
         "title": "Reload Min/Max",
         "category": "Home Assistant"
-      },      
+      },
       {
         "command": "vscode-home-assistant.genericThermostatReload",
         "title": "Reload Generic Thermostat",
         "category": "Home Assistant"
-      },      
+      },
       {
         "command": "vscode-home-assistant.genericCameraReload",
         "title": "Reload Generic Camera",
         "category": "Home Assistant"
-      },      
+      },
+      {
+        "command": "vscode-home-assistant.pingReload",
+        "title": "Reload Ping",
+        "category": "Home Assistant"
+      },
       {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Add-on",
