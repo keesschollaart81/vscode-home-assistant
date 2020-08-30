@@ -13,6 +13,7 @@ import {
   TimePeriod,
 } from "./types";
 import { Condition } from "./conditions";
+import { Trigger } from "./integrations/automation";
 
 export type Action =
   | ChooseAction
@@ -22,6 +23,7 @@ export type Action =
   | RepeatAction
   | SceneAction
   | ServiceAction
+  | WaitForTriggerAction
   | WaitTemplateAction
   | Condition; // A condition is a valid action
 
@@ -199,6 +201,31 @@ export interface ServiceAction {
    * https://www.home-assistant.io/docs/scripts/service-calls
    */
   entity_id?: Entities | "all" | "none" | null;
+}
+
+export interface WaitForTriggerAction {
+  /**
+   * Alias for the wait for trigger action.
+   */
+  alias?: string;
+
+  /**
+   * The trigger to wait for, before continuing execution of the script.
+   * https://www.home-assistant.io/docs/scripts/#wait-for-trigger
+   */
+  wait_for_trigger?: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * Set a timeout after which the script will continue its execution if the trigger has not occurred.
+   * https://www.home-assistant.io/docs/scripts/#wait-for-trigger
+   */
+  timeout?: TimePeriod;
+
+  /**
+   * Continue the execute of the action sequence on time out or not.
+   * https://www.home-assistant.io/docs/scripts/#wait-for-trigger
+   */
+  continue_on_timeout?: boolean;
 }
 
 export interface WaitTemplateAction {
