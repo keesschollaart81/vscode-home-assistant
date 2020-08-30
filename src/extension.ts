@@ -192,6 +192,7 @@ export async function activate(
       "generic",
       "reload"
     ),
+    new CommandMappings("vscode-home-assistant.pingReload", "ping", "reload"),
     new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
