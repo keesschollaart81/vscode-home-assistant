@@ -200,6 +200,11 @@ export async function activate(
       "reload"
     ),
     new CommandMappings(
+      "vscode-home-assistant.universalReload",
+      "universal",
+      "reload"
+    ),
+    new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
       "addon_restart",
