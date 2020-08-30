@@ -93,7 +93,7 @@ interface Item {
   action: Action | Action[] | IncludeList;
 }
 
-type Trigger =
+export type Trigger =
   | TriggerDevice
   | TriggerEvent
   | TriggerGeolocation
