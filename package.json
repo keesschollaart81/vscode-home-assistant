@@ -158,6 +158,11 @@
         "category": "Home Assistant"
       },      
       {
+        "command": "vscode-home-assistant.genericThermostatReload",
+        "title": "Reload Generic Thermostat",
+        "category": "Home Assistant"
+      },      
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Hassio Add-on",
         "category": "Home Assistant"
