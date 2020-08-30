@@ -148,6 +148,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.filesizeReload",
+        "title": "Reload File Size",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Hassio Add-on",
         "category": "Home Assistant"
