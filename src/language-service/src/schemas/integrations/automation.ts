@@ -10,7 +10,6 @@ import {
   IncludeList,
   InputDatetimeEntities,
   PersonEntities,
-  SensorEntities,
   State,
   Template,
   Times,
@@ -251,7 +250,7 @@ interface TriggerNumericState {
    * The entity ID or list of entity IDs to monitor the numeric state for.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
-  entity_id: SensorEntities;
+  entity_id: Entities;
 
   /**
    * Fire this trigger if the numeric state of the monitored entity (or entities) is changing from above to below the given threshold.
