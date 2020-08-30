@@ -195,6 +195,11 @@ export async function activate(
     new CommandMappings("vscode-home-assistant.pingReload", "ping", "reload"),
     new CommandMappings("vscode-home-assistant.trendReload", "trend", "reload"),
     new CommandMappings(
+      "vscode-home-assistant.historyStatsReload",
+      "history_stats",
+      "reload"
+    ),
+    new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
       "addon_restart",
