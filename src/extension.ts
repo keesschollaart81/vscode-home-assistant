@@ -188,6 +188,11 @@ export async function activate(
       "reload"
     ),
     new CommandMappings(
+      "vscode-home-assistant.genericCameraReload",
+      "generic",
+      "reload"
+    ),
+    new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
       "addon_restart",
