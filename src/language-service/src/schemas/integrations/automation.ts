@@ -2,7 +2,7 @@
  * Automation integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/__init__.py
  */
-import { Deprecated, IncludeList } from "../types";
+import { Data, Deprecated, IncludeList } from "../types";
 import { Action } from "../actions";
 import { Condition } from "../conditions";
 import { Trigger } from "../triggers";
@@ -81,6 +81,12 @@ interface Item {
    * https://www.home-assistant.io/docs/automation/#automation-basics
    */
   trigger: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * Variables that will be available inside your templates and conditions.
+   * https://www.home-assistant.io/docs/automation/#automation-basics
+   */
+  variables?: Data;
 
   /**
    * Conditions are optional tests that can limit an automation rule to only work in your specific use cases. A condition will test against the current state of the system. This includes the current time, devices, people and other things like the sun.
