@@ -25,6 +25,7 @@ export type Action =
   | ServiceAction
   | WaitForTriggerAction
   | WaitTemplateAction
+  | VariablesAction
   | Condition; // A condition is a valid action
 
 export interface ChooseAction {
@@ -251,4 +252,17 @@ export interface WaitTemplateAction {
    * https://www.home-assistant.io/docs/scripts/#wait
    */
   continue_on_timeout?: boolean;
+}
+
+export interface VariablesAction {
+  /**
+   * Alias for the variables action.
+   */
+  alias?: string;
+
+  /**
+   * The variable command allows you to set/override variables that will be accessible by templates in actions after it.
+   * https://www.home-assistant.io/docs/scripts/#variables
+   */
+  variables: Data;
 }

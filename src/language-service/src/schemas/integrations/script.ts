@@ -2,7 +2,7 @@
  * Group integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/__init__.py
  */
-import { IncludeNamed, IncludeList } from "../types";
+import { Data, IncludeNamed, IncludeList } from "../types";
 import { Action } from "../actions";
 
 export type Domain = "script";
@@ -68,6 +68,12 @@ interface Item {
     | "error"
     | "fatal"
     | "critical";
+
+  /**
+   * Variables that will be available inside your templates.
+   * https://www.home-assistant.io/integrations/script/#variables
+   */
+  variables?: Data;
 
   /**
    * The sequence of actions to be performed in the script.
