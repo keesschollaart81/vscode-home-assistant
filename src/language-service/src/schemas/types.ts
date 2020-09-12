@@ -84,6 +84,17 @@ export type DeviceTrackerEntity = string;
 export type DeviceTrackerEntities = string | string[];
 
 /**
+ * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$"
+ */
+export type InputEntity = string;
+
+/**
+ * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputEntities = string | string[];
+
+/**
  * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
  */
 export type InputDatetimeEntity = string;
@@ -93,6 +104,17 @@ export type InputDatetimeEntity = string;
  * @items.pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
  */
 export type InputDatetimeEntities = string | string[];
+
+/**
+ * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputNumberEntity = string;
+
+/**
+ * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_number\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputNumberEntities = string | string[];
 
 /**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$

@@ -8,11 +8,13 @@ import {
   DynamicTemplate,
   Entities,
   IncludeList,
+  InputDatetimeEntities,
+  InputNumberEntity,
   State,
   Template,
   Time,
-  ZoneEntities,
   TimePeriod,
+  ZoneEntities,
 } from "./types";
 
 export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
@@ -90,13 +92,13 @@ export interface NumericStateCondition {
    * Passes if the numeric state of the given entity (or entities) is above the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  above?: number;
+  above?: number | InputNumberEntity;
 
   /**
    * Passes if the numeric state of the given entity (or entities) is below the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  below?: number;
+  below?: number | InputNumberEntity;
 
   /**
    * The entity ID or list of entity IDs to test the numeric state against.
@@ -229,14 +231,14 @@ export interface TimeCondition {
    * Note that if only before key is used, the condition will be true from midnight until the specified time.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
-  before?: Time;
+  before?: Time | InputDatetimeEntities;
 
   /**
    * Conditionally check if it is currently after a certain time of day.
    * Note that if only after key is used, the condition will be true from the specified time until midnight.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
-  after?: Time;
+  after?: Time | InputDatetimeEntities;
 
   /**
    * Days of the week this condition can be valid.
