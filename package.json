@@ -228,6 +228,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.rpioGpioReload",
+        "title": "Reload Raspberry Pi GPIO",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Add-on",
         "category": "Home Assistant"
