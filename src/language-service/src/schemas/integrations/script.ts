@@ -55,6 +55,21 @@ interface Item {
   mode?: Mode;
 
   /**
+   * When `max` is exceeded (which is effectively 1 for `single` mode) a log message will be emitted to indicate this has happened. This controls the severity level of that log message
+   * https://www.home-assistant.io/integrations/script/#script-modes
+   */
+  max_exceeded?:
+    | "silent"
+    | "notset"
+    | "debug"
+    | "info"
+    | "warn"
+    | "warning"
+    | "error"
+    | "fatal"
+    | "critical";
+
+  /**
    * The sequence of actions to be performed in the script.
    * https://www.home-assistant.io/integrations/script/#sequence
    */
