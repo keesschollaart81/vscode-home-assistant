@@ -208,6 +208,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.bayesianReload",
+        "title": "Reload Bayesian",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Add-on",
         "category": "Home Assistant"
