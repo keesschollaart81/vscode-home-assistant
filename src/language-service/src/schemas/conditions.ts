@@ -5,6 +5,7 @@
 import {
   Deprecated,
   DeviceTrackerEntities,
+  DynamicTemplate,
   Entities,
   IncludeList,
   State,
@@ -19,6 +20,7 @@ export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
 export type Condition =
   | AndCondition
   | DeviceCondition
+  | DynamicTemplate
   | NotCondition
   | NumericStateCondition
   | OrCondition

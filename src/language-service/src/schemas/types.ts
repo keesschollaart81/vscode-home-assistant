@@ -187,6 +187,13 @@ export type State = number | string;
 export type Template = string;
 
 /**
+ * Dynamic template must contain Jinja
+ *
+ * @TJS-pattern \{(?:[%\{#])
+ */
+export type DynamicTemplate = string;
+
+/**
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
  */
 export type Time = string;
