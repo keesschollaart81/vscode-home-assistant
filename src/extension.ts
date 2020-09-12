@@ -231,7 +231,12 @@ export async function activate(
       "reload"
     ),
     new CommandMappings("vscode-home-assistant.smtpReload", "smtp", "reload"),
-    new CommandMappings("vscode-home-assistant.smtpReload", "mqtt", "reload"),
+    new CommandMappings("vscode-home-assistant.mqttReload", "mqtt", "reload"),
+    new CommandMappings(
+      "vscode-home-assistant.rpioGpioReload",
+      "rpi_gpio",
+      "reload"
+    ),
     new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
