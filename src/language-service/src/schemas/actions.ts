@@ -13,7 +13,7 @@ import {
   TimePeriod,
 } from "./types";
 import { Condition } from "./conditions";
-import { Trigger } from "./integrations/automation";
+import { Trigger } from "./triggers";
 
 export type Action =
   | ChooseAction
