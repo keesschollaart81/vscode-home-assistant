@@ -28,7 +28,7 @@ if (fs.readdirSync(outputFolder).length > 0 && process.argv[2] === "--quick") {
     "Skipping schema generation because there already schema files"
   );
 } else {
-  console.log("Generating schema's...");
+  console.log("Generating schemas...");
   const pathToSchemaMappings: PathToSchemaMapping[] = JSON.parse(filecontents);
   pathToSchemaMappings.forEach((mapping) => {
     console.log(mapping.path);

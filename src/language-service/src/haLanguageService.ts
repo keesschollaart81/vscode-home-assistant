@@ -44,7 +44,7 @@ export class HomeAssistantLanguageService {
       const haFiles = this.haConfig.getAllFiles();
       if (haFiles && haFiles.length > 0) {
         console.log(
-          `Applying schema's to ${haFiles.length} of your configuration files...`
+          `Applying schemas to ${haFiles.length} of your configuration files...`
         );
       }
 
@@ -62,11 +62,11 @@ export class HomeAssistantLanguageService {
     } catch (error) {
       const message: string = error.message;
       console.error(
-        `Unexpected error updating the schema's, message: ${message}`,
+        `Unexpected error updating the schemas, message: ${message}`,
         error
       );
     }
-    console.log(`Schema's updated!`);
+    console.log(`Schemas updated!`);
   };
 
   private getValidYamlTags(): string[] {

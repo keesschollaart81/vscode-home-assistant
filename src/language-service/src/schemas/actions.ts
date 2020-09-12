@@ -4,7 +4,7 @@
  */
 import {
   Data,
-  DataTemplate,
+  Deprecated,
   Entities,
   IncludeList,
   Integer,
@@ -13,6 +13,7 @@ import {
   TimePeriod,
 } from "./types";
 import { Condition } from "./conditions";
+import { Trigger } from "./triggers";
 
 export type Action =
   | ChooseAction
@@ -22,7 +23,9 @@ export type Action =
   | RepeatAction
   | SceneAction
   | ServiceAction
+  | WaitForTriggerAction
   | WaitTemplateAction
+  | VariablesAction
   | Condition; // A condition is a valid action
 
 export interface ChooseAction {
@@ -109,10 +112,11 @@ export interface EventAction {
   event_data?: Data;
 
   /**
-   * The event data to pass along, using script template.
+   * DEPRECATED as of Home Assistant 0.115.
+   * You can use templates directly in the event_data parameter, replace "event_data_template" with just "event_data".
    * https://www.home-assistant.io/docs/scripts/#fire-an-event
    */
-  event_data_template?: DataTemplate;
+  event_data_template?: Deprecated;
 }
 
 export interface RepeatAction {
@@ -174,10 +178,11 @@ export interface ServiceAction {
   service?: string;
 
   /**
-   * Allow the service to call to be generated from a template.
+   * DEPRECATED as of Home Assistant 0.115.
+   * You can use templates directly in the service parameter, replace "service_template" with just "service".
    * https://www.home-assistant.io/docs/scripts/service-calls/#use-templates-to-decide-which-service-to-call
    */
-  service_template?: Template;
+  service_template?: Deprecated;
 
   /**
    * Specify other parameters beside the entity to target. For example, the light turn on service allows specifying the brightness.
@@ -186,16 +191,42 @@ export interface ServiceAction {
   data?: Data;
 
   /**
-   * Specify other parameters based on templates.
+   * DEPRECATED as of Home Assistant 0.115.
+   * You can use templates directly in the data parameter, replace "data_template" with just "data".
    * https://www.home-assistant.io/docs/scripts/service-calls/#use-templates-to-determine-the-attributes
    */
-  data_template?: DataTemplate;
+  data_template?: Deprecated;
 
   /**
    * The entity (or entities) to execute this service call on.
    * https://www.home-assistant.io/docs/scripts/service-calls
    */
   entity_id?: Entities | "all" | "none" | null;
+}
+
+export interface WaitForTriggerAction {
+  /**
+   * Alias for the wait for trigger action.
+   */
+  alias?: string;
+
+  /**
+   * The trigger to wait for, before continuing execution of the script.
+   * https://www.home-assistant.io/docs/scripts/#wait-for-trigger
+   */
+  wait_for_trigger?: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * Set a timeout after which the script will continue its execution if the trigger has not occurred.
+   * https://www.home-assistant.io/docs/scripts/#wait-for-trigger
+   */
+  timeout?: TimePeriod;
+
+  /**
+   * Continue the execute of the action sequence on time out or not.
+   * https://www.home-assistant.io/docs/scripts/#wait-for-trigger
+   */
+  continue_on_timeout?: boolean;
 }
 
 export interface WaitTemplateAction {
@@ -221,4 +252,17 @@ export interface WaitTemplateAction {
    * https://www.home-assistant.io/docs/scripts/#wait
    */
   continue_on_timeout?: boolean;
+}
+
+export interface VariablesAction {
+  /**
+   * Alias for the variables action.
+   */
+  alias?: string;
+
+  /**
+   * The variable command allows you to set/override variables that will be accessible by templates in actions after it.
+   * https://www.home-assistant.io/docs/scripts/#variables
+   */
+  variables: Data;
 }

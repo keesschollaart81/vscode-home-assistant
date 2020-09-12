@@ -168,6 +168,76 @@ export async function activate(
       "reload_themes"
     ),
     new CommandMappings(
+      "vscode-home-assistant.homekitReload",
+      "homekit",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.filesizeReload",
+      "filesize",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.minMaxReload",
+      "min_max",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.genericThermostatReload",
+      "generic_thermostat",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.genericCameraReload",
+      "generic",
+      "reload"
+    ),
+    new CommandMappings("vscode-home-assistant.pingReload", "ping", "reload"),
+    new CommandMappings("vscode-home-assistant.trendReload", "trend", "reload"),
+    new CommandMappings(
+      "vscode-home-assistant.historyStatsReload",
+      "history_stats",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.universalReload",
+      "universal",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.statisticsReload",
+      "statistics",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.filterReload",
+      "filter",
+      "reload"
+    ),
+    new CommandMappings("vscode-home-assistant.restReload", "rest", "reload"),
+    new CommandMappings(
+      "vscode-home-assistant.commandLineReload",
+      "command_line",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.bayesianReload",
+      "bayesian",
+      "reload"
+    ),
+    new CommandMappings(
+      "vscode-home-assistant.telegramReload",
+      "telegram",
+      "reload"
+    ),
+    new CommandMappings("vscode-home-assistant.smtpReload", "smtp", "reload"),
+    new CommandMappings("vscode-home-assistant.mqttReload", "mqtt", "reload"),
+    new CommandMappings(
+      "vscode-home-assistant.rpioGpioReload",
+      "rpi_gpio",
+      "reload"
+    ),
+    new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
       "addon_restart",

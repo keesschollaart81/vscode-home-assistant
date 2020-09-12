@@ -5,14 +5,16 @@
 import {
   Deprecated,
   DeviceTrackerEntities,
+  DynamicTemplate,
   Entities,
   IncludeList,
-  SensorEntities,
+  InputDatetimeEntities,
+  InputNumberEntity,
   State,
   Template,
   Time,
-  ZoneEntities,
   TimePeriod,
+  ZoneEntities,
 } from "./types";
 
 export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
@@ -20,6 +22,7 @@ export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
 export type Condition =
   | AndCondition
   | DeviceCondition
+  | DynamicTemplate
   | NotCondition
   | NumericStateCondition
   | OrCondition
@@ -89,25 +92,31 @@ export interface NumericStateCondition {
    * Passes if the numeric state of the given entity (or entities) is above the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  above?: number;
+  above?: number | InputNumberEntity;
 
   /**
    * Passes if the numeric state of the given entity (or entities) is below the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  below?: number;
+  below?: number | InputNumberEntity;
 
   /**
    * The entity ID or list of entity IDs to test the numeric state against.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  entity_id: SensorEntities;
+  entity_id: Entities;
 
   /**
    * An optional value template to use as the numeric state value.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
   value_template?: Template;
+
+  /**
+   * Use the value of a specific entity attribute to test against, instead of the entity state.
+   * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
+   */
+  attribute?: string;
 }
 
 export interface OrCondition {
@@ -154,6 +163,12 @@ export interface StateCondition {
    * This option has no effect, please remove it.
    */
   from?: Deprecated;
+
+  /**
+   * Use the value of a specific entity attribute to test against, instead of the entity state.
+   * https://www.home-assistant.io/docs/scripts/conditions/#state-condition
+   */
+  attribute?: string;
 }
 
 export interface SunCondition {
@@ -216,14 +231,14 @@ export interface TimeCondition {
    * Note that if only before key is used, the condition will be true from midnight until the specified time.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
-  before?: Time;
+  before?: Time | InputDatetimeEntities;
 
   /**
    * Conditionally check if it is currently after a certain time of day.
    * Note that if only after key is used, the condition will be true from the specified time until midnight.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
-  after?: Time;
+  after?: Time | InputDatetimeEntities;
 
   /**
    * Days of the week this condition can be valid.

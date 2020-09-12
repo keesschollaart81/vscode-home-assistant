@@ -89,7 +89,7 @@ export interface Core {
    * Packages in Home Assistant provide a way to bundle different component’s configuration together. It allows for "splitting" your configuration.
    * https://www.home-assistant.io/docs/configuration/packages/
    */
-  packages?: Array<HomeAssistantRoot> | IncludeNamed;
+  packages?: HomeAssistantRoot | IncludeNamed;
 
   /**
    * Pick your time zone from the column TZ of Wikipedia’s list of tz database time

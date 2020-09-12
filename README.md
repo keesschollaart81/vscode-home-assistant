@@ -2,7 +2,7 @@
 
 <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/header.png" alt="Home Assistant Config Helper for Visual Studio Code"/>
 
-[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/keesschollaart.vscode-home-assistant.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant)  [![GitHub release](https://img.shields.io/github/release-pre/keesschollaart81/vscode-home-assistant.svg)](https://github.com/keesschollaart81/vscode-home-assistant/releases) 
+[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/keesschollaart.vscode-home-assistant.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant) [![GitHub release](https://img.shields.io/github/release-pre/keesschollaart81/vscode-home-assistant.svg)](https://github.com/keesschollaart81/vscode-home-assistant/releases)
 
 </h1>
 
@@ -20,10 +20,10 @@
 
 5. Continue reading in the Wiki:
 
-    - [Configure connection to HA](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
-    - [VS Code Remote SSH](https://github.com/keesschollaart81/vscode-home-assistant/wiki/VS-Code-Remote-SSH)
-    - [Your config, local or remote?](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Your-config,-local-or-remote%3F)
-    - [The troubleshooting guide](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Troubleshooting)
+   - [Configure connection to HA](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Configure-connection-to-HA)
+   - [VS Code Remote SSH](https://github.com/keesschollaart81/vscode-home-assistant/wiki/VS-Code-Remote-SSH)
+   - [Your config, local or remote?](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Your-config,-local-or-remote%3F)
+   - [The troubleshooting guide](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Troubleshooting)
 
 # Features
 
@@ -64,13 +64,14 @@ Snippets allow you to create commonly used data structures very quickly.
 Commands allow you to quickly interact with Home Assistant! Find them using Cmd+shift+P and type 'Home Assistant'
 
 ## Render templates
+
 Evaluate jinja templates via Home Assistant's API and see how they would render.
 
 ![image](https://user-images.githubusercontent.com/6755359/69496084-6b089d80-0ece-11ea-8496-50251b91732f.png)
 
 # Contribution
 
-- [How to update the schema's](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's)
+- [How to update the schemas](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schemas)
 - [Local Development](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Local-development)
 
 # Release Notes
@@ -86,7 +87,7 @@ Create an [issue](https://github.com/keesschollaart81/vscode-home-assistant/issu
 - [ ] Go to Definition for entities, scripts and automations
 - [ ] Autocomplete !secrets
 - [ ] Check local config with HA Server
- 
+
 # Telemetry
 
 This extension collects telemetry data to help us build a better experience for

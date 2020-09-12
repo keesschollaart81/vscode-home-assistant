@@ -2,7 +2,7 @@
  * Group integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/__init__.py
  */
-import { IncludeNamed, IncludeList } from "../types";
+import { Data, IncludeNamed, IncludeList } from "../types";
 import { Action } from "../actions";
 
 export type Domain = "script";
@@ -53,6 +53,27 @@ interface Item {
    * https://www.home-assistant.io/integrations/script/#script-modes
    */
   mode?: Mode;
+
+  /**
+   * When `max` is exceeded (which is effectively 1 for `single` mode) a log message will be emitted to indicate this has happened. This controls the severity level of that log message
+   * https://www.home-assistant.io/integrations/script/#script-modes
+   */
+  max_exceeded?:
+    | "silent"
+    | "notset"
+    | "debug"
+    | "info"
+    | "warn"
+    | "warning"
+    | "error"
+    | "fatal"
+    | "critical";
+
+  /**
+   * Variables that will be available inside your templates.
+   * https://www.home-assistant.io/integrations/script/#variables
+   */
+  variables?: Data;
 
   /**
    * The sequence of actions to be performed in the script.

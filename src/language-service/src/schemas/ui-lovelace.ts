@@ -127,11 +127,17 @@ export interface NoActionConfig {
   action: "none";
 }
 
+export interface UrlActionConfig {
+  action: "url";
+  url_path: string;
+}
+
 export type ActionConfig =
   | ToggleActionConfig
   | CallServiceActionConfig
   | NavigateActionConfig
   | MoreInfoActionConfig
+  | UrlActionConfig
   | NoActionConfig;
 
 export interface AlarmPanelCardConfig extends LovelaceCardConfig {
@@ -174,6 +180,7 @@ export interface EntitiesCardEntityConfig extends EntityConfig {
   state_color?: boolean;
   header?: HeaderFooterPictureWidgetConfig | HeaderFooterButtonWidgetConfig;
   footer?: HeaderFooterPictureWidgetConfig | HeaderFooterButtonWidgetConfig;
+  attribute?: string;
 }
 
 export interface HeaderFooterPictureWidgetConfig extends LovelaceCardConfig {
@@ -325,7 +332,7 @@ export interface PictureElementsCardConfig extends LovelaceCardConfig {
   camera_image?: string;
   camera_view?: any;
   state_image?: any;
-  state_filter: string[];
+  state_filter?: Array<{ key: string } | string>;
   aspect_ratio?: string;
   entity?: string;
   elements: Elements;

@@ -1,8 +1,4 @@
 export type Data = {
-  [key: string]: any;
-};
-
-export type DataTemplate = {
   [key: string]: any | Template;
 };
 
@@ -88,6 +84,50 @@ export type DeviceTrackerEntity = string;
 export type DeviceTrackerEntities = string | string[];
 
 /**
+ * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$"
+ */
+export type InputEntity = string;
+
+/**
+ * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputEntities = string | string[];
+
+/**
+ * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputDatetimeEntity = string;
+
+/**
+ * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_datetime\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputDatetimeEntities = string | string[];
+
+/**
+ * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputNumberEntity = string;
+
+/**
+ * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_number\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type InputNumberEntities = string | string[];
+
+/**
+ * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type PersonEntity = string;
+
+/**
+ * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?person\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^person\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type PersonEntities = string | string[];
+
+/**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
  */
 export type SceneEntity = string;
@@ -169,46 +209,49 @@ export type State = number | string;
 export type Template = string;
 
 /**
+ * Dynamic template must contain Jinja
+ *
+ * @TJS-pattern \{(?:[%\{#])
+ */
+export type DynamicTemplate = string;
+
+/**
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
  */
 export type Time = string;
+
+/**
+ * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
+ * @items.pattern^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
+ */
+export type Times = string | string[];
 
 export type TimePeriod = string | TimePeriodSeconds | TimePeriodMap;
 
 export interface TimePeriodMap {
   /**
    * Number of days. This must be a number.
-   *
-   * @TJS-type integer
    */
-  days?: number;
+  days?: Integer | Template;
   /**
    * Number of hours. This must be a number.
-   *
-   * @TJS-type integer
    */
-  hours?: number;
+  hours?: Integer | Template;
 
   /**
    * Number of milliseconds. This must be a number.
-   *
-   * @TJS-type integer
    */
-  milliseconds?: number;
+  milliseconds?: Integer | Template;
 
   /**
    * Number of minutes. This must be a number.
-   *
-   * @TJS-type integer
    */
-  minutes?: number;
+  minutes?: Integer | Template;
 
   /**
    * Number of seconds. This must be a number.
-   *
-   * @TJS-type integer
    */
-  seconds?: number;
+  seconds?: Integer | Template;
 }
 
 export type TimePeriodSeconds = number;
