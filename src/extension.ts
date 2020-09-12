@@ -230,6 +230,7 @@ export async function activate(
       "telegram",
       "reload"
     ),
+    new CommandMappings("vscode-home-assistant.smtpReload", "smpt", "reload"),
     new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
