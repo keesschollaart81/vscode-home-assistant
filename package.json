@@ -223,6 +223,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.mqttReload",
+        "title": "Reload MQTT",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Add-on",
         "category": "Home Assistant"
