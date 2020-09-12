@@ -8,11 +8,12 @@ import {
   DynamicTemplate,
   Entities,
   IncludeList,
+  InputNumberEntity,
   State,
   Template,
   Time,
-  ZoneEntities,
   TimePeriod,
+  ZoneEntities,
 } from "./types";
 
 export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
@@ -90,13 +91,13 @@ export interface NumericStateCondition {
    * Passes if the numeric state of the given entity (or entities) is above the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  above?: number;
+  above?: number | InputNumberEntity;
 
   /**
    * Passes if the numeric state of the given entity (or entities) is below the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  below?: number;
+  below?: number | InputNumberEntity;
 
   /**
    * The entity ID or list of entity IDs to test the numeric state against.
