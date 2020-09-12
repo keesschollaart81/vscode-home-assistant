@@ -230,14 +230,14 @@ export interface TimeCondition {
    * Note that if only before key is used, the condition will be true from midnight until the specified time.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
-  before?: Time;
+  before?: Time | InputDatetimeEntities;
 
   /**
    * Conditionally check if it is currently after a certain time of day.
    * Note that if only after key is used, the condition will be true from the specified time until midnight.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
-  after?: Time;
+  after?: Time | InputDatetimeEntities;
 
   /**
    * Days of the week this condition can be valid.
