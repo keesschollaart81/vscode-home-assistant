@@ -10,6 +10,7 @@ import {
   IncludeList,
   InputDatetimeEntities,
   InputNumberEntity,
+  PersonEntities,
   State,
   Template,
   Time,
@@ -253,8 +254,11 @@ export interface ZoneCondition {
   /**
    * The entity ID(s) of the device tracker(s).
    * https://www.home-assistant.io/docs/scripts/conditions/#zone-condition
+   *
+   * @TJS-pattern ^(device_tracker|person)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?(device_tracker|person)\.(?!_)[\da-z_]+(?<!_))*$
+   * @items.pattern ^(device_tracker|person)\.(?!_)[\da-z_]+(?<!_)$
    */
-  entity_id: DeviceTrackerEntities;
+  entity_id: DeviceTrackerEntities | PersonEntities;
 
   /**
    * DEPRECATED.
