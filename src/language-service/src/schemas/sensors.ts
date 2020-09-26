@@ -52,5 +52,6 @@ export interface TemplateSensorEntry {
     [key: string]: string;
   };
   availability_template?: string | boolean;
+  unique_id?: string;
   device_class?: string;
 }
