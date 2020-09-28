@@ -11,8 +11,12 @@ export type Deprecated = any | any[];
 export type DeviceClasses =
   | DeviceClassesBinarySensor
   | DeviceClassesCover
+  | DeviceClassesMediaPlayer
   | DeviceClassesSensor;
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/binary_sensor/__init__.py
+ */
 export type DeviceClassesBinarySensor =
   | "battery"
   | "battery_charging"
@@ -39,6 +43,9 @@ export type DeviceClassesBinarySensor =
   | "vibration"
   | "window";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/cover/__init__.py
+ */
 export type DeviceClassesCover =
   | "awning"
   | "blind"
@@ -51,15 +58,27 @@ export type DeviceClassesCover =
   | "shutter"
   | "window";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/media_player/__init__.py
+ */
+export type DeviceClassesMediaPlayer = "tv" | "speaker" | "receiver";
+
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
+ */
 export type DeviceClassesSensor =
   | "battery"
+  | "current"
+  | "energy"
   | "humidity"
   | "illuminance"
+  | "power"
+  | "power_factor"
+  | "pressure"
   | "signal_strength"
   | "temperature"
-  | "power"
-  | "pressure"
-  | "timestamp";
+  | "timestamp"
+  | "voltage";
 
 /**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
