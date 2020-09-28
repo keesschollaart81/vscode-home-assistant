@@ -314,6 +314,7 @@ export interface MarkdownCardConfig extends LovelaceCardConfig {
 export interface MediaControlCardConfig extends LovelaceCardConfig {
   type: "media-control";
   entity: string;
+  name?: string;
 }
 
 export interface PictureCardConfig extends LovelaceCardConfig {
