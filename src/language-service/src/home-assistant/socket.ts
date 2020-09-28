@@ -5,16 +5,18 @@ https://github.com/home-assistant/home-assistant-js-websocket/blob/master/lib/so
 
 */
 
-import * as ha from "home-assistant-js-websocket";
+import type { Auth } from "home-assistant-js-websocket/dist/auth";
+
 import WebSocket = require("ws");
 
 const MSG_TYPE_AUTH_REQUIRED = "auth_required";
 const MSG_TYPE_AUTH_INVALID = "auth_invalid";
 const MSG_TYPE_AUTH_OK = "auth_ok";
+const ERR_CANNOT_CONNECT = 1;
 const ERR_INVALID_AUTH = 2;
 
 export function createSocket(
-  auth: ha.Auth,
+  auth: Auth,
   ignoreCertificates: boolean
 ): Promise<any> {
   // Convert from http:// -> ws://, https:// -> wss://
@@ -78,14 +80,14 @@ export function createSocket(
         );
       }
       if (invalidAuth) {
-        promReject(ha.ERR_INVALID_AUTH);
+        promReject(ERR_INVALID_AUTH);
         return;
       }
 
       // Reject if we no longer have to retry
       if (triesLeft === 0) {
         // We never were connected and will not retry
-        promReject(ha.ERR_CANNOT_CONNECT);
+        promReject(ERR_CANNOT_CONNECT);
         return;
       }
 

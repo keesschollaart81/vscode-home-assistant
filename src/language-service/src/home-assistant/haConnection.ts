@@ -1,12 +1,21 @@
-import * as ha from "home-assistant-js-websocket";
 import {
   CompletionItem,
   CompletionItemKind,
   MarkupContent,
 } from "vscode-languageserver-protocol";
 import axios, { Method } from "axios";
+import type {
+  Connection,
+  HassEntities,
+  HassServices,
+  AuthData,
+} from "home-assistant-js-websocket";
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
+
+// Normal require(), and cast to the static type
+// eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+const ha = require("home-assistant-js-websocket/dist/haws.cjs") as typeof import("home-assistant-js-websocket");
 
 export interface IHaConnection {
   tryConnect(): Promise<void>;
@@ -16,11 +25,11 @@ export interface IHaConnection {
 }
 
 export class HaConnection implements IHaConnection {
-  private connection: ha.Connection | undefined;
+  private connection: Connection | undefined;
 
-  private hassEntities!: Promise<ha.HassEntities>;
+  private hassEntities!: Promise<HassEntities>;
 
-  private hassServices!: Promise<ha.HassServices>;
+  private hassServices!: Promise<HassServices>;
 
   constructor(private configurationService: IConfigurationService) {}
 
@@ -37,7 +46,7 @@ export class HaConnection implements IHaConnection {
       return;
     }
 
-    const auth = new ha.Auth(<ha.AuthData>{
+    const auth = new ha.Auth(<AuthData>{
       access_token: `${this.configurationService.token}`,
       expires: +new Date(new Date().getTime() + 1e11),
       hassUrl: `${this.configurationService.url}`,
@@ -106,13 +115,13 @@ export class HaConnection implements IHaConnection {
     }
   };
 
-  private getHassEntities = async (): Promise<ha.HassEntities> => {
+  private getHassEntities = async (): Promise<HassEntities> => {
     if (this.hassEntities !== undefined) {
       return this.hassEntities;
     }
 
     await this.createConnection();
-    this.hassEntities = new Promise<ha.HassEntities>(
+    this.hassEntities = new Promise<HassEntities>(
       // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
       async (resolve, reject) => {
         if (!this.connection) {
@@ -166,11 +175,11 @@ export class HaConnection implements IHaConnection {
     return completions;
   }
 
-  private getHassServices = async (): Promise<ha.HassServices> => {
+  private getHassServices = async (): Promise<HassServices> => {
     await this.createConnection();
 
     if (!this.hassServices) {
-      this.hassServices = new Promise<ha.HassServices>(
+      this.hassServices = new Promise<HassServices>(
         // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
         async (resolve, reject) => {
           if (!this.connection) {
