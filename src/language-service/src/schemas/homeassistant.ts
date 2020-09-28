@@ -34,7 +34,7 @@ export interface InternalIntegrations {
    * Groups allows you to combine multiple entities into a single group entity.
    * https://www.home-assistant.io/integrations/group
    */
-  group?: integrations.Group.Schema | IncludeNamed;
+  group?: integrations.Group.Schema | IncludeNamed | null;
 
   /**
    * The http integration serves all files and data required for the Home Assistant frontend. You only need to add this to your configuration file if you want to change any of the default settings.
