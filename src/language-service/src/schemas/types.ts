@@ -212,18 +212,6 @@ export type PositiveInteger = number;
  */
 export type Port = number;
 
-/**
- * @TJS-pattern ^!secret\s([a-zA-Z0-9_-]+)$
- */
-export type Secret = string;
-
-/**
- * @TJS-type string
- * @TJS-pattern [.]yaml|[.]yml$
- */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface SecretTag {}
-
 export type State = number | string;
 export type Template = string;
 

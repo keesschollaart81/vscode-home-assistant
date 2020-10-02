@@ -3,8 +3,6 @@
  * https://hacs.xyz/
  * Source: https://github.com/hacs/integration/blob/1.1.2/custom_components/hacs/configuration_schema.py
  */
-import { Secret } from "../types";
-
 export type Domain = "hacs";
 export interface Schema {
   /**
@@ -13,7 +11,7 @@ export interface Schema {
    *
    * @TJS-pattern ^[0-9a-fA-F]{40}$
    */
-  token: string | Secret;
+  token: string;
 
   /**
    * Enable tracking of AppDaemon apps.
