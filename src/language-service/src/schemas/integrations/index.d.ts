@@ -4,6 +4,7 @@ export * as HACS from "./hacs";
 export * as HTTP from "./http";
 export * as Hue from "./hue";
 export * as InputBoolean from "./input_boolean";
+export * as InputNumber from "./input_number";
 export * as PanelIframe from "./panel_iframe";
 export * as Scene from "./scene";
 export * as Script from "./script";

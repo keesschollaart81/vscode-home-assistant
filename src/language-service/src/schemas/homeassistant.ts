@@ -49,6 +49,12 @@ export interface InternalIntegrations {
   input_boolean?: integrations.InputBoolean.Schema | IncludeNamed | null;
 
   /**
+   * The input_number integration allows the user to define values that can be controlled via the frontend and can be used within conditions of automation. The frontend can display a slider, or a numeric input box.
+   * https://www.home-assistant.io/integrations/input_number
+   */
+  input_number?: integrations.InputNumber.Schema | IncludeNamed | null;
+
+  /**
    * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
    * https://www.home-assistant.io/integrations/panel_iframe
    */
