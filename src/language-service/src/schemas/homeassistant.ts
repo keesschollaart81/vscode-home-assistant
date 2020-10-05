@@ -31,6 +31,12 @@ export interface InternalIntegrations {
   automation?: integrations.Automation.Schema | IncludeList;
 
   /**
+   * Binary sensors gather information about the state of devices which have a “digital” return value (either 1 or 0). These can be switches, contacts, pins, etc.
+   * https://www.home-assistant.io/integrations/binary_sensor
+   */
+  binary_sensor?: integrations.BinarySensor.Schema | IncludeList;
+
+  /**
    * The counter integration allows one to count occurrences fired by automations.
    * https://www.home-assistant.io/integrations/counter
    */

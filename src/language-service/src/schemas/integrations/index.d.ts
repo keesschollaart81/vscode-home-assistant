@@ -1,4 +1,5 @@
 export * as Automation from "./automation";
+export * as BinarySensor from "./binary_sensor";
 export * as Counter from "./counter";
 export * as Group from "./group";
 export * as HACS from "./hacs";
