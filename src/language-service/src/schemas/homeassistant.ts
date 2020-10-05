@@ -31,6 +31,12 @@ export interface InternalIntegrations {
   automation?: integrations.Automation.Schema | IncludeList;
 
   /**
+   * The counter integration allows one to count occurrences fired by automations.
+   * https://www.home-assistant.io/integrations/counter
+   */
+  counter?: integrations.Counter.Schema | IncludeNamed | null;
+
+  /**
    * Groups allows you to combine multiple entities into a single group entity.
    * https://www.home-assistant.io/integrations/group
    */
