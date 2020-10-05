@@ -561,8 +561,10 @@ export interface SectionEntityConfig {
 
 export interface CastEntityConfig {
   type: "cast";
-  name?: string;
+  dashboard?: string;
   view: string | number;
+  name?: string;
+  icon?: string;
   hide_if_unavailable?: boolean;
 }
 
