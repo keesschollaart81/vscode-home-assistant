@@ -70,6 +70,13 @@
     "fromType": "File"
   },
   {
+    "key": "binary_sensor",
+    "path": "configuration.yaml/binary_sensor",
+    "file": "binary_sensor.json",
+    "tsFile": "integrations/binary_sensor.ts",
+    "fromType": "File"
+  },
+  {
     "key": "ui-lovelace",
     "path": "ui-lovelace.yaml",
     "file": "ui-lovelace.json",
