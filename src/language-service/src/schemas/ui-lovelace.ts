@@ -560,7 +560,7 @@ export interface ButtonEntityConfig {
   action_name?: string;
   tap_action: ActionConfig;
   hold_action?: ActionConfig;
-  double_tap_token?: ActionConfig;
+  double_tap_action?: ActionConfig;
 }
 
 /**
