@@ -221,6 +221,7 @@ export interface EntitiesCardConfig extends LovelaceCardConfig {
     | SectionEntityConfig
     | CastEntityConfig
     | CustomEntityConfig
+    | ButtonEntityConfig
     | string
   >;
   theme?: string;
@@ -563,6 +564,16 @@ export interface CastEntityConfig {
   name?: string;
   view: string | number;
   hide_if_unavailable?: boolean;
+}
+
+export interface ButtonEntityConfig {
+  type: "button";
+  name: string;
+  icon?: string;
+  action_name?: string;
+  tap_action: ActionConfig;
+  hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
 }
 
 /**
