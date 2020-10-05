@@ -560,7 +560,7 @@ export interface SectionEntityConfig {
 
 export interface CastEntityConfig {
   type: "cast";
-  dashboard: string | number;
+  dashboard?: string;
   view: string | number;
   name?: string;
   icon?: string;
