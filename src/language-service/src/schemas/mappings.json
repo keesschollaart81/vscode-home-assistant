@@ -119,6 +119,13 @@
     "fromType": "File"
   },
   {
+    "key": "vacuum",
+    "path": "configuration.yaml/vacuum",
+    "file": "vacuum.json",
+    "tsFile": "integrations/vacuum.ts",
+    "fromType": "File"
+  },
+  {
     "key": "ui-lovelace",
     "path": "ui-lovelace.yaml",
     "file": "ui-lovelace.json",
