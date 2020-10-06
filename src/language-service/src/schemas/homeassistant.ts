@@ -90,6 +90,12 @@ export interface InternalIntegrations {
   light?: integrations.Light.Schema | IncludeList;
 
   /**
+   * Keeps track which locks are in your environment, their state and allows you to control them.
+   * https://www.home-assistant.io/integrations/lock
+   */
+  lock?: integrations.Lock.Schema | IncludeList;
+
+  /**
    * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
    * https://www.home-assistant.io/integrations/panel_iframe
    */
