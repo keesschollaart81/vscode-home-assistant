@@ -59,8 +59,8 @@
     "key": "homeassistant-sensor",
     "path": "configuration.yaml/sensor",
     "file": "homeassistant-sensor.json",
-    "tsFile": "sensors.ts",
-    "fromType": "SensorFile"
+    "tsFile": "integrations/sensor.ts",
+    "fromType": "File"
   },
   {
     "key": "automations",

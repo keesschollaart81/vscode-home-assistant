@@ -1,5 +1,4 @@
 import { Core } from "./core";
-import { Sensors } from "./sensors";
 // eslint-disable-next-line import/extensions
 import * as integrations from "./integrations";
 import { IncludeList, IncludeNamed } from "./types";
@@ -84,7 +83,11 @@ export interface InternalIntegrations {
    */
   scene?: integrations.Scene.Schema | IncludeList;
 
-  sensor?: null | Array<Sensors> | IncludeList; // TODO: Migrate to new structure
+  /**
+   * Sensors are gathering information about states and conditions.
+   * https://www.home-assistant.io/integrations/sensor
+   */
+  sensor?: integrations.Sensor.Schema | IncludeList;
 }
 
 /**
