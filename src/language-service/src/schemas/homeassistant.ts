@@ -124,6 +124,12 @@ export interface InternalIntegrations {
    * https://www.home-assistant.io/integrations/switch
    */
   switch?: integrations.Switch.Schema | IncludeList;
+
+  /**
+   * The vacuum integration enables the ability to control home cleaning robots within Home Assistant.
+   * https://www.home-assistant.io/integrations/vacuum
+   */
+  vacuum?: integrations.Vacuum.Schema | IncludeList;
 }
 
 /**

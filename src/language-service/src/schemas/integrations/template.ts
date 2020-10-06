@@ -179,6 +179,22 @@ export interface SwitchPlatformSchema extends PlatformSchema {
   };
 }
 
+export interface VacuumPlatformSchema extends PlatformSchema {
+  /**
+   * The template platform creates vacuums that combine integrations and provides the ability to run scripts or invoke services for each of the start, pause, stop, return_to_base, clean_spot, locate and set_fan_speed commands of a vacuum.
+   * https://www.home-assistant.io/integrations/vacuum.template
+   */
+  platform: "template";
+
+  /**
+   * List of vacuums.
+   * https://www.home-assistant.io/integrations/vacuum.template#vacuums
+   */
+  vacuums: {
+    [key: string]: VacuumItem | IncludeNamed;
+  };
+}
+
 interface AlarmControlPanelItem {
   /**
    * Defines an action to run when the alarm is armed to away mode.
@@ -685,6 +701,98 @@ interface SwitchItem {
   /**
    * Defines a template to set the state of the switch. If not defined, the switch will optimistically assume all commands are successful.
    * https://www.home-assistant.io/integrations/switch.template#value_template
+   */
+  value_template?: Template;
+}
+
+interface VacuumItem {
+  /**
+   * Defines templates for attributes of the sensor.
+   * https://www.home-assistant.io/integrations/vacuum.template#attribute_templates
+   */
+  attributes_template?: { [key: string]: Template };
+
+  /**
+   * Defines a template to get the available state of the component. If the template returns true, the device is available.
+   * https://www.home-assistant.io/integrations/vacuum.template#availability_template
+   */
+  availability_template?: Template;
+
+  /**
+   * Defines a template to get the battery level of the vacuum. Legal values are numbers between 0 and 100.
+   * https://www.home-assistant.io/integrations/vacuum.template#battery_level_template
+   */
+  battery_level_template?: Template;
+
+  /**
+   * Defines an action to run when the vacuum is given a clean spot command.
+   * https://www.home-assistant.io/integrations/vacuum.template#clean_spot
+   */
+  clean_spot?: Action | Action[];
+
+  /**
+   * Defines a template to get the fan speed of the vacuum.
+   * https://www.home-assistant.io/integrations/vacuum.template#fan_speed_template
+   */
+  fan_speed_template?: Template;
+
+  /**
+   * List of fan speeds supported by the vacuum.
+   * https://www.home-assistant.io/integrations/vacuum.template#fan_speeds
+   */
+  fan_speeds?: string[];
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/vacuum.template#friendly_name
+   */
+  friendly_name?: string;
+
+  /**
+   * Defines an action to run when the vacuum is given a locate command.
+   * https://www.home-assistant.io/integrations/vacuum.template#locate
+   */
+  locate?: Action | Action[];
+
+  /**
+   * Defines an action to run when the vacuum is paused.
+   * https://www.home-assistant.io/integrations/vacuum.template#pause
+   */
+  pause?: Action | Action[];
+
+  /**
+   * Defines an action to run when the vacuum is given a return to base command.
+   * https://www.home-assistant.io/integrations/vacuum.template#return_to_base
+   */
+  return_to_base?: Action | Action[];
+
+  /**
+   * Defines an action to run when the vacuum is given a command to set the fan speed.
+   * https://www.home-assistant.io/integrations/vacuum.template#set_fan_speed
+   */
+  set_fan_speed?: Action | Action[];
+
+  /**
+   * Defines an action to run when the vacuum is started.
+   * https://www.home-assistant.io/integrations/vacuum.template#start
+   */
+  start: Action | Action[];
+
+  /**
+   * Defines an action to run when the vacuum is stopped.
+   * https://www.home-assistant.io/integrations/vacuum.template#stop
+   */
+  stop?: Action | Action[];
+
+  /**
+   * An ID that uniquely identifies this vacuum. Set this to an unique value to allow customization trough the UI.
+   * https://www.home-assistant.io/integrations/vacuum.template#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Defines a template to get the state of the vacuum. Valid value: docked/cleaning/idle/paused/returning/error.
+   * https://www.home-assistant.io/integrations/vacuum.template#value_template
    */
   value_template?: Template;
 }

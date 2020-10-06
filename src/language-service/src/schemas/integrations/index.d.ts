@@ -17,3 +17,4 @@ export * as Scene from "./scene";
 export * as Script from "./script";
 export * as Sensor from "./sensor";
 export * as Switch from "./switch";
+export * as Vacuum from "./vacuum";
