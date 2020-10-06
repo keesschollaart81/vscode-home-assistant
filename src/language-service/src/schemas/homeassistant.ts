@@ -1,7 +1,7 @@
 import { Core } from "./core";
 // eslint-disable-next-line import/extensions
 import * as integrations from "./integrations";
-import { Include, IncludeList, IncludeNamed } from "./types";
+import { IncludeList, IncludeNamed } from "./types";
 
 /**
  * @TJS-additionalProperties true
