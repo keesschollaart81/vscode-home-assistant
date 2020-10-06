@@ -105,6 +105,13 @@
     "fromType": "File"
   },
   {
+    "key": "lock",
+    "path": "configuration.yaml/lock",
+    "file": "lock.json",
+    "tsFile": "integrations/lock.ts",
+    "fromType": "File"
+  },
+  {
     "key": "ui-lovelace",
     "path": "ui-lovelace.yaml",
     "file": "ui-lovelace.json",

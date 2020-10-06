@@ -97,6 +97,56 @@ export interface LightPlatformSchema extends PlatformSchema {
   };
 }
 
+export interface LockPlatformSchema extends PlatformSchema {
+  /**
+   * The template platform creates locks that combines components.
+   * https://www.home-assistant.io/integrations/lock.template
+   */
+  platform: "template";
+
+  /**
+   * Defines a template to get the available state of the component. If the template returns true, the device is available.
+   * https://www.home-assistant.io/integrations/lock.template/#availability_template
+   */
+  availability_template?: Template;
+
+  /**
+   * Defines an action to lock the lock.
+   * https://www.home-assistant.io/integrations/lock.template/#lock
+   */
+  lock: Action | Action[];
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/lock.template/#name
+   */
+  name?: string;
+
+  /**
+   * Force lock state to use optimistic mode.
+   * https://www.home-assistant.io/integrations/lock.template/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * An ID that uniquely identifies this lock. Set this to an unique value to allow customization trough the UI.
+   * https://www.home-assistant.io/integrations/lock.template/#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Defines an action to unlock the lock.
+   * https://www.home-assistant.io/integrations/lock.template/#unlock
+   */
+  unlock: Action | Action[];
+
+  /**
+   * Defines a template to set the state of the lock.
+   * https://www.home-assistant.io/integrations/lock.template/#value_template
+   */
+  value_template: Template;
+}
+
 export interface SensorPlatformSchema extends PlatformSchema {
   /**
    * The template platform supports sensors which get their values from other entities.
