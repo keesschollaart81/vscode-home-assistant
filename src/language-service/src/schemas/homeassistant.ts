@@ -84,6 +84,12 @@ export interface InternalIntegrations {
   input_number?: integrations.InputNumber.Schema | IncludeNamed | null;
 
   /**
+   * This integration allows you to track and control various light bulbs.
+   * https://www.home-assistant.io/integrations/light
+   */
+  light?: integrations.Light.Schema | IncludeList;
+
+  /**
    * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
    * https://www.home-assistant.io/integrations/panel_iframe
    */

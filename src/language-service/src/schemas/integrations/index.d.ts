@@ -5,6 +5,7 @@ export * as Counter from "./counter";
 export * as Cover from "./cover";
 export * as Fan from "./fan";
 export * as Group from "./group";
+export * as Light from "./light";
 export * as HACS from "./hacs";
 export * as HTTP from "./http";
 export * as Hue from "./hue";
