@@ -9,7 +9,6 @@ import {
   Template,
   TimePeriod,
   ZoneEntity,
-  State,
   Times,
   DeviceTrackerEntities,
   PersonEntities,
