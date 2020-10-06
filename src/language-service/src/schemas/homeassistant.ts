@@ -54,6 +54,12 @@ export interface InternalIntegrations {
   cover?: integrations.Cover.Schema | IncludeList;
 
   /**
+   * The Fan integration allows you to control and monitor Fan devices.
+   * https://www.home-assistant.io/integrations/fan
+   */
+  fan?: integrations.Fan.Schema | IncludeList;
+
+  /**
    * Groups allows you to combine multiple entities into a single group entity.
    * https://www.home-assistant.io/integrations/group
    */

@@ -3,6 +3,7 @@ export * as Automation from "./automation";
 export * as BinarySensor from "./binary_sensor";
 export * as Counter from "./counter";
 export * as Cover from "./cover";
+export * as Fan from "./fan";
 export * as Group from "./group";
 export * as HACS from "./hacs";
 export * as HTTP from "./http";

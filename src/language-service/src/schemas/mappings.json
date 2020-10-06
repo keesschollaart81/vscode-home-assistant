@@ -91,6 +91,13 @@
     "fromType": "File"
   },
   {
+    "key": "fan",
+    "path": "configuration.yaml/fan",
+    "file": "fan.json",
+    "tsFile": "integrations/fan.ts",
+    "fromType": "File"
+  },
+  {
     "key": "ui-lovelace",
     "path": "ui-lovelace.yaml",
     "file": "ui-lovelace.json",
