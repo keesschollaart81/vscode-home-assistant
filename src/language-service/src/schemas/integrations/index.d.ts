@@ -16,3 +16,4 @@ export * as PanelIframe from "./panel_iframe";
 export * as Scene from "./scene";
 export * as Script from "./script";
 export * as Sensor from "./sensor";
+export * as Switch from "./switch";
