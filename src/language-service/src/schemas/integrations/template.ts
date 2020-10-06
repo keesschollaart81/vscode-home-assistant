@@ -6,6 +6,7 @@ import {
   Deprecated,
   DeviceClassesBinarySensor,
   DeviceClassesSensor,
+  DeviceClassesCover,
   IncludeList,
   IncludeNamed,
   Template,
@@ -45,6 +46,22 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
    */
   sensors: {
     [key: string]: BinarySensorItem | IncludeNamed;
+  };
+}
+
+export interface CoverPlatformSchema extends PlatformSchema {
+  /**
+   * The template platform can create covers that combine integrations and provides the ability to run scripts or invoke services for each of the open, close, stop, position and tilt commands of a cover.
+   * https://www.home-assistant.io/integrations/cover.template
+   */
+  platform: "template";
+
+  /**
+   * List of covers.
+   * https://www.home-assistant.io/integrations/cover.template/#covers
+   */
+  covers: {
+    [key: string]: CoverItem | IncludeNamed;
   };
 }
 
@@ -179,6 +196,104 @@ interface BinarySensorItem {
    * https://www.home-assistant.io/integrations/binary_sensor.template#value_template
    */
   value_template: Template;
+}
+
+interface CoverItem {
+  /**
+   * Defines a template to get the available state of the component. If the template returns true, the device is available. If the template returns any other value, the device will be unavailable.
+   * https://www.home-assistant.io/integrations/cover.template/#availability_template
+   */
+  availability_template?: Template;
+
+  /**
+   * Defines an action to close the cover.
+   * https://www.home-assistant.io/integrations/cover.template/#close_cover
+   */
+  close_cover?: Action | Action[];
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/cover.template/#device_class
+   */
+  device_class?: DeviceClassesCover;
+
+  /**
+   * Defines a template for the entity picture of the sensor.
+   * https://www.home-assistant.io/integrations/cover.template/#entity_picture_template
+   */
+  entity_picture_template?: Template;
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/cover.template/#friendly_name
+   */
+  friendly_name?: string;
+
+  /**
+   * Defines a template to specify which icon to use.
+   * https://www.home-assistant.io/integrations/cover.template/#icon_template
+   */
+  icon_template?: Template;
+
+  /**
+   * Defines an action to open the cover. If open_cover is specified, close_cover must also be specified.
+   * https://www.home-assistant.io/integrations/cover.template/#open_cover
+   */
+  open_cover?: Action | Action[];
+
+  /**
+   * Force cover position to use optimistic mode.
+   * https://www.home-assistant.io/integrations/cover.template/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * Defines a template to get the state of the cover. Legal values are numbers between 0 (closed) and 100 (open).
+   * https://www.home-assistant.io/integrations/cover.template/#position_template
+   */
+  position_template?: Template;
+
+  /**
+   * Defines an action to set to a cover position (between 0 and 100).
+   * https://www.home-assistant.io/integrations/cover.template/#set_cover_position
+   */
+  set_cover_position?: Action | Action[];
+
+  /**
+   * Defines an action to set the tilt of a cover (between 0 and 100).
+   * https://www.home-assistant.io/integrations/cover.template/#set_cover_tilt_position
+   */
+  set_cover_tilt_position?: Action | Action[];
+
+  /**
+   * Defines an action to stop the cover.
+   * https://www.home-assistant.io/integrations/cover.template/#stop_cover
+   */
+  stop_cover?: Action | Action[];
+
+  /**
+   * Force cover tilt position to use optimistic mode.
+   * https://www.home-assistant.io/integrations/cover.template/#tilt_optimistic
+   */
+  tilt_optimistic?: boolean;
+
+  /**
+   * Defines a template to get the tilt state of the cover. Legal values are numbers between 0 (closed) and 100 (open).
+   * https://www.home-assistant.io/integrations/cover.template/#tilt_template
+   */
+  tilt_template?: Template;
+
+  /**
+   * An ID that uniquely identifies this cover. Set this to an unique value to allow customization trough the UI.
+   * https://www.home-assistant.io/integrations/cover.template/#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Defines a template to get the state of the cover. Valid values are open/true or closed/false.
+   * https://www.home-assistant.io/integrations/cover.template/#value_template
+   */
+  value_template?: Template;
 }
 
 interface SensorItem {
