@@ -2,6 +2,7 @@ export * as AlarmControlPanel from "./alarm_control_panel";
 export * as Automation from "./automation";
 export * as BinarySensor from "./binary_sensor";
 export * as Counter from "./counter";
+export * as Cover from "./cover";
 export * as Group from "./group";
 export * as HACS from "./hacs";
 export * as HTTP from "./http";

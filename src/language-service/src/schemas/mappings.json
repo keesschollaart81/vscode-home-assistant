@@ -84,6 +84,13 @@
     "fromType": "File"
   },
   {
+    "key": "cover",
+    "path": "configuration.yaml/cover",
+    "file": "cover.json",
+    "tsFile": "integrations/cover.ts",
+    "fromType": "File"
+  },
+  {
     "key": "ui-lovelace",
     "path": "ui-lovelace.yaml",
     "file": "ui-lovelace.json",

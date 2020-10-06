@@ -48,6 +48,12 @@ export interface InternalIntegrations {
   counter?: integrations.Counter.Schema | IncludeNamed | null;
 
   /**
+   * Home Assistant can give you an interface to control covers such as rollershutters, blinds, and garage doors.
+   * https://www.home-assistant.io/integrations/cover
+   */
+  cover?: integrations.Cover.Schema | IncludeList;
+
+  /**
    * Groups allows you to combine multiple entities into a single group entity.
    * https://www.home-assistant.io/integrations/group
    */
