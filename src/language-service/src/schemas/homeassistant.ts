@@ -24,6 +24,12 @@ export interface HomeAssistantRoot
  */
 export interface InternalIntegrations {
   /**
+   * Home Assistant can give you an interface which is similar to a classic alarm system.
+   * https://www.home-assistant.io/integrations/alarm_control_panel
+   */
+  alarm_control_panel?: integrations.AlarmControlPanel.Schema | IncludeList;
+
+  /**
    * Automations offer the capability to call a service based on a simple or complex trigger. Automation allows a condition such as a sunset to cause an event, such as a light turning on.
    * https://www.home-assistant.io/docs/automation/
    */
