@@ -63,6 +63,13 @@
     "fromType": "File"
   },
   {
+    "key": "alarm_control_panel",
+    "path": "configuration.yaml/alarm_control_panel",
+    "file": "homeassistant-alarm_control_panel.json",
+    "tsFile": "integrations/alarm_control_panel.ts",
+    "fromType": "File"
+  },
+  {
     "key": "automations",
     "path": "configuration.yaml/automation",
     "file": "automations.json",

@@ -4,15 +4,33 @@
  */
 import {
   Deprecated,
-  IncludeNamed,
-  Template,
   DeviceClassesBinarySensor,
   DeviceClassesSensor,
+  IncludeList,
+  IncludeNamed,
+  Template,
   TimePeriod,
 } from "../types";
+import { Action } from "../actions";
 import { PlatformSchema } from "../platform";
 
 export type Domain = "template";
+
+export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
+  /**
+   * The template integrations creates alarm control panels that combine integrations or adds pre-processing logic to actions.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/
+   */
+  platform: "template";
+
+  /**
+   * List of panels.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#panels
+   */
+  panels: {
+    [key: string]: AlarmControlPanelItem | IncludeNamed;
+  };
+}
 
 export interface BinarySensorPlatformSchema extends PlatformSchema {
   /**
@@ -44,6 +62,56 @@ export interface SensorPlatformSchema extends PlatformSchema {
   sensors: {
     [key: string]: SensorItem | IncludeNamed;
   };
+}
+
+interface AlarmControlPanelItem {
+  /**
+   * Defines an action to run when the alarm is armed to away mode.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#arm_away
+   */
+  arm_away?: Action | Action[] | IncludeList;
+
+  /**
+   * Defines an action to run when the alarm is armed to home mode.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#arm_home
+   */
+  arm_home?: Action | Action[] | IncludeList;
+
+  /**
+   * Defines an action to run when the alarm is armed to night mode.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#arm_night
+   */
+  arm_night?: Action | Action[] | IncludeList;
+
+  /**
+   * If true, the code is required to arm the alarm.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#code_arm_required
+   */
+  code_arm_required?: boolean;
+
+  /**
+   * Defines an action to run when the alarm is disarmed.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#disarm
+   */
+  disarm?: Action | Action[] | IncludeList;
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#name
+   */
+  name?: string;
+
+  /**
+   * An ID that uniquely identifies this alarm control panel. Set this to an unique value to allow customization trough the UI.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Defines a template to set the state of the alarm panel. Only the states armed_away, armed_home, armed_night, disarmed, pending, triggered and unavailable are used.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#value_template
+   */
+  value_template?: Template;
 }
 
 interface BinarySensorItem {
