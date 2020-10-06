@@ -65,6 +65,22 @@ export interface CoverPlatformSchema extends PlatformSchema {
   };
 }
 
+export interface FanPlatformSchema extends PlatformSchema {
+  /**
+   * The template platform creates fans that combine integrations and provides the ability to run scripts or invoke services for each of the turn_on, turn_off, set_speed, set_oscillating, and set_direction commands of a fan.
+   * https://www.home-assistant.io/integrations/fan.template
+   */
+  platform: "template";
+
+  /**
+   * List of fans.
+   * https://www.home-assistant.io/integrations/fan.template/#fans
+   */
+  fans: {
+    [key: string]: FanItem | IncludeNamed;
+  };
+}
+
 export interface SensorPlatformSchema extends PlatformSchema {
   /**
    * The template platform supports sensors which get their values from other entities.
@@ -294,6 +310,86 @@ interface CoverItem {
    * https://www.home-assistant.io/integrations/cover.template/#value_template
    */
   value_template?: Template;
+}
+
+interface FanItem {
+  /**
+   * Defines a template to get the available state of the component. If the template returns true, the device is available.
+   * https://www.home-assistant.io/integrations/fan.template/#availability_template
+   */
+  availability_template?: Template;
+
+  /**
+   * Defines a template to get the direction of the fan. Valid value: ‘forward’/‘reverse’
+   * https://www.home-assistant.io/integrations/fan.template/#direction_template
+   */
+  direction_template?: Template;
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/fan.template/#friendly_name
+   */
+  friendly_name?: string;
+
+  /**
+   * Defines a template to get the osc state of the fan. Valid value: true/false
+   * https://www.home-assistant.io/integrations/fan.template/#oscillating_template
+   */
+  oscillating_template?: Template;
+
+  /**
+   * Defines an action to run when the fan is given a direction command.
+   * https://www.home-assistant.io/integrations/fan.template/#set_direction
+   */
+  set_direction?: Action | Action[];
+
+  /**
+   * Defines an action to run when the fan is given an osc state command.
+   * https://www.home-assistant.io/integrations/fan.template/#set_oscillating
+   */
+  set_oscillating?: Action | Action[];
+
+  /**
+   * Defines an action to run when the fan is given a speed command.
+   * https://www.home-assistant.io/integrations/fan.template/#set_speed
+   */
+  set_speed?: Action | Action[];
+
+  /**
+   * Defines a template to get the speed of the fan.
+   * https://www.home-assistant.io/integrations/fan.template/#speed_template
+   */
+  speed_template?: Template;
+
+  /**
+   * List of speeds the fan is capable of running at.
+   * https://www.home-assistant.io/integrations/fan.template/#speeds
+   */
+  speeds: string[];
+
+  /**
+   * Defines an action to run when the fan is turned off.
+   * https://www.home-assistant.io/integrations/fan.template/#turn_off
+   */
+  turn_off: Action | Action[];
+
+  /**
+   * Defines an action to run when the fan is turned on.
+   * https://www.home-assistant.io/integrations/fan.template/#turn_on
+   */
+  turn_on: Action | Action[];
+
+  /**
+   * An ID that uniquely identifies this fan. Set this to an unique value to allow customization trough the UI.
+   * https://www.home-assistant.io/integrations/fan.template/#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Defines a template to get the state of the fan. Valid value: ‘on’/‘off’
+   * https://www.home-assistant.io/integrations/fan.template/#value_template
+   */
+  value_template: Template;
 }
 
 interface SensorItem {
