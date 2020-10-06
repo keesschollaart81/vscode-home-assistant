@@ -81,6 +81,22 @@ export interface FanPlatformSchema extends PlatformSchema {
   };
 }
 
+export interface LightPlatformSchema extends PlatformSchema {
+  /**
+   * The template platform creates lights that combine integrations and provides the ability to run scripts or invoke services for each of the on, off, and brightness commands of a light.
+   * https://www.home-assistant.io/integrations/light.template
+   */
+  platform: "template";
+
+  /**
+   * List of lights.
+   * https://www.home-assistant.io/integrations/fan.template/#lights
+   */
+  lights: {
+    [key: string]: LightItem | IncludeNamed;
+  };
+}
+
 export interface SensorPlatformSchema extends PlatformSchema {
   /**
    * The template platform supports sensors which get their values from other entities.
@@ -390,6 +406,104 @@ interface FanItem {
    * https://www.home-assistant.io/integrations/fan.template/#value_template
    */
   value_template: Template;
+}
+
+interface LightItem {
+  /**
+   * Defines a template to get the available state of the component. If the template returns true, the device is available.
+   * https://www.home-assistant.io/integrations/light.template#availability_template
+   */
+  availability_template?: Template;
+
+  /**
+   * Defines a template to get the color of the light. Must render a tuple (hue, saturation).
+   * https://www.home-assistant.io/integrations/light.template#color_template
+   */
+  color_template?: Template;
+
+  /**
+   * Defines a template for the entity picture of the light.
+   * https://www.home-assistant.io/integrations/light.template#entity_picture_template
+   */
+  entity_picture_template?: Template;
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/light.template#friendly_name
+   */
+  friendly_name?: string;
+
+  /**
+   * Defines a template for an icon or picture, e.g., showing a different icon for different states.
+   * https://www.home-assistant.io/integrations/light.template#icon_template
+   */
+  icon_template?: Template;
+
+  /**
+   * Defines a template to get the brightness of the light.
+   * https://www.home-assistant.io/integrations/light.template#level_template
+   */
+  level_template?: Template;
+
+  /**
+   * Defines an action to run when the light is given a color command.
+   * https://www.home-assistant.io/integrations/light.template#set_color
+   */
+  set_color?: Action | Action[];
+
+  /**
+   * Defines an action to run when the light is given a brightness command.
+   * https://www.home-assistant.io/integrations/light.template#set_level
+   */
+  set_level?: Action | Action[];
+
+  /**
+   * Defines an action to run when the light is given a color temperature command.
+   * https://www.home-assistant.io/integrations/light.template#set_temperature
+   */
+  set_temperature?: Action | Action[];
+
+  /**
+   * Defines an action to run when the light is given a white value command.
+   * https://www.home-assistant.io/integrations/light.template#set_white_value
+   */
+  set_white_value?: Action | Action[];
+
+  /**
+   * Defines a template to get the color temperature of the light.
+   * https://www.home-assistant.io/integrations/light.template#temperature_template
+   */
+  temperature_template?: Template;
+
+  /**
+   * Defines an action to run when the light is turned off.
+   * https://www.home-assistant.io/integrations/light.template#turn_off
+   */
+  turn_off: Action | Action[];
+
+  /**
+   * Defines an action to run when the light is turned on.
+   * https://www.home-assistant.io/integrations/light.template#turn_on
+   */
+  turn_on: Action | Action[];
+
+  /**
+   * An ID that uniquely identifies this light. Set this to an unique value to allow customisation trough the UI.
+   * https://www.home-assistant.io/integrations/light.template#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Defines a template to get the state of the light.
+   * https://www.home-assistant.io/integrations/light.template#value_template
+   */
+  value_template?: Template;
+
+  /**
+   * Defines a template to get the white value of the light.
+   * https://www.home-assistant.io/integrations/light.template#white_value_template
+   */
+  white_value_template?: Template;
 }
 
 interface SensorItem {

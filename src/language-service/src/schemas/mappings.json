@@ -98,6 +98,13 @@
     "fromType": "File"
   },
   {
+    "key": "light",
+    "path": "configuration.yaml/light",
+    "file": "light.json",
+    "tsFile": "integrations/light.ts",
+    "fromType": "File"
+  },
+  {
     "key": "ui-lovelace",
     "path": "ui-lovelace.yaml",
     "file": "ui-lovelace.json",
