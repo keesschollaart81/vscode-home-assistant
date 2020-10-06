@@ -112,6 +112,13 @@
     "fromType": "File"
   },
   {
+    "key": "switch",
+    "path": "configuration.yaml/switch",
+    "file": "switch.json",
+    "tsFile": "integrations/switch.ts",
+    "fromType": "File"
+  },
+  {
     "key": "ui-lovelace",
     "path": "ui-lovelace.yaml",
     "file": "ui-lovelace.json",
