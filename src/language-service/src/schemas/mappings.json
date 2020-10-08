@@ -42,6 +42,13 @@
     "fromType": "Schema"
   },
   {
+    "key": "homeassistant-input-number",
+    "path": "configuration.yaml/input_number",
+    "file": "homeassistant-input-number.json",
+    "tsFile": "integrations/input_number.ts",
+    "fromType": "Schema"
+  },
+  {
     "key": "homeassistant-script",
     "path": "configuration.yaml/script",
     "file": "homeassistant-script.json",
@@ -52,14 +59,70 @@
     "key": "homeassistant-sensor",
     "path": "configuration.yaml/sensor",
     "file": "homeassistant-sensor.json",
-    "tsFile": "sensors.ts",
-    "fromType": "SensorFile"
+    "tsFile": "integrations/sensor.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "alarm_control_panel",
+    "path": "configuration.yaml/alarm_control_panel",
+    "file": "homeassistant-alarm_control_panel.json",
+    "tsFile": "integrations/alarm_control_panel.ts",
+    "fromType": "File"
   },
   {
     "key": "automations",
     "path": "configuration.yaml/automation",
     "file": "automations.json",
     "tsFile": "integrations/automation.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "binary_sensor",
+    "path": "configuration.yaml/binary_sensor",
+    "file": "binary_sensor.json",
+    "tsFile": "integrations/binary_sensor.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "cover",
+    "path": "configuration.yaml/cover",
+    "file": "cover.json",
+    "tsFile": "integrations/cover.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "fan",
+    "path": "configuration.yaml/fan",
+    "file": "fan.json",
+    "tsFile": "integrations/fan.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "light",
+    "path": "configuration.yaml/light",
+    "file": "light.json",
+    "tsFile": "integrations/light.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "lock",
+    "path": "configuration.yaml/lock",
+    "file": "lock.json",
+    "tsFile": "integrations/lock.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "switch",
+    "path": "configuration.yaml/switch",
+    "file": "switch.json",
+    "tsFile": "integrations/switch.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "vacuum",
+    "path": "configuration.yaml/vacuum",
+    "file": "vacuum.json",
+    "tsFile": "integrations/vacuum.ts",
     "fromType": "File"
   },
   {

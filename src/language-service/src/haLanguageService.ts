@@ -1,16 +1,17 @@
 import {
-  CompletionList,
-  TextDocumentChangeEvent,
-  TextDocument,
-  Position,
   CompletionItem,
-  TextEdit,
+  CompletionList,
   Definition,
   DefinitionLink,
   Diagnostic,
-  Hover,
   FormattingOptions,
+  Hover,
+  Position,
+  Range,
   SymbolInformation,
+  TextDocument,
+  TextDocumentChangeEvent,
+  TextEdit,
 } from "vscode-languageserver-protocol";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import {
@@ -138,10 +139,22 @@ export class HomeAssistantLanguageService {
     }
     const diagnostics: Diagnostic[] = [];
     for (const diagnosticItem of diagnosticResults) {
+      // Fetch the text before the error, this might be "!secret"
+      const possibleSecret = document.getText(
+        Range.create(
+          diagnosticItem.range.start.line,
+          diagnosticItem.range.start.character - 8,
+          diagnosticItem.range.end.line,
+          diagnosticItem.range.start.character - 1
+        )
+      );
+
+      // Skip errors about secrets, we simply have no idea what is in them
+      if (possibleSecret === "!secret") continue;
+
       diagnosticItem.severity = 1; // Convert all warnings to errors
       diagnostics.push(diagnosticItem);
     }
-
     return diagnostics;
   };
 

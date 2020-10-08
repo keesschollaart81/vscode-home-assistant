@@ -4,7 +4,6 @@ import {
   DeviceClasses,
   IncludeNamed,
   Integer,
-  Secret,
   TimeZone,
   UnitSystem,
 } from "./types";
@@ -17,13 +16,13 @@ export interface Core {
    * List of folders that can be used as sources for files.
    * https://www.home-assistant.io/docs/configuration/basic/#allowlist_external_dirs
    */
-  allowlist_external_dirs?: string[] | Secret[];
+  allowlist_external_dirs?: string[];
 
   /**
    * List of URLs that can be used as sources for files.
    * https://www.home-assistant.io/docs/configuration/basic/#allowlist_external_urls
    */
-  allowlist_external_urls?: string[] | Secret[];
+  allowlist_external_urls?: string[];
 
   /**
    * Customize entities.
@@ -47,19 +46,19 @@ export interface Core {
    * Altitude above sea level in meters. Impacts weather/sunrise data.
    * https://www.home-assistant.io/docs/configuration/basic/#elevation
    */
-  elevation?: Integer | Secret;
+  elevation?: Integer;
 
   /**
    * The URL that Home Assistant is available on from the internet. For example: https://example.duckdns.org:8123. Note that this setting may only contain a protocol, hostname and port; using a path is not supported.
    * https://www.home-assistant.io/docs/configuration/basic/#external_url
    */
-  external_url?: string | Secret;
+  external_url?: string;
 
   /**
    * The URL that Home Assistant is available on from your local network. For example: http://homeassistant.local:8123. Note that this setting may only contain a protocol, hostname and port; using a path is not supported.
    * https://www.home-assistant.io/docs/configuration/basic/#internal_url
    */
-  internal_url?: string | Secret;
+  internal_url?: string;
 
   /**
    * Latitude of your location required to calculate the time the sun rises and sets.
@@ -68,7 +67,7 @@ export interface Core {
    * @minimum -90
    * @maximum 90
    */
-  latitude?: number | Secret;
+  latitude?: number;
 
   /**
    * Longitude of your location required to calculate the time the sun rises and sets.
@@ -77,13 +76,13 @@ export interface Core {
    * @minimum -180
    * @maximum 180
    */
-  longitude?: number | Secret;
+  longitude?: number;
 
   /**
    * Name of the location where Home Assistant is running.
    * https://www.home-assistant.io/docs/configuration/basic/#name
    */
-  name?: string | Secret;
+  name?: string;
 
   /**
    * Packages in Home Assistant provide a way to bundle different component’s configuration together. It allows for "splitting" your configuration.
@@ -96,14 +95,14 @@ export interface Core {
    * https://www.home-assistant.io/docs/configuration/basic/#time_zone
    * https://www.wikiwand.com/en/List_of_tz_database_time_zones
    */
-  time_zone?: TimeZone | Secret;
+  time_zone?: TimeZone;
 
   /**
    * "metric" for Metric, "imperial" for Imperial.
    * This also sets temperature unit Home Assistant will use.
    * https://www.home-assistant.io/docs/configuration/basic/#unit_system
    */
-  unit_system?: UnitSystem | Secret;
+  unit_system?: UnitSystem;
 
   /**
    * DEPRECATED as of Home Assistant 0.113.0.

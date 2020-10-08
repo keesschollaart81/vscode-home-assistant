@@ -1,5 +1,4 @@
 import { Core } from "./core";
-import { Sensors } from "./sensors";
 // eslint-disable-next-line import/extensions
 import * as integrations from "./integrations";
 import { IncludeList, IncludeNamed } from "./types";
@@ -25,10 +24,40 @@ export interface HomeAssistantRoot
  */
 export interface InternalIntegrations {
   /**
+   * Home Assistant can give you an interface which is similar to a classic alarm system.
+   * https://www.home-assistant.io/integrations/alarm_control_panel
+   */
+  alarm_control_panel?: integrations.AlarmControlPanel.Schema | IncludeList;
+
+  /**
    * Automations offer the capability to call a service based on a simple or complex trigger. Automation allows a condition such as a sunset to cause an event, such as a light turning on.
    * https://www.home-assistant.io/docs/automation/
    */
   automation?: integrations.Automation.Schema | IncludeList;
+
+  /**
+   * Binary sensors gather information about the state of devices which have a “digital” return value (either 1 or 0). These can be switches, contacts, pins, etc.
+   * https://www.home-assistant.io/integrations/binary_sensor
+   */
+  binary_sensor?: integrations.BinarySensor.Schema | IncludeList;
+
+  /**
+   * The counter integration allows one to count occurrences fired by automations.
+   * https://www.home-assistant.io/integrations/counter
+   */
+  counter?: integrations.Counter.Schema | IncludeNamed | null;
+
+  /**
+   * Home Assistant can give you an interface to control covers such as rollershutters, blinds, and garage doors.
+   * https://www.home-assistant.io/integrations/cover
+   */
+  cover?: integrations.Cover.Schema | IncludeList;
+
+  /**
+   * The Fan integration allows you to control and monitor Fan devices.
+   * https://www.home-assistant.io/integrations/fan
+   */
+  fan?: integrations.Fan.Schema | IncludeList;
 
   /**
    * Groups allows you to combine multiple entities into a single group entity.
@@ -49,6 +78,24 @@ export interface InternalIntegrations {
   input_boolean?: integrations.InputBoolean.Schema | IncludeNamed | null;
 
   /**
+   * The input_number integration allows the user to define values that can be controlled via the frontend and can be used within conditions of automation. The frontend can display a slider, or a numeric input box.
+   * https://www.home-assistant.io/integrations/input_number
+   */
+  input_number?: integrations.InputNumber.Schema | IncludeNamed | null;
+
+  /**
+   * This integration allows you to track and control various light bulbs.
+   * https://www.home-assistant.io/integrations/light
+   */
+  light?: integrations.Light.Schema | IncludeList;
+
+  /**
+   * Keeps track which locks are in your environment, their state and allows you to control them.
+   * https://www.home-assistant.io/integrations/lock
+   */
+  lock?: integrations.Lock.Schema | IncludeList;
+
+  /**
    * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
    * https://www.home-assistant.io/integrations/panel_iframe
    */
@@ -66,7 +113,23 @@ export interface InternalIntegrations {
    */
   scene?: integrations.Scene.Schema | IncludeList;
 
-  sensor?: null | Array<Sensors> | IncludeList; // TODO: Migrate to new structure
+  /**
+   * Sensors are gathering information about states and conditions.
+   * https://www.home-assistant.io/integrations/sensor
+   */
+  sensor?: integrations.Sensor.Schema | IncludeList;
+
+  /**
+   * Keeps track which switches are in your environment, their state and allows you to control them.
+   * https://www.home-assistant.io/integrations/switch
+   */
+  switch?: integrations.Switch.Schema | IncludeList;
+
+  /**
+   * The vacuum integration enables the ability to control home cleaning robots within Home Assistant.
+   * https://www.home-assistant.io/integrations/vacuum
+   */
+  vacuum?: integrations.Vacuum.Schema | IncludeList;
 }
 
 /**
