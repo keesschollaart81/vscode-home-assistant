@@ -12,7 +12,8 @@ export type DeviceClasses =
   | DeviceClassesBinarySensor
   | DeviceClassesCover
   | DeviceClassesMediaPlayer
-  | DeviceClassesSensor;
+  | DeviceClassesSensor
+  | DeviceClassesSwitch;
 
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/binary_sensor/__init__.py
@@ -79,6 +80,11 @@ export type DeviceClassesSensor =
   | "temperature"
   | "timestamp"
   | "voltage";
+
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/switch/__init__.py
+ */
+export type DeviceClassesSwitch = "outlet" | "switch";
 
 /**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
