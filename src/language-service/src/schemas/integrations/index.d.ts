@@ -3,6 +3,7 @@ export * as Automation from "./automation";
 export * as BinarySensor from "./binary_sensor";
 export * as Camera from "./camera";
 export * as Climate from "./climate";
+export * as Cloud from "./cloud";
 export * as Counter from "./counter";
 export * as Cover from "./cover";
 export * as DeviceTracker from "./device_tracker";
