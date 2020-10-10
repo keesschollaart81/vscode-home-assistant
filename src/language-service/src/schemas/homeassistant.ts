@@ -42,6 +42,17 @@ export interface InternalIntegrations {
   binary_sensor?: integrations.BinarySensor.Schema | IncludeList;
 
   /**
+   * The camera integration allows you to use IP cameras with Home Assistant.
+   * https://www.home-assistant.io/integrations/camera
+   */
+  camera?: integrations.Camera.Schema | IncludeList;
+
+  /**
+   * The Climate integration allows you to control and monitor HVAC (heating, ventilating, and air conditioning) devices and thermostats.
+   * https://www.home-assistant.io/integrations/climate
+   */
+  climate?: integrations.Climate.Schema | IncludeList;
+  /**
    * The counter integration allows one to count occurrences fired by automations.
    * https://www.home-assistant.io/integrations/counter
    */
@@ -52,6 +63,12 @@ export interface InternalIntegrations {
    * https://www.home-assistant.io/integrations/cover
    */
   cover?: integrations.Cover.Schema | IncludeList;
+
+  /**
+   * The device tracker allows you to track devices in Home Assistant. This can happen by querying your wireless router or by having applications push location info.
+   * https://www.home-assistant.io/integrations/device_tracker
+   */
+  device_tracker?: integrations.DeviceTracker.Schema | IncludeList;
 
   /**
    * The Fan integration allows you to control and monitor Fan devices.
@@ -138,12 +155,36 @@ export interface InternalIntegrations {
  */
 export interface CoreIntegrations {
   /**
+   * The Home Assistant Cloud allows you to quickly integrate your local Home Assistant with various cloud services like Amazon Alexa and Google Assistant.
+   * https://www.nabucasa.com/config/
+   */
+  cloud?: integrations.Cloud.Schema | IncludeNamed | null;
+
+  /**
    * DEPRECATED as of Home Assistant 0.113.0
    *
    * The Philips Hue integration allows you to control and monitor the lights and motion sensors connected to your Hue bridge.
    * https://www.home-assistant.io/integrations/hue
    */
   hue?: integrations.Hue.Schema | IncludeNamed;
+
+  /**
+   * MQTT (aka MQ Telemetry Transport) is a machine-to-machine or “Internet of Things” connectivity protocol on top of TCP/IP. It allows extremely lightweight publish/subscribe messaging transport.
+   * https://www.home-assistant.io/integrations/mqtt/
+   */
+  mqtt?: integrations.MQTT.Schema;
+
+  /**
+   * The mqtt_eventstream integration connects two Home Assistant instances via MQTT.
+   * https://www.home-assistant.io/integrations/mqtt_eventstream
+   */
+  mqtt_eventstream?: integrations.MQTTEventstream.Schema | null;
+
+  /**
+   * The mqtt_statestream integration publishes state changes in Home Assistant to individual MQTT topics.
+   * https://www.home-assistant.io/integrations/mqtt_statestream
+   */
+  mqtt_statestream?: integrations.MQTTStatestream.Schema;
 }
 
 /**

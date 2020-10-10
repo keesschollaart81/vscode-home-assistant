@@ -84,10 +84,31 @@
     "fromType": "File"
   },
   {
+    "key": "camera",
+    "path": "configuration.yaml/camera",
+    "file": "camera.json",
+    "tsFile": "integrations/camera.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "climate",
+    "path": "configuration.yaml/climate",
+    "file": "climate.json",
+    "tsFile": "integrations/climate.ts",
+    "fromType": "File"
+  },
+  {
     "key": "cover",
     "path": "configuration.yaml/cover",
     "file": "cover.json",
     "tsFile": "integrations/cover.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "device_tracker",
+    "path": "configuration.yaml/device_tracker",
+    "file": "device_tracker.json",
+    "tsFile": "integrations/device_tracker.ts",
     "fromType": "File"
   },
   {
