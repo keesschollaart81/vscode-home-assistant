@@ -11,6 +11,7 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
     "badges",
     "devices",
     "entities",
+    "entity_config",
     "entity_id",
     "entity",
     "exclude_entities",

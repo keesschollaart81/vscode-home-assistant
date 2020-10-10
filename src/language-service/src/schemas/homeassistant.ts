@@ -155,6 +155,12 @@ export interface InternalIntegrations {
  */
 export interface CoreIntegrations {
   /**
+   * The Home Assistant Cloud allows you to quickly integrate your local Home Assistant with various cloud services like Amazon Alexa and Google Assistant.
+   * https://www.nabucasa.com/config/
+   */
+  cloud?: integrations.Cloud.Schema | IncludeNamed | null;
+
+  /**
    * DEPRECATED as of Home Assistant 0.113.0
    *
    * The Philips Hue integration allows you to control and monitor the lights and motion sensors connected to your Hue bridge.
