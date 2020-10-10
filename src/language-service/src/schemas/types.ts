@@ -87,6 +87,17 @@ export type DeviceClassesSensor =
 export type DeviceClassesSwitch = "outlet" | "switch";
 
 /**
+ * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)$
+ */
+export type Domain = string;
+
+/**
+ * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)$
+ * @items.pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)$
+ */
+export type Domains = string[];
+
+/**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
  */
 export type Entity = string;

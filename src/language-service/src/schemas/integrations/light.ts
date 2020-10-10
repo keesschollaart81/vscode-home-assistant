@@ -4,6 +4,11 @@
  */
 import { IncludeList } from "../types";
 import { PlatformSchema } from "../platform";
+import {
+  LightDefaultPlatformSchema as MQTTDefaultPlatformSchema,
+  LightJSONPlatformSchema as MQTTJSONPlatformSchema,
+  LightTemplatePlatformSchema as MQTTTemplatePlatformSchema,
+} from "./mqtt";
 import { LightPlatformSchema as TemplatePlatformSchema } from "./template";
 
 export type Domain = "light";
@@ -15,9 +20,14 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(template)$)\w+$
+   * @TJS-pattern ^(?!(mqtt|template)$)\w+$
    */
   platform: string;
 }
 
-type Item = TemplatePlatformSchema | OtherPlatform;
+type Item =
+  | MQTTDefaultPlatformSchema
+  | MQTTJSONPlatformSchema
+  | MQTTTemplatePlatformSchema
+  | TemplatePlatformSchema
+  | OtherPlatform;
