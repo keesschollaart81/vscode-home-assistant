@@ -113,7 +113,7 @@ interface Filter {
   /**
    * The list of domains to be excluded.
    */
-  exclude_domains: Domains;
+  exclude_domains?: Domains;
 
   /**
    * The list of entity ids to be excluded,
@@ -123,7 +123,7 @@ interface Filter {
   /**
    * Exclude all entities matching a listed pattern (e.g., switch.garage_*).
    */
-  exclude_entity_globs: string[];
+  exclude_entity_globs?: string[];
 
   /**
    * The list of domains to be included.
@@ -138,7 +138,7 @@ interface Filter {
   /**
    * Include all entities matching a listed pattern (e.g., light.living_room_*).
    */
-  include_entity_globs: string[];
+  include_entity_globs?: string[];
 }
 
 interface AlexaEntity {
