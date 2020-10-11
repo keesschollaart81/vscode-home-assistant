@@ -4,6 +4,10 @@
  */
 import { IncludeList } from "../types";
 import { PlatformSchema } from "../platform";
+import {
+  VacuumPlatformSchema as MQTTPlatformSchema,
+  VacuumLegacyPlatformSchema as MQTTLegacyPlatformSchema,
+} from "./mqtt";
 import { VacuumPlatformSchema as TemplatePlatformSchema } from "./template";
 
 export type Domain = "vacuum";
@@ -15,9 +19,13 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!template)\w+$
+   * @TJS-pattern ^(?!(mqtt|template)$)\w+$
    */
   platform: string;
 }
 
-type Item = TemplatePlatformSchema | OtherPlatform;
+type Item =
+  | MQTTPlatformSchema
+  | MQTTLegacyPlatformSchema
+  | TemplatePlatformSchema
+  | OtherPlatform;

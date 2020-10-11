@@ -4,6 +4,7 @@
  */
 import { IncludeList } from "../types";
 import { PlatformSchema } from "../platform";
+import { BinarySensorPlatformSchema as MQTTPlatformSchema } from "./mqtt";
 import { BinarySensorPlatformSchema as TemplatePlatformSchema } from "./template";
 
 export type Domain = "binary_sensor";
@@ -16,9 +17,9 @@ export type File = Item | Item[];
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!template)\w+$
+   * @TJS-pattern ^(?!(mqtt|template)$)\w+$
    */
   platform: string;
 }
 
-type Item = TemplatePlatformSchema | OtherPlatform;
+type Item = MQTTPlatformSchema | TemplatePlatformSchema | OtherPlatform;

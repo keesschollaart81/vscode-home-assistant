@@ -14,7 +14,7 @@ interface Item {
    * Show a "slider" or a input "box" in the UI frontend. Defaults to "slider".
    * https://www.home-assistant.io/integrations/input_number#mode
    */
-  conf_mode?: "slider" | "box";
+  mode?: "slider" | "box";
 
   /**
    * The icon that shows in the frontend.

@@ -6,6 +6,7 @@ import { IncludeList } from "../types";
 import { PlatformSchema } from "../platform";
 import { SensorPlatformSchema as TemplatePlatformSchema } from "./template";
 import { SensorPlatformSchema as MQTTPlatformSchema } from "./mqtt";
+import { SensorPlatformSchema as MQTTRoomPlatformSchema } from "./mqtt_room";
 
 export type Domain = "sensor";
 export type Schema = Item[] | IncludeList;
@@ -16,9 +17,13 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!mqtt|template)\w+$
+   * @TJS-pattern ^(?!(mqtt|mqtt_room|template)$)\w+$
    */
   platform: string;
 }
 
-type Item = MQTTPlatformSchema | TemplatePlatformSchema | OtherPlatform;
+type Item =
+  | MQTTPlatformSchema
+  | MQTTRoomPlatformSchema
+  | TemplatePlatformSchema
+  | OtherPlatform;
