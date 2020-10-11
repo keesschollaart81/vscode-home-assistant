@@ -102,8 +102,7 @@ export interface NumericStateCondition {
   below?: number | InputNumberEntity;
 
   /**
-   * The entity ID or list of entity IDs to test the numeric state against.
-   * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
+   * @$ref json/enities.json
    */
   entity_id: Entities;
 

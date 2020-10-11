@@ -86,8 +86,7 @@ export type DeviceClassesSensor =
 export type Entity = string;
 
 /**
- * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_))*$
- * @items.pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
+ * @$ref http://my-schema.org
  */
 export type Entities = string | string[];
 
