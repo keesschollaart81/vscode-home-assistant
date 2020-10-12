@@ -26,7 +26,7 @@ interface Item {
    * Initial value when Home Assistant starts.
    * https://www.home-assistant.io/integrations/input_number#initial
    */
-  initial?: boolean;
+  initial?: number;
 
   /**
    * Maximum value of the number
