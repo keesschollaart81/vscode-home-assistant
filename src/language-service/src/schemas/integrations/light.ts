@@ -4,6 +4,7 @@
  */
 import { IncludeList } from "../types";
 import { PlatformSchema } from "../platform";
+import { LightPlatformSchema as GroupPlatformSchema } from "./group";
 import {
   LightDefaultPlatformSchema as MQTTDefaultPlatformSchema,
   LightJSONPlatformSchema as MQTTJSONPlatformSchema,
@@ -20,12 +21,13 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(mqtt|template)$)\w+$
+   * @TJS-pattern ^(?!(group|mqtt|template)$)\w+$
    */
   platform: string;
 }
 
 type Item =
+  | GroupPlatformSchema
   | MQTTDefaultPlatformSchema
   | MQTTJSONPlatformSchema
   | MQTTTemplatePlatformSchema
