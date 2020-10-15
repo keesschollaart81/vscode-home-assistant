@@ -3,6 +3,7 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/group/__init__.py
  */
 import { Entities, IncludeNamed } from "../types";
+import { PlatformSchema } from "../platform";
 
 export type Domain = "group";
 export interface Schema {
@@ -31,6 +32,26 @@ interface Item {
   /**
    * Name of the group.
    * https://www.home-assistant.io/integrations/group#name
+   */
+  name?: string;
+}
+
+export interface LightPlatformSchema extends PlatformSchema {
+  /**
+   * The group light platform lets you combine multiple lights into one entity.
+   * https://www.home-assistant.io/integrations/light.group/
+   */
+  platform: "group";
+
+  /**
+   * A list of entities to be included in the light group.
+   * https://www.home-assistant.io/integrations/light.group/#entities
+   */
+  entities: Entities;
+
+  /**
+   * The name of the light group. Defaults to “Light Group”.
+   * https://www.home-assistant.io/integrations/light.group/#name
    */
   name?: string;
 }
