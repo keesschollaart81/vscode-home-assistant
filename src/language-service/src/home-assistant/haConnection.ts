@@ -138,6 +138,11 @@ export class HaConnection implements IHaConnection {
     return this.hassEntities;
   };
 
+  public getEntityIds = async (): Promise<string[]> => {
+    const entities = await this.getHassEntities();
+    return Object.keys(entities);
+  };
+
   public async getEntityCompletions(): Promise<CompletionItem[]> {
     const entities = await this.getHassEntities();
 

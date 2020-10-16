@@ -3,6 +3,12 @@ import * as fs from "fs";
 import { JSONSchema } from "yaml-language-server/out/server/src/languageservice/jsonSchema";
 import { HaFileInfo } from "../haConfig/dto";
 
+export type SchemaCollection = Array<{
+  uri: string;
+  fileMatch?: string[];
+  schema?: JSONSchema;
+}>;
+
 export class SchemaServiceForIncludes {
   private mappings: Array<PathToSchemaMapping & { schema: JSONSchema }>;
 
@@ -18,12 +24,8 @@ export class SchemaServiceForIncludes {
     });
   }
 
-  public getSchemaContributions(haFiles: HaFileInfo[]): any {
-    const results: Array<{
-      uri: string;
-      fileMatch?: string[];
-      schema?: JSONSchema;
-    }> = [];
+  public getSchemaContributions(haFiles: HaFileInfo[]): SchemaCollection {
+    const results: SchemaCollection = [];
 
     for (const [sourceFile, sourceFileMapping] of haFiles.entries()) {
       let sourceFileMappingPath = sourceFileMapping.path.replace(
@@ -52,7 +54,9 @@ export class SchemaServiceForIncludes {
           resultEntry = {
             uri: id,
             fileMatch: [fileass],
-            schema: relatedPathToSchemaMapping.schema,
+            schema: JSON.parse(
+              JSON.stringify(relatedPathToSchemaMapping.schema)
+            ),
           };
           results.push(resultEntry);
         } else if (resultEntry.fileMatch !== undefined) {

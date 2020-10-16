@@ -101,9 +101,6 @@ export interface NumericStateCondition {
    */
   below?: number | InputNumberEntity;
 
-  /**
-   * @$ref json/enities.json
-   */
   entity_id: Entities;
 
   /**

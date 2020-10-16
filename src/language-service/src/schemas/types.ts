@@ -103,9 +103,9 @@ export type Domains = string[];
 export type Entity = string;
 
 /**
- * @$ref http://my-schema.org
+ * @$ref http://schemas.home-assistant.io/my-entities
  */
-export type Entities = string | string[];
+export type Entities = any;
 
 /**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$

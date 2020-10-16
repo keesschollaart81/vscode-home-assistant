@@ -18,7 +18,12 @@ import {
   LanguageService,
   LanguageSettings,
 } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
-import { SchemaServiceForIncludes } from "./schemas/schemaService";
+import { JSONSchema } from "vscode-json-languageservice";
+import { setFlagsFromString } from "v8";
+import {
+  SchemaCollection,
+  SchemaServiceForIncludes,
+} from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
@@ -27,6 +32,8 @@ import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 import { Includetype } from "./haConfig/dto";
 
 export class HomeAssistantLanguageService {
+  private knownEntityIds: string[] = [];
+
   constructor(
     private yamlLanguageService: LanguageService,
     private haConfig: HomeAssistantConfiguration,
@@ -48,7 +55,23 @@ export class HomeAssistantLanguageService {
           `Applying schemas to ${haFiles.length} of your configuration files...`
         );
       }
+      const entitySchemas = this.getValidEntityIdsSchema();
 
+      this.yamlLanguageService.deleteSchema(
+        "http://schemas.home-assistant.io/my-entities"
+      );
+      this.yamlLanguageService.deleteSchema(
+        "http://schemas.home-assistant.io/homeassistant-packages"
+      );
+      this.yamlLanguageService.deleteSchema(
+        "http://schemas.home-assistant.io/my-entities"
+      );
+      this.yamlLanguageService.resetSchema(
+        "http://schemas.home-assistant.io/my-entities"
+      );
+      this.yamlLanguageService.resetSchema(
+        "http://schemas.home-assistant.io/homeassistant-packages"
+      );
       this.yamlLanguageService.configure(<LanguageSettings>{
         validate: true,
         customTags: this.getValidYamlTags(),
@@ -56,8 +79,13 @@ export class HomeAssistantLanguageService {
         format: true,
         hover: true,
         isKubernetes: false,
-        schemas: this.schemaServiceForIncludes.getSchemaContributions(haFiles),
+        schemas: entitySchemas.concat(
+          this.schemaServiceForIncludes.getSchemaContributions(haFiles)
+        ),
       });
+      // this.yamlLanguageService.deleteSchema("http://schemas.home-assistant.io/homeassistant-packages")
+      // this.yamlLanguageService.deleteSchema("http://schemas.home-assistant.io/my-entities")
+      // this.yamlLanguageService.addSchema("http://schemas.home-assistant.io/my-entities", entitySchemas[0].schema);
 
       this.diagnoseAllFiles();
     } catch (error) {
@@ -69,6 +97,23 @@ export class HomeAssistantLanguageService {
     }
     console.log(`Schemas updated!`);
   };
+
+  private getValidEntityIdsSchema(): SchemaCollection {
+    const schema: JSONSchema = {
+      type: "string",
+    };
+    if (this.knownEntityIds.length > 0) {
+      schema.enum = this.knownEntityIds;
+    } else {
+      schema.enum = ["test", "kees"];
+    }
+    return [
+      {
+        uri: "http://schemas.home-assistant.io/my-entities",
+        schema,
+      },
+    ];
+  }
 
   private getValidYamlTags(): string[] {
     const validTags: string[] = [];
@@ -101,6 +146,7 @@ export class HomeAssistantLanguageService {
           `Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`
         );
         await this.haConfig.discoverFiles();
+        this.knownEntityIds = await this.haConnection.getEntityIds();
         this.findAndApplySchemas();
       }
 
@@ -118,6 +164,8 @@ export class HomeAssistantLanguageService {
     const diagnostics = await this.getDiagnostics(
       textDocumentChangeEvent.document
     );
+
+    this.knownEntityIds = await this.haConnection.getEntityIds();
 
     this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
   };
