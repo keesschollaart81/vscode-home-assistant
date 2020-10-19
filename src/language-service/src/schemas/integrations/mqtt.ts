@@ -39,13 +39,13 @@ export interface Schema {
      * The maximum QoS level of the topic.
      * https://www.home-assistant.io/docs/mqtt/birth_will/#qos
      */
-    qos: QOS;
+    qos?: QOS;
 
     /**
      * If the published message should have the retain flag on or not.
      * https://www.home-assistant.io/docs/mqtt/birth_will/#retain
      */
-    retain: boolean;
+    retain?: boolean;
   };
 
   /**
@@ -154,13 +154,13 @@ export interface Schema {
      * The maximum QoS level of the topic.
      * https://www.home-assistant.io/docs/mqtt/birth_will/#qos
      */
-    qos: QOS;
+    qos?: QOS;
 
     /**
      * If the published message should have the retain flag on or not.
      * https://www.home-assistant.io/docs/mqtt/birth_will/#retain
      */
-    retain: boolean;
+    retain?: boolean;
   };
 }
 
