@@ -1323,7 +1323,7 @@ export interface CoverPlatformSchema extends PlatformSchema {
    * The value that will be sent on an open_cover_tilt command.
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_opened_value
    */
-  tilt_opened_value: Integer;
+  tilt_opened_value?: Integer;
 
   /**
    * Flag that determines if tilt works in optimistic mode.
