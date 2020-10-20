@@ -489,7 +489,7 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
    * For sensors that only send on state updates (like PIRs), this variable sets a delay in seconds after which the sensor’s state will be updated back to off.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#off_delay
    */
-  off_delay: PositiveInteger;
+  off_delay?: PositiveInteger;
 
   /**
    * The payload that represents the available state.
