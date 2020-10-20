@@ -70,6 +70,12 @@ export interface Core {
   latitude?: number;
 
   /**
+   * Enable this option to restore pre-0.117 template rendering. Which renders all templates to string, instead of native types.
+   * https://www.home-assistant.io/docs/configuration/basic/#legacy_templates
+   */
+  legacy_templates?: boolean;
+
+  /**
    * Longitude of your location required to calculate the time the sun rises and sets.
    * https://www.home-assistant.io/docs/configuration/basic/#longitude
    *
