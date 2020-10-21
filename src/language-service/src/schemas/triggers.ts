@@ -28,7 +28,8 @@ export type Trigger =
   | TimeTrigger
   | TimePatternTrigger
   | WebhookTrigger
-  | ZoneTrigger;
+  | ZoneTrigger
+  | TagTrigger;
 
 /**
  * @TJS-additionalProperties true
@@ -370,4 +371,9 @@ interface ZoneTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
    */
   event: "enter" | "leave";
+}
+
+interface TagTrigger {
+  platform: "tag";
+  tag_id: string;
 }
