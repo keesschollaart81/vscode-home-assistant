@@ -24,12 +24,12 @@ export type Trigger =
   | NumericStateTrigger
   | StateTrigger
   | SunTrigger
+  | TagTrigger
   | TemplateTrigger
   | TimeTrigger
   | TimePatternTrigger
   | WebhookTrigger
-  | ZoneTrigger
-  | TagTrigger;
+  | ZoneTrigger;
 
 /**
  * @TJS-additionalProperties true
