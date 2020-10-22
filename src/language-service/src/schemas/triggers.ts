@@ -374,6 +374,19 @@ interface ZoneTrigger {
 }
 
 interface TagTrigger {
+
+  /**
+   * This trigger fired when a tag is scanned.
+   */
   platform: "tag";
+
+  /**
+   * Identifier of the tag. Use this to decide what to do.
+   */
   tag_id: string;
+
+  /**
+   * Device registry identifier of the device that scanned the tag. Use this to decide where to do it.
+   */
+  device_id?: string;
 }
