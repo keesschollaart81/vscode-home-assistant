@@ -374,7 +374,6 @@ interface ZoneTrigger {
 }
 
 interface TagTrigger {
-
   /**
    * This trigger fired when a tag is scanned.
    */
