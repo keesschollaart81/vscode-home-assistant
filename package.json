@@ -327,7 +327,7 @@
     "lint-staged": "^10.5.1",
     "prettier": "^2.1.2",
     "rimraf": "3.0.2",
-    "ts-loader": "^8.0.7",
+    "ts-loader": "^8.0.9",
     "ts-node": "9.0.0",
     "typescript": "^4.0.5",
     "typescript-json-schema": "0.43.0",
