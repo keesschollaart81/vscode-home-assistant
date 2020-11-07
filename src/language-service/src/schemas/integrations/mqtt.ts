@@ -1367,7 +1367,7 @@ export interface DeviceTrackerPlatformSchema extends PlatformSchema {
    * List of devices with their topic.
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#devices
    */
-  devices: { [key: string]: string }[];
+  devices: { [key: string]: string };
 
   /**
    * The payload value that represents the ‘home’ state for the device.
