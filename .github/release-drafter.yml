@@ -23,10 +23,10 @@ categories:
   - title: "🧰 Maintenance"
     labels:
       - "chore"
-      - "dependencies"
 exclude-labels:
   - "invalid"
   - "wontfix"
+  - "dependencies"
 change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
 version-resolver:
   major:
