@@ -21,9 +21,9 @@ import { VsCodeFileAccessor } from "./fileAccessor";
 
 const connection = createConnection(ProposedFeatures.all);
 
-// console.log = connection.console.log.bind(connection.console);
-// console.warn = connection.window.showWarningMessage.bind(connection.console);
-// console.error = connection.window.showErrorMessage.bind(connection.console);
+console.log = connection.console.log.bind(connection.console);
+console.warn = connection.window.showWarningMessage.bind(connection.console);
+console.error = connection.window.showErrorMessage.bind(connection.console);
 
 const documents = new TextDocuments(TextDocument);
 documents.listen(connection);

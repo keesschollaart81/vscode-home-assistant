@@ -18,8 +18,6 @@ import {
   LanguageService,
   LanguageSettings,
 } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
-import { JSONSchema } from "vscode-json-languageservice";
-import { setFlagsFromString } from "v8";
 import {
   SchemaCollection,
   SchemaServiceForIncludes,
