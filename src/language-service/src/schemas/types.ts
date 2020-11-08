@@ -98,11 +98,6 @@ export type Domain = string;
 export type Domains = string[];
 
 /**
- * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
- */
-export type Entity = string;
-
-/**
  * @$ref http://schemas.home-assistant.io/my-entities
  */
 export type Entities = any;

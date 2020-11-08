@@ -55,23 +55,7 @@ export class HomeAssistantLanguageService {
           `Applying schemas to ${haFiles.length} of your configuration files...`
         );
       }
-      const entitySchemas = this.getValidEntityIdsSchema();
 
-      this.yamlLanguageService.deleteSchema(
-        "http://schemas.home-assistant.io/my-entities"
-      );
-      this.yamlLanguageService.deleteSchema(
-        "http://schemas.home-assistant.io/homeassistant-packages"
-      );
-      this.yamlLanguageService.deleteSchema(
-        "http://schemas.home-assistant.io/my-entities"
-      );
-      this.yamlLanguageService.resetSchema(
-        "http://schemas.home-assistant.io/my-entities"
-      );
-      this.yamlLanguageService.resetSchema(
-        "http://schemas.home-assistant.io/homeassistant-packages"
-      );
       this.yamlLanguageService.configure(<LanguageSettings>{
         validate: true,
         customTags: this.getValidYamlTags(),
@@ -79,13 +63,10 @@ export class HomeAssistantLanguageService {
         format: true,
         hover: true,
         isKubernetes: false,
-        schemas: entitySchemas.concat(
+        schemas: this.getValidEntityIdsSchema().concat(
           this.schemaServiceForIncludes.getSchemaContributions(haFiles)
         ),
       });
-      // this.yamlLanguageService.deleteSchema("http://schemas.home-assistant.io/homeassistant-packages")
-      // this.yamlLanguageService.deleteSchema("http://schemas.home-assistant.io/my-entities")
-      // this.yamlLanguageService.addSchema("http://schemas.home-assistant.io/my-entities", entitySchemas[0].schema);
 
       this.diagnoseAllFiles();
     } catch (error) {
@@ -99,18 +80,40 @@ export class HomeAssistantLanguageService {
   };
 
   private getValidEntityIdsSchema(): SchemaCollection {
-    const schema: JSONSchema = {
-      type: "string",
-    };
+    const entityIdSchemaUri = "http://schemas.home-assistant.io/my-entities";
     if (this.knownEntityIds.length > 0) {
-      schema.enum = this.knownEntityIds;
-    } else {
-      schema.enum = ["test", "kees"];
+      // we have a list of entities, return the 'whitelist' of entity_ids as an enum type
+      return [
+        {
+          uri: entityIdSchemaUri,
+          schema: {
+            enum: this.knownEntityIds,
+          },
+        },
+      ];
     }
+    // fall back to entity_id validation by regex
     return [
       {
-        uri: "http://schemas.home-assistant.io/my-entities",
-        schema,
+        uri: entityIdSchemaUri,
+        schema: {
+          pattern:
+            "^(?!.+__)(?!_)[da-z_]+(?<!_).(?!_)[da-z_]+(?<!_)s?(?:,s?(?!.+__)(?!_)[da-z_]+(?<!_).(?!_)[da-z_]+(?<!_))*$",
+          anyOf: [
+            {
+              type: "array",
+              items: {
+                type: "string",
+              },
+            },
+            {
+              type: "string",
+            },
+          ],
+          items: {
+            pattern: "^(?!.+__)(?!_)[\\da-z_]+(?<!_)\\.(?!_)[\\da-z_]+(?<!_)$",
+          },
+        },
       },
     ];
   }

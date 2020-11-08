@@ -1,4 +1,4 @@
-import { IncludeList } from "./types";
+import { Entities, IncludeList } from "./types";
 
 /*
 
@@ -321,7 +321,7 @@ export interface MarkdownCardConfig extends LovelaceCardConfig {
   content: string;
   title?: string;
   card_size?: number;
-  entity_ids?: string | string[];
+  entity_ids?: Entities;
   theme?: string;
 }
 
