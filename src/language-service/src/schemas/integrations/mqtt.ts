@@ -1051,7 +1051,7 @@ export interface ClimatePlatformSchema extends PlatformSchema {
    * Step size for temperature set point.
    * https://www.home-assistant.io/integrations/climate.mqtt#temp_step
    */
-  temperature_step?: number;
+  temp_step?: number;
 
   /**
    * An ID that uniquely identifies this HVAC device. If two HVAC devices have the same unique ID, Home Assistant will raise an exception.
