@@ -85,6 +85,12 @@ export interface Core {
   longitude?: number;
 
   /**
+   * A mapping of local media sources and their paths on disk.
+   * https://www.home-assistant.io/docs/configuration/basic/#media_dirs
+   */
+  media_dirs?: { [key: string]: string };
+
+  /**
    * Name of the location where Home Assistant is running.
    * https://www.home-assistant.io/docs/configuration/basic/#name
    */
