@@ -16,7 +16,7 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
       return [];
     }
     const includeType = matches[2];
-    const whatToInclude = `${matches[5]}`.trim();
+    const whatToInclude = `${matches[5]}`.trim().replace(/['"]+/g, "");
     switch (includeType) {
       case "!include":
         // eslint-disable-next-line no-case-declarations
