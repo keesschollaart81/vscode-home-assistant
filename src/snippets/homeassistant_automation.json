@@ -54,6 +54,10 @@
     "prefix": "condition-and",
     "body": ["- condition: and", "  conditions:", "    "]
   },
+  "condition not": {
+    "prefix": "condition-not",
+    "body": ["- condition: not", "  conditions:", "    "]
+  },
   "trigger state": {
     "prefix": "trigger-state",
     "body": [
