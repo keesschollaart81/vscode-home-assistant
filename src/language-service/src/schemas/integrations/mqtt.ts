@@ -1791,7 +1791,7 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
    * The list of effects the light supports.
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_list
    */
-  effect_list?: string;
+  effect_list?: string | string[];
 
   /**
    * The MQTT topic subscribed to receive effect state updates.
@@ -2111,7 +2111,7 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
    * The list of effects the light supports.
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_list
    */
-  effect_list?: string;
+  effect_list?: string | string[];
 
   /**
    * The duration, in seconds, of a “long” flash.
@@ -2353,7 +2353,7 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
    * The list of effects the light supports.
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_list
    */
-  effect_list?: string;
+  effect_list?: string | string[];
 
   /**
    * Template to extract effect from the state payload value.
