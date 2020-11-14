@@ -30,6 +30,28 @@ export type Trigger =
   | WebhookTrigger
   | ZoneTrigger;
 
+type EventType =
+  | "automation_reloaded"
+  | "automation_triggered"
+  | "call_service"
+  | "component_loaded"
+  | "deconz_event"
+  | "homeassistant_started"
+  | "homeassistant_stop"
+  | "logbook_entry"
+  | "platform_discovered"
+  | "scene_reloaded"
+  | "service_executed"
+  | "service_registered"
+  | "service_removed"
+  | "state_changed"
+  | "tag_scanned"
+  | "themes_updates"
+  | "time_changed"
+  | "user_added"
+  | "user_removed"
+  | "zha_event";
+
 /**
  * @TJS-additionalProperties true
  */
@@ -71,17 +93,7 @@ interface EventTrigger {
    * The name of the event to listen for.
    * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
    */
-  event_type:
-    | "automation_reloaded"
-    | "call_service"
-    | "component_loaded"
-    | "platform_discovered"
-    | "scene_reloaded"
-    | "service_executed"
-    | "service_registered"
-    | "state_changed"
-    | "time_changed"
-    | string;
+  event_type: EventType | EventType[] | string | string[];
 }
 
 interface GeolocationTrigger {
