@@ -11,12 +11,12 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
     uri: string
     // eslint-disable-next-line @typescript-eslint/require-await
   ): Promise<Definition[]> => {
-    const matches = /(.*)(!include([\S]*))([\s]*)*(.*)/.exec(line);
-    if (!matches || matches.length !== 6) {
+    const matches = /(.*)(!include\S*)\s+(["'])?(.+)\3/.exec(line);
+    if (!matches || matches.length !== 5) {
       return [];
     }
     const includeType = matches[2];
-    const whatToInclude = `${matches[5]}`.trim().replace(/['"]+/g, "");
+    const whatToInclude = `${matches[4]}`.trim();
     switch (includeType) {
       case "!include":
         // eslint-disable-next-line no-case-declarations
