@@ -24,6 +24,7 @@ export type Trigger =
   | NumericStateTrigger
   | StateTrigger
   | SunTrigger
+  | TagTrigger
   | TemplateTrigger
   | TimeTrigger
   | TimePatternTrigger
@@ -382,4 +383,24 @@ interface ZoneTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
    */
   event: "enter" | "leave";
+}
+
+interface TagTrigger {
+  /**
+   * This trigger fired when a tag is scanned.
+   * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
+   */
+  platform: "tag";
+
+  /**
+   * Identifier of the tag. Use this to decide what to do.
+   * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
+   */
+  tag_id: string;
+
+  /**
+   * Device registry identifier of the device that scanned the tag. Use this to decide where to do it.
+   * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
+   */
+  device_id?: string;
 }
