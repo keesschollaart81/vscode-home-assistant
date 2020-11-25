@@ -11,6 +11,7 @@ export * as Fan from "./fan";
 export * as Group from "./group";
 export * as Light from "./light";
 export * as Lock from "./lock";
+export * as Lovelace from "./lovelace";
 export * as HACS from "./hacs";
 export * as HTTP from "./http";
 export * as Hue from "./hue";
