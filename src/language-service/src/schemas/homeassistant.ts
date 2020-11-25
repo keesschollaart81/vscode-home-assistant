@@ -113,6 +113,12 @@ export interface InternalIntegrations {
   lock?: integrations.Lock.Schema | IncludeList;
 
   /**
+   * Lovelace is the Home Assistant dashboard. It’s a fast, customizable and powerful way for users to manage their homes, working on mobile and desktop.
+   * https://www.home-assistant.io/lovelace
+   */
+  lovelace?: integrations.Lovelace.Schema | null;
+
+  /**
    * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
    * https://www.home-assistant.io/integrations/panel_iframe
    */
