@@ -109,6 +109,17 @@ export type Entity = string;
 export type Entities = string | string[];
 
 /**
+ * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type AlarmControlPanelEntity = string;
+
+/**
+ * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?alarm_control_panel\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type AlarmControlPanelEntities = string | string[];
+
+/**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
 export type DeviceTrackerEntity = string;
