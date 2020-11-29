@@ -396,11 +396,11 @@ interface TagTrigger {
    * Identifier of the tag. Use this to decide what to do.
    * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
    */
-  tag_id: string;
+  tag_id: string | string[];
 
   /**
    * Device registry identifier of the device that scanned the tag. Use this to decide where to do it.
    * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
    */
-  device_id?: string;
+  device_id?: string | string[];
 }
