@@ -147,24 +147,24 @@
     "fromType": "File"
   },
   {
-    "key": "ui-lovelace",
+    "key": "lovelace-dashboard",
     "path": "ui-lovelace.yaml",
-    "file": "ui-lovelace.json",
-    "tsFile": "ui-lovelace.ts",
-    "fromType": "LovelaceConfig"
+    "file": "lovelace-dashboard.json",
+    "tsFile": "lovelace/dashboard.ts",
+    "fromType": "Dashboard"
   },
   {
     "key": "lovelace-views",
     "path": "ui-lovelace.yaml/views",
     "file": "lovelace-views.json",
-    "tsFile": "ui-lovelace.ts",
-    "fromType": "LovelaceViewConfigs"
+    "tsFile": "lovelace/view.ts",
+    "fromType": "View"
   },
   {
     "key": "lovelace-cards",
     "path": "ui-lovelace.yaml/views/cards",
     "file": "lovelace-cards.json",
-    "tsFile": "ui-lovelace.ts",
-    "fromType": "LoveLaceCardFile"
+    "tsFile": "lovelace/types.ts",
+    "fromType": "CardsFile"
   }
 ]

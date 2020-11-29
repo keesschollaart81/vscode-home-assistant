@@ -9,12 +9,14 @@ import { IHaConnection } from "../home-assistant/haConnection";
 export class EntityIdCompletionContribution implements JSONWorkerContribution {
   public static propertyMatches: string[] = [
     "badges",
+    "camera_image",
     "devices",
     "entities",
     "entity_config",
     "entity_id",
     "entity",
     "exclude_entities",
+    "geo_location",
     "include_entities",
     "scene",
     "zone",
