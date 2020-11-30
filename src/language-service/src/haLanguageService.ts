@@ -77,8 +77,9 @@ export class HomeAssistantLanguageService {
         validTags.push(`!${item} scalar`);
       }
     }
-    validTags.push("!secret scalar");
     validTags.push("!env_var scalar");
+    validTags.push("!input scalar");
+    validTags.push("!secret scalar");
 
     return validTags;
   }

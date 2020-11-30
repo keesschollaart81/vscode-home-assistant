@@ -109,6 +109,17 @@ export type Entity = string;
 export type Entities = string | string[];
 
 /**
+ * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type AlarmControlPanelEntity = string;
+
+/**
+ * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?alarm_control_panel\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type AlarmControlPanelEntities = string | string[];
+
+/**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
 export type DeviceTrackerEntity = string;
@@ -118,6 +129,50 @@ export type DeviceTrackerEntity = string;
  * @items.pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
 export type DeviceTrackerEntities = string | string[];
+
+/**
+ * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type CameraEntity = string;
+
+/**
+ * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?camera\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^camera\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type CameraEntities = string | string[];
+
+/**
+ * @TJS-pattern ^climate\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type ClimateEntity = string;
+
+/**
+ * @TJS-pattern ^climate\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?climate\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^climate\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type ClimateEntities = string | string[];
+
+/**
+ * @TJS-pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type GeoLocationEntity = string;
+
+/**
+ * @TJS-pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?geo_location\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type GeoLocationEntities = string | string[];
+
+/**
+ * @TJS-pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type HumidifierEntity = string;
+
+/**
+ * @TJS-pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?humidifier\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type HumidifierEntities = string | string[];
 
 /**
  * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$"
@@ -153,6 +208,28 @@ export type InputNumberEntity = string;
 export type InputNumberEntities = string | string[];
 
 /**
+ * @TJS-pattern ^light\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type LightEntity = string;
+
+/**
+ * @TJS-pattern ^light\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?light\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^light\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type LightEntities = string | string[];
+
+/**
+ * @TJS-pattern ^media_player\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type MediaPlayerEntity = string;
+
+/**
+ * @TJS-pattern ^media_player\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?media_player\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^media_player\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type MediaPlayerEntities = string | string[];
+
+/**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
 export type PersonEntity = string;
@@ -162,6 +239,17 @@ export type PersonEntity = string;
  * @items.pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
 export type PersonEntities = string | string[];
+
+/**
+ * @TJS-pattern ^plant\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type PlantEntity = string;
+
+/**
+ * @TJS-pattern ^plant\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?plant\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^plant\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type PlantEntities = string | string[];
 
 /**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
@@ -184,6 +272,17 @@ export type SensorEntity = string;
  * @items.pattern ^sensor\.(?!_)[\da-z_]+(?<!_)$
  */
 export type SensorEntities = string | string[];
+
+/**
+ * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type WeatherEntity = string;
+
+/**
+ * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?weather\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^weather\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type WeatherEntities = string | string[];
 
 /**
  * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)$

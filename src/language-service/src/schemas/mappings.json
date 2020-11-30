@@ -1,170 +1,170 @@
 [
   {
-    "key": "homeassistant",
+    "key": "configuration",
     "path": "configuration.yaml",
-    "file": "homeassistant.json",
-    "tsFile": "homeassistant.ts",
-    "fromType": "HomeAssistantRoot"
+    "file": "configuration.json",
+    "tsFile": "configuration.ts",
+    "fromType": "ConfigurationRoot"
   },
   {
-    "key": "homeassistant-packages",
+    "key": "integration-homeassistant-packages",
     "path": "configuration.yaml/homeassistant/packages",
-    "file": "homeassistant-packages.json",
-    "tsFile": "homeassistant.ts",
-    "fromType": "HomeAssistantRoot"
+    "file": "integration-homeassistant-packages.json",
+    "tsFile": "configuration.ts",
+    "fromType": "ConfigurationRoot"
   },
   {
-    "key": "homeassistant-customize",
+    "key": "integration-homeassistant-customize",
     "path": "configuration.yaml/homeassistant/customize",
-    "file": "homeassistant-customize.json",
-    "tsFile": "homeassistant.ts",
+    "file": "integration-homeassistant-customize.json",
+    "tsFile": "./integrations/core/homeassistant.ts",
     "fromType": "CoreCustomize"
   },
   {
-    "key": "homeassistant-scene",
+    "key": "integration-scene",
     "path": "configuration.yaml/scene",
-    "file": "homeassistant-scene.json",
-    "tsFile": "integrations/scene.ts",
+    "file": "integration-scene.json",
+    "tsFile": "integrations/core/scene.ts",
     "fromType": "File"
   },
   {
-    "key": "homeassistant-http",
+    "key": "integration-http",
     "path": "configuration.yaml/http",
-    "file": "homeassistant-http.json",
-    "tsFile": "integrations/http.ts",
+    "file": "integration-http.json",
+    "tsFile": "integrations/core/http.ts",
     "fromType": "Schema"
   },
   {
-    "key": "homeassistant-input-boolean",
+    "key": "integration-input_boolean",
     "path": "configuration.yaml/input_boolean",
-    "file": "homeassistant-input-boolean.json",
-    "tsFile": "integrations/input_boolean.ts",
+    "file": "integration-input_boolean.json",
+    "tsFile": "integrations/core/input_boolean.ts",
     "fromType": "Schema"
   },
   {
-    "key": "homeassistant-input-number",
+    "key": "integration-input_number",
     "path": "configuration.yaml/input_number",
-    "file": "homeassistant-input-number.json",
-    "tsFile": "integrations/input_number.ts",
+    "file": "integration-input_number.json",
+    "tsFile": "integrations/core/input_number.ts",
     "fromType": "Schema"
   },
   {
-    "key": "homeassistant-script",
+    "key": "integration-script",
     "path": "configuration.yaml/script",
-    "file": "homeassistant-script.json",
-    "tsFile": "integrations/script.ts",
+    "file": "integration-script.json",
+    "tsFile": "integrations/core/script.ts",
     "fromType": "Schema"
   },
   {
-    "key": "homeassistant-sensor",
+    "key": "integration-sensor",
     "path": "configuration.yaml/sensor",
-    "file": "homeassistant-sensor.json",
-    "tsFile": "integrations/sensor.ts",
+    "file": "integration-sensor.json",
+    "tsFile": "integrations/core/sensor.ts",
     "fromType": "File"
   },
   {
-    "key": "alarm_control_panel",
+    "key": "integration-alarm_control_panel",
     "path": "configuration.yaml/alarm_control_panel",
-    "file": "homeassistant-alarm_control_panel.json",
-    "tsFile": "integrations/alarm_control_panel.ts",
+    "file": "integration-alarm_control_panel.json",
+    "tsFile": "integrations/core/alarm_control_panel.ts",
     "fromType": "File"
   },
   {
-    "key": "automations",
+    "key": "integration-automation",
     "path": "configuration.yaml/automation",
-    "file": "automations.json",
-    "tsFile": "integrations/automation.ts",
+    "file": "integration-automation.json",
+    "tsFile": "integrations/core/automation.ts",
     "fromType": "File"
   },
   {
-    "key": "binary_sensor",
+    "key": "integration-binary_sensor",
     "path": "configuration.yaml/binary_sensor",
-    "file": "binary_sensor.json",
-    "tsFile": "integrations/binary_sensor.ts",
+    "file": "integration-binary_sensor.json",
+    "tsFile": "integrations/core/binary_sensor.ts",
     "fromType": "File"
   },
   {
-    "key": "camera",
+    "key": "integration-camera",
     "path": "configuration.yaml/camera",
-    "file": "camera.json",
-    "tsFile": "integrations/camera.ts",
+    "file": "integration-camera.json",
+    "tsFile": "integrations/core/camera.ts",
     "fromType": "File"
   },
   {
-    "key": "climate",
+    "key": "integration-climate",
     "path": "configuration.yaml/climate",
-    "file": "climate.json",
-    "tsFile": "integrations/climate.ts",
+    "file": "integration-climate.json",
+    "tsFile": "integrations/core/climate.ts",
     "fromType": "File"
   },
   {
-    "key": "cover",
+    "key": "integration-cover",
     "path": "configuration.yaml/cover",
-    "file": "cover.json",
-    "tsFile": "integrations/cover.ts",
+    "file": "integration-cover.json",
+    "tsFile": "integrations/core/cover.ts",
     "fromType": "File"
   },
   {
-    "key": "device_tracker",
+    "key": "integration-device_tracker",
     "path": "configuration.yaml/device_tracker",
-    "file": "device_tracker.json",
-    "tsFile": "integrations/device_tracker.ts",
+    "file": "integration-device_tracker.json",
+    "tsFile": "integrations/core/device_tracker.ts",
     "fromType": "File"
   },
   {
-    "key": "fan",
+    "key": "integration-fan",
     "path": "configuration.yaml/fan",
-    "file": "fan.json",
-    "tsFile": "integrations/fan.ts",
+    "file": "integration-fan.json",
+    "tsFile": "integrations/core/fan.ts",
     "fromType": "File"
   },
   {
-    "key": "light",
+    "key": "integration-light",
     "path": "configuration.yaml/light",
-    "file": "light.json",
-    "tsFile": "integrations/light.ts",
+    "file": "integration-light.json",
+    "tsFile": "integrations/core/light.ts",
     "fromType": "File"
   },
   {
-    "key": "lock",
+    "key": "integration-lock",
     "path": "configuration.yaml/lock",
-    "file": "lock.json",
-    "tsFile": "integrations/lock.ts",
+    "file": "integration-lock.json",
+    "tsFile": "integrations/core/lock.ts",
     "fromType": "File"
   },
   {
-    "key": "switch",
+    "key": "integration-switch",
     "path": "configuration.yaml/switch",
-    "file": "switch.json",
-    "tsFile": "integrations/switch.ts",
+    "file": "integration-switch.json",
+    "tsFile": "integrations/core/switch.ts",
     "fromType": "File"
   },
   {
-    "key": "vacuum",
+    "key": "integration-vacuum",
     "path": "configuration.yaml/vacuum",
-    "file": "vacuum.json",
-    "tsFile": "integrations/vacuum.ts",
+    "file": "integration-vacuum.json",
+    "tsFile": "integrations/core/vacuum.ts",
     "fromType": "File"
   },
   {
-    "key": "ui-lovelace",
+    "key": "lovelace-dashboard",
     "path": "ui-lovelace.yaml",
-    "file": "ui-lovelace.json",
-    "tsFile": "ui-lovelace.ts",
-    "fromType": "LovelaceConfig"
+    "file": "lovelace-dashboard.json",
+    "tsFile": "lovelace/dashboard.ts",
+    "fromType": "Dashboard"
   },
   {
     "key": "lovelace-views",
     "path": "ui-lovelace.yaml/views",
     "file": "lovelace-views.json",
-    "tsFile": "ui-lovelace.ts",
-    "fromType": "LovelaceViewConfigs"
+    "tsFile": "lovelace/view.ts",
+    "fromType": "View"
   },
   {
     "key": "lovelace-cards",
     "path": "ui-lovelace.yaml/views/cards",
     "file": "lovelace-cards.json",
-    "tsFile": "ui-lovelace.ts",
-    "fromType": "LoveLaceCardFile"
+    "tsFile": "lovelace/types.ts",
+    "fromType": "CardsFile"
   }
 ]
