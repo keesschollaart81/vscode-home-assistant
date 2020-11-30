@@ -96,7 +96,7 @@ export class HomeAssistantYamlFile {
   private getCustomTags(): Schema.Tag[] {
     return [
       `env_Var`,
-      `placeholder`,
+      `input`,
       `secret`,
       `${Includetype[Includetype.include]}`,
       `${Includetype[Includetype.include_dir_list]}`,
