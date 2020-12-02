@@ -237,6 +237,7 @@ export async function activate(
       "rpi_gpio",
       "reload"
     ),
+    new CommandMappings("vscode-home-assistant.knxReload", "knx", "reload"),
     new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",

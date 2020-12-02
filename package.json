@@ -233,6 +233,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.knxReload",
+        "title": "Reload KNX",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Add-on",
         "category": "Home Assistant"
