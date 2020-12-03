@@ -1,3 +1,5 @@
+export type Area = string;
+
 export type Data = {
   [key: string]: any | Template;
 };
