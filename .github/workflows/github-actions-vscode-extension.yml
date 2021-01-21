@@ -23,7 +23,6 @@ jobs:
         run: npm run lint
 
       - name: 🚀 Run Compile
-        working-directory: src/language-service
         run: npm run compile
 
       - name: 🚀 VSCode Marketplace Publish
