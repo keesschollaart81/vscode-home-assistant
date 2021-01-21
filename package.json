@@ -324,7 +324,7 @@
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "4.2.0",
     "eslint-plugin-wc": "^1.2.0",
@@ -339,7 +339,7 @@
     "vscode-test": "^1.4.1"
   },
   "dependencies": {
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "bufferutil": "^4.0.2",
     "home-assistant-js-websocket": "^5.7.0",
     "utf-8-validate": "^5.0.4",
