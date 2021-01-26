@@ -249,6 +249,7 @@ export async function activate(
       "hassio",
       "host_reboot"
     ),
+    new CommandMappings("vscode-home-assistant.templateReload", "template", "reload"),
   ];
 
   commandMappings.forEach((mapping) => {
