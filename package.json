@@ -287,7 +287,7 @@
           "comments": false,
           "strings": true
         },
-        "editor.autoIndent": "full"
+        "editor.autoIndent": "advanced"
       }
     }
   },
