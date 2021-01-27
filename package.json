@@ -239,7 +239,7 @@
       },
       {
         "command": "vscode-home-assistant.templateReload",
-        "title": "Reload Template Sensors",
+        "title": "Reload Template Entities",
         "category": "Home Assistant"
       },
       {
