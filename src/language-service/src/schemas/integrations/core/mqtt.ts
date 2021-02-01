@@ -2428,6 +2428,12 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
   red_template?: string;
 
   /**
+   * Template to extract red color from the state payload value.
+   * https://www.home-assistant.io/integrations/light.mqtt/#state_template
+   */
+  state_template?: string;
+
+  /**
    * The MQTT topic subscribed to receive state updates.
    * https://www.home-assistant.io/integrations/light.mqtt/#state_topic
    */
