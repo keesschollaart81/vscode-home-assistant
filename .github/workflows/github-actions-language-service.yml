@@ -16,39 +16,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@master
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v2.3.4
 
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@master
+      - name: 🏗 Set up NodeJS
+        uses: actions/setup-node@v2.1.4
         with:
-          node-version: 12.x
+          node-version: "14"
 
-      - name: NPM Install
+      - name: 🏗 Install NodeJS packages
         working-directory: src/language-service
-        run: |
-          rm package-lock.json
-          npm install
+        run: npm install
 
-      - name: NPM Lint
+      - name: 🚀 Run Linter
         working-directory: src/language-service
         run: npm run lint
 
-      - name: NPM Compile
+      - name: 🚀 Run Compile
         working-directory: src/language-service
         run: npm run compile
 
-      - name: Create .npmrc
-        run: echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> ~/.npmrc
+      - name: 🏗 Create .npmrc
+        if: success() && github.ref == 'refs/heads/master'
+        run:
+          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" >> ~/.npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: NPM Publish to Registry
+      - name: 🚀 Publish to NPM Registry
         if: success() && github.ref == 'refs/heads/master'
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm publish src/language-service
+
     # - name: NPM Publish to Registry
     #   uses: actions/npm@master
     #   if: success() && github.ref == 'refs/heads/master'

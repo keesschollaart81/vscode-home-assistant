@@ -1,6 +1,6 @@
 {
   "name": "home-assistant-language-service",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "description": "Home Assistant Language Service",
   "source": "src/haLanguageService.ts",
   "main": "dist/haLanguageService.js",
@@ -38,8 +38,8 @@
     "schema": "ts-node src/schemas/generateSchemas.ts"
   },
   "devDependencies": {
-    "@types/mocha": "8.0.4",
-    "@types/node": "14.14.10",
+    "@types/mocha": "8.2.0",
+    "@types/node": "14.14.22",
     "@types/vscode": "1.48.0",
     "@types/ws": "7.4.0",
     "@types/yaml": "1.9.7",
@@ -48,7 +48,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.4.0",
     "eslint-config-airbnb-typescript": "^9.0.0",
-    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
@@ -59,9 +59,9 @@
     "prettier": "^2.0.5",
     "rimraf": "3.0.2",
     "ts-loader": "^8.0.0",
-    "ts-node": "9.0.0",
-    "typescript": "4.1.2",
-    "typescript-json-schema": "0.45.0",
+    "ts-node": "9.1.1",
+    "typescript": "4.1.3",
+    "typescript-json-schema": "0.48.0",
     "vscode-test": "^1.4.0"
   },
   "dependencies": {
@@ -69,8 +69,8 @@
     "home-assistant-js-websocket": "^5.7.0",
     "vscode-json-languageservice": "3.9.1",
     "vscode-languageserver-protocol": "3.15.3",
-    "vscode-uri": "2.1.2",
-    "ws": "7.4.0",
+    "vscode-uri": "3.0.2",
+    "ws": "7.4.2",
     "yaml": "1.10.0",
     "yaml-language-server": "0.12.0"
   },

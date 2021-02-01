@@ -239,6 +239,11 @@ export async function activate(
     ),
     new CommandMappings("vscode-home-assistant.knxReload", "knx", "reload"),
     new CommandMappings(
+      "vscode-home-assistant.templateReload",
+      "template",
+      "reload"
+    ),
+    new CommandMappings(
       "vscode-home-assistant.hassioAddonRestartGitPull",
       "hassio",
       "addon_restart",
