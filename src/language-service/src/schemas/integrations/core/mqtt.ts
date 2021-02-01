@@ -1299,7 +1299,7 @@ export interface CoverPlatformSchema extends PlatformSchema {
    * The MQTT topic to publish commands to control the cover tilt.
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_command_topic
    */
-  tilt_command_topic?: Integer;
+  tilt_command_topic?: string;
 
   /**
    * Flag that determines if open/close are flipped; higher values toward closed and lower values toward open.
