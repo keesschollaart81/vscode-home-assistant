@@ -191,13 +191,13 @@ interface NumericStateTrigger {
    * Fire this trigger if the numeric state of the monitored entity (or entities) is changing from above to below the given threshold.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
-  below?: number;
+  below?: string | number;
 
   /**
    * Fire this trigger if the numeric state of the monitored entity (or entities) is changing from below to above the given threshold.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
-  above?: number;
+  above?: string | number;
 
   /**
    * An optional value template to use as the numeric state value.
