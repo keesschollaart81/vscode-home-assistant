@@ -6,6 +6,7 @@ import {
   Data,
   Entities,
   InputDatetimeEntities,
+  InputNumberEntity,
   Template,
   TimePeriod,
   ZoneEntity,
