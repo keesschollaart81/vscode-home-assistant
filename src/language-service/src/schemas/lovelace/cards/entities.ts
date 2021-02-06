@@ -22,7 +22,7 @@ export interface Schema {
    * A list of entity IDs or entity (row) objects.
    * https://www.home-assistant.io/lovelace/entities/#entities
    */
-  entities: Entity[];
+  entities?: Entity[];
 
   /**
    * Header widget to render.

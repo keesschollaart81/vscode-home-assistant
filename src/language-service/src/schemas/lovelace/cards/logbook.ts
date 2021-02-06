@@ -18,7 +18,7 @@ export interface Schema {
    * The entities that will show in the card.
    * https://www.home-assistant.io/lovelace/logbook/#entities
    */
-  entities: Entity[];
+  entities?: Entity[];
 
   /**
    * Number of hours in the past to track.
