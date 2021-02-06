@@ -29,7 +29,7 @@ export interface Schema {
    * A list of entity IDs or entity objects.
    * https://www.home-assistant.io/lovelace/glance/#entities
    */
-  entities: Entity[];
+  entities?: Entity[];
 
   /**
    * Show entity icon.
