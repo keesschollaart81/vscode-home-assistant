@@ -26,7 +26,7 @@ export interface Schema {
    * List of entity IDs. Either this or the geo_location_sources configuration option is required.
    * https://www.home-assistant.io/lovelace/map/#entities
    */
-  entities: Entity | Entity[];
+  entities?: Entity | Entity[];
 
   /**
    * List of geolocation sources. All current entities with that source will be displayed on the map. See Geolocation platform for valid sources. Set to all to use all available sources. Either this or the entities configuration option is required.

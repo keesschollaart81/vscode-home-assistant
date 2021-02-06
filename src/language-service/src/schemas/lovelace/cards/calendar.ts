@@ -18,7 +18,7 @@ export interface Schema {
    * A list of calendar entities that will be displayed in the card.
    * https://www.home-assistant.io/lovelace/calendar/#entities
    */
-  entities: Entity[];
+  entities?: Entity[];
 
   /**
    * The view that will show first when the card is loaded onto the page.
