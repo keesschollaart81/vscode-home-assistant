@@ -7,6 +7,7 @@ import {
   Integer,
   TimeZone,
   UnitSystem,
+  TemperatureUnit,
 } from "../../types";
 
 export type Domain = "group";
@@ -117,6 +118,13 @@ export interface Schema {
    * https://www.home-assistant.io/docs/configuration/basic/#unit_system
    */
   unit_system?: UnitSystem;
+
+  /**
+   * Override temperature unit set by unit_system.
+   * "C" for Celsius, "F" for Fahrenheit.
+   * https://www.home-assistant.io/docs/configuration/basic/#temperature_unit
+   */
+  temperature_unit?: TemperatureUnit;
 
   /**
    * DEPRECATED as of Home Assistant 0.113.0.
