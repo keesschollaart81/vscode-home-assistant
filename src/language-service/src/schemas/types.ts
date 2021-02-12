@@ -976,3 +976,4 @@ export type TimeZone =
   | "Zulu";
 
 export type UnitSystem = "metric" | "imperial";
+export type TemperatureUnit = "C" | "F";
