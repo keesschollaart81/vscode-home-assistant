@@ -54,6 +54,11 @@
           "vscode-home-assistant.ignoreCertificates": {
             "type": "boolean",
             "description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
+          },
+          "vscode-home-assistant.disableAutomaticFileAssociation": {
+            "type": "boolean",
+            "description": "Disables the automatic file association creation in .vscode/settings.json that associates YAML files with the Home Assistant file language.",
+            "default": false
           }
         }
       }

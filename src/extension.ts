@@ -331,7 +331,10 @@ export async function activate(
     .get("files.associations");
   if (
     !fileAssociations["*.yaml"] &&
-    Object.values(fileAssociations).indexOf("home-assistant") === -1
+    Object.values(fileAssociations).indexOf("home-assistant") === -1 &&
+    vscode.workspace
+      .getConfiguration()
+      .get("vscode-home-assistant.disableAutomaticFileAssociation", false) === false
   ) {
     await vscode.workspace
       .getConfiguration()

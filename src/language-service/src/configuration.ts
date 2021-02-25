@@ -13,6 +13,7 @@ export interface HomeAssistantConfiguration {
   longLivedAccessToken?: string;
   hostUrl?: string;
   ignoreCertificates: boolean;
+  disableAutomaticFileAssociation: boolean;
 }
 
 export class ConfigurationService implements IConfigurationService {
@@ -23,6 +24,8 @@ export class ConfigurationService implements IConfigurationService {
   public url?: string;
 
   public ignoreCertificates = false;
+
+  public disableAutomaticFileAssociation = false;
 
   constructor() {
     this.setConfigViaEnvironmentVariables();
@@ -41,6 +44,7 @@ export class ConfigurationService implements IConfigurationService {
       this.url = this.getUri(incoming.hostUrl);
     }
     this.ignoreCertificates = !!incoming.ignoreCertificates;
+    this.disableAutomaticFileAssociation = !!incoming.disableAutomaticFileAssociation;
 
     this.setConfigViaEnvironmentVariables();
 
