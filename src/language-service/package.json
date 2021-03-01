@@ -48,7 +48,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.4.0",
     "eslint-config-airbnb-typescript": "^9.0.0",
-    "eslint-config-prettier": "^7.0.0",
+    "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
