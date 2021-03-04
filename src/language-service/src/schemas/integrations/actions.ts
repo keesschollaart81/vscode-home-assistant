@@ -50,6 +50,11 @@ export interface ChooseAction {
 
 export interface ChooseActionItem {
   /**
+   * Alias for this choose item.
+   */
+  alias?: string;
+
+  /**
    * Only preform the sequence of actions if this condition/these conditions match.
    * https://www.home-assistant.io/docs/scripts/#choose-a-group-of-actions
    */
@@ -80,6 +85,11 @@ export interface DelayAction {
  * @TJS-additionalProperties true
  */
 export interface DeviceAction {
+  /**
+   * Alias for the device action.
+   */
+  alias?: string;
+
   /**
    * The internal ID of the device to execute an action on.
    * Device actions encompass a set of events that are defined by an integration.
@@ -158,6 +168,11 @@ export interface RepeatAction {
 }
 
 export interface SceneAction {
+  /**
+   * Alias for the scene action.
+   */
+  alias?: string;
+
   /**
    * Activate a scene.
    * https://www.home-assistant.io/docs/scripts/#activate-a-scene

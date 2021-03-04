@@ -35,6 +35,11 @@ export type Condition =
 
 export interface AndCondition {
   /**
+   * Alias for the and condition.
+   */
+  alias?: string;
+
+  /**
    * Test multiple conditions in one condition statement. Passes if all embedded conditions are valid.
    * https://www.home-assistant.io/docs/scripts/conditions/#and-condition
    */
@@ -51,6 +56,11 @@ export interface AndCondition {
  * @TJS-additionalProperties true
  */
 export interface DeviceCondition {
+  /**
+   * Alias for the device condition.
+   */
+  alias?: string;
+
   /**
    * Device conditions encompass a set of properties that are defined by an integration.
    * In contrast to state conditions, device conditions are tied to a device and not necessarily an entity. To use a device trigger, set up an automation through the browser frontend.
@@ -70,6 +80,11 @@ export interface DeviceCondition {
 
 export interface NotCondition {
   /**
+   * Alias for the not condition.
+   */
+  alias?: string;
+
+  /**
    * Test multiple conditions in one condition statement. Passes if all embedded conditions are not valid.
    * https://www.home-assistant.io/docs/scripts/conditions/#not-condition
    */
@@ -83,6 +98,11 @@ export interface NotCondition {
 }
 
 export interface NumericStateCondition {
+  /**
+   * Alias for the numeric state condition.
+   */
+  alias?: string;
+
   /**
    * This type of condition attempts to parse the state of the specified entity as a number, and triggers if the value matches the thresholds.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
@@ -122,6 +142,11 @@ export interface NumericStateCondition {
 
 export interface OrCondition {
   /**
+   * Alias for the or condition.
+   */
+  alias?: string;
+
+  /**
    * Test multiple conditions in one condition statement. Passes if any embedded condition is valid.
    * https://www.home-assistant.io/docs/scripts/conditions/#or-condition
    */
@@ -135,6 +160,11 @@ export interface OrCondition {
 }
 
 export interface StateCondition {
+  /**
+   * Alias for the state condition.
+   */
+  alias?: string;
+
   /**
    * Tests if an entity (or entities) is in a specified state.
    * https://www.home-assistant.io/docs/scripts/conditions/#state-condition
@@ -174,6 +204,11 @@ export interface StateCondition {
 
 export interface SunCondition {
   /**
+   * Alias for the sun condition.
+   */
+  alias?: string;
+
+  /**
    * The sun state can be used to test if the sun has set or risen.
    * https://www.home-assistant.io/docs/scripts/conditions/#sun-condition
    */
@@ -208,6 +243,11 @@ export interface SunCondition {
 
 export interface TemplateCondition {
   /**
+   * Alias for the template condition.
+   */
+  alias?: string;
+
+  /**
    * The template condition tests if the given template renders a value equal to true. This is achieved by having the template result in a true boolean expression or by having the template render ‘true’.
    * https://www.home-assistant.io/docs/scripts/conditions/#template-condition
    */
@@ -221,6 +261,11 @@ export interface TemplateCondition {
 }
 
 export interface TimeCondition {
+  /**
+   * Alias for the time condition.
+   */
+  alias?: string;
+
   /**
    * The time condition can test if it is after a specified time, before a specified time or if it is a certain day of the week.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
@@ -249,6 +294,11 @@ export interface TimeCondition {
 }
 
 export interface ZoneCondition {
+  /**
+   * Alias for the zone condition.
+   */
+  alias?: string;
+
   condition: "zone";
 
   /**
