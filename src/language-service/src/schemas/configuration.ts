@@ -166,6 +166,12 @@ export interface InternalIntegrations {
    * https://www.home-assistant.io/integrations/vacuum
    */
   vacuum?: integrations.Core.Vacuum.Schema | IncludeList;
+
+  /**
+   * The weather platforms gather meteorological information from web services and display the conditions and other details about the weather at the given location.
+   * https://www.home-assistant.io/integrations/weather
+   */
+  weather?: integrations.Core.Weather.Schema | IncludeList;
 }
 
 /**

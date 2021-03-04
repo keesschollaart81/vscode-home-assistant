@@ -147,6 +147,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-weather",
+    "path": "configuration.yaml/weather",
+    "file": "integration-weather.json",
+    "tsFile": "integrations/core/weather.ts",
+    "fromType": "File"
+  },
+  {
     "key": "lovelace-dashboard",
     "path": "ui-lovelace.yaml",
     "file": "lovelace-dashboard.json",
