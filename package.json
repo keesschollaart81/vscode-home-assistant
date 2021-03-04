@@ -311,7 +311,7 @@
     "lint:types": "tsc",
     "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:types",
     "schema": "ts-node src/language-service/src/schemas/generateSchemas.ts",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test",
+    "test": "npm run compile",
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
@@ -340,8 +340,7 @@
     "ts-loader": "^8.0.10",
     "ts-node": "9.1.1",
     "typescript": "^4.2.2",
-    "typescript-json-schema": "0.49.0",
-    "vscode-test": "^1.5.1"
+    "typescript-json-schema": "0.49.0"
   },
   "dependencies": {
     "axios": "^0.21.1",
