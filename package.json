@@ -312,7 +312,8 @@
     "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:types",
     "schema": "ts-node src/language-service/src/schemas/generateSchemas.ts",
     "test": "npm run compile",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@types/mocha": "8.2.1",
