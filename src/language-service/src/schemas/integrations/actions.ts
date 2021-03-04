@@ -202,7 +202,7 @@ export interface ServiceAction {
    * The entity (or entities) to execute this service call on.
    * https://www.home-assistant.io/docs/scripts/service-calls
    */
-  entity_id?: Entities | "all" | "none" | null;
+  entity_id?: Entities | "all" | "none" | null | Template;
 
   /**
    * Defines the target (area(s), device(s) and entitie(s)) to execute this service call on.
@@ -213,13 +213,13 @@ export interface ServiceAction {
      * The entity (or entities) to execute this service call on.
      * https://www.home-assistant.io/docs/scripts/service-calls
      */
-    entity_id?: Entities | "all" | "none" | null;
+    entity_id?: Entities | "all" | "none" | null | Template;
 
     /**
      * The device (or devices) to execute this service call on.
      * https://www.home-assistant.io/docs/scripts/service-calls
      */
-    device_id?: string | string[] | "none";
+    device_id?: string | string[] | "none" | Template;
 
     /**
      * The area (or areas) to execute this service call on.
