@@ -222,9 +222,8 @@ export class HomeAssistantLanguageService {
 
   public onCompletionResolve = async (
     completionItem: CompletionItem
-  ): Promise<CompletionItem> => {
-    return this.yamlLanguageService.doResolve(completionItem);
-  };
+  ): Promise<CompletionItem> =>
+    this.yamlLanguageService.doResolve(completionItem);
 
   public onHover = async (
     document: TextDocument,
