@@ -195,6 +195,56 @@ export interface VacuumPlatformSchema extends PlatformSchema {
   };
 }
 
+export interface WeatherPlatformSchema extends PlatformSchema {
+  /**
+   * The template integrations creates weather provider that combines integrations and an existing weather provider into a fused weather provider.
+   * https://www.home-assistant.io/integrations/weather.template
+   */
+  platform: "template";
+
+  /**
+   * Defines templates for the current weather condition.
+   * https://www.home-assistant.io/integrations/weather.template#condition_template
+   */
+  condition_template: Template;
+
+  /**
+   * Defines templates for the daily forcast data.
+   * https://www.home-assistant.io/integrations/weather.template#forecast_template
+   */
+  forecast_template?: Template;
+
+  /**
+   * Defines templates for the current humidity.
+   * https://www.home-assistant.io/integrations/weather.template#humidity_template
+   */
+  humidity_template: Template;
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/weather.template#name
+   */
+  name: string;
+
+  /**
+   * Defines templates for the current air pressure.
+   * https://www.home-assistant.io/integrations/weather.template#pressure_template
+   */
+  pressure_template?: Template;
+
+  /**
+   * Defines templates for the current temperature.
+   * https://www.home-assistant.io/integrations/weather.template#temperature_template
+   */
+  temperature_template: Template;
+
+  /**
+   * Defines templates for the current wind speed.
+   * https://www.home-assistant.io/integrations/weather.template#wind_speed_template
+   */
+  wind_speed_template?: Template;
+}
+
 interface AlarmControlPanelItem {
   /**
    * Defines an action to run when the alarm is armed to away mode.
