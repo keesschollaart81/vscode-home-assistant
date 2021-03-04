@@ -44,10 +44,10 @@
     "body": [
       "- alias: \"${1:condition alias (name)}\"",
       "  condition: time",
-      "  after: \"${1: 15:00:00}\"",
-      "  before: \"${2: 02:00:00}\"",
+      "  after: \"${2: 15:00:00}\"",
+      "  before: \"${3: 02:00:00}\"",
       "  weekday:",
-      "    - \"${3: mon}\""
+      "    - \"${4: mon}\""
     ]
   },
   "condition or": {
@@ -121,9 +121,9 @@
     "prefix": "action-service",
     "body": [
       "- alias: \"${1:action alias (name)}\"",
-      "  service: ${1:service name}",
+      "  service: ${2:service name}",
       "  target:",
-      "    entity_id: ${2:entity ID}"
+      "    entity_id: ${3:entity ID}"
     ],
     "description": "Add a Home Assistant service action for automation"
   },
