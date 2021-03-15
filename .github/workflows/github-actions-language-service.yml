@@ -32,6 +32,10 @@ jobs:
         working-directory: src/language-service
         run: npm run lint
 
+      - name: 🚀 Build Schema
+        working-directory: src/language-service
+        run: npm run schema
+
       - name: 🚀 Run Compile
         working-directory: src/language-service
         run: npm run compile
