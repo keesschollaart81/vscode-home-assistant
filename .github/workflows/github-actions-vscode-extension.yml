@@ -22,6 +22,9 @@ jobs:
       - name: 🚀 Run Linter
         run: npm run lint
 
+      - name: 🚀 Build Schema
+        run: npm run schema
+
       - name: 🚀 Run Compile
         run: npm run compile
 
