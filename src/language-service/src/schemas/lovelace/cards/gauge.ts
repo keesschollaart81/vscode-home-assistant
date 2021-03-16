@@ -43,7 +43,7 @@ export interface Schema {
    * Allows setting of colors for different numbers.
    * https://www.home-assistant.io/lovelace/gauge/#severity
    */
-  severity: Severity;
+  severity?: Severity;
 
   /**
    * Set to any theme within themes.yaml.
