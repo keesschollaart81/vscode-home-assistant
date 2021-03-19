@@ -541,7 +541,7 @@ interface FanItem {
   /**
    * DEPRECATED as of Home Assistant 2021.3.0
    */
-  speeds: Deprecated;
+  speeds?: Deprecated;
 
   /**
    * Defines an action to run when the fan is turned off.
