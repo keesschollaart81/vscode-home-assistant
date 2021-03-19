@@ -485,19 +485,19 @@ interface FanItem {
    * https://www.home-assistant.io/integrations/fan.template/#oscillating_template
    */
   oscillating_template?: Template;
-  
+
   /**
    * Defines a template to get the speed percentage of the fan.
    * https://www.home-assistant.io/integrations/fan.template/#percentage_template
    */
   percentage_template?: Template;
-  
+
   /**
    * Defines a template to get the preset mode of the fan.
    * https://www.home-assistant.io/integrations/fan.template/#preset_mode_template
    */
   preset_mode_template?: Template;
-  
+
   /**
    * List of preset modes the fan is capable of. This is an arbitrary list of strings and must not contain any speeds.
    * https://www.home-assistant.io/integrations/fan.template/#preset_modes
@@ -515,7 +515,7 @@ interface FanItem {
    * https://www.home-assistant.io/integrations/fan.template/#set_oscillating
    */
   set_oscillating?: Action | Action[];
-  
+
   /**
    * Defines an action to run when the fan is given a speed percentage command.
    * https://www.home-assistant.io/integrations/fan.template/#set_percentage
@@ -526,7 +526,7 @@ interface FanItem {
    * DEPRECATED as of Home Assistant 2021.3.0
    */
   set_speed?: Deprecated;
-  
+
   /**
    * The number of speeds the fan supports. Used to calculate the percentage step for the fan.increase_speed and fan.decrease_speed services.
    * https://www.home-assistant.io/integrations/fan.template/#speed_count
