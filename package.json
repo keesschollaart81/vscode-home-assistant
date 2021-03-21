@@ -356,7 +356,7 @@
     "vscode-languageserver-textdocument": "^1.0.1",
     "vscode-uri": "3.0.2",
     "ws": "7.4.4",
-    "yaml": "1.10.0",
+    "yaml": "1.10.2",
     "yaml-language-server": "0.12.0"
   }
 }
