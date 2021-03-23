@@ -1284,6 +1284,12 @@ export interface CoverPlatformSchema extends PlatformSchema {
   state_opening?: string;
 
   /**
+   * The payload that represents the stopped state (for covers that do not report open/closed state).
+   * https://www.home-assistant.io/integrations/cover.mqtt/#state_stopped
+   */
+  state_stopped?: string;
+
+  /**
    * The MQTT topic subscribed to receive cover state messages. Use only if not using position_topic. State topic can only read open/close state.
    * https://www.home-assistant.io/integrations/cover.mqtt/#state_topic
    */
