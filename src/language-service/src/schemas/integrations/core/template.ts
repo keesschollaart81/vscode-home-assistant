@@ -9,6 +9,7 @@ import {
   DeviceClassesCover,
   IncludeList,
   IncludeNamed,
+  PositiveInteger,
   Template,
   TimePeriod,
 } from "../../types";
@@ -193,6 +194,56 @@ export interface VacuumPlatformSchema extends PlatformSchema {
   vacuums: {
     [key: string]: VacuumItem | IncludeNamed;
   };
+}
+
+export interface WeatherPlatformSchema extends PlatformSchema {
+  /**
+   * The template integrations creates weather provider that combines integrations and an existing weather provider into a fused weather provider.
+   * https://www.home-assistant.io/integrations/weather.template
+   */
+  platform: "template";
+
+  /**
+   * Defines templates for the current weather condition.
+   * https://www.home-assistant.io/integrations/weather.template#condition_template
+   */
+  condition_template: Template;
+
+  /**
+   * Defines templates for the daily forcast data.
+   * https://www.home-assistant.io/integrations/weather.template#forecast_template
+   */
+  forecast_template?: Template;
+
+  /**
+   * Defines templates for the current humidity.
+   * https://www.home-assistant.io/integrations/weather.template#humidity_template
+   */
+  humidity_template: Template;
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/weather.template#name
+   */
+  name: string;
+
+  /**
+   * Defines templates for the current air pressure.
+   * https://www.home-assistant.io/integrations/weather.template#pressure_template
+   */
+  pressure_template?: Template;
+
+  /**
+   * Defines templates for the current temperature.
+   * https://www.home-assistant.io/integrations/weather.template#temperature_template
+   */
+  temperature_template: Template;
+
+  /**
+   * Defines templates for the current wind speed.
+   * https://www.home-assistant.io/integrations/weather.template#wind_speed_template
+   */
+  wind_speed_template?: Template;
 }
 
 interface AlarmControlPanelItem {
@@ -436,6 +487,24 @@ interface FanItem {
   oscillating_template?: Template;
 
   /**
+   * Defines a template to get the speed percentage of the fan.
+   * https://www.home-assistant.io/integrations/fan.template/#percentage_template
+   */
+  percentage_template?: Template;
+
+  /**
+   * Defines a template to get the preset mode of the fan.
+   * https://www.home-assistant.io/integrations/fan.template/#preset_mode_template
+   */
+  preset_mode_template?: Template;
+
+  /**
+   * List of preset modes the fan is capable of. This is an arbitrary list of strings and must not contain any speeds.
+   * https://www.home-assistant.io/integrations/fan.template/#preset_modes
+   */
+  preset_modes?: string[];
+
+  /**
    * Defines an action to run when the fan is given a direction command.
    * https://www.home-assistant.io/integrations/fan.template/#set_direction
    */
@@ -448,22 +517,31 @@ interface FanItem {
   set_oscillating?: Action | Action[];
 
   /**
-   * Defines an action to run when the fan is given a speed command.
-   * https://www.home-assistant.io/integrations/fan.template/#set_speed
+   * Defines an action to run when the fan is given a speed percentage command.
+   * https://www.home-assistant.io/integrations/fan.template/#set_percentage
    */
-  set_speed?: Action | Action[];
+  set_percentage?: Action | Action[];
 
   /**
-   * Defines a template to get the speed of the fan.
-   * https://www.home-assistant.io/integrations/fan.template/#speed_template
+   * DEPRECATED as of Home Assistant 2021.3.0
    */
-  speed_template?: Template;
+  set_speed?: Deprecated;
 
   /**
-   * List of speeds the fan is capable of running at.
-   * https://www.home-assistant.io/integrations/fan.template/#speeds
+   * The number of speeds the fan supports. Used to calculate the percentage step for the fan.increase_speed and fan.decrease_speed services.
+   * https://www.home-assistant.io/integrations/fan.template/#speed_count
    */
-  speeds: string[];
+  speed_count?: PositiveInteger;
+
+  /**
+   * DEPRECATED as of Home Assistant 2021.3.0
+   */
+  speed_template?: Deprecated;
+
+  /**
+   * DEPRECATED as of Home Assistant 2021.3.0
+   */
+  speeds?: Deprecated;
 
   /**
    * Defines an action to run when the fan is turned off.

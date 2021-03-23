@@ -33,7 +33,7 @@ export interface Schema {
    * Should the cards be shown square.
    * https://www.home-assistant.io/lovelace/grid/#square
    */
-  square?: string;
+  square?: boolean;
 
   /**
    * Title of Grid.

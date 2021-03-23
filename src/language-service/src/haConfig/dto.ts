@@ -1,3 +1,12 @@
+// eslint-disable-next-line no-shadow
+export enum Includetype {
+  include,
+  include_dir_list,
+  include_dir_named,
+  include_dir_merge_list,
+  include_dir_merge_named,
+}
+
 export interface HaFileInfo {
   filename: string;
   path: string;
@@ -18,15 +27,6 @@ export interface ScriptReferences {
     end: [number, number];
   };
 }
-
-export enum Includetype {
-  include,
-  include_dir_list,
-  include_dir_named,
-  include_dir_merge_list,
-  include_dir_merge_named,
-}
-
 export interface YamlIncludePlaceholder {
   isInclude: boolean;
   fromFile: string;

@@ -173,6 +173,12 @@ interface MqttTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#mqtt-trigger
    */
   topic: string;
+
+  /**
+   * Value template allows, for example, picking out a JSON key from the incoming MQTT message.
+   * https://www.home-assistant.io/docs/automation/trigger/#mqtt-trigger
+   */
+  value_template?: Template;
 }
 
 interface NumericStateTrigger {

@@ -114,11 +114,8 @@ export class VsCodeFileAccessor implements FileAccessor {
   public getRelativePathAsFileUri = (
     relativeFrom: string,
     filename: string
-  ): string => {
-    return vscodeUri.URI.file(
-      this.getRelativePath(relativeFrom, filename)
-    ).toString();
-  };
+  ): string =>
+    vscodeUri.URI.file(this.getRelativePath(relativeFrom, filename)).toString();
 
   public fromUriToLocalPath = (uri: string): string => {
     const workspaceFolderUri = vscodeUri.URI.parse(this.workspaceFolder);

@@ -1230,6 +1230,12 @@ export interface CoverPlatformSchema extends PlatformSchema {
   position_open?: Integer;
 
   /**
+   * Defines a template that can be used to extract the payload for the `position_topic` topic.
+   * https://www.home-assistant.io/integrations/cover.mqtt/#position_template
+   */
+  position_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive cover position messages. If position_topic is set state_topic is ignored.
    * https://www.home-assistant.io/integrations/cover.mqtt/#position_topic
    */
@@ -1284,6 +1290,12 @@ export interface CoverPlatformSchema extends PlatformSchema {
   state_opening?: string;
 
   /**
+   * The payload that represents the stopped state (for covers that do not report open/closed state).
+   * https://www.home-assistant.io/integrations/cover.mqtt/#state_stopped
+   */
+  state_stopped?: string;
+
+  /**
    * The MQTT topic subscribed to receive cover state messages. Use only if not using position_topic. State topic can only read open/close state.
    * https://www.home-assistant.io/integrations/cover.mqtt/#state_topic
    */
@@ -1296,16 +1308,21 @@ export interface CoverPlatformSchema extends PlatformSchema {
   tilt_closed_value?: Integer;
 
   /**
+   * Defines a template that can be used to extract the payload for the `tilt_command_topic` topic.
+   * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_command_template
+   */
+  tilt_command_template?: Template;
+
+  /**
    * The MQTT topic to publish commands to control the cover tilt.
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_command_topic
    */
   tilt_command_topic?: string;
 
   /**
-   * Flag that determines if open/close are flipped; higher values toward closed and lower values toward open.
-   * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_invert_state
+   * DEPRECATED as of Home Assistant 2021.3.0
    */
-  tilt_invert_state?: boolean;
+  tilt_invert_state?: Deprecated;
 
   /**
    *The maximum tilt value.
@@ -1350,10 +1367,9 @@ export interface CoverPlatformSchema extends PlatformSchema {
   unique_id?: string;
 
   /**
-   * Defines a template to extract a value from the payload.
-   * https://www.home-assistant.io/integrations/cover.mqtt/#value_template
+   * DEPRECATED as of Home Assistant 2021.3.0
    */
-  value_template?: Template;
+  value_template?: Deprecated;
 }
 
 export interface DeviceTrackerPlatformSchema extends PlatformSchema {
