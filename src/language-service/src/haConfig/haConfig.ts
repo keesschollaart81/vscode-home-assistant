@@ -100,8 +100,12 @@ export class HomeAssistantConfiguration {
 
   private getRootFiles = (): string[] => {
     const filesInRoot = this.fileAccessor.getFilesInFolder("");
-    const ourFiles = ["configuration.yaml", "ui-lovelace.yaml"];
-    const ourFolders = ["blueprints/automation/"];
+    const ourFiles = [
+      "configuration.yaml",
+      "ui-lovelace.yaml",
+      "automations.yaml",
+    ];
+    const ourFolders = ["blueprints/automation/", "automations/"];
 
     const rootFiles = ourFiles.filter((f) => filesInRoot.some((y) => y === f));
     const subfolderFiles = filesInRoot.filter((f) =>
