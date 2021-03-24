@@ -35,18 +35,33 @@ export class SchemaServiceForIncludes {
         "cards"
       );
 
+      if (sourceFileMappingPath.startsWith("blueprints/automation/")) {
+        sourceFileMappingPath = "blueprints/automation";
+      }
+
+      if (
+        sourceFileMappingPath.startsWith("automations/") ||
+        sourceFileMappingPath === "automations.yaml"
+      ) {
+        sourceFileMappingPath = "configuration.yaml/automation";
+      }
+
       const relatedPathToSchemaMapping = this.mappings.find(
         (x) => x.path === sourceFileMappingPath
       );
       if (relatedPathToSchemaMapping) {
         const id = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
-        let relativePath = path.relative(
+        let absolutePath = path.resolve(
           process.cwd(),
           haFiles[sourceFile].filename
         );
-        relativePath = relativePath.replace("\\", "/");
-        const fileass = `**/${encodeURI(relativePath)}`;
+        absolutePath = absolutePath.replace("\\", "/");
+        const fileass = encodeURI(absolutePath);
         let resultEntry = results.find((x) => x.uri === id);
+
+        console.log(
+          `Assigning ${fileass} the ${relatedPathToSchemaMapping.path} schema`
+        );
 
         if (!resultEntry) {
           resultEntry = {

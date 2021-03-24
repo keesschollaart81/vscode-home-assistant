@@ -11,7 +11,7 @@ export type Domain = "automation";
 export type Schema = Item[] | IncludeList;
 export type File = Item | Item[];
 
-type Mode = "single" | "parallel" | "queued" | "restart";
+export type Mode = "single" | "parallel" | "queued" | "restart";
 type Item = AutomationItem | BlueprintItem;
 
 interface BaseItem {
@@ -90,7 +90,7 @@ interface BaseItem {
   condition?: Condition | Condition[] | IncludeList;
 }
 
-interface AutomationItem extends BaseItem {
+export interface AutomationItem extends BaseItem {
   /**
    * Triggers describe events that should trigger the automation rule.
    * https://www.home-assistant.io/docs/automation/#automation-basics

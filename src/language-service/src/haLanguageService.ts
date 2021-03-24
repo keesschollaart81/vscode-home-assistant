@@ -22,6 +22,7 @@ import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
+import { DomainCompletionContribution } from "./completionHelpers/domains";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 import { Includetype } from "./haConfig/dto";
@@ -153,6 +154,32 @@ export class HomeAssistantLanguageService {
       // Skip errors about secrets, we simply have no idea what is in them
       if (possibleSecret === "!secret") continue;
 
+      // Fetch the text before the error, this might be "!input"
+      const possibleInput = document.getText(
+        Range.create(
+          diagnosticItem.range.start.line,
+          diagnosticItem.range.start.character - 7,
+          diagnosticItem.range.end.line,
+          diagnosticItem.range.start.character - 1
+        )
+      );
+
+      // Skip errors about input, that is up to the Blueprint creator
+      if (possibleInput === "!input") continue;
+
+      // Fetch the text before the error, this might be "!include"
+      const possibleInclude = document.getText(
+        Range.create(
+          diagnosticItem.range.start.line,
+          diagnosticItem.range.start.character - 9,
+          diagnosticItem.range.end.line,
+          diagnosticItem.range.start.character - 1
+        )
+      );
+
+      // Skip errors about include, everything can be included
+      if (possibleInclude === "!include") continue;
+
       diagnosticItem.severity = 1; // Convert all warnings to errors
       diagnostics.push(diagnosticItem);
     }
@@ -279,6 +306,7 @@ export class HomeAssistantLanguageService {
     const properties: { [provider: string]: string[] } = {};
     properties.entities = EntityIdCompletionContribution.propertyMatches;
     properties.services = ServicesCompletionContribution.propertyMatches;
+    properties.domains = DomainCompletionContribution.propertyMatches;
 
     const additionalCompletionProvider = this.findAutoCompletionProperty(
       document,
@@ -292,6 +320,13 @@ export class HomeAssistantLanguageService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         if (!currentCompletions.items.some((x) => x.data && x.data.isEntity)) {
           additionalCompletion = await this.haConnection.getEntityCompletions();
+        }
+        break;
+      case "domains":
+        // sometimes the domains are already added, do not add them twice
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isDomain)) {
+          additionalCompletion = await this.haConnection.getDomainCompletions();
         }
         break;
       case "services":
