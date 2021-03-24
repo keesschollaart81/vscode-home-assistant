@@ -173,5 +173,12 @@
     "file": "lovelace-cards.json",
     "tsFile": "lovelace/types.ts",
     "fromType": "CardsFile"
+  },
+  {
+    "key": "blueprint-automation",
+    "path": "blueprints/automation",
+    "file": "blueprint-automation.json",
+    "tsFile": "integrations/core/blueprint.ts",
+    "fromType": "AutomationBlueprintFile"
   }
 ]

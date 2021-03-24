@@ -1,26 +1,112 @@
 /**
- * Automation integration
- * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/__init__.py
+ * Blueprint integration
+ * Source:
+ * - https://github.com/home-assistant/core/blob/dev/homeassistant/components/blueprint/__init__.py
+ * - https://github.com/home-assistant/core/blob/dev/homeassistant/components/blueprint/models.py
+ * - https://github.com/home-assistant/core/blob/dev/homeassistant/components/blueprint/schemas.py
  */
 import { Data, Deprecated, IncludeList } from "../../types";
+import { Selector } from "../selectors";
+import { Mode } from "./automation";
 import { Action } from "../actions";
 import { Condition } from "../conditions";
 import { Trigger } from "../triggers";
 
-export type Domain = "automation";
-export type Schema = Item[] | IncludeList;
-export type File = Item | Item[];
+export type Domain = "blueprint";
+export type Schema = null;
 
-export type Mode = "single" | "parallel" | "queued" | "restart";
-type Item = AutomationItem | BlueprintItem;
+export interface AutomationBlueprintFile {
+  /**
+   * The blueprint schema.
+   * https://www.home-assistant.io/docs/blueprint/schema/#the-blueprint-schema
+   */
+  blueprint: AutomationBlueprint;
+}
 
-interface BaseItem {
+// export interface AutomationBlueprint extends AutomationItem, Blueprint {}
+
+interface Blueprint {
+  /**
+   * The description of the blueprint. While optional, this field is highly recommended. The description can include Markdown.
+   * https://www.home-assistant.io/docs/blueprint/schema/#description
+   */
+  description?: string;
+
+  /**
+   * The domain name this blueprint provides a blueprint for.
+   * https://www.home-assistant.io/docs/blueprint/schema/#domain
+   */
+  domain: string;
+
+  /**
+   * Home Assistant requirements for this Blueprint.
+   */
+  homeassistant?: {
+    /**
+     * The minimal version number of Home Assistant Core that is needed for this Blueprint.
+     */
+    min_version?: string;
+  };
+
+  /**
+   * These are the input fields that the consumer of your blueprint can provide using YAML definition, or via a configuration form in the UI.
+   * https://www.home-assistant.io/docs/blueprint/schema/#input
+   */
+  input?: {
+    [key: string]: BlueprintInputSchema;
+  };
+
+  /**
+   * The name of the blueprint. Keep this short and descriptive.
+   * https://www.home-assistant.io/docs/blueprint/schema/#name
+   */
+  name: string;
+
+  /**
+   * The URL to the online location where this Blueprint was imported from. Generally there is no need to add this, in the future this might be used for updating Blueprints.
+   */
+  source_url?: string;
+}
+
+interface BlueprintInputSchema {
+  /**
+   * The name of the input field.
+   * https://www.home-assistant.io/docs/blueprint/schema/#name
+   */
+  name?: string;
+
+  /**
+   * A short description of the input field. Keep this short and descriptive.
+   * https://www.home-assistant.io/docs/blueprint/schema/#description
+   */
+  description?: string;
+
+  /**
+   * The default value of this input, in case the input is not provided by the user of this blueprint.
+   * https://www.home-assistant.io/docs/blueprint/schema/#default
+   */
+  default?: string;
+
+  /**
+   * The default value of this input, in case the input is not provided by the user of this blueprint.
+   * https://www.home-assistant.io/docs/blueprint/schema/#default
+   */
+  selector?: Selector;
+}
+
+export interface AutomationBlueprint extends Blueprint {
   /**
    * A unique identifier for this automation.
    * Do not use the same twice, ever!
    * https://www.home-assistant.io/docs/automation/
    */
   id?: string;
+
+  /**
+   * The domain name this blueprint provides a blueprint for.
+   * https://www.home-assistant.io/docs/blueprint/schema/#domain
+   */
+  domain: "automation";
 
   /**
    * Alias will be used to generate an entity_id from.
@@ -88,9 +174,7 @@ interface BaseItem {
    * https://www.home-assistant.io/docs/automation/#automation-basics
    */
   condition?: Condition | Condition[] | IncludeList;
-}
 
-interface AutomationItem extends BaseItem {
   /**
    * Triggers describe events that should trigger the automation rule.
    * https://www.home-assistant.io/docs/automation/#automation-basics
@@ -102,23 +186,4 @@ interface AutomationItem extends BaseItem {
    * https://www.home-assistant.io/docs/automation/#automation-basics
    */
   action: Action | Action[] | IncludeList;
-}
-
-interface BlueprintItem extends BaseItem {
-  use_blueprint: {
-    path: string;
-    input: { [key: string]: any };
-  };
-
-  /**
-   * Triggers describe events that should trigger the automation rule.
-   * https://www.home-assistant.io/docs/automation/#automation-basics
-   */
-  trigger?: Trigger | Trigger[] | IncludeList;
-
-  /**
-   * The action(s) which will be performed when a rule is triggered and all conditions are met. For example, it can turn a light on, set the temperature on your thermostat or activate a scene.
-   * https://www.home-assistant.io/docs/automation/#automation-basics
-   */
-  action?: Action | Action[] | IncludeList;
 }

@@ -46,7 +46,7 @@ export interface InternalIntegrations {
    * Blueprints provide predefined templates for e.g., automations.
    * https://www.home-assistant.io/integrations/blueprint
    */
-  blueprint?: null;
+  blueprint?: integrations.Core.Blueprint.Schema;
 
   /**
    * The camera integration allows you to use IP cameras with Home Assistant.
