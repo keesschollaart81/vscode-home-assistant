@@ -179,6 +179,6 @@
     "path": "blueprints/automation",
     "file": "blueprint-automation.json",
     "tsFile": "integrations/core/blueprint.ts",
-    "fromType": "AutomationBlueprintFile"
+    "fromType": "AutomationBlueprint"
   }
 ]

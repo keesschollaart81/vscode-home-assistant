@@ -90,7 +90,7 @@ interface BaseItem {
   condition?: Condition | Condition[] | IncludeList;
 }
 
-interface AutomationItem extends BaseItem {
+export interface AutomationItem extends BaseItem {
   /**
    * Triggers describe events that should trigger the automation rule.
    * https://www.home-assistant.io/docs/automation/#automation-basics
