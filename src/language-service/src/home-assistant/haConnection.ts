@@ -20,6 +20,7 @@ const ha = require("home-assistant-js-websocket/dist/haws.cjs") as typeof import
 export interface IHaConnection {
   tryConnect(): Promise<void>;
   notifyConfigUpdate(conf: any): Promise<void>;
+  getDomainCompletions(): Promise<CompletionItem[]>;
   getEntityCompletions(): Promise<CompletionItem[]>;
   getServiceCompletions(): Promise<CompletionItem[]>;
 }
@@ -170,6 +171,30 @@ export class HaConnection implements IHaConnection {
       for (const [attrKey, attrValue] of Object.entries(value.attributes)) {
         completionItem.documentation.value += `| ${attrKey} | ${attrValue} | \r\n`;
       }
+      completions.push(completionItem);
+    }
+    return completions;
+  }
+
+  public async getDomainCompletions(): Promise<CompletionItem[]> {
+    const entities = await this.getHassEntities();
+    let domains = [];
+
+    if (!entities) {
+      return [];
+    }
+
+    for (const [, value] of Object.entries(entities)) {
+      domains.push(value.entity_id.split(".")[0]);
+    }
+    domains = [...new Set(domains)];
+
+    const completions: CompletionItem[] = [];
+    for (const domain of domains) {
+      const completionItem = CompletionItem.create(domain);
+      completionItem.kind = CompletionItemKind.Variable;
+      completionItem.data = {};
+      completionItem.data.isDomain = true;
       completions.push(completionItem);
     }
     return completions;
