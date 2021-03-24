@@ -81,7 +81,7 @@ interface BlueprintInputSchema {
    * The default value of this input, in case the input is not provided by the user of this blueprint.
    * https://www.home-assistant.io/docs/blueprint/schema/#default
    */
-  default?: string;
+  default?: any;
 
   /**
    * The default value of this input, in case the input is not provided by the user of this blueprint.
