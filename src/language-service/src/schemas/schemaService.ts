@@ -39,7 +39,10 @@ export class SchemaServiceForIncludes {
         sourceFileMappingPath = "blueprints/automation";
       }
 
-      if (sourceFileMappingPath.startsWith("automations/")) {
+      if (
+        sourceFileMappingPath.startsWith("automations/") ||
+        sourceFileMappingPath === "automations.yaml"
+      ) {
         sourceFileMappingPath = "configuration.yaml/automation";
       }
 
