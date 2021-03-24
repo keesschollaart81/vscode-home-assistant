@@ -154,6 +154,32 @@ export class HomeAssistantLanguageService {
       // Skip errors about secrets, we simply have no idea what is in them
       if (possibleSecret === "!secret") continue;
 
+      // Fetch the text before the error, this might be "!input"
+      const possibleInput = document.getText(
+        Range.create(
+          diagnosticItem.range.start.line,
+          diagnosticItem.range.start.character - 7,
+          diagnosticItem.range.end.line,
+          diagnosticItem.range.start.character - 1
+        )
+      );
+
+      // Skip errors about input, that is up to the Blueprint creator
+      if (possibleInput === "!input") continue;
+
+      // Fetch the text before the error, this might be "!include"
+      const possibleInclude = document.getText(
+        Range.create(
+          diagnosticItem.range.start.line,
+          diagnosticItem.range.start.character - 9,
+          diagnosticItem.range.end.line,
+          diagnosticItem.range.start.character - 1
+        )
+      );
+
+      // Skip errors about include, everything can be included
+      if (possibleInclude === "!include") continue;
+
       diagnosticItem.severity = 1; // Convert all warnings to errors
       diagnostics.push(diagnosticItem);
     }
