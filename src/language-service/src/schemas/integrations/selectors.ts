@@ -49,7 +49,7 @@ export interface AreaSelector {
        * Can be set to an integration domain. Limits the list of areas that provide devices by the set integration domain.
        * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
        */
-      integration?: string;
+      integration?: Domain;
 
       /**
        * When set, it limits the list of areas that provide devices by the set manufacturer name.
@@ -85,7 +85,7 @@ export interface AreaSelector {
        * Can be set to an integration domain. Limits the list of areas that provide entities by the set integration domain.
        * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
        */
-      integration?: string;
+      integration?: Domain;
     };
   } | null;
 }
@@ -113,7 +113,7 @@ export interface DeviceSelector {
        * Can be set to an integration domain. Limits the list of devices that provide entities by the set integration domain.
        * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
        */
-      integration?: string;
+      integration?: Domain;
       /**
        * Limits the list of devices that provide entities of a certain domain.
        * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
@@ -129,7 +129,7 @@ export interface DeviceSelector {
      * Can be set to an integration domain. Limits the list of devices to devices provided by the set integration domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
-    integration?: string;
+    integration?: Domain;
     /**
      * When set, it limits the list of devices to devices provided by the set manufacturer name.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
@@ -153,7 +153,7 @@ export interface EntitySelector {
      * Can be set to an integration domain. Limits the list of devices that provide entities by the set integration domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
-    integration?: string;
+    integration?: Domain;
     /**
      * Limits the list of devices that provide entities of a certain domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
@@ -242,7 +242,7 @@ export interface TargetSelector {
        * Can be set to an integration domain. Limits the device targets that are provided devices by the set integration domain.
        * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
        */
-      integration?: string;
+      integration?: Domain;
 
       /**
        * When set, it limits the targets to devices provided by the set manufacturer name.
@@ -278,7 +278,7 @@ export interface TargetSelector {
        * Can be set to an integration domain. Limits targets to entities provided by the set integration domain.
        * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
        */
-      integration?: string;
+      integration?: Domain;
     };
   } | null;
 }
