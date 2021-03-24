@@ -39,6 +39,10 @@ export class SchemaServiceForIncludes {
         sourceFileMappingPath = "blueprints/automation";
       }
 
+      if (sourceFileMappingPath.startsWith("automations/")) {
+        sourceFileMappingPath = "configuration.yaml/automation";
+      }
+
       const relatedPathToSchemaMapping = this.mappings.find(
         (x) => x.path === sourceFileMappingPath
       );
@@ -51,6 +55,10 @@ export class SchemaServiceForIncludes {
         absolutePath = absolutePath.replace("\\", "/");
         const fileass = encodeURI(absolutePath);
         let resultEntry = results.find((x) => x.uri === id);
+
+        console.log(
+          `Assigning ${fileass} the ${relatedPathToSchemaMapping.path} schema`
+        );
 
         if (!resultEntry) {
           resultEntry = {
