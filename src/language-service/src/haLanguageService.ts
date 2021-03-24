@@ -22,6 +22,7 @@ import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
+import { DomainCompletionContribution } from "./completionHelpers/domains";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 import { Includetype } from "./haConfig/dto";
@@ -279,6 +280,7 @@ export class HomeAssistantLanguageService {
     const properties: { [provider: string]: string[] } = {};
     properties.entities = EntityIdCompletionContribution.propertyMatches;
     properties.services = ServicesCompletionContribution.propertyMatches;
+    properties.domains = DomainCompletionContribution.propertyMatches;
 
     const additionalCompletionProvider = this.findAutoCompletionProperty(
       document,
@@ -292,6 +294,13 @@ export class HomeAssistantLanguageService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         if (!currentCompletions.items.some((x) => x.data && x.data.isEntity)) {
           additionalCompletion = await this.haConnection.getEntityCompletions();
+        }
+        break;
+      case "domains":
+        // sometimes the domains are already added, do not add them twice
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isDomain)) {
+          additionalCompletion = await this.haConnection.getDomainCompletions();
         }
         break;
       case "services":
