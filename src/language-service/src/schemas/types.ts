@@ -330,7 +330,7 @@ export type PositiveInteger = number;
  */
 export type Port = number;
 
-export type State = number | string;
+export type State = boolean | number | string;
 export type Template = string;
 
 /**
