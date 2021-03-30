@@ -204,6 +204,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   platform: "template";
 
   /**
+   * The attribution to be shown in the frontend.
+   * https://www.home-assistant.io/integrations/weather.template#attribution_template
+   */
+  attribution_template?: Template;
+
+  /**
    * Defines templates for the current weather condition.
    * https://www.home-assistant.io/integrations/weather.template#condition_template
    */
@@ -228,6 +234,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   name: string;
 
   /**
+   * The current ozone level.
+   * https://www.home-assistant.io/integrations/weather.template#ozone_template
+   */
+  ozone_template?: Template;
+
+  /**
    * Defines templates for the current air pressure.
    * https://www.home-assistant.io/integrations/weather.template#pressure_template
    */
@@ -238,6 +250,18 @@ export interface WeatherPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/weather.template#temperature_template
    */
   temperature_template: Template;
+
+  /**
+   * The current visibility.
+   * https://www.home-assistant.io/integrations/weather.template#visibility_template
+   */
+  visibility_template?: Template;
+
+  /**
+   * The current wind bearing.
+   * https://www.home-assistant.io/integrations/weather.template#wind_bearing_template
+   */
+  wind_bearing_template?: Template;
 
   /**
    * Defines templates for the current wind speed.
