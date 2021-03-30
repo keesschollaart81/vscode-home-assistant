@@ -4,6 +4,7 @@
  */
 import { Data, IncludeNamed, IncludeList } from "../../types";
 import { Action } from "../actions";
+import { Selector } from "../selectors";
 
 export type Domain = "script";
 export interface Schema {
