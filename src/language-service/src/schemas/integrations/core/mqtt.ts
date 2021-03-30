@@ -274,6 +274,12 @@ export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
   };
 
   /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#icon
+   */
+  icon?: string;
+
+  /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#json_attributes_template
    */
@@ -468,6 +474,12 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
   force_update?: boolean;
 
   /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt/#icon
+   */
+  icon?: string;
+
+  /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#json_attributes_template
    */
@@ -624,6 +636,12 @@ export interface CameraPlatformSchema extends PlatformSchema {
      */
     via_device?: string;
   };
+
+  /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/camera.mqtt/#icon
+   */
+  icon?: string;
 
   /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
@@ -848,6 +866,12 @@ export interface ClimatePlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/climate.mqtt/#hold_modes
    */
   hold_modes?: string[];
+
+  /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#icon
+   */
+  icon?: string;
 
   /**
    * Set the initial target temperature.
@@ -1162,6 +1186,12 @@ export interface CoverPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/cover.mqtt/#device_class
    */
   device_class?: DeviceClassesCover;
+
+  /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/cover.mqtt/#icon
+   */
+  icon?: string;
 
   /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
@@ -1502,6 +1532,12 @@ export interface FanPlatformSchema extends PlatformSchema {
   };
 
   /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#icon
+   */
+  icon?: string;
+
+  /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
    * https://www.home-assistant.io/integrations/fan.mqtt#json_attributes_template
    */
@@ -1840,6 +1876,12 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
   hs_value_template?: Template;
 
   /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/light.mqtt/#icon
+   */
+  icon?: string;
+
+  /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_template
    */
@@ -2148,6 +2190,12 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
   hs?: boolean;
 
   /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/light.mqtt/#icon
+   */
+  icon?: string;
+
+  /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_template
    */
@@ -2384,6 +2432,12 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
   green_template?: Template;
 
   /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/light.mqtt/#icon
+   */
+  icon?: string;
+
+  /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_template
    */
@@ -2558,6 +2612,12 @@ export interface LockPlatformSchema extends PlatformSchema {
      */
     via_device?: string;
   };
+
+  /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/lock.mqtt/#icon
+   */
+  icon?: string;
 
   /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
@@ -2932,6 +2992,12 @@ export interface VacuumPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#fan_speed_topic
    */
   fan_speed_topic?: string;
+
+  /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/vacuum.mqtt/#icon
+   */
+  icon?: string;
 
   /**
    * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
