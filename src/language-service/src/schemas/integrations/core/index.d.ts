@@ -26,5 +26,6 @@ export * as Scene from "./scene";
 export * as Script from "./script";
 export * as Sensor from "./sensor";
 export * as Switch from "./switch";
+export * as Updater from "./updater";
 export * as Vacuum from "./vacuum";
 export * as Weather from "./weather";
