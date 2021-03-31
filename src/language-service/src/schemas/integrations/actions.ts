@@ -223,25 +223,27 @@ export interface ServiceAction {
    * Defines the target (area(s), device(s) and entitie(s)) to execute this service call on.
    * https://www.home-assistant.io/docs/scripts/service-calls
    */
-  target?: {
-    /**
-     * The entity (or entities) to execute this service call on.
-     * https://www.home-assistant.io/docs/scripts/service-calls
-     */
-    entity_id?: Entities | "all" | "none" | null | Template;
+  target?:
+    | {
+        /**
+         * The entity (or entities) to execute this service call on.
+         * https://www.home-assistant.io/docs/scripts/service-calls
+         */
+        entity_id?: Entities | "all" | "none" | null | Template;
 
-    /**
-     * The device (or devices) to execute this service call on.
-     * https://www.home-assistant.io/docs/scripts/service-calls
-     */
-    device_id?: string | string[] | "none" | Template;
+        /**
+         * The device (or devices) to execute this service call on.
+         * https://www.home-assistant.io/docs/scripts/service-calls
+         */
+        device_id?: string | string[] | "none" | Template;
 
-    /**
-     * The area (or areas) to execute this service call on.
-     * https://www.home-assistant.io/docs/scripts/service-calls
-     */
-    area_id?: Area | Area[] | "none";
-  };
+        /**
+         * The area (or areas) to execute this service call on.
+         * https://www.home-assistant.io/docs/scripts/service-calls
+         */
+        area_id?: Area | Area[] | "none";
+      }
+    | Template;
 }
 
 export interface WaitForTriggerAction {
