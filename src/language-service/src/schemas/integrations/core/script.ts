@@ -4,6 +4,7 @@
  */
 import { Data, IncludeNamed, IncludeList } from "../../types";
 import { Action } from "../actions";
+import { Selector } from "../selectors";
 
 export type Domain = "script";
 export interface Schema {
@@ -84,6 +85,18 @@ interface Item {
 
 interface Field {
   /**
+   * Marks if this script parameter is an advanced usage parameter.
+   * https://www.home-assistant.io/integrations/script/#advanced
+   */
+  advanced?: boolean;
+
+  /**
+   * The default value of this parameter field.
+   * https://www.home-assistant.io/integrations/script/#default
+   */
+  default?: any;
+
+  /**
    * Description of this script parameter.
    * https://www.home-assistant.io/integrations/script/#description
    */
@@ -94,4 +107,22 @@ interface Field {
    * https://www.home-assistant.io/integrations/script/#example
    */
   example?: string;
+
+  /**
+   * The name of the script parameter field.
+   * https://www.home-assistant.io/integrations/script/#name
+   */
+  name?: string;
+
+  /**
+   * Marks if this script parameter is an advanced usage parameter.
+   * https://www.home-assistant.io/integrations/script/#advanced
+   */
+  required?: boolean;
+
+  /**
+   * The UI selector to use for this script parameter field.
+   * https://www.home-assistant.io/integrations/script/#selector
+   */
+  selector?: Selector;
 }
