@@ -321,7 +321,7 @@
     "@types/request": "2.48.5",
     "@types/vscode": "1.45.1",
     "@types/ws": "7.4.1",
-    "@typescript-eslint/eslint-plugin": "^4.20.0",
+    "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.20.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.23.0",
