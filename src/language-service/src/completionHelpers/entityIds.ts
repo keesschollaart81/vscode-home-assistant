@@ -21,6 +21,8 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
     "scene",
     "zone",
     "zones",
+    "light",
+    "lights"
   ];
 
   constructor(private haConnection: IHaConnection) {}
