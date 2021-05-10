@@ -18,11 +18,11 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
     "exclude_entities",
     "geo_location",
     "include_entities",
+    "light",
+    "lights",
     "scene",
     "zone",
     "zones",
-    "light",
-    "lights",
   ];
 
   constructor(private haConnection: IHaConnection) {}
