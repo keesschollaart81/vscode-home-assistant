@@ -8,6 +8,7 @@ import { Selector } from "../selectors";
 
 export type Domain = "script";
 type Item = ScriptItem | BlueprintItem;
+export type File = Schema | ScriptItem | BlueprintItem;
 export interface Schema {
   [key: string]: Item | IncludeNamed;
 }
