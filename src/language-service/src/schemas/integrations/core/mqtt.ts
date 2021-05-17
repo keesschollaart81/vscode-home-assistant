@@ -197,6 +197,12 @@ export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
   }[];
 
   /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#availability_topic
    */
@@ -403,6 +409,12 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
   }[];
 
   /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability_topic
    */
@@ -585,6 +597,12 @@ export interface CameraPlatformSchema extends PlatformSchema {
   }[];
 
   /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/camera.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability_topic
    */
@@ -735,6 +753,12 @@ export interface ClimatePlatformSchema extends PlatformSchema {
      */
     payload_not_available?: string;
   }[];
+
+  /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
@@ -1123,6 +1147,12 @@ export interface CoverPlatformSchema extends PlatformSchema {
   }[];
 
   /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/cover.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability_topic
    */
@@ -1473,6 +1503,12 @@ export interface FanPlatformSchema extends PlatformSchema {
   }[];
 
   /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/fan.mqtt/#availability_topic
    */
@@ -1725,6 +1761,12 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
      */
     payload_not_available?: string;
   }[];
+
+  /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/light.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
@@ -2083,6 +2125,12 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
   }[];
 
   /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/light.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_topic
    */
@@ -2325,6 +2373,12 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
   }[];
 
   /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/light.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_topic
    */
@@ -2553,6 +2607,12 @@ export interface LockPlatformSchema extends PlatformSchema {
      */
     payload_not_available?: string;
   }[];
+
+  /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/lock.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
@@ -2894,6 +2954,12 @@ export interface SensorPlatformSchema extends PlatformSchema {
   }[];
 
   /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/sensor.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/sensor.mqtt#availability_topic
    */
@@ -3067,6 +3133,12 @@ export interface VacuumPlatformSchema extends PlatformSchema {
      */
     payload_not_available?: string;
   }[];
+
+  /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/vacuum.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
@@ -3296,6 +3368,12 @@ export interface VacuumLegacyPlatformSchema extends PlatformSchema {
      */
     payload_not_available?: string;
   }[];
+
+  /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/vacuum.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
