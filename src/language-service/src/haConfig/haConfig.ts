@@ -151,7 +151,7 @@ export class HomeAssistantConfiguration {
 
   private discoverCore = async (
     filename: string,
-    // eslint-disable-next-line no-shadow
+    // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
     path: string,
     files: FilesCollection
   ): Promise<FilesCollection> => {
