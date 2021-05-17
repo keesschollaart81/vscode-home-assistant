@@ -83,21 +83,18 @@ export async function activate(
   client
     .onReady()
     .then(() => {
-      client.onNotification(
-        "no-config",
-        async (): Promise<void> => {
-          const goToSettings = "Go to Settings (UI)";
-          const optionClicked = await vscode.window.showInformationMessage(
-            "Please configure Home Assistant (search for 'Home Assistant' in settings).",
-            goToSettings
+      client.onNotification("no-config", async (): Promise<void> => {
+        const goToSettings = "Go to Settings (UI)";
+        const optionClicked = await vscode.window.showInformationMessage(
+          "Please configure Home Assistant (search for 'Home Assistant' in settings).",
+          goToSettings
+        );
+        if (optionClicked === goToSettings) {
+          await vscode.commands.executeCommand(
+            "workbench.action.openSettings2"
           );
-          if (optionClicked === goToSettings) {
-            await vscode.commands.executeCommand(
-              "workbench.action.openSettings2"
-            );
-          }
         }
-      );
+      });
       client.onNotification("configuration_check_completed", async (result) => {
         if (result && result.result === "valid") {
           await vscode.window.showInformationMessage(
