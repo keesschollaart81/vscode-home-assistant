@@ -15,7 +15,8 @@ import { createSocket } from "./socket";
 
 // Normal require(), and cast to the static type
 // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-const ha = require("home-assistant-js-websocket/dist/haws.cjs") as typeof import("home-assistant-js-websocket");
+const ha =
+  require("home-assistant-js-websocket/dist/haws.cjs") as typeof import("home-assistant-js-websocket");
 
 export interface IHaConnection {
   tryConnect(): Promise<void>;

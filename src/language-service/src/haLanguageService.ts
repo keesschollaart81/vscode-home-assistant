@@ -228,11 +228,8 @@ export class HomeAssistantLanguageService {
       return Promise.resolve(result);
     }
 
-    const currentCompletions: CompletionList = await this.yamlLanguageService.doComplete(
-      textDocument,
-      position,
-      false
-    );
+    const currentCompletions: CompletionList =
+      await this.yamlLanguageService.doComplete(textDocument, position, false);
 
     const additionalCompletions = await this.getServiceAndEntityCompletions(
       textDocument,
@@ -332,7 +329,8 @@ export class HomeAssistantLanguageService {
       case "services":
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         if (!currentCompletions.items.some((x) => x.data && x.data.isService)) {
-          additionalCompletion = await this.haConnection.getServiceCompletions();
+          additionalCompletion =
+            await this.haConnection.getServiceCompletions();
         }
         break;
     }
