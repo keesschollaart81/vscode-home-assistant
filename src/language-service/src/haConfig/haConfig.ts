@@ -105,7 +105,11 @@ export class HomeAssistantConfiguration {
       "ui-lovelace.yaml",
       "automations.yaml",
     ];
-    const ourFolders = ["blueprints/automation/", "automations/"];
+    const ourFolders = [
+      "blueprints/automation/",
+      "blueprints/script/",
+      "automations/",
+    ];
 
     const rootFiles = ourFiles.filter((f) => filesInRoot.some((y) => y === f));
     const subfolderFiles = filesInRoot.filter((f) =>
@@ -151,7 +155,7 @@ export class HomeAssistantConfiguration {
 
   private discoverCore = async (
     filename: string,
-    // eslint-disable-next-line no-shadow
+    // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
     path: string,
     files: FilesCollection
   ): Promise<FilesCollection> => {

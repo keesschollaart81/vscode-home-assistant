@@ -4,15 +4,18 @@
  */
 import { Data, IncludeNamed, IncludeList } from "../../types";
 import { Action } from "../actions";
+import { Selector } from "../selectors";
 
 export type Domain = "script";
+type Item = ScriptItem | BlueprintItem;
+export type File = Schema | ScriptItem | BlueprintItem;
 export interface Schema {
   [key: string]: Item | IncludeNamed;
 }
 
 type Mode = "single" | "restart" | "queued" | "parallel";
 
-interface Item {
+interface BaseItem {
   /**
    * Alias will be used to generate an entity_id from.
    * https://www.home-assistant.io/integrations/script/#alias
@@ -74,15 +77,21 @@ interface Item {
    * https://www.home-assistant.io/integrations/script/#variables
    */
   variables?: Data;
-
-  /**
-   * The sequence of actions to be performed in the script.
-   * https://www.home-assistant.io/integrations/script/#sequence
-   */
-  sequence: Action | Action[] | IncludeList;
 }
 
 interface Field {
+  /**
+   * Marks if this script parameter is an advanced usage parameter.
+   * https://www.home-assistant.io/integrations/script/#advanced
+   */
+  advanced?: boolean;
+
+  /**
+   * The default value of this parameter field.
+   * https://www.home-assistant.io/integrations/script/#default
+   */
+  default?: any;
+
   /**
    * Description of this script parameter.
    * https://www.home-assistant.io/integrations/script/#description
@@ -94,4 +103,43 @@ interface Field {
    * https://www.home-assistant.io/integrations/script/#example
    */
   example?: string;
+
+  /**
+   * The name of the script parameter field.
+   * https://www.home-assistant.io/integrations/script/#name
+   */
+  name?: string;
+
+  /**
+   * Marks if this script parameter is an advanced usage parameter.
+   * https://www.home-assistant.io/integrations/script/#advanced
+   */
+  required?: boolean;
+
+  /**
+   * The UI selector to use for this script parameter field.
+   * https://www.home-assistant.io/integrations/script/#selector
+   */
+  selector?: Selector;
+}
+
+export interface ScriptItem extends BaseItem {
+  /**
+   * The sequence of actions to be performed in the script.
+   * https://www.home-assistant.io/integrations/script/#sequence
+   */
+  sequence: Action | Action[] | IncludeList;
+}
+
+interface BlueprintItem extends BaseItem {
+  use_blueprint: {
+    path: string;
+    input: { [key: string]: any };
+  };
+
+  /**
+   * The sequence of actions to be performed in the script.
+   * https://www.home-assistant.io/integrations/script/#sequence
+   */
+  sequence?: Action | Action[] | IncludeList;
 }

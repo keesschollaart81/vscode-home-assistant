@@ -2,7 +2,7 @@
  * Scene integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/scene/__init__.py
  */
-import { IncludeNamed, IncludeList, Deprecated } from "../../types";
+import { IncludeNamed, IncludeList, Deprecated, State } from "../../types";
 
 export type Domain = "scene";
 export type Schema = Item[] | IncludeList;
@@ -15,7 +15,7 @@ interface Item {
    */
   entities:
     | {
-        [entity: string]: ItemEntity;
+        [entity: string]: ItemEntity | State;
       }
     | IncludeNamed;
 

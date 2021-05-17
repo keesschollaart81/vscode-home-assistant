@@ -19,7 +19,7 @@ export class HomeAssistantYamlFile {
   constructor(
     private fileAccessor: FileAccessor,
     private filename: string,
-    // eslint-disable-next-line no-shadow
+    // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
     public path: string
   ) {}
 

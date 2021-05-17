@@ -53,7 +53,7 @@
     "path": "configuration.yaml/script",
     "file": "integration-script.json",
     "tsFile": "integrations/core/script.ts",
-    "fromType": "Schema"
+    "fromType": "File"
   },
   {
     "key": "integration-sensor",
@@ -133,6 +133,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-number",
+    "path": "configuration.yaml/number",
+    "file": "integration-number.json",
+    "tsFile": "integrations/core/number.ts",
+    "fromType": "File"
+  },
+  {
     "key": "integration-switch",
     "path": "configuration.yaml/switch",
     "file": "integration-switch.json",
@@ -180,5 +187,12 @@
     "file": "blueprint-automation.json",
     "tsFile": "integrations/core/blueprint.ts",
     "fromType": "AutomationBlueprint"
+  },
+  {
+    "key": "blueprint-script",
+    "path": "blueprints/script",
+    "file": "blueprint-script.json",
+    "tsFile": "integrations/core/blueprint.ts",
+    "fromType": "ScriptBlueprint"
   }
 ]

@@ -132,6 +132,12 @@ export interface InternalIntegrations {
   lovelace?: integrations.Core.Lovelace.Schema | null;
 
   /**
+   * Keeps track on number entities in your environment, their state, and allows you to control them.
+   * https://www.home-assistant.io/integrations/number
+   */
+  number?: integrations.Core.Number.Schema | IncludeList;
+
+  /**
    * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
    * https://www.home-assistant.io/integrations/panel_iframe
    */
@@ -156,10 +162,22 @@ export interface InternalIntegrations {
   sensor?: integrations.Core.Sensor.Schema | IncludeList;
 
   /**
+   * The Spotify media player integration allows you to control Spotify playback from Home Assistant.
+   * https://www.home-assistant.io/integrations/spotify
+   */
+  spotify?: integrations.Core.Spotify.Schema;
+
+  /**
    * Keeps track which switches are in your environment, their state and allows you to control them.
    * https://www.home-assistant.io/integrations/switch
    */
   switch?: integrations.Core.Switch.Schema | IncludeList;
+
+  /**
+   * The updater binary sensor will check daily for new releases.
+   * https://www.home-assistant.io/integrations/updater
+   */
+  updater?: integrations.Core.Updater.Schema | null;
 
   /**
    * The vacuum integration enables the ability to control home cleaning robots within Home Assistant.
