@@ -132,6 +132,12 @@ export interface InternalIntegrations {
   lovelace?: integrations.Core.Lovelace.Schema | null;
 
   /**
+   * Keeps track on number entities in your environment, their state, and allows you to control them.
+   * https://www.home-assistant.io/integrations/number
+   */
+  number?: integrations.Core.Number.Schema | IncludeList;
+
+  /**
    * The panel_iframe support allows you to add additional panels to your Home Assistant frontend. The panels are listed in the sidebar and can contain external resources like the web frontend of your router, your monitoring system, or your media server.
    * https://www.home-assistant.io/integrations/panel_iframe
    */
