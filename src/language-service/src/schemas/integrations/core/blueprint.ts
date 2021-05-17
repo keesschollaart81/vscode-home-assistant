@@ -7,6 +7,7 @@
  */
 import { Selector } from "../selectors";
 import { AutomationItem } from "./automation";
+import { ScriptItem } from "./script";
 
 export type Domain = "blueprint";
 export type Schema = null;
@@ -19,7 +20,13 @@ export interface AutomationBlueprint extends AutomationItem {
   blueprint: Blueprint;
 }
 
-// export interface AutomationBlueprint extends AutomationItem, Blueprint {}
+export interface ScriptBlueprint extends ScriptItem {
+  /**
+   * The blueprint schema.
+   * https://www.home-assistant.io/docs/blueprint/schema/#the-blueprint-schema
+   */
+  blueprint: Blueprint;
+}
 
 interface Blueprint {
   /**

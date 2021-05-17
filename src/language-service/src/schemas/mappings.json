@@ -180,5 +180,12 @@
     "file": "blueprint-automation.json",
     "tsFile": "integrations/core/blueprint.ts",
     "fromType": "AutomationBlueprint"
+  },
+  {
+    "key": "blueprint-script",
+    "path": "blueprints/script",
+    "file": "blueprint-script.json",
+    "tsFile": "integrations/core/blueprint.ts",
+    "fromType": "ScriptBlueprint"
   }
 ]
