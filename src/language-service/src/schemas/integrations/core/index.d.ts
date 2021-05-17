@@ -21,6 +21,7 @@ export * as Lovelace from "./lovelace";
 export * as MQTT from "./mqtt";
 export * as MQTTEventstream from "./mqtt_eventstream";
 export * as MQTTStatestream from "./mqtt_statestream";
+export * as Number from "./number";
 export * as PanelIframe from "./panel_iframe";
 export * as Scene from "./scene";
 export * as Script from "./script";

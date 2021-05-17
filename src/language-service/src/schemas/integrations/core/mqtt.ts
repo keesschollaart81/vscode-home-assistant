@@ -16,6 +16,7 @@ import { PlatformSchema } from "../platform";
 
 export type Domain = "mqtt";
 type QOS = 0 | 1 | 2;
+type AvailabilityMode = "all" | "any" | "latest";
 
 export interface Schema {
   /**
@@ -2708,6 +2709,158 @@ export interface LockPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/lock.mqtt/#value_template
    */
   value_template?: Template;
+}
+
+export interface NumberPlatformSchema extends PlatformSchema {
+  /**
+   * The MQTT number platform.
+   * https://www.home-assistant.io/integrations/number.mqtt/
+   */
+  platform: "mqtt";
+
+  /**
+   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * https://www.home-assistant.io/integrations/number.mqtt/#availability
+   */
+  availability?: {
+    /**
+     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * https://www.home-assistant.io/integrations/number.mqtt/#topic
+     */
+    topic: string;
+
+    /**
+     * The payload that represents the available state.
+     * https://www.home-assistant.io/integrations/number.mqtt/#payload_available
+     */
+    payload_available?: string;
+
+    /**
+     * The payload that represents the unavailable state.
+     * https://www.home-assistant.io/integrations/number.mqtt/#payload_not_available
+     */
+    payload_not_available?: string;
+  }[];
+
+  /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/number.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
+   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * https://www.home-assistant.io/integrations/numbver.mqtt/#availability_topic
+   */
+  availability_topic?: string;
+
+  /**
+   * The MQTT topic to publish commands to change the number state.
+   * https://www.home-assistant.io/integrations/number.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * Information about the device this number is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * https://www.home-assistant.io/integrations/number.mqtt/#device
+   */
+  device?: {
+    /**
+     * A list of connections of the device to the outside world as a list of tuples.
+     * https://www.home-assistant.io/integrations/number.mqtt#connections
+     */
+    connections?: { [key: string]: string };
+
+    /**
+     * A list of IDs that uniquely identify the device. For example a serial number.
+     * https://www.home-assistant.io/integrations/number.mqtt#identifiers
+     */
+    identifier?: string;
+
+    /**
+     * The manufacturer of the device.
+     * https://www.home-assistant.io/integrations/number.mqtt#manufacturer
+     */
+    manufacturer?: string;
+
+    /**
+     * The model of the device.
+     * https://www.home-assistant.io/integrations/number.mqtt#model
+     */
+    model?: string;
+
+    /**
+     * The name of the device.
+     * https://www.home-assistant.io/integrations/number.mqtt#name
+     */
+    name?: string;
+
+    /**
+     * The firmware version of the device.
+     * https://www.home-assistant.io/integrations/number.mqtt#sw_version
+     */
+    sw_version?: string;
+
+    /**
+     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * https://www.home-assistant.io/integrations/number.mqtt#via_device
+     */
+    via_device?: string;
+  };
+
+  /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/number.mqtt/#icon
+   */
+  icon?: string;
+
+  /**
+   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * https://www.home-assistant.io/integrations/number.mqtt#json_attributes_template
+   */
+  json_attributes_template?: Template;
+
+  /**
+   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as entity attributes.
+   * https://www.home-assistant.io/integrations/number.mqtt#json_attributes_topic
+   */
+  json_attributes_topic?: string;
+
+  /**
+   * The name of the MQTT number.
+   * https://www.home-assistant.io/integrations/number.mqtt#name
+   */
+  name?: string;
+
+  /**
+   * Flag that defines if the number works in optimistic mode.
+   * https://www.home-assistant.io/integrations/number.mqtt/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/number.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/number.mqtt/#retain
+   */
+  retain?: boolean;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/number.mqtt/#state_topic
+   */
+  state_topic?: string;
+
+  /**
+   * An ID that uniquely identifies this number. If two numbers have the same unique ID, Home Assistant will raise an exception.
+   * https://www.home-assistant.io/integrations/number.mqtt#unique_id
+   */
+  unique_id?: string;
 }
 
 export interface SensorPlatformSchema extends PlatformSchema {

@@ -133,6 +133,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-number",
+    "path": "configuration.yaml/number",
+    "file": "integration-number.json",
+    "tsFile": "integrations/core/number.ts",
+    "fromType": "File"
+  },
+  {
     "key": "integration-switch",
     "path": "configuration.yaml/switch",
     "file": "integration-switch.json",
