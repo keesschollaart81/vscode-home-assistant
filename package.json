@@ -325,7 +325,7 @@
     "@typescript-eslint/parser": "^4.23.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.26.0",
-    "eslint-config-airbnb-typescript": "^9.0.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-flowtype": "^5.7.2",
     "eslint-plugin-import": "^2.22.1",
