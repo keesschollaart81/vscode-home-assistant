@@ -2887,6 +2887,18 @@ export interface NumberPlatformSchema extends PlatformSchema {
   json_attributes_topic?: string;
 
   /**
+   * Maximum value.
+   * https://www.home-assistant.io/integrations/number.mqtt#max
+   */
+  max?: number;
+
+  /**
+   * Minimum value.
+   * https://www.home-assistant.io/integrations/number.mqtt#min
+   */
+  min?: number;
+
+  /**
    * The name of the MQTT number.
    * https://www.home-assistant.io/integrations/number.mqtt#name
    */
@@ -2915,6 +2927,12 @@ export interface NumberPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/number.mqtt/#state_topic
    */
   state_topic?: string;
+
+  /**
+   * Step value. Smallest value `0.001`.
+   * https://www.home-assistant.io/integrations/number.mqtt/#step
+   */
+  step?: number;
 
   /**
    * An ID that uniquely identifies this number. If two numbers have the same unique ID, Home Assistant will raise an exception.
