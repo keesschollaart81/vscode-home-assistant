@@ -1671,6 +1671,18 @@ export interface FanPlatformSchema extends PlatformSchema {
   payload_oscillation_on?: string;
 
   /**
+   * A special payload that resets the `percentage` state attribute to `None` when received at the `percentage_state_topic`.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#payload_reset_percentage
+   */
+  payload_reset_percentage?: string;
+
+  /**
+   * A special payload that resets the `preset_mode` state attribute to `None` when received at the `preset_mode_state_topic`.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#payload_reset_preset_mode
+   */
+  payload_reset_preset_mode?: string;
+
+  /**
    * The maximum QoS level to be used when receiving and publishing messages.
    * https://www.home-assistant.io/integrations/fan.mqtt/#qos
    */
@@ -2887,6 +2899,18 @@ export interface NumberPlatformSchema extends PlatformSchema {
   json_attributes_topic?: string;
 
   /**
+   * Maximum value.
+   * https://www.home-assistant.io/integrations/number.mqtt#max
+   */
+  max?: number;
+
+  /**
+   * Minimum value.
+   * https://www.home-assistant.io/integrations/number.mqtt#min
+   */
+  min?: number;
+
+  /**
    * The name of the MQTT number.
    * https://www.home-assistant.io/integrations/number.mqtt#name
    */
@@ -2915,6 +2939,12 @@ export interface NumberPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/number.mqtt/#state_topic
    */
   state_topic?: string;
+
+  /**
+   * Step value. Smallest value `0.001`.
+   * https://www.home-assistant.io/integrations/number.mqtt/#step
+   */
+  step?: number;
 
   /**
    * An ID that uniquely identifies this number. If two numbers have the same unique ID, Home Assistant will raise an exception.
