@@ -212,6 +212,12 @@ export interface CoreIntegrations {
   hue?: integrations.Core.Hue.Schema | IncludeNamed;
 
   /**
+   * The KNX integration for Home Assistant allows you to connect to KNX/IP devices.
+   * https://www.home-assistant.io/integrations/knx
+   */
+  knx?: integrations.Core.KNX.Schema | IncludeNamed;
+
+  /**
    * MQTT (aka MQ Telemetry Transport) is a machine-to-machine or “Internet of Things” connectivity protocol on top of TCP/IP. It allows extremely lightweight publish/subscribe messaging transport.
    * https://www.home-assistant.io/integrations/mqtt/
    */
