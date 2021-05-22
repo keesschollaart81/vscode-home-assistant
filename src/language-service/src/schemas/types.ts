@@ -347,7 +347,7 @@ export type Time = string;
 
 /**
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
- * @items.pattern^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
+ * @items.pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
  */
 export type Times = string | string[];
 
