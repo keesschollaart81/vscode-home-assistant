@@ -1671,6 +1671,18 @@ export interface FanPlatformSchema extends PlatformSchema {
   payload_oscillation_on?: string;
 
   /**
+   * A special payload that resets the `percentage` state attribute to `None` when received at the `percentage_state_topic`.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#payload_reset_percentage
+   */
+  payload_reset_percentage?: string;
+
+  /**
+   * A special payload that resets the `preset_mode` state attribute to `None` when received at the `preset_mode_state_topic`.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#payload_reset_preset_mode
+   */
+  payload_reset_preset_mode?: string;
+
+  /**
    * The maximum QoS level to be used when receiving and publishing messages.
    * https://www.home-assistant.io/integrations/fan.mqtt/#qos
    */
