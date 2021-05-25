@@ -5,11 +5,12 @@
 import {
   Deprecated,
   DeviceClassesBinarySensor,
-  DeviceClassesSensor,
   DeviceClassesCover,
+  DeviceClassesSensor,
   IncludeList,
   IncludeNamed,
   PositiveInteger,
+  StateClassesSensor,
   Template,
   TimePeriod,
 } from "../../types";
@@ -767,6 +768,12 @@ interface SensorItem {
    * https://www.home-assistant.io/integrations/binary_sensor.template#icon_template
    */
   icon_template?: Template;
+
+  /**
+   * The State Class of the sensor.
+   * https://www.home-assistant.io/integrations/binary_sensor.template#state_class
+   */
+  state_class?: StateClassesSensor;
 
   /**
    * Defines the units of measurement of the sensor, if any. This will also influence the graphical presentation in the history visualization as a continuous value.
