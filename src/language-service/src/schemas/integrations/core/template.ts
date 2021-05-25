@@ -606,6 +606,12 @@ interface LightItem {
   color_template?: Template;
 
   /**
+   * Defines a template to get the list of supported effects. Must render a list.
+   * https://www.home-assistant.io/integrations/light.template#effect_list_template
+   */
+  effect_list_template?: Template;
+
+  /**
    * Defines a template for the entity picture of the light.
    * https://www.home-assistant.io/integrations/light.template#entity_picture_template
    */
@@ -630,10 +636,28 @@ interface LightItem {
   level_template?: Template;
 
   /**
+   * Defines a template to get the max mireds value of the light.
+   * https://www.home-assistant.io/integrations/light.template#max_mireds_template
+   */
+  max_mireds_template?: Template;
+
+  /**
+   * Defines a template to get the min mireds value of the light.
+   * https://www.home-assistant.io/integrations/light.template#min_mireds_template
+   */
+  min_mireds_template?: Template;
+
+  /**
    * Defines an action to run when the light is given a color command.
    * https://www.home-assistant.io/integrations/light.template#set_color
    */
   set_color?: Action | Action[];
+
+  /**
+   * Defines an action to run when the light is given a effect command.
+   * https://www.home-assistant.io/integrations/light.template#set_effect
+   */
+  set_effect?: Action | Action[];
 
   /**
    * Defines an action to run when the light is given a brightness command.
@@ -652,6 +676,12 @@ interface LightItem {
    * https://www.home-assistant.io/integrations/light.template#set_white_value
    */
   set_white_value?: Action | Action[];
+
+  /**
+   * Defines a template to get if light supports transition.
+   * https://www.home-assistant.io/integrations/light.template#supports_transition_template
+   */
+  supports_transition_template?: Template;
 
   /**
    * Defines a template to get the color temperature of the light.
