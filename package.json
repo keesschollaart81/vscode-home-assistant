@@ -322,7 +322,7 @@
     "@types/vscode": "1.45.1",
     "@types/ws": "7.4.4",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.24.0",
+    "@typescript-eslint/parser": "^4.25.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.26.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
