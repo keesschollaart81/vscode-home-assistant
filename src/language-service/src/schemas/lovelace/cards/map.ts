@@ -17,7 +17,7 @@ type GeoLocationEntity = GeoLocationEntityString | "all";
 
 export interface Schema {
   /**
-   * he Map card that allows you to display entities on a map.
+   * The Map card that allows you to display entities on a map.
    * https://www.home-assistant.io/lovelace/map/
    */
   type: "map";
