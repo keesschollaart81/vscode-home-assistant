@@ -1428,9 +1428,10 @@ export interface CoverPlatformSchema extends PlatformSchema {
   unique_id?: string;
 
   /**
-   * DEPRECATED as of Home Assistant 2021.3.0
+   * Defines a template to extract a value from the payload.
+   * https://www.home-assistant.io/integrations/cover.mqtt/#value_template
    */
-  value_template?: Deprecated;
+  value_template?: Template;
 }
 
 export interface DeviceTrackerPlatformSchema extends PlatformSchema {
