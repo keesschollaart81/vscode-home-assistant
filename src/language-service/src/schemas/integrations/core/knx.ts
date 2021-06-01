@@ -891,6 +891,18 @@ interface Light {
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address?: GroupAddresses;
+
+  /**
+   * KNX group address for setting the xyY color of the light. DPT 242.600
+   * https://www.home-assistant.io/integrations/knx#xyy_address
+   */
+  xyy_address?: GroupAddresses;
+
+  /**
+   * KNX group address for retrieving the xyY color of the light. DPT 242.600
+   * https://www.home-assistant.io/integrations/knx#xyy_state_address
+   */
+  xyy_state_address?: GroupAddresses;
 }
 
 interface Notify {
