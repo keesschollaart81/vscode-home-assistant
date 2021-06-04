@@ -548,6 +548,12 @@ interface FanItem {
   set_percentage?: Action | Action[];
 
   /**
+   * Defines an action to run when the fan is given a preset command.
+   * https://www.home-assistant.io/integrations/fan.template/#set_preset_mode
+   */
+  set_preset_mode?: Action | Action[];
+
+  /**
    * DEPRECATED as of Home Assistant 2021.3.0
    */
   set_speed?: Deprecated;
