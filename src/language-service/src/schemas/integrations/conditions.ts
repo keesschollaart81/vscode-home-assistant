@@ -10,6 +10,7 @@ import {
   IncludeList,
   InputDatetimeEntity,
   InputNumberEntity,
+  NumberEntity,
   PersonEntities,
   SensorEntity,
   State,
@@ -114,13 +115,13 @@ export interface NumericStateCondition {
    * Passes if the numeric state of the given entity (or entities) is above the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  above?: number | InputNumberEntity;
+  above?: number | InputNumberEntity | NumberEntity | SensorEntity;
 
   /**
    * Passes if the numeric state of the given entity (or entities) is below the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  below?: number | InputNumberEntity;
+  below?: number | InputNumberEntity | NumberEntity | SensorEntity;
 
   /**
    * The entity ID or list of entity IDs to test the numeric state against.
