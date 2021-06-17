@@ -10,6 +10,7 @@ import {
   IncludeList,
   InputDatetimeEntity,
   InputNumberEntity,
+  Integer,
   NumberEntity,
   PersonEntities,
   SensorEntity,
@@ -33,6 +34,7 @@ export type Condition =
   | SunCondition
   | TemplateCondition
   | TimeCondition
+  | TriggerCondition
   | ZoneCondition;
 
 export interface AndCondition {
@@ -297,6 +299,25 @@ export interface TimeCondition {
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
   weekday?: Weekday | Array<Weekday>;
+}
+
+export interface TriggerCondition {
+  /**
+   * Alias for the trigger condition.
+   */
+  alias?: string;
+
+  /**
+   * The trigger condition can test if this automation was triggered by a specific trigger.
+   * https://www.home-assistant.io/docs/scripts/conditions/#trigger-condition
+   */
+  condition: "trigger";
+
+  /**
+   * The ID (or IDs) of the triggers to test against if they have triggered this automation.
+   * https://www.home-assistant.io/docs/scripts/conditions/#trigger-condition
+   */
+  id: string | string[] | Integer | Integer[];
 }
 
 export interface ZoneCondition {

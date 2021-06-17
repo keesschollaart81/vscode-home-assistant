@@ -79,6 +79,13 @@ interface DeviceTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#device-triggers
    */
   domain: string;
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#device-triggers
+   */
+  id?: string;
 }
 
 interface EventTrigger {
@@ -99,6 +106,13 @@ interface EventTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
    */
   event_type: EventType | EventType[] | string | string[];
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
+   */
+  id?: string;
 }
 
 interface GeolocationTrigger {
@@ -113,6 +127,13 @@ interface GeolocationTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#geolocation-trigger
    */
   event: "enter" | "leave";
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#geolocation-trigger
+   */
+  id?: string;
 
   /**
    * The source is directly linked to one of the Geolocation platforms.
@@ -139,6 +160,13 @@ interface HomeAssistantTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#home-assistant-trigger
    */
   event: "start" | "shutdown";
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#home-assistant-trigger
+   */
+  id?: string;
 }
 
 interface MqttTrigger {
@@ -154,6 +182,13 @@ interface MqttTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#mqtt-trigger
    */
   encoding?: string;
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#mqtt-trigger
+   */
+  id?: string;
 
   /**
    * The payload to match on before triggering.
@@ -210,6 +245,13 @@ interface NumericStateTrigger {
   above?: number | InputNumberEntity | NumberEntity | SensorEntity;
 
   /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
+   */
+  id?: string;
+
+  /**
    * An optional value template to use as the numeric state value.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
@@ -264,6 +306,13 @@ interface StateTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
    */
   attribute?: string;
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
+   */
+  id?: string;
 }
 
 interface SunTrigger {
@@ -280,6 +329,13 @@ interface SunTrigger {
   event: "sunset" | "sunrise";
 
   /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#sun-trigger
+   */
+  id?: string;
+
+  /**
    * Optional offset from the sunrise or sunset. For example "-00:45:00" will trigger 45 minutes before sunrise or sunset.
    * https://www.home-assistant.io/docs/automation/trigger/#sun-trigger
    */
@@ -292,6 +348,13 @@ interface TemplateTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#template-trigger
    */
   platform: "template";
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#template-trigger
+   */
+  id?: string;
 
   /**
    * The template to render for this trigger. The event will fire is the result is true.
@@ -321,6 +384,13 @@ interface TimeTrigger {
    * @items.pattern ^((input_datetime|sensor)\.(?!_)[\da-z_]+(?<!_)|(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?)$
    */
   at: Times | InputDatetimeEntities | SensorEntities;
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#time-trigger
+   */
+  id?: string;
 }
 
 interface TimePatternTrigger {
@@ -329,6 +399,13 @@ interface TimePatternTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#time-pattern-trigger
    */
   platform: "time_pattern";
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#time-pattern-trigger
+   */
+  id?: string;
 
   /**
    * The hour or hours to trigger on.
@@ -360,6 +437,13 @@ interface WebhookTrigger {
   platform: "webhook";
 
   /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
+   */
+  id?: string;
+
+  /**
    * The webhook ID to use, defines the endpoint: /api/webhook/<webhook_id>
    * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
    */
@@ -372,6 +456,13 @@ interface ZoneTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
    */
   platform: "zone";
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
+   */
+  id?: string;
 
   /**
    * The entity ID(s) of the device tracker(s) to monitor on a given zone.
@@ -401,6 +492,13 @@ interface TagTrigger {
    * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
    */
   platform: "tag";
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
+   */
+  id?: string;
 
   /**
    * Identifier of the tag. Use this to decide what to do.
