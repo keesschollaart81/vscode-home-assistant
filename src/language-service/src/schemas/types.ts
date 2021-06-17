@@ -237,6 +237,17 @@ export type MediaPlayerEntity = string;
 export type MediaPlayerEntities = string | string[];
 
 /**
+ * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type NumberEntity = string;
+
+/**
+ * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?number\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^number\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type NumberEntities = string | string[];
+
+/**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
 export type PersonEntity = string;
