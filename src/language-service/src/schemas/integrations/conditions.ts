@@ -8,9 +8,10 @@ import {
   DynamicTemplate,
   Entities,
   IncludeList,
-  InputDatetimeEntities,
+  InputDatetimeEntity,
   InputNumberEntity,
   PersonEntities,
+  SensorEntity,
   State,
   Template,
   Time,
@@ -276,15 +277,19 @@ export interface TimeCondition {
    * Conditionally check if it is currently before a certain time of day.
    * Note that if only before key is used, the condition will be true from midnight until the specified time.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
+   *
+   * @TJS-pattern ^((input_datetime|sensor)\.(?!_)[\da-z_]+(?<!_)|(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?)$
    */
-  before?: Time | InputDatetimeEntities;
+  before?: Time | InputDatetimeEntity | SensorEntity;
 
   /**
    * Conditionally check if it is currently after a certain time of day.
    * Note that if only after key is used, the condition will be true from the specified time until midnight.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
+   *
+   * @TJS-pattern ^((input_datetime|sensor)\.(?!_)[\da-z_]+(?<!_)|(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?)$
    */
-  after?: Time | InputDatetimeEntities;
+  after?: Time | InputDatetimeEntity | SensorEntity;
 
   /**
    * Days of the week this condition can be valid.
