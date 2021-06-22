@@ -1,5 +1,15 @@
 export type Area = string;
 
+export type ColorMode =
+  | "onoff"
+  | "brightness"
+  | "color_temp"
+  | "hs"
+  | "xy"
+  | "rgb"
+  | "rgbw"
+  | "rgbww";
+
 export type Data = {
   [key: string]: any | Template;
 };

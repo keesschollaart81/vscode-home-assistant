@@ -3,13 +3,14 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/mqtt/
  */
 import {
+  ColorMode,
   Deprecated,
   DeviceClassesBinarySensor,
-  DeviceClassesSensor,
   DeviceClassesCover,
+  DeviceClassesSensor,
+  Integer,
   Port,
   PositiveInteger,
-  Integer,
   Template,
 } from "../../types";
 import { PlatformSchema } from "../platform";
@@ -1812,6 +1813,18 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
   brightness_value_template?: Template;
 
   /**
+   * The MQTT topic subscribed to receive color mode updates.
+   * https://www.home-assistant.io/integrations/light.mqtt/#color_mode_state_topic
+   */
+  color_mode_state_topic?: string;
+
+  /**
+   * Defines a template to extract the color mode.
+   * https://www.home-assistant.io/integrations/light.mqtt/#color_mode_value_template
+   */
+  color_mode_value_template?: Template;
+
+  /**
    * Defines a template to compose message which will be sent to color_temp_command_topic. Available variables: value.
    * https://www.home-assistant.io/integrations/light.mqtt/#color_temp_command_template
    */
@@ -2058,28 +2071,36 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
   unique_id?: string;
 
   /**
-   * The MQTT topic to publish commands to change the light’s white value.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_command_topic
+   * The MQTT topic to publish commands to change the light to white mode with a given brightness.
+   * https://www.home-assistant.io/integrations/light.mqtt#white_command_topic
    */
-  white_value_command_topic?: string;
+  white_command_topic?: string;
 
   /**
-   * Defines the maximum white value (i.e., 100%) of the MQTT device.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_scale
+   * Defines the maximum white level (i.e., 100%) of the MQTT device.
+   * https://www.home-assistant.io/integrations/light.mqtt#white_scale
    */
-  white_value_scale?: Integer;
+  white_scale?: Integer;
 
   /**
-   * The MQTT topic subscribed to receive white value updates.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_state_topic
+   * DEPRECATED
    */
-  white_value_state_topic?: string;
+  white_value_command_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the white value.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_template
+   * DEPRECATED
    */
-  white_value_template?: Template;
+  white_value_scale?: Deprecated;
+
+  /**
+   * DEPRECATED
+   */
+  white_value_state_topic?: Deprecated;
+
+  /**
+   * DEPRECATED
+   */
+  white_value_template?: Deprecated;
 
   /**
    * The MQTT topic to publish commands to change the light’s XY state.
@@ -2160,6 +2181,12 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_scale
    */
   brightness_scale?: Integer;
+
+  /**
+   * Flag that defines if the light supports color modes.
+   * https://www.home-assistant.io/integrations/light.mqtt/#color
+   */
+  color_mode?: boolean;
 
   /**
    * Flag that defines if the light supports color temperature.
@@ -2328,6 +2355,12 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/light.mqtt/#state_topic
    */
   state_topic?: string;
+
+  /**
+   * A list of color modes supported by the light.
+   * https://www.home-assistant.io/integrations/light.mqtt/#supported_color_modes
+   */
+  supported_color_modes: ColorMode[];
 
   /**
    * An ID that uniquely identifies this light. If two lights have the same unique ID, Home Assistant will raise an exception.
@@ -2584,10 +2617,9 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
   unique_id?: string;
 
   /**
-   * Template to extract white value from the state payload value.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_template
+   * DEPRECATED
    */
-  white_value_template?: Template;
+  white_value_template?: Deprecated;
 }
 
 export interface LockPlatformSchema extends PlatformSchema {
