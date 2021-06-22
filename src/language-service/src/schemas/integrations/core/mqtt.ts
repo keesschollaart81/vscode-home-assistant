@@ -2360,7 +2360,7 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
    * A list of color modes supported by the light.
    * https://www.home-assistant.io/integrations/light.mqtt/#supported_color_modes
    */
-  supported_color_modes: ColorMode[];
+  supported_color_modes?: ColorMode[];
 
   /**
    * An ID that uniquely identifies this light. If two lights have the same unique ID, Home Assistant will raise an exception.
