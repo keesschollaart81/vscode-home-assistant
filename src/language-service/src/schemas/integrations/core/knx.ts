@@ -246,6 +246,12 @@ export interface Schema {
   notify?: Notify[];
 
   /**
+   * The KNX number platform allows to send generic numeric values to the KNX bus and update its state from received telegrams.
+   * https://www.home-assistant.io/integrations/knx#number
+   */
+  number?: NumberEntity[];
+
+  /**
    * Defines the maximum number of telegrams to be sent to the bus per second (range 1-100).
    * https://www.home-assistant.io/integrations/knx#rate_limit
    *
@@ -917,6 +923,50 @@ interface Notify {
    * https://www.home-assistant.io/integrations/knx#name
    */
   name?: string;
+}
+
+interface NumberEntity {
+  /**
+   * KNX group address for setting the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * Maximum value that can be sent. Defaults to the `type` DPT maximum value.
+   * https://www.home-assistant.io/integrations/knx#max
+   */
+  max?: number;
+
+  /**
+   * Minimum value that can be sent. Defaults to the `type` DPT minimum value.
+   * https://www.home-assistant.io/integrations/knx#min
+   */
+  min?: number;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus.
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * Any supported type of KNX Sensor representing a numeric value (e.g., "percent" or "temperature")
+   * https://www.home-assistant.io/integrations/knx#type
+   */
+  type: ValueType | "binary" | "time" | "date" | "datetime";
 }
 
 interface Routing {
