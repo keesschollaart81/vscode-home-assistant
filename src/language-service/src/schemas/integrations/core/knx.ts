@@ -7,6 +7,7 @@ import {
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   Entity,
+  Integer,
   Port,
 } from "../../types";
 
@@ -272,6 +273,12 @@ export interface Schema {
    * https://www.home-assistant.io/integrations/knx#scene
    */
   scene?: Scene[];
+
+  /**
+   * The KNX select platform allows the user to define a list of values that can be selected via the frontend and can be used within conditions of automation.
+   * https://www.home-assistant.io/integrations/knx#select
+   */
+  select?: Select[];
 
   /**
    * The KNX sensor platform allows you to monitor KNX sensors.
@@ -999,6 +1006,62 @@ interface Scene {
    * @maximum 64
    */
   scene_number: number;
+}
+
+interface Select {
+  /**
+   * Group address new values will be sent to.
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * List of options to choose from. Each `option` and `payload` have to be unique.
+   * https://www.home-assistant.io/integrations/knx#options
+   */
+  options: {
+    /**
+     * The name of the option used to trigger the assigned `payload`.
+     * https://www.home-assistant.io/integrations/knx#option
+     */
+    option: string;
+
+    /**
+     * The raw payload assigned to the `option`.
+     * https://www.home-assistant.io/integrations/knx#payload
+     */
+    payload: Integer;
+  }[];
+
+  /**
+   * The length of the payload expected for the DPT. Use `0` for DPT 1, 2 or 3.
+   * https://www.home-assistant.io/integrations/knx#payload_length
+   */
+  payload_length: Integer;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus.
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * Actively read the value from the bus.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: boolean | string;
 }
 
 interface Sensor {
