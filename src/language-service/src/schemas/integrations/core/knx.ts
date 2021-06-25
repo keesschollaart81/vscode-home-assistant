@@ -403,18 +403,6 @@ interface Climate {
   command_value_state_address?: GroupAddresses;
 
   /**
-   * KNX address for switching between heat/cool mode. DPT 1.100
-   * https://www.home-assistant.io/integrations/knx#heat_cool_address
-   */
-  heat_cool_address?: GroupAddresses;
-
-  /**
-   * KNX address for reading heat/cool mode. DPT 1.100
-   * https://www.home-assistant.io/integrations/knx#heat_cool_state_address
-   */
-  heat_cool_state_address?: GroupAddresses;
-
-  /**
    * KNX address for setting HVAC controller modes. DPT 20.105
    * https://www.home-assistant.io/integrations/knx#controller_mode_address
    */
@@ -443,6 +431,18 @@ interface Climate {
    * https://www.home-assistant.io/integrations/knx#controller_status_state_address
    */
   controller_status_state_address?: GroupAddresses;
+
+  /**
+   * KNX address for switching between heat/cool mode. DPT 1.100
+   * https://www.home-assistant.io/integrations/knx#heat_cool_address
+   */
+  heat_cool_address?: GroupAddresses;
+
+  /**
+   * KNX address for reading heat/cool mode. DPT 1.100
+   * https://www.home-assistant.io/integrations/knx#heat_cool_state_address
+   */
+  heat_cool_state_address?: GroupAddresses;
 
   /**
    * Override the minimum temperature.
