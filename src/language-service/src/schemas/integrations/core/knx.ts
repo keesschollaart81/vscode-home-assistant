@@ -391,6 +391,18 @@ interface BinarySensor {
 
 interface Climate {
   /**
+   * KNX address for reading current activity. `0` is idle, `1` is active. DPT 1
+   * https://www.home-assistant.io/integrations/knx#active_state_addres
+   */
+  active_state_address?: GroupAddresses;
+
+  /**
+   * KNX address for reading current command value in percent. `0` sets the climate entity to idle if `active_state_address` is not set. DPT 5.001
+   * https://www.home-assistant.io/integrations/knx#command_value_state_address
+   */
+  command_value_state_address?: GroupAddresses;
+
+  /**
    * KNX address for switching between heat/cool mode. DPT 1.100
    * https://www.home-assistant.io/integrations/knx#heat_cool_address
    */
