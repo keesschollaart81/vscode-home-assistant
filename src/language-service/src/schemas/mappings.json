@@ -140,6 +140,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-select",
+    "path": "configuration.yaml/select",
+    "file": "integration-select.json",
+    "tsFile": "integrations/core/select.ts",
+    "fromType": "File"
+  },
+  {
     "key": "integration-switch",
     "path": "configuration.yaml/switch",
     "file": "integration-switch.json",
