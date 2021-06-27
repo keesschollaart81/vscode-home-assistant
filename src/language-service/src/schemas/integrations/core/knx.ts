@@ -1120,7 +1120,7 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#respond_to_read
    */
   respond_to_read?: boolean;
-  
+
   /**
    * Separate KNX group address for retrieving the switch state. DPT 1
    * https://www.home-assistant.io/integrations/knx#state_address
