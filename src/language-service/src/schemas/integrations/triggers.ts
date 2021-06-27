@@ -96,6 +96,12 @@ interface EventTrigger {
   platform: "event";
 
   /**
+   * Additional event context that has to match before triggering.
+   * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
+   */
+  context?: Data;
+
+  /**
    * Additional event data that has to match before triggering.
    * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
    */
