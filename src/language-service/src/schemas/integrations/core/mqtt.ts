@@ -1601,6 +1601,12 @@ export interface FanPlatformSchema extends PlatformSchema {
   optimistic?: boolean;
 
   /**
+   * Defines a template to generate the payload to send to oscillation_command_topic.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_value_template
+   */
+  oscillation_command_template?: Template;
+
+  /**
    * The MQTT topic to publish commands to change the oscillation state.
    * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_command_topic
    */
@@ -1628,19 +1634,19 @@ export interface FanPlatformSchema extends PlatformSchema {
    * The payload that represents the fan’s high speed.
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_high_speed
    */
-  payload_high_speed?: string;
+  payload_high_speed?: Deprecated;
 
   /**
    * The payload that represents the fan’s low speed.
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_low_speed
    */
-  payload_low_speed?: string;
+  payload_low_speed?: Deprecated;
 
   /**
    * The payload that represents the fan’s medium speed.
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_medium_speed
    */
-  payload_medium_speed?: string;
+  payload_medium_speed?: Deprecated;
 
   /**
    * The payload that represents the offline state.
@@ -1685,6 +1691,60 @@ export interface FanPlatformSchema extends PlatformSchema {
   payload_reset_preset_mode?: string;
 
   /**
+   * Defines a template to generate the payload to send to `percentage_command_topic`.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_command_template
+   */
+  percentage_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the fan speed state based on a percentage.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_command_topic
+   */
+  percentage_command_topic?: string;
+
+  /**
+   * The MQTT topic subscribed to receive fan speed based on percentage.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_state_topic
+   */
+  percentage_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from fan percentage speed.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_value_template
+   */
+  percentage_value_template?: string;
+
+  /**
+   * Defines a template to generate the payload to send to preset_mode_command_topic.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_command_template
+   */
+  preset_mode_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the preset mode.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_command_topic
+   */
+  preset_mode_command_topic?: string;
+
+  /**
+   * The MQTT topic subscribed to receive fan speed based on presets.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_state_topic
+   */
+  preset_mode_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from the preset_mode payload.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_value_template
+   */
+  preset_mode_value_template?: string;
+
+  /**
+   * List of preset modes this fan is capable of running at.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_modes
+   */
+  preset_modes?: string[];
+
+  /**
    * The maximum QoS level to be used when receiving and publishing messages.
    * https://www.home-assistant.io/integrations/fan.mqtt/#qos
    */
@@ -1697,28 +1757,40 @@ export interface FanPlatformSchema extends PlatformSchema {
   retain?: boolean;
 
   /**
+   * The minimum of numeric output range (off not included, so speed_range_min - 1 represents 0%).
+   * https://www.home-assistant.io/integrations/fan.mqtt/#speed_range_min
+   */
+  speed_range_min?: PositiveInteger;
+
+  /**
+   * The maximum of numeric output range (representing 100%).
+   * https://www.home-assistant.io/integrations/fan.mqtt/#speed_range_max
+   */
+  speed_range_max?: PositiveInteger;
+
+  /**
    * The MQTT topic to publish commands to change speed state.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_command_topic
    */
-  speed_command_topic?: string;
+  speed_command_topic?: Deprecated;
 
   /**
    * The MQTT topic subscribed to receive speed state updates.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_state_topic
    */
-  speed_state_topic?: string;
+  speed_state_topic?: Deprecated;
 
   /**
    * Defines a template to extract a value from the speed payload.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_value_template
    */
-  speed_value_template?: Template;
+  speed_value_template?: Deprecated;
 
   /**
    * List of speeds this fan is capable of running at. Valid entries are off, low, medium and high.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speeds
    */
-  speeds: string[];
+  speeds: Deprecated;
 
   /**
    * The MQTT topic subscribed to receive state updates.
