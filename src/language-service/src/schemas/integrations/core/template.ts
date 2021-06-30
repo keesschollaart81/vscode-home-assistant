@@ -5,11 +5,12 @@
 import {
   Deprecated,
   DeviceClassesBinarySensor,
-  DeviceClassesSensor,
   DeviceClassesCover,
+  DeviceClassesSensor,
   IncludeList,
   IncludeNamed,
   PositiveInteger,
+  StateClassesSensor,
   Template,
   TimePeriod,
 } from "../../types";
@@ -547,6 +548,12 @@ interface FanItem {
   set_percentage?: Action | Action[];
 
   /**
+   * Defines an action to run when the fan is given a preset command.
+   * https://www.home-assistant.io/integrations/fan.template/#set_preset_mode
+   */
+  set_preset_mode?: Action | Action[];
+
+  /**
    * DEPRECATED as of Home Assistant 2021.3.0
    */
   set_speed?: Deprecated;
@@ -606,6 +613,12 @@ interface LightItem {
   color_template?: Template;
 
   /**
+   * Defines a template to get the list of supported effects. Must render a list.
+   * https://www.home-assistant.io/integrations/light.template#effect_list_template
+   */
+  effect_list_template?: Template;
+
+  /**
    * Defines a template for the entity picture of the light.
    * https://www.home-assistant.io/integrations/light.template#entity_picture_template
    */
@@ -630,10 +643,28 @@ interface LightItem {
   level_template?: Template;
 
   /**
+   * Defines a template to get the max mireds value of the light.
+   * https://www.home-assistant.io/integrations/light.template#max_mireds_template
+   */
+  max_mireds_template?: Template;
+
+  /**
+   * Defines a template to get the min mireds value of the light.
+   * https://www.home-assistant.io/integrations/light.template#min_mireds_template
+   */
+  min_mireds_template?: Template;
+
+  /**
    * Defines an action to run when the light is given a color command.
    * https://www.home-assistant.io/integrations/light.template#set_color
    */
   set_color?: Action | Action[];
+
+  /**
+   * Defines an action to run when the light is given a effect command.
+   * https://www.home-assistant.io/integrations/light.template#set_effect
+   */
+  set_effect?: Action | Action[];
 
   /**
    * Defines an action to run when the light is given a brightness command.
@@ -652,6 +683,12 @@ interface LightItem {
    * https://www.home-assistant.io/integrations/light.template#set_white_value
    */
   set_white_value?: Action | Action[];
+
+  /**
+   * Defines a template to get if light supports transition.
+   * https://www.home-assistant.io/integrations/light.template#supports_transition_template
+   */
+  supports_transition_template?: Template;
 
   /**
    * Defines a template to get the color temperature of the light.
@@ -737,6 +774,12 @@ interface SensorItem {
    * https://www.home-assistant.io/integrations/binary_sensor.template#icon_template
    */
   icon_template?: Template;
+
+  /**
+   * The State Class of the sensor.
+   * https://www.home-assistant.io/integrations/binary_sensor.template#state_class
+   */
+  state_class?: StateClassesSensor;
 
   /**
    * Defines the units of measurement of the sensor, if any. This will also influence the graphical presentation in the history visualization as a continuous value.

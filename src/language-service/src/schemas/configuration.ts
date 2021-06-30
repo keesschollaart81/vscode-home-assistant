@@ -156,6 +156,12 @@ export interface InternalIntegrations {
   scene?: integrations.Core.Scene.Schema | IncludeList;
 
   /**
+   * Selects offers a limited set of selectable options for the entity state.
+   * https://www.home-assistant.io/integrations/select
+   */
+  select?: integrations.Core.Select.Schema | IncludeList;
+
+  /**
    * Sensors are gathering information about states and conditions.
    * https://www.home-assistant.io/integrations/sensor
    */

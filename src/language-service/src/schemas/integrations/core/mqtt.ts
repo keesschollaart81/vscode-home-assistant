@@ -3,13 +3,14 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/mqtt/
  */
 import {
+  ColorMode,
   Deprecated,
   DeviceClassesBinarySensor,
-  DeviceClassesSensor,
   DeviceClassesCover,
+  DeviceClassesSensor,
+  Integer,
   Port,
   PositiveInteger,
-  Integer,
   Template,
 } from "../../types";
 import { PlatformSchema } from "../platform";
@@ -1428,9 +1429,10 @@ export interface CoverPlatformSchema extends PlatformSchema {
   unique_id?: string;
 
   /**
-   * DEPRECATED as of Home Assistant 2021.3.0
+   * Defines a template to extract a value from the payload.
+   * https://www.home-assistant.io/integrations/cover.mqtt/#value_template
    */
-  value_template?: Deprecated;
+  value_template?: Template;
 }
 
 export interface DeviceTrackerPlatformSchema extends PlatformSchema {
@@ -1599,6 +1601,12 @@ export interface FanPlatformSchema extends PlatformSchema {
   optimistic?: boolean;
 
   /**
+   * Defines a template to generate the payload to send to oscillation_command_topic.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_value_template
+   */
+  oscillation_command_template?: Template;
+
+  /**
    * The MQTT topic to publish commands to change the oscillation state.
    * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_command_topic
    */
@@ -1626,19 +1634,19 @@ export interface FanPlatformSchema extends PlatformSchema {
    * The payload that represents the fan’s high speed.
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_high_speed
    */
-  payload_high_speed?: string;
+  payload_high_speed?: Deprecated;
 
   /**
    * The payload that represents the fan’s low speed.
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_low_speed
    */
-  payload_low_speed?: string;
+  payload_low_speed?: Deprecated;
 
   /**
    * The payload that represents the fan’s medium speed.
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_medium_speed
    */
-  payload_medium_speed?: string;
+  payload_medium_speed?: Deprecated;
 
   /**
    * The payload that represents the offline state.
@@ -1683,6 +1691,60 @@ export interface FanPlatformSchema extends PlatformSchema {
   payload_reset_preset_mode?: string;
 
   /**
+   * Defines a template to generate the payload to send to `percentage_command_topic`.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_command_template
+   */
+  percentage_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the fan speed state based on a percentage.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_command_topic
+   */
+  percentage_command_topic?: string;
+
+  /**
+   * The MQTT topic subscribed to receive fan speed based on percentage.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_state_topic
+   */
+  percentage_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from fan percentage speed.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_value_template
+   */
+  percentage_value_template?: string;
+
+  /**
+   * Defines a template to generate the payload to send to preset_mode_command_topic.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_command_template
+   */
+  preset_mode_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the preset mode.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_command_topic
+   */
+  preset_mode_command_topic?: string;
+
+  /**
+   * The MQTT topic subscribed to receive fan speed based on presets.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_state_topic
+   */
+  preset_mode_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from the preset_mode payload.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_value_template
+   */
+  preset_mode_value_template?: string;
+
+  /**
+   * List of preset modes this fan is capable of running at.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#preset_modes
+   */
+  preset_modes?: string[];
+
+  /**
    * The maximum QoS level to be used when receiving and publishing messages.
    * https://www.home-assistant.io/integrations/fan.mqtt/#qos
    */
@@ -1695,28 +1757,40 @@ export interface FanPlatformSchema extends PlatformSchema {
   retain?: boolean;
 
   /**
+   * The minimum of numeric output range (off not included, so speed_range_min - 1 represents 0%).
+   * https://www.home-assistant.io/integrations/fan.mqtt/#speed_range_min
+   */
+  speed_range_min?: PositiveInteger;
+
+  /**
+   * The maximum of numeric output range (representing 100%).
+   * https://www.home-assistant.io/integrations/fan.mqtt/#speed_range_max
+   */
+  speed_range_max?: PositiveInteger;
+
+  /**
    * The MQTT topic to publish commands to change speed state.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_command_topic
    */
-  speed_command_topic?: string;
+  speed_command_topic?: Deprecated;
 
   /**
    * The MQTT topic subscribed to receive speed state updates.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_state_topic
    */
-  speed_state_topic?: string;
+  speed_state_topic?: Deprecated;
 
   /**
    * Defines a template to extract a value from the speed payload.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_value_template
    */
-  speed_value_template?: Template;
+  speed_value_template?: Deprecated;
 
   /**
    * List of speeds this fan is capable of running at. Valid entries are off, low, medium and high.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speeds
    */
-  speeds: string[];
+  speeds: Deprecated;
 
   /**
    * The MQTT topic subscribed to receive state updates.
@@ -1809,6 +1883,18 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_value_template
    */
   brightness_value_template?: Template;
+
+  /**
+   * The MQTT topic subscribed to receive color mode updates.
+   * https://www.home-assistant.io/integrations/light.mqtt/#color_mode_state_topic
+   */
+  color_mode_state_topic?: string;
+
+  /**
+   * Defines a template to extract the color mode.
+   * https://www.home-assistant.io/integrations/light.mqtt/#color_mode_value_template
+   */
+  color_mode_value_template?: Template;
 
   /**
    * Defines a template to compose message which will be sent to color_temp_command_topic. Available variables: value.
@@ -2057,28 +2143,36 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
   unique_id?: string;
 
   /**
-   * The MQTT topic to publish commands to change the light’s white value.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_command_topic
+   * The MQTT topic to publish commands to change the light to white mode with a given brightness.
+   * https://www.home-assistant.io/integrations/light.mqtt#white_command_topic
    */
-  white_value_command_topic?: string;
+  white_command_topic?: string;
 
   /**
-   * Defines the maximum white value (i.e., 100%) of the MQTT device.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_scale
+   * Defines the maximum white level (i.e., 100%) of the MQTT device.
+   * https://www.home-assistant.io/integrations/light.mqtt#white_scale
    */
-  white_value_scale?: Integer;
+  white_scale?: Integer;
 
   /**
-   * The MQTT topic subscribed to receive white value updates.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_state_topic
+   * DEPRECATED
    */
-  white_value_state_topic?: string;
+  white_value_command_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the white value.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_template
+   * DEPRECATED
    */
-  white_value_template?: Template;
+  white_value_scale?: Deprecated;
+
+  /**
+   * DEPRECATED
+   */
+  white_value_state_topic?: Deprecated;
+
+  /**
+   * DEPRECATED
+   */
+  white_value_template?: Deprecated;
 
   /**
    * The MQTT topic to publish commands to change the light’s XY state.
@@ -2159,6 +2253,12 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_scale
    */
   brightness_scale?: Integer;
+
+  /**
+   * Flag that defines if the light supports color modes.
+   * https://www.home-assistant.io/integrations/light.mqtt/#color
+   */
+  color_mode?: boolean;
 
   /**
    * Flag that defines if the light supports color temperature.
@@ -2327,6 +2427,12 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/light.mqtt/#state_topic
    */
   state_topic?: string;
+
+  /**
+   * A list of color modes supported by the light.
+   * https://www.home-assistant.io/integrations/light.mqtt/#supported_color_modes
+   */
+  supported_color_modes?: ColorMode[];
 
   /**
    * An ID that uniquely identifies this light. If two lights have the same unique ID, Home Assistant will raise an exception.
@@ -2583,10 +2689,9 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
   unique_id?: string;
 
   /**
-   * Template to extract white value from the state payload value.
-   * https://www.home-assistant.io/integrations/light.mqtt/#white_value_template
+   * DEPRECATED
    */
-  white_value_template?: Template;
+  white_value_template?: Deprecated;
 }
 
 export interface LockPlatformSchema extends PlatformSchema {
@@ -2951,6 +3056,175 @@ export interface NumberPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/number.mqtt#unique_id
    */
   unique_id?: string;
+}
+
+export interface SelectPlatformSchema extends PlatformSchema {
+  /**
+   * This mqtt select platform uses the MQTT message payload as the select value.
+   * https://www.home-assistant.io/integrations/select.mqtt
+   */
+  platform: "mqtt";
+
+  /**
+   * Set multiple availability topics for this select.
+   */
+  availability?: {
+    /**
+     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * https://www.home-assistant.io/integrations/select.mqtt#availability_topic
+     */
+    topic?: string;
+
+    /**
+     * The payload that represents the available state.
+     * https://www.home-assistant.io/integrations/select.mqtt#payload_available
+     */
+    payload_available?: string;
+
+    /**
+     * The payload that represents the unavailable state.
+     * https://www.home-assistant.io/integrations/select.mqtt#payload_not_available
+     */
+    payload_not_available?: string;
+  }[];
+
+  /**
+   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * https://www.home-assistant.io/integrations/select.mqtt/#availability_mode
+   */
+  availability_mode?: AvailabilityMode;
+
+  /**
+   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * https://www.home-assistant.io/integrations/select.mqtt#availability_topic
+   */
+  availability_topic?: string;
+
+  /**
+   * The MQTT topic to publish commands to control the select.
+   * https://www.home-assistant.io/integrations/select.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * Information about the device this select is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * https://www.home-assistant.io/integrations/select.mqtt#device
+   */
+  device?: {
+    /**
+     * A list of connections of the device to the outside world as a list of tuples.
+     * https://www.home-assistant.io/integrations/select.mqtt#connections
+     */
+    connections?: { [key: string]: string };
+
+    /**
+     * A list of IDs that uniquely identify the device. For example a serial number.
+     * https://www.home-assistant.io/integrations/select.mqtt#identifiers
+     */
+    identifier?: string;
+
+    /**
+     * The manufacturer of the device.
+     * https://www.home-assistant.io/integrations/select.mqtt#manufacturer
+     */
+    manufacturer?: string;
+
+    /**
+     * The model of the device.
+     * https://www.home-assistant.io/integrations/select.mqtt#model
+     */
+    model?: string;
+
+    /**
+     * The name of the device.
+     * https://www.home-assistant.io/integrations/select.mqtt#name
+     */
+    name?: string;
+
+    /**
+     * The firmware version of the device.
+     * https://www.home-assistant.io/integrations/select.mqtt#sw_version
+     */
+    sw_version?: string;
+
+    /**
+     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * https://www.home-assistant.io/integrations/select.mqtt#via_device
+     */
+    via_device?: string;
+  };
+
+  /**
+   * Flag which defines if the entity should be enabled when first added.
+   * https://www.home-assistant.io/integrations/select.mqtt#enabled_by_default
+   */
+  enabled_by_default?: boolean;
+
+  /**
+   * Icon to use for the entity created.
+   * https://www.home-assistant.io/integrations/select.mqtt/#icon
+   */
+  icon?: string;
+
+  /**
+   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * https://www.home-assistant.io/integrations/select.mqtt#json_attributes_template
+   */
+  json_attributes_template?: Template;
+
+  /**
+   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as entity attributes. Implies force_update of the current select state when a message is received on this topic.
+   * https://www.home-assistant.io/integrations/select.mqtt#json_attributes_topic
+   */
+  json_attributes_topic?: string;
+
+  /**
+   * The name of the MQTT select.
+   * https://www.home-assistant.io/integrations/select.mqtt#name
+   */
+  name?: string;
+
+  /**
+   * Flag that defines the select works in optimistic mode.
+   * https://www.home-assistant.io/integrations/select.mqtt/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * List of options to choose from in the select.
+   * https://www.home-assistant.io/integrations/select.mqtt/#options
+   */
+  options?: string[];
+
+  /**
+   * The maximum QoS level of the state topic.
+   * https://www.home-assistant.io/integrations/select.mqtt#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/select.mqtt/#retain
+   */
+  retain?: boolean;
+
+  /**
+   * The MQTT topic subscribed to receive the select value.
+   * https://www.home-assistant.io/integrations/select.mqtt#state_topic
+   */
+  state_topic?: string;
+
+  /**
+   * An ID that uniquely identifies this select. If two selects have the same unique ID, Home Assistant will raise an exception.
+   * https://www.home-assistant.io/integrations/select.mqtt#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Defines a template to extract a value from the payload.
+   * https://www.home-assistant.io/integrations/select.mqtt/#value_template
+   */
+  value_template?: Template;
 }
 
 export interface SensorPlatformSchema extends PlatformSchema {

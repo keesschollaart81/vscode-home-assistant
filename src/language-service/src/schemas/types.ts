@@ -1,5 +1,15 @@
 export type Area = string;
 
+export type ColorMode =
+  | "onoff"
+  | "brightness"
+  | "color_temp"
+  | "hs"
+  | "xy"
+  | "rgb"
+  | "rgbw"
+  | "rgbww";
+
 export type Data = {
   [key: string]: any | Template;
 };
@@ -82,6 +92,11 @@ export type DeviceClassesSensor =
   | "temperature"
   | "timestamp"
   | "voltage";
+
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
+ */
+export type StateClassesSensor = "measurement";
 
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/switch/__init__.py
@@ -232,6 +247,17 @@ export type MediaPlayerEntity = string;
 export type MediaPlayerEntities = string | string[];
 
 /**
+ * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type NumberEntity = string;
+
+/**
+ * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?number\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^number\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type NumberEntities = string | string[];
+
+/**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
 export type PersonEntity = string;
@@ -346,8 +372,8 @@ export type DynamicTemplate = string;
 export type Time = string;
 
 /**
- * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
- * @items.pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
+ * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?$
+ * @items.pattern ^(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?$
  */
 export type Times = string | string[];
 

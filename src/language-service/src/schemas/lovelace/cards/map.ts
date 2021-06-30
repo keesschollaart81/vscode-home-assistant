@@ -17,7 +17,7 @@ type GeoLocationEntity = GeoLocationEntityString | "all";
 
 export interface Schema {
   /**
-   * he Map card that allows you to display entities on a map.
+   * The Map card that allows you to display entities on a map.
    * https://www.home-assistant.io/lovelace/map/
    */
   type: "map";
@@ -32,7 +32,7 @@ export interface Schema {
    * List of geolocation sources. All current entities with that source will be displayed on the map. See Geolocation platform for valid sources. Set to all to use all available sources. Either this or the entities configuration option is required.
    * https://www.home-assistant.io/lovelace/map/#geo_location_sources
    */
-  geo_location_sources: GeoLocationEntity[];
+  geo_location_sources?: GeoLocationEntity[];
 
   /**
    * The card title.

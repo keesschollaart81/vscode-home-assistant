@@ -223,7 +223,7 @@ export interface SelectSelector {
      * List of options that the user can choose from.
      * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
      */
-    options: [string];
+    options: string[];
   };
 }
 

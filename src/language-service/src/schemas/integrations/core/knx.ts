@@ -7,6 +7,7 @@ import {
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   Entity,
+  Integer,
   Port,
 } from "../../types";
 
@@ -246,6 +247,12 @@ export interface Schema {
   notify?: Notify[];
 
   /**
+   * The KNX number platform allows to send generic numeric values to the KNX bus and update its state from received telegrams.
+   * https://www.home-assistant.io/integrations/knx#number
+   */
+  number?: NumberEntity[];
+
+  /**
    * Defines the maximum number of telegrams to be sent to the bus per second (range 1-100).
    * https://www.home-assistant.io/integrations/knx#rate_limit
    *
@@ -266,6 +273,12 @@ export interface Schema {
    * https://www.home-assistant.io/integrations/knx#scene
    */
   scene?: Scene[];
+
+  /**
+   * The KNX select platform allows the user to define a list of values that can be selected via the frontend and can be used within conditions of automation.
+   * https://www.home-assistant.io/integrations/knx#select
+   */
+  select?: Select[];
 
   /**
    * The KNX sensor platform allows you to monitor KNX sensors.
@@ -378,16 +391,16 @@ interface BinarySensor {
 
 interface Climate {
   /**
-   * KNX address for switching between heat/cool mode. DPT 1.100
-   * https://www.home-assistant.io/integrations/knx#heat_cool_address
+   * KNX address for reading current activity. `0` is idle, `1` is active. DPT 1
+   * https://www.home-assistant.io/integrations/knx#active_state_addres
    */
-  heat_cool_address?: GroupAddresses;
+  active_state_address?: GroupAddresses;
 
   /**
-   * KNX address for reading heat/cool mode. DPT 1.100
-   * https://www.home-assistant.io/integrations/knx#heat_cool_state_address
+   * KNX address for reading current command value in percent. `0` sets the climate entity to idle if `active_state_address` is not set. DPT 5.001
+   * https://www.home-assistant.io/integrations/knx#command_value_state_address
    */
-  heat_cool_state_address?: GroupAddresses;
+  command_value_state_address?: GroupAddresses;
 
   /**
    * KNX address for setting HVAC controller modes. DPT 20.105
@@ -418,6 +431,18 @@ interface Climate {
    * https://www.home-assistant.io/integrations/knx#controller_status_state_address
    */
   controller_status_state_address?: GroupAddresses;
+
+  /**
+   * KNX address for switching between heat/cool mode. DPT 1.100
+   * https://www.home-assistant.io/integrations/knx#heat_cool_address
+   */
+  heat_cool_address?: GroupAddresses;
+
+  /**
+   * KNX address for reading heat/cool mode. DPT 1.100
+   * https://www.home-assistant.io/integrations/knx#heat_cool_state_address
+   */
+  heat_cool_state_address?: GroupAddresses;
 
   /**
    * Override the minimum temperature.
@@ -891,6 +916,18 @@ interface Light {
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address?: GroupAddresses;
+
+  /**
+   * KNX group address for setting the xyY color of the light. DPT 242.600
+   * https://www.home-assistant.io/integrations/knx#xyy_address
+   */
+  xyy_address?: GroupAddresses;
+
+  /**
+   * KNX group address for retrieving the xyY color of the light. DPT 242.600
+   * https://www.home-assistant.io/integrations/knx#xyy_state_address
+   */
+  xyy_state_address?: GroupAddresses;
 }
 
 interface Notify {
@@ -905,6 +942,50 @@ interface Notify {
    * https://www.home-assistant.io/integrations/knx#name
    */
   name?: string;
+}
+
+interface NumberEntity {
+  /**
+   * KNX group address for setting the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * Maximum value that can be sent. Defaults to the `type` DPT maximum value.
+   * https://www.home-assistant.io/integrations/knx#max
+   */
+  max?: number;
+
+  /**
+   * Minimum value that can be sent. Defaults to the `type` DPT minimum value.
+   * https://www.home-assistant.io/integrations/knx#min
+   */
+  min?: number;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus.
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * Any supported type of KNX Sensor representing a numeric value (e.g., "percent" or "temperature")
+   * https://www.home-assistant.io/integrations/knx#type
+   */
+  type: ValueType | "binary" | "time" | "date" | "datetime";
 }
 
 interface Routing {
@@ -937,6 +1018,62 @@ interface Scene {
    * @maximum 64
    */
   scene_number: number;
+}
+
+interface Select {
+  /**
+   * Group address new values will be sent to.
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * List of options to choose from. Each `option` and `payload` have to be unique.
+   * https://www.home-assistant.io/integrations/knx#options
+   */
+  options: {
+    /**
+     * The name of the option used to trigger the assigned `payload`.
+     * https://www.home-assistant.io/integrations/knx#option
+     */
+    option: string;
+
+    /**
+     * The raw payload assigned to the `option`.
+     * https://www.home-assistant.io/integrations/knx#payload
+     */
+    payload: Integer;
+  }[];
+
+  /**
+   * The length of the payload expected for the DPT. Use `0` for DPT 1, 2 or 3.
+   * https://www.home-assistant.io/integrations/knx#payload_length
+   */
+  payload_length: Integer;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus.
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * Actively read the value from the bus.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: boolean | string;
 }
 
 interface Sensor {
@@ -989,6 +1126,12 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#name
    */
   name?: string;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
 
   /**
    * Separate KNX group address for retrieving the switch state. DPT 1

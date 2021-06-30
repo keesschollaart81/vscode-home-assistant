@@ -8,9 +8,12 @@ import {
   DynamicTemplate,
   Entities,
   IncludeList,
-  InputDatetimeEntities,
+  InputDatetimeEntity,
   InputNumberEntity,
+  Integer,
+  NumberEntity,
   PersonEntities,
+  SensorEntity,
   State,
   Template,
   Time,
@@ -31,6 +34,7 @@ export type Condition =
   | SunCondition
   | TemplateCondition
   | TimeCondition
+  | TriggerCondition
   | ZoneCondition;
 
 export interface AndCondition {
@@ -113,13 +117,13 @@ export interface NumericStateCondition {
    * Passes if the numeric state of the given entity (or entities) is above the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  above?: number | InputNumberEntity;
+  above?: number | InputNumberEntity | NumberEntity | SensorEntity;
 
   /**
    * Passes if the numeric state of the given entity (or entities) is below the given threshold.
    * https://www.home-assistant.io/docs/scripts/conditions/#numeric-state-condition
    */
-  below?: number | InputNumberEntity;
+  below?: number | InputNumberEntity | NumberEntity | SensorEntity;
 
   /**
    * The entity ID or list of entity IDs to test the numeric state against.
@@ -276,21 +280,44 @@ export interface TimeCondition {
    * Conditionally check if it is currently before a certain time of day.
    * Note that if only before key is used, the condition will be true from midnight until the specified time.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
+   *
+   * @TJS-pattern ^((input_datetime|sensor)\.(?!_)[\da-z_]+(?<!_)|(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?)$
    */
-  before?: Time | InputDatetimeEntities;
+  before?: Time | InputDatetimeEntity | SensorEntity;
 
   /**
    * Conditionally check if it is currently after a certain time of day.
    * Note that if only after key is used, the condition will be true from the specified time until midnight.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
+   *
+   * @TJS-pattern ^((input_datetime|sensor)\.(?!_)[\da-z_]+(?<!_)|(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?)$
    */
-  after?: Time | InputDatetimeEntities;
+  after?: Time | InputDatetimeEntity | SensorEntity;
 
   /**
    * Days of the week this condition can be valid.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
   weekday?: Weekday | Array<Weekday>;
+}
+
+export interface TriggerCondition {
+  /**
+   * Alias for the trigger condition.
+   */
+  alias?: string;
+
+  /**
+   * The trigger condition can test if this automation was triggered by a specific trigger.
+   * https://www.home-assistant.io/docs/scripts/conditions/#trigger-condition
+   */
+  condition: "trigger";
+
+  /**
+   * The ID (or IDs) of the triggers to test against if they have triggered this automation.
+   * https://www.home-assistant.io/docs/scripts/conditions/#trigger-condition
+   */
+  id: string | string[] | Integer | Integer[];
 }
 
 export interface ZoneCondition {
