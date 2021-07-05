@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@types/mocha": "8.2.2",
-    "@types/node": "15.14.0",
+    "@types/node": "16.0.0",
     "@types/vscode": "1.48.0",
     "@types/ws": "7.4.5",
     "@types/yaml": "1.9.7",
