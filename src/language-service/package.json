@@ -38,7 +38,7 @@
     "schema": "ts-node src/schemas/generateSchemas.ts"
   },
   "devDependencies": {
-    "@types/mocha": "8.2.2",
+    "@types/mocha": "8.2.3",
     "@types/node": "16.0.0",
     "@types/vscode": "1.48.0",
     "@types/ws": "7.4.6",
