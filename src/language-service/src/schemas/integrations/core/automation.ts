@@ -2,7 +2,7 @@
  * Automation integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/__init__.py
  */
-import { Data, Deprecated, IncludeList } from "../../types";
+import { Data, Deprecated, IncludeList, PositiveInteger } from "../../types";
 import { Action } from "../actions";
 import { Condition } from "../conditions";
 import { Trigger } from "../triggers";
@@ -78,6 +78,18 @@ interface BaseItem {
     | "critical";
 
   /**
+   * Controls tracing settings of this automation.
+   * https://www.home-assistant.io/docs/automation/troubleshooting
+   */
+  trace?: {
+    /**
+     * The number of automation traces tha are stored for this automation.
+     * https://www.home-assistant.io/docs/automation/yaml/#number-of-debug-traces-stored
+     */
+    stored_traces?: PositiveInteger;
+  };
+
+  /**
    * Variables that will be available inside your templates and conditions.
    * https://www.home-assistant.io/docs/automation/#automation-basics
    */
@@ -96,6 +108,12 @@ export interface AutomationItem extends BaseItem {
    * https://www.home-assistant.io/docs/automation/#automation-basics
    */
   trigger: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * Available in trigger templates with the difference that only limited templates can be used to pass a value to the trigger variable.
+   * https://www.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  trigger_variables?: Data;
 
   /**
    * The action(s) which will be performed when a rule is triggered and all conditions are met. For example, it can turn a light on, set the temperature on your thermostat or activate a scene.

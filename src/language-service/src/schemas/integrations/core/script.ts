@@ -2,7 +2,7 @@
  * Group integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/__init__.py
  */
-import { Data, IncludeNamed, IncludeList } from "../../types";
+import { Data, IncludeNamed, IncludeList, PositiveInteger } from "../../types";
 import { Action } from "../actions";
 import { Selector } from "../selectors";
 
@@ -71,6 +71,17 @@ interface BaseItem {
     | "error"
     | "fatal"
     | "critical";
+
+  /**
+   * Controls tracing settings of this script.
+   * https://www.home-assistant.io/docs/automation/troubleshooting
+   */
+  trace?: {
+    /**
+     * The number of automation traces tha are stored for this script.
+     */
+    stored_traces?: PositiveInteger;
+  };
 
   /**
    * Variables that will be available inside your templates.

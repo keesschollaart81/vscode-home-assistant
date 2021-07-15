@@ -253,6 +253,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   temperature_template: Template;
 
   /**
+   * An ID that uniquely identifies this weather entity. Set this to a unique value to allow customization through the UI.
+   * https://www.home-assistant.io/integrations/weather.template#unique_id
+   */
+  unique_id?: string;
+
+  /**
    * The current visibility.
    * https://www.home-assistant.io/integrations/weather.template#visibility_template
    */
