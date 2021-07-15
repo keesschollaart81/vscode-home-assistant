@@ -61,9 +61,15 @@ export class VsCodeFileAccessor implements FileAccessor {
 
     try {
       fs.readdirSync(subFolder).forEach((file) => {
-        filelist = fs.statSync(path.join(subFolder, file)).isDirectory()
-          ? this.getFilesInFolder(path.join(subFolder, file), filelist)
-          : filelist.concat(path.join(subFolder, file));
+        // ignore dot files
+        if (file.charAt(0) === ".") {
+          return;
+        }
+        filelist =
+          fs.statSync(path.join(subFolder, file)).isDirectory() &&
+          !file.startsWith(".")
+            ? this.getFilesInFolder(path.join(subFolder, file), filelist)
+            : filelist.concat(path.join(subFolder, file));
       });
     } catch (err) {
       console.log(`Cannot find the files in folder ${subFolder}`);
