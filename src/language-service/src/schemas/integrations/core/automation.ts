@@ -110,6 +110,12 @@ export interface AutomationItem extends BaseItem {
   trigger: Trigger | Trigger[] | IncludeList;
 
   /**
+   * Available in trigger templates with the difference that only limited templates can be used to pass a value to the trigger variable.
+   * https://www.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  trigger_variables?: Data;
+
+  /**
    * The action(s) which will be performed when a rule is triggered and all conditions are met. For example, it can turn a light on, set the temperature on your thermostat or activate a scene.
    * https://www.home-assistant.io/docs/automation/#automation-basics
    */
