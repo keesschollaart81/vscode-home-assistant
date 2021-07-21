@@ -234,6 +234,12 @@ export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
   command_template?: Template;
 
   /**
+   * The MQTT topic to publish commands to change the alarm state.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#command_topic
+   */
+   command_topic?: string;
+
+  /**
    * Information about the device this sensor is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#device
    */
