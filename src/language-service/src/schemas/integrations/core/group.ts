@@ -54,4 +54,10 @@ export interface LightPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/light.group/#name
    */
   name?: string;
+
+  /**
+   * An ID that uniquely identifies this light group. If two lights have the same unique ID, Home Assistant will raise an error.
+   * https://www.home-assistant.io/integrations/light.group/#unique_id
+   */
+  unique_id?: string;
 }
