@@ -846,6 +846,18 @@ interface Light {
   color_temperature_state_address?: GroupAddresses;
 
   /**
+   * KNX group address for setting the hue of the light color in degrees. DPT 5.003
+   * https://www.home-assistant.io/integrations/knx#hue_address
+   */
+  hue_address?: GroupAddresses;
+
+  /**
+   * KNX group address for retrieving the hue of the light color in degrees. DPT 5.003
+   * https://www.home-assistant.io/integrations/knx#hue_state_address
+   */
+  hue_state_address?: GroupAddresses;
+
+  /**
    * Used when the actuator only supports individual group addresses for colors. When address is specified for all 3 (or 4) individual colors the root address key can be omitted.
    * https://www.home-assistant.io/integrations/knx#individual_colors
    */
@@ -910,6 +922,18 @@ interface Light {
    * https://www.home-assistant.io/integrations/knx#rgbw_state_address
    */
   rgbw_state_address?: GroupAddresses;
+
+  /**
+   * KNX group address for setting the saturation of the light color in percent. DPT 5.001
+   * https://www.home-assistant.io/integrations/knx#saturation_address
+   */
+  saturation_address?: GroupAddresses;
+
+  /**
+   * KNX group address for retrieving the saturation of the light color in percent. DPT 5.001
+   * https://www.home-assistant.io/integrations/knx#saturation_state_address
+   */
+  saturation_state_address?: GroupAddresses;
 
   /**
    * KNX group address for retrieving the switch state of the light. DPT 1.001
