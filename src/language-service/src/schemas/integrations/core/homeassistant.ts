@@ -1,13 +1,14 @@
 import { ConfigurationRoot } from "../../configuration";
 
 import {
+  Currency,
   Deprecated,
   DeviceClasses,
   IncludeNamed,
   Integer,
+  TemperatureUnit,
   TimeZone,
   UnitSystem,
-  TemperatureUnit,
 } from "../../types";
 
 export type Domain = "group";
@@ -26,6 +27,12 @@ export interface Schema {
    * https://www.home-assistant.io/docs/configuration/basic/#allowlist_external_urls
    */
   allowlist_external_urls?: string[];
+
+  /**
+   * Set the default currency for Home Assistant to use.
+   * https://www.home-assistant.io/docs/configuration/basic/#currency
+   */
+  currency?: Currency;
 
   /**
    * Customize entities.
