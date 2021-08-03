@@ -35,6 +35,7 @@ export * as PictureGlance from "./picture_glance";
 export * as PlantStatus from "./plant_status";
 export * as Sensor from "./sensor";
 export * as ShoppingList from "./shopping_list";
+export * as StatisticsGraph from "./statistics_graph";
 export * as Thermostat from "./thermostat";
 export * as VerticalStack from "./vertical_stack";
 export * as WeatherForecast from "./weather_forecast";
