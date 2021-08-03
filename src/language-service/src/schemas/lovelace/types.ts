@@ -42,6 +42,7 @@ export type Card =
   | cards.PlantStatus.Schema
   | cards.Sensor.Schema
   | cards.ShoppingList.Schema
+  | cards.StatisticsGraph.Schema
   | cards.Thermostat.Schema
   | cards.VerticalStack.Schema
   | cards.WeatherForecast.Schema;
