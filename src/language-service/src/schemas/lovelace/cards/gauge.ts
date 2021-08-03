@@ -40,6 +40,12 @@ export interface Schema {
   name?: string;
 
   /**
+   * Show the gauge as a needle gauge.
+   * https://www.home-assistant.io/lovelace/gauge/#needle
+   */
+  needle?: boolean;
+
+  /**
    * Allows setting of colors for different numbers.
    * https://www.home-assistant.io/lovelace/gauge/#severity
    */
