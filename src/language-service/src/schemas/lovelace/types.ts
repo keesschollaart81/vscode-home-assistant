@@ -10,6 +10,15 @@ export type Card =
   | cards.Calendar.Schema
   | cards.Conditional.Schema
   | cards.Custom.Schema
+  | cards.EnergyCarbonConsumedGauge.Schema
+  | cards.EnergyDateSelection.Schema
+  | cards.EnergyDevicesGraph.Schema
+  | cards.EnergyDistribution.Schema
+  | cards.EnergyGridNeutralityGauge.Schema
+  | cards.EnergySolarConsumedGauge.Schema
+  | cards.EnergySolarGraph.Schema
+  | cards.EnergySourcesTable.Schema
+  | cards.EnergyUsageGraph.Schema
   | cards.Entities.Schema
   | cards.Entity.Schema
   | cards.EntityButton.Schema
