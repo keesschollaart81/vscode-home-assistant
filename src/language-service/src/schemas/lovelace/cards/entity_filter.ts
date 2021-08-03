@@ -6,7 +6,7 @@
  *  - https://github.com/home-assistant/frontend/blob/dev/src/data/lovelace.ts
  */
 import { Entity as EntityString } from "../../types";
-import { Card, EntityConfig } from "../types";
+import { Card, EntityConfig, ViewLayout } from "../types";
 
 type Entity = EntityString | EntityFilterEntityConfig;
 type StateFilter = StateFilterConfig | string;
@@ -41,6 +41,11 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/entity-filter/#state_filter
    */
   state_filter: StateFilter[];
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }
 
 interface EntityFilterEntityConfig extends EntityConfig {
