@@ -103,3 +103,14 @@ export interface Badge {
   type?: string;
   [key: string]: any;
 }
+
+/**
+ * @TJS-additionalProperties true
+ */
+export interface ViewLayout {
+  /**
+   * Defines the position of the card in an sidebar view.
+   * https://www.home-assistant.io/lovelace/sidebar/#view_layoutposition
+   */
+  position?: "main" | "sidebar";
+}

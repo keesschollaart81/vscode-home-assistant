@@ -7,6 +7,7 @@
  */
 import { CameraEntity } from "../../types";
 import { Element } from "../elements";
+import { ViewLayout } from "../types";
 
 export interface Schema {
   /**
@@ -68,4 +69,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/picture-elements/#title
    */
   title?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

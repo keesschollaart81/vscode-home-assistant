@@ -6,6 +6,7 @@
  *  - https://github.com/home-assistant/frontend/blob/dev/src/data/lovelace.ts
  */
 import { Entity } from "../../types";
+import { ViewLayout } from "../types";
 
 export interface Schema {
   /**
@@ -37,4 +38,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/calendar/#title
    */
   title?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

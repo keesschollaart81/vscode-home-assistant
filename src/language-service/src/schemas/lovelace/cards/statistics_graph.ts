@@ -7,7 +7,7 @@
  */
 
 import { Entity as EntityString, PositiveInteger } from "../../types";
-import { EntityConfig } from "../types";
+import { EntityConfig, ViewLayout } from "../types";
 
 type Entity = EntityString | EntityConfig;
 type StateType = "max" | "mean" | "min" | "sum";
@@ -50,4 +50,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/statistics-graph/#title
    */
   title?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

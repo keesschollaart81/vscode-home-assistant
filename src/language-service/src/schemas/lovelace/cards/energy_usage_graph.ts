@@ -1,3 +1,5 @@
+import { ViewLayout } from "../types";
+
 /**
  * Lovelace Energy usage graph Card
  * Sources:
@@ -14,4 +16,9 @@ export interface Schema {
    * The card title.
    */
   title?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

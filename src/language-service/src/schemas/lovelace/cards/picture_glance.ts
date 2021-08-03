@@ -7,7 +7,7 @@
  */
 
 import { Action } from "../actions";
-import { EntityConfig } from "../types";
+import { EntityConfig, ViewLayout } from "../types";
 import { CameraEntity, Entity as EntityString } from "../../types";
 
 type Entity = EntityString | PictureGlanceEntityConfig;
@@ -102,6 +102,11 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/picture-glance/#title
    */
   title?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }
 
 interface PictureGlanceEntityConfig extends EntityConfig {
