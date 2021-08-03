@@ -10,6 +10,15 @@ export type Card =
   | cards.Calendar.Schema
   | cards.Conditional.Schema
   | cards.Custom.Schema
+  | cards.EnergyCarbonConsumedGauge.Schema
+  | cards.EnergyDateSelection.Schema
+  | cards.EnergyDevicesGraph.Schema
+  | cards.EnergyDistribution.Schema
+  | cards.EnergyGridNeutralityGauge.Schema
+  | cards.EnergySolarConsumedGauge.Schema
+  | cards.EnergySolarGraph.Schema
+  | cards.EnergySourcesTable.Schema
+  | cards.EnergyUsageGraph.Schema
   | cards.Entities.Schema
   | cards.Entity.Schema
   | cards.EntityButton.Schema
@@ -33,6 +42,7 @@ export type Card =
   | cards.PlantStatus.Schema
   | cards.Sensor.Schema
   | cards.ShoppingList.Schema
+  | cards.StatisticsGraph.Schema
   | cards.Thermostat.Schema
   | cards.VerticalStack.Schema
   | cards.WeatherForecast.Schema;
@@ -92,4 +102,15 @@ export interface Badge {
    */
   type?: string;
   [key: string]: any;
+}
+
+/**
+ * @TJS-additionalProperties true
+ */
+export interface ViewLayout {
+  /**
+   * Defines the position of the card in an sidebar view.
+   * https://www.home-assistant.io/lovelace/sidebar/#view_layoutposition
+   */
+  position?: "main" | "sidebar";
 }

@@ -1,3 +1,5 @@
+import { ViewLayout } from "../types";
+
 /**
  * Lovelace Webpage/iframe Card
  * Sources:
@@ -29,4 +31,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/iframe/#url
    */
   url: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

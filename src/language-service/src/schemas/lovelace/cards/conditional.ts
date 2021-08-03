@@ -5,7 +5,7 @@
  *  - https://github.com/home-assistant/frontend/blob/dev/src/panels/lovelace/cards/types.ts
  *  - https://github.com/home-assistant/frontend/blob/dev/src/data/lovelace.ts
  */
-import { Card, Condition } from "../types";
+import { Card, Condition, ViewLayout } from "../types";
 
 export interface Schema {
   /**
@@ -25,4 +25,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/conditional/#conditions
    */
   conditions: Condition[];
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

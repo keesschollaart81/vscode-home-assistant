@@ -10,7 +10,7 @@ import {
   GeoLocationEntity as GeoLocationEntityString,
   PositiveInteger,
 } from "../../types";
-import { EntityConfig } from "../types";
+import { EntityConfig, ViewLayout } from "../types";
 
 type Entity = EntityString | EntityConfig;
 type GeoLocationEntity = GeoLocationEntityString | "all";
@@ -63,4 +63,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/map/#hours_to_show
    */
   hours_to_show?: PositiveInteger;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

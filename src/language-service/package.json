@@ -1,6 +1,6 @@
 {
   "name": "home-assistant-language-service",
-  "version": "1.20.0",
+  "version": "1.21.0",
   "description": "Home Assistant Language Service",
   "source": "src/haLanguageService.ts",
   "main": "dist/haLanguageService.js",
@@ -38,10 +38,10 @@
     "schema": "ts-node src/schemas/generateSchemas.ts"
   },
   "devDependencies": {
-    "@types/mocha": "8.2.3",
-    "@types/node": "16.3.2",
+    "@types/mocha": "9.0.0",
+    "@types/node": "16.4.10",
     "@types/vscode": "1.48.0",
-    "@types/ws": "7.4.6",
+    "@types/ws": "7.4.7",
     "@types/yaml": "1.9.7",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
@@ -70,7 +70,7 @@
     "vscode-json-languageservice": "3.9.1",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-uri": "3.0.2",
-    "ws": "7.5.3",
+    "ws": "8.0.0",
     "yaml": "1.10.2",
     "yaml-language-server": "0.12.0"
   },

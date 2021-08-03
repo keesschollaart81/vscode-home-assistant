@@ -6,6 +6,7 @@
  *  - https://github.com/home-assistant/frontend/blob/dev/src/data/lovelace.ts
  */
 import { Entity, PositiveInteger } from "../../types";
+import { ViewLayout } from "../types";
 
 export interface Schema {
   /**
@@ -42,4 +43,9 @@ export interface Schema {
    * Set to any theme within themes.yaml.
    */
   theme?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

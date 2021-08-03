@@ -7,6 +7,7 @@
  */
 
 import { PositiveInteger, SensorEntity } from "../../types";
+import { ViewLayout } from "../types";
 
 export interface Schema {
   /**
@@ -46,6 +47,24 @@ export interface Schema {
   icon?: string;
 
   /**
+   * Limits of the graph Y-axis.
+   * https://www.home-assistant.io/lovelace/sensor/#limits
+   */
+  limits?: {
+    /**
+     * Minimum value of the graph Y-axis.
+     * https://www.home-assistant.io/lovelace/sensor/#min
+     */
+    min?: number;
+
+    /**
+     * Maximum value of the graph Y-axis.
+     * https://www.home-assistant.io/lovelace/sensor/#max
+     */
+    max?: number;
+  };
+
+  /**
    * The card name.
    * https://www.home-assistant.io/lovelace/sensor/#name
    */
@@ -62,4 +81,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/sensor/#unit
    */
   unit?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

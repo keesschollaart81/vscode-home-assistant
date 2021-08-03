@@ -7,6 +7,7 @@
  */
 
 import { Entity } from "../../types";
+import { ViewLayout } from "../types";
 
 export interface Schema {
   /**
@@ -40,6 +41,12 @@ export interface Schema {
   name?: string;
 
   /**
+   * Show the gauge as a needle gauge.
+   * https://www.home-assistant.io/lovelace/gauge/#needle
+   */
+  needle?: boolean;
+
+  /**
    * Allows setting of colors for different numbers.
    * https://www.home-assistant.io/lovelace/gauge/#severity
    */
@@ -56,6 +63,11 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/gauge/#unit
    */
   unit?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }
 
 interface Severity {

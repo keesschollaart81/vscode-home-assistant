@@ -7,7 +7,7 @@
  */
 
 import { Action } from "../actions";
-import { EntityConfig } from "../types";
+import { EntityConfig, ViewLayout } from "../types";
 import { Entity as EntityString, PositiveInteger } from "../../types";
 
 type Entity = EntityString | GlanceEntityConfig;
@@ -66,6 +66,11 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/glance/#theme
    */
   title?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }
 
 interface GlanceEntityConfig extends EntityConfig {

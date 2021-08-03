@@ -6,6 +6,7 @@
  *  - https://github.com/home-assistant/frontend/blob/dev/src/data/lovelace.ts
  */
 import { AlarmControlPanelEntity } from "../../types";
+import { ViewLayout } from "../types";
 
 type States = "arm_away" | "arm_custom_bypass" | "arm_home" | "arm_night";
 
@@ -39,4 +40,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/alarm-panel/#theme
    */
   theme?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

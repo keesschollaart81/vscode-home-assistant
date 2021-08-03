@@ -1,9 +1,11 @@
-import { Entity, IncludeList } from "../types";
+import { Deprecated, Entity, IncludeList } from "../types";
 import { Badge, Card } from "./types";
 
 type Badges = Badge | Entity;
 
-export interface View {
+export type View = MasonryView | PanelView | SidebarView | CustomView;
+
+interface BaseView {
   /**
    * Style the background using CSS.
    * https://www.home-assistant.io/lovelace/dashboards-and-views/#background
@@ -29,12 +31,6 @@ export interface View {
   icon?: string;
 
   /**
-   * Setting panel true sets the view to panel mode. In this mode the first card is rendered full-width, other cards in the view will not be rendered.
-   * https://www.home-assistant.io/lovelace/dashboards-and-views/#panel
-   */
-  panel?: boolean;
-
-  /**
    * You can link to one view from a card in another view when using cards that support navigation (navigation_path). The string supplied here will be appended to the string /lovelace/ to create the path to the view.
    * https://www.home-assistant.io/lovelace/dashboards-and-views/#path
    */
@@ -57,4 +53,50 @@ export interface View {
    * https://www.home-assistant.io/lovelace/dashboards-and-views/#visible
    */
   visible?: boolean | any;
+}
+
+export interface MasonryView extends BaseView {
+  /**
+   * The masonry view is the default view type. It sorts cards in columns based on their size.
+   * https://www.home-assistant.io/lovelace/masonry/
+   */
+  type?: "masonry";
+
+  /**
+   * List of entities IDs or badge objects to display as badges. Note that badges do not show when view is in panel mode.
+   * https://www.home-assistant.io/lovelace/dashboards-and-views/#badges
+   */
+  badges?: Badges[];
+
+  /**
+   * Deprecated, used "type: panel" instead.
+   * https://www.home-assistant.io/lovelace/dashboards-and-views/#panel
+   */
+  panel?: Deprecated;
+}
+
+export interface PanelView extends BaseView {
+  /**
+   * In this view the first card is rendered full-width, other cards in the view will not be rendered.
+   * https://www.home-assistant.io/lovelace/panel/
+   */
+  type: "panel";
+}
+
+export interface SidebarView extends BaseView {
+  /**
+   * The sidebar view has 2 columns, a wide one and a smaller one on the right.
+   * https://rc.home-assistant.io/lovelace/sidebar/
+   */
+  type: "sidebar";
+}
+
+/**
+ * @TJS-additionalProperties true
+ */
+export interface CustomView extends BaseView {
+  /**
+   * @TJS-pattern custom:(.*)$
+   */
+  type: string;
 }

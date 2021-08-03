@@ -7,7 +7,7 @@
  */
 
 import { PositiveInteger } from "../../types";
-import { Card } from "../types";
+import { Card, ViewLayout } from "../types";
 
 export interface Schema {
   /**
@@ -40,4 +40,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/grid/#title
    */
   title?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }

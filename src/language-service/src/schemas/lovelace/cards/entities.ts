@@ -8,6 +8,7 @@
 import { Entity as EntityString } from "../../types";
 import { HeaderFooter } from "../headers_footers";
 import { Row } from "../rows";
+import { ViewLayout } from "../types";
 
 type Entity = EntityString | Row;
 
@@ -65,4 +66,9 @@ export interface Schema {
    * https://www.home-assistant.io/lovelace/entities/#title
    */
   title?: string;
+
+  /**
+   * Layout options for the view this card is in
+   */
+  view_layout?: ViewLayout;
 }
