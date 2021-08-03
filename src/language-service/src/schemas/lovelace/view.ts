@@ -3,7 +3,7 @@ import { Badge, Card } from "./types";
 
 type Badges = Badge | Entity;
 
-export type View = MasonryView | PanelView | SidebarView;
+export type View = MasonryView | PanelView | SidebarView | CustomView;
 
 interface BaseView {
   /**
@@ -89,4 +89,14 @@ export interface SidebarView extends BaseView {
    * https://rc.home-assistant.io/lovelace/sidebar/
    */
   type: "sidebar";
+}
+
+/**
+ * @TJS-additionalProperties true
+ */
+export interface CustomView extends BaseView {
+  /**
+   * @TJS-pattern custom:(.*)$
+   */
+  type: string;
 }
