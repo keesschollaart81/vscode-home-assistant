@@ -46,6 +46,24 @@ export interface Schema {
   icon?: string;
 
   /**
+   * Limits of the graph Y-axis.
+   * https://www.home-assistant.io/lovelace/sensor/#limits
+   */
+  limits?: {
+    /**
+     * Minimum value of the graph Y-axis.
+     * https://www.home-assistant.io/lovelace/sensor/#min
+     */
+    min?: number;
+
+    /**
+     * Maximum value of the graph Y-axis.
+     * https://www.home-assistant.io/lovelace/sensor/#max
+     */
+    max?: number;
+  };
+
+  /**
    * The card name.
    * https://www.home-assistant.io/lovelace/sensor/#name
    */
