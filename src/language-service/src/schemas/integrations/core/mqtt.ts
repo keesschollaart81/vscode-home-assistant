@@ -936,6 +936,12 @@ export interface ClimatePlatformSchema extends PlatformSchema {
   min_temp?: number;
 
   /**
+   * A template to render the value sent to the mode_command_topic with.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#mode_command_template
+   */
+  mode_command_template?: Template;
+
+  /**
    * The MQTT topic to publish commands to change the HVAC operation mode.
    * https://www.home-assistant.io/integrations/climate.mqtt/#mode_command_topic
    */
