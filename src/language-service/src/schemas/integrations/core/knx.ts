@@ -9,6 +9,7 @@ import {
   Entity,
   Integer,
   Port,
+  StateClassesSensor,
 } from "../../types";
 
 /**
@@ -1118,6 +1119,12 @@ interface Sensor {
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address: GroupAddresses;
+
+  /**
+   * The State Class of the sensor.
+   * https://www.home-assistant.io/integrations/knx#state_class
+   */
+  state_class?: StateClassesSensor;
 
   /**
    * Actively read the value from the bus.
