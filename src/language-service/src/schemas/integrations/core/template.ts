@@ -625,6 +625,12 @@ interface LightItem {
   effect_list_template?: Template;
 
   /**
+   * Defines a template to get the currently selected effect.
+   * https://www.home-assistant.io/integrations/light.template#effect_template
+   */
+  effect_template?: Template;
+
+  /**
    * Defines a template for the entity picture of the light.
    * https://www.home-assistant.io/integrations/light.template#entity_picture_template
    */
