@@ -80,17 +80,30 @@ export type DeviceClassesMediaPlayer = "tv" | "speaker" | "receiver";
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
  */
 export type DeviceClassesSensor =
+  | "aqi"
   | "battery"
+  | "carbon_dioxide"
+  | "carbon_monoxide"
   | "current"
   | "energy"
   | "humidity"
   | "illuminance"
-  | "power"
+  | "monetary"
+  | "nitrogen_dioxide"
+  | "nitrogen_monoxide"
+  | "nitrous_oxide"
+  | "ozone"
+  | "pm1"
+  | "pm10"
+  | "pm25"
   | "power_factor"
+  | "power"
   | "pressure"
   | "signal_strength"
+  | "sulphur_dioxide"
   | "temperature"
   | "timestamp"
+  | "volatile_organic_compounds"
   | "voltage";
 
 /**
