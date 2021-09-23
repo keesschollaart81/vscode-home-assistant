@@ -14,6 +14,7 @@ export type Card =
   | cards.EnergyDateSelection.Schema
   | cards.EnergyDevicesGraph.Schema
   | cards.EnergyDistribution.Schema
+  | cards.EnergyGasGraph.Schema
   | cards.EnergyGridNeutralityGauge.Schema
   | cards.EnergySolarConsumedGauge.Schema
   | cards.EnergySolarGraph.Schema
