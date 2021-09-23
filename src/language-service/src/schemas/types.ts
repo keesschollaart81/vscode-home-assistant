@@ -53,6 +53,7 @@ export type DeviceClassesBinarySensor =
   | "safety"
   | "smoke"
   | "sound"
+  | "update"
   | "vibration"
   | "window";
 
@@ -85,7 +86,9 @@ export type DeviceClassesSensor =
   | "carbon_dioxide"
   | "carbon_monoxide"
   | "current"
+  | "date"
   | "energy"
+  | "gas"
   | "humidity"
   | "illuminance"
   | "monetary"
