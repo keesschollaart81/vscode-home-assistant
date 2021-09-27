@@ -346,7 +346,7 @@
   },
   "dependencies": {
     "axios": "^0.21.4",
-    "bufferutil": "^4.0.3",
+    "bufferutil": "^4.0.4",
     "home-assistant-js-websocket": "^5.11.1",
     "utf-8-validate": "^5.0.5",
     "vscode-extension-telemetry": "0.4.1",
