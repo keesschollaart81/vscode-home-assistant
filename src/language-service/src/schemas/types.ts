@@ -112,7 +112,7 @@ export type DeviceClassesSensor =
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
  */
- export type StateClassesSensor = 
+export type StateClassesSensor = 
  | "measurement"
  | "total"
  | "total_increasing";
