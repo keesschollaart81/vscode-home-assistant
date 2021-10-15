@@ -306,7 +306,7 @@ interface AlarmControlPanelItem {
    * Format for the code used to arm/disarm the alarm.
    * https://www.home-assistant.io/integrations/alarm_control_panel.template/#code_format
    */
-  code_format?: 'no_code' | 'number' | 'text';
+  code_format?: "no_code" | "number" | "text";
 
   /**
    * Defines an action to run when the alarm is disarmed.
