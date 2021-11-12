@@ -53,6 +53,7 @@ export type DeviceClassesBinarySensor =
   | "safety"
   | "smoke"
   | "sound"
+  | "update"
   | "vibration"
   | "window";
 
@@ -85,7 +86,9 @@ export type DeviceClassesSensor =
   | "carbon_dioxide"
   | "carbon_monoxide"
   | "current"
+  | "date"
   | "energy"
+  | "gas"
   | "humidity"
   | "illuminance"
   | "monetary"
@@ -109,7 +112,7 @@ export type DeviceClassesSensor =
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
  */
-export type StateClassesSensor = "measurement";
+export type StateClassesSensor = "measurement" | "total" | "total_increasing";
 
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/switch/__init__.py

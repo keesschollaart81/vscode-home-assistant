@@ -303,6 +303,12 @@ interface AlarmControlPanelItem {
   code_arm_required?: boolean;
 
   /**
+   * Format for the code used to arm/disarm the alarm.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.template/#code_format
+   */
+  code_format?: "no_code" | "number" | "text";
+
+  /**
    * Defines an action to run when the alarm is disarmed.
    * https://www.home-assistant.io/integrations/alarm_control_panel.template/#disarm
    */
@@ -623,6 +629,12 @@ interface LightItem {
    * https://www.home-assistant.io/integrations/light.template#effect_list_template
    */
   effect_list_template?: Template;
+
+  /**
+   * Defines a template to get the currently selected effect.
+   * https://www.home-assistant.io/integrations/light.template#effect_template
+   */
+  effect_template?: Template;
 
   /**
    * Defines a template for the entity picture of the light.

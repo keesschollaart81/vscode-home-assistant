@@ -11,6 +11,7 @@ import {
   Integer,
   Port,
   PositiveInteger,
+  StateClassesSensor,
   Template,
 } from "../../types";
 import { PlatformSchema } from "../platform";
@@ -934,6 +935,12 @@ export interface ClimatePlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/climate.mqtt/#min_temp
    */
   min_temp?: number;
+
+  /**
+   * A template to render the value sent to the mode_command_topic with.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#mode_command_template
+   */
+  mode_command_template?: Template;
 
   /**
    * The MQTT topic to publish commands to change the HVAC operation mode.
@@ -3317,6 +3324,12 @@ export interface SensorPlatformSchema extends PlatformSchema {
     name?: string;
 
     /**
+     * Suggest an area if the device isn’t in one yet.
+     * https://www.home-assistant.io/integrations/sensor.mqtt#suggested_area
+     */
+    suggested_area?: string;
+
+    /**
      * The firmware version of the device.
      * https://www.home-assistant.io/integrations/sensor.mqtt#sw_version
      */
@@ -3360,6 +3373,18 @@ export interface SensorPlatformSchema extends PlatformSchema {
   json_attributes_topic?: string;
 
   /**
+   * The MQTT topic subscribed to receive timestamps for when an accumulating sensor such as an energy meter was reset. If the sensor never resets, set last_reset_topic to same as state_topic and set the last_reset_value_template to a constant valid timstamp, for example UNIX epoch 0: 1970-01-01T00:00:00+00:00.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#last_reset_topic
+   */
+  last_reset_topic?: string;
+
+  /**
+   * Defines a template to extract the last_reset. Available variables: entity_id. The entity_id can be used to reference the entity’s attributes.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#last_reset_value_template
+   */
+  last_reset_value_template?: string;
+
+  /**
    * The name of the MQTT sensor.
    * https://www.home-assistant.io/integrations/sensor.mqtt#name
    */
@@ -3382,6 +3407,12 @@ export interface SensorPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/sensor.mqtt#qos
    */
   qos?: QOS;
+
+  /**
+   * The state_class of the sensor.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#state_class
+   */
+  state_class?: StateClassesSensor;
 
   /**
    * The MQTT topic subscribed to receive sensor values.
