@@ -1055,9 +1055,9 @@ interface NumberEntity {
 
   /**
    * Any supported type of KNX Sensor representing a numeric value (e.g., "percent" or "temperature")
-   * https://www.home-assistant.io/integrations/knx#type
+   * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type: ValueType | "binary" | "time" | "date" | "datetime";
+  type: ValueType;
 }
 
 interface Scene {
@@ -1175,7 +1175,7 @@ interface Sensor {
    * A type from the value types.
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type: ValueType | "binary" | "time" | "date" | "datetime";
+  type: ValueType;
 }
 
 interface Switch {
