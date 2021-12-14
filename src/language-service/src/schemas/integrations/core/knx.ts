@@ -200,10 +200,10 @@ export interface Schema {
   cover?: Cover[];
 
   /**
-   * Defines a list of patterns for filtering KNX group addresses. Telegrams with destination addresses matching this pattern are sent to the Home Assistant event bus as knx_event.
-   * https://www.home-assistant.io/integrations/knx#event_filter
+   * Defines lists of patterns for filtering KNX group addresses. Telegrams with destination addresses matching this pattern are sent to the Home Assistant event bus as knx_event.
+   * https://www.home-assistant.io/integrations/knx/#events
    */
-  event_filter?: string[];
+  event?: Event[];
 
   /**
    * KNX integration is able to expose entity states or attributes to KNX bus.
@@ -681,6 +681,20 @@ interface Cover {
    * @minimum 0
    */
   travelling_time_up?: number;
+}
+
+interface Event {
+  /**
+   * KNX group address to fire events.
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  address: GroupAddresses;
+
+  /**
+   * A type from the value types. The decoded value will be written to the event data `value` key.
+   * https://www.home-assistant.io/integrations/knx/#value-types
+   */
+  type?: ValueType;
 }
 
 interface ExposeTime {
