@@ -182,6 +182,12 @@ export interface Schema {
   binary_sensor?: BinarySensor[];
 
   /**
+   * The KNX binary sensor platform allows you to monitor KNX binary sensors.
+   * https://www.home-assistant.io/integrations/knx/#button
+   */
+  button?: Button[];
+
+  /**
    * The KNX climate platform is used as an interface to KNX thermostats and room controllers.
    * https://www.home-assistant.io/integrations/knx#binary-sensor
    */
@@ -377,6 +383,44 @@ interface BinarySensor {
    * DEPRECATED
    */
   significant_bit?: Deprecated;
+}
+
+interface Button {
+  /**
+   * Group address to send to.
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddress;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * The raw payload to be sent. Defaults to `1`
+   * https://www.home-assistant.io/integrations/knx#payload
+   */
+  payload?: Integer;
+
+  /**
+   * The length of the payload expected for the DPT. Use `0` for DPT 1, 2 or 3. Defaults to `0`. When `payload_length` is used `value` shall not be set.
+   * https://www.home-assistant.io/integrations/knx#payload_length
+   */
+  payload_length?: Integer;
+
+  /**
+   * The value to be sent.
+   * https://www.home-assistant.io/integrations/knx#payload
+   */
+  value?: Integer;
+
+  /**
+   * A type from the value types to decode the value. Requires `value` to be set.
+   * https://www.home-assistant.io/integrations/knx/#value-types
+   */
+  type?: ValueType;
 }
 
 interface Climate {
