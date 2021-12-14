@@ -467,6 +467,12 @@ interface Climate {
   controller_status_state_address?: GroupAddresses;
 
   /**
+   * Overrides the default controller mode. Any Home Assistant hvac_mode can be configured. This can, for example, be set to “cool” for cooling-only devices.
+   * https://www.home-assistant.io/integrations/knx#climate
+   */
+  default_controller_mode_address?: "off" | "auto" | "heat" | "cool" | "heat_cool" | "fan_only" | "dry";
+
+  /**
    * KNX address for switching between heat/cool mode. DPT 1.100
    * https://www.home-assistant.io/integrations/knx#heat_cool_address
    */
