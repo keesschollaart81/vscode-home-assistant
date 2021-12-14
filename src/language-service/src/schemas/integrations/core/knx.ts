@@ -304,21 +304,6 @@ export interface Schema {
    * https://www.home-assistant.io/integrations/knx#weather
    */
   weather?: Weather[];
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.4.0
-   */
-  config_file?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.4.0
-   */
-  fire_event?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.4.0
-   */
-  fire_event_filter?: Deprecated;
 }
 
 interface BinarySensor {
