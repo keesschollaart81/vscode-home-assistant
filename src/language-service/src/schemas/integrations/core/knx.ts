@@ -205,7 +205,6 @@ export interface Schema {
    */
   event?: Event[];
 
-
   /**
    * DEPRECATED as of Home Assistant 2021.12.0
    */
@@ -470,7 +469,14 @@ interface Climate {
    * Overrides the default controller mode. Any Home Assistant hvac_mode can be configured. This can, for example, be set to “cool” for cooling-only devices.
    * https://www.home-assistant.io/integrations/knx#climate
    */
-  default_controller_mode_address?: "off" | "auto" | "heat" | "cool" | "heat_cool" | "fan_only" | "dry";
+  default_controller_mode?:
+    | "off"
+    | "auto"
+    | "heat"
+    | "cool"
+    | "heat_cool"
+    | "fan_only"
+    | "dry";
 
   /**
    * KNX address for switching between heat/cool mode. DPT 1.100
