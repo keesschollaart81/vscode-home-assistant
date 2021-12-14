@@ -1025,15 +1025,21 @@ interface NumberEntity {
 
   /**
    * Maximum value that can be sent. Defaults to the `type` DPT maximum value.
-   * https://www.home-assistant.io/integrations/knx#max
+   * https://www.home-assistant.io/integrations/knx#number
    */
   max?: number;
 
   /**
    * Minimum value that can be sent. Defaults to the `type` DPT minimum value.
-   * https://www.home-assistant.io/integrations/knx#min
+   * https://www.home-assistant.io/integrations/knx#number
    */
   min?: number;
+
+  /**
+   * Specifies the mode used in the UI.
+   * https://www.home-assistant.io/integrations/knx#number
+   */
+  mode?: "auto" | "box" | "slider";
 
   /**
    * A name for this device used within Home Assistant.
