@@ -706,7 +706,7 @@ interface ExposeTime {
 
   /**
    * Either time, date or datetime.
-   * https://www.home-assistant.io/integrations/knx#type
+   * https://www.home-assistant.io/integrations/knx/#value-types
    */
   type: "time" | "date" | "datetime";
 }
@@ -738,7 +738,7 @@ interface ExposeSensor {
 
   /**
    * Type of the exposed value.
-   * https://www.home-assistant.io/integrations/knx#type
+   * https://www.home-assistant.io/integrations/knx/#value-types
    */
   type: ValueType | "binary" | "time" | "date" | "datetime";
 }
@@ -1148,7 +1148,7 @@ interface Sensor {
 
   /**
    * A type from the value types.
-   * https://www.home-assistant.io/integrations/knx#type
+   * https://www.home-assistant.io/integrations/knx/#value-types
    */
   type: ValueType | "binary" | "time" | "date" | "datetime";
 }
