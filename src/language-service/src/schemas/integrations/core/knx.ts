@@ -8,7 +8,6 @@ import {
   DeviceClassesCover,
   Entity,
   Integer,
-  Port,
   StateClassesSensor,
 } from "../../types";
 
@@ -22,11 +21,6 @@ type GroupAddress = string;
  * @items.pattern ^(\d{1,2}(\/\d{1,2})?\/\d{1,4}|\d{1,5}|i-.+)$
  */
 type GroupAddresses = string[] | string;
-
-/**
- * @TJS-pattern ^\d{1,2}\/\d{1,2}\/\d{1,3}$
- */
-type IndividualAddress = string;
 
 type ValueType =
   | "1byte_signed"
@@ -188,6 +182,12 @@ export interface Schema {
   binary_sensor?: BinarySensor[];
 
   /**
+   * The KNX binary sensor platform allows you to monitor KNX binary sensors.
+   * https://www.home-assistant.io/integrations/knx/#button
+   */
+  button?: Button[];
+
+  /**
    * The KNX climate platform is used as an interface to KNX thermostats and room controllers.
    * https://www.home-assistant.io/integrations/knx#binary-sensor
    */
@@ -200,10 +200,15 @@ export interface Schema {
   cover?: Cover[];
 
   /**
-   * Defines a list of patterns for filtering KNX group addresses. Telegrams with destination addresses matching this pattern are sent to the Home Assistant event bus as knx_event.
-   * https://www.home-assistant.io/integrations/knx#event_filter
+   * Defines lists of patterns for filtering KNX group addresses. Telegrams with destination addresses matching this pattern are sent to the Home Assistant event bus as knx_event.
+   * https://www.home-assistant.io/integrations/knx/#events
    */
-  event_filter?: string[];
+  event?: Event[];
+
+  /**
+   * DEPRECATED as of Home Assistant 2021.12.0
+   */
+  event_filter?: Deprecated;
 
   /**
    * KNX integration is able to expose entity states or attributes to KNX bus.
@@ -218,10 +223,9 @@ export interface Schema {
   fan?: Fan[];
 
   /**
-   * The KNX individual address (IA) that shall be used for routing or if a tunneling server doesn’t assign an IA at connection.
-   * https://www.home-assistant.io/integrations/knx#individual_address
+   * DEPRECATED as of Home Assistant 2021.12.0
    */
-  individual_address?: IndividualAddress;
+  individual_address?: Deprecated;
 
   /**
    * The KNX light integration is used as an interface to control KNX actuators for lighting applications.
@@ -230,16 +234,14 @@ export interface Schema {
   light?: Light[];
 
   /**
-   * The multicast group to use for automatic interface discovery and routing communication.
-   * https://www.home-assistant.io/integrations/knx#multicast_group
+   * DEPRECATED as of Home Assistant 2021.12.0
    */
-  multicast_group?: string;
+  multicast_group?: Deprecated;
 
   /**
-   * The port for multicast communication.
-   * https://www.home-assistant.io/integrations/knx#multicast_port
+   * DEPRECATED as of Home Assistant 2021.12.0
    */
-  multicast_port?: Port;
+  multicast_port?: Deprecated;
 
   /**
    * The KNX notify platform allows you to send notifications to KNX devices as DPT16 strings.
@@ -254,20 +256,14 @@ export interface Schema {
   number?: NumberEntity[];
 
   /**
-   * Defines the maximum number of telegrams to be sent to the bus per second (range 1-100).
-   * https://www.home-assistant.io/integrations/knx#rate_limit
-   *
-   * @TJS-type integer
-   * @minimum 1
-   * @maximum 100
+   * DEPRECATED as of Home Assistant 2021.12.0
    */
-  rate_limit?: number;
+  rate_limit?: Deprecated;
 
   /**
-   * Explicit connection via KNX/IP routing. This requires multicast communication to work in your environment.
-   * https://www.home-assistant.io/integrations/knx#routing
+   * DEPRECATED as of Home Assistant 2021.12.0
    */
-  routing?: Routing;
+  routing?: Deprecated;
 
   /**
    * The KNX scenes platform allows you to trigger KNX scenes.
@@ -288,10 +284,9 @@ export interface Schema {
   sensor?: Sensor[];
 
   /**
-   * The integration will collect the current state of each configured device from the KNX bus to display it correctly within Home Assistant. Set this option to False to prevent this behavior.
-   * https://www.home-assistant.io/integrations/knx#state_updater
+   * DEPRECATED as of Home Assistant 2021.12.0
    */
-  state_updater?: boolean;
+  state_updater?: Deprecated;
 
   /**
    * The KNX switch platform is used as an interface to switching actuators.
@@ -300,31 +295,15 @@ export interface Schema {
   switch?: Switch[];
 
   /**
-   * Connect to a specific tunneling server or if the auto detection of the KNX/IP device does not work.
-   * https://www.home-assistant.io/integrations/knx#tunneling
+   * DEPRECATED as of Home Assistant 2021.12.0
    */
-  tunneling?: Tunneling;
+  tunneling?: Deprecated;
 
   /**
    * The KNX weather platform is used as an interface to KNX weather stations.
    * https://www.home-assistant.io/integrations/knx#weather
    */
   weather?: Weather[];
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.4.0
-   */
-  config_file?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.4.0
-   */
-  fire_event?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.4.0
-   */
-  fire_event_filter?: Deprecated;
 }
 
 interface BinarySensor {
@@ -390,6 +369,44 @@ interface BinarySensor {
   significant_bit?: Deprecated;
 }
 
+interface Button {
+  /**
+   * Group address to send to.
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddress;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * The raw payload to be sent. Defaults to `1`
+   * https://www.home-assistant.io/integrations/knx#payload
+   */
+  payload?: Integer;
+
+  /**
+   * The length of the payload expected for the DPT. Use `0` for DPT 1, 2 or 3. Defaults to `0`. When `payload_length` is used `value` shall not be set.
+   * https://www.home-assistant.io/integrations/knx#payload_length
+   */
+  payload_length?: Integer;
+
+  /**
+   * The value to be sent.
+   * https://www.home-assistant.io/integrations/knx#payload
+   */
+  value?: Integer;
+
+  /**
+   * A type from the value types to decode the value. Requires `value` to be set.
+   * https://www.home-assistant.io/integrations/knx/#value-types
+   */
+  type?: ValueType;
+}
+
 interface Climate {
   /**
    * KNX address for reading current activity. `0` is idle, `1` is active. DPT 1
@@ -432,6 +449,19 @@ interface Climate {
    * https://www.home-assistant.io/integrations/knx#controller_status_state_address
    */
   controller_status_state_address?: GroupAddresses;
+
+  /**
+   * Overrides the default controller mode. Any Home Assistant hvac_mode can be configured. This can, for example, be set to “cool” for cooling-only devices.
+   * https://www.home-assistant.io/integrations/knx#climate
+   */
+  default_controller_mode?:
+    | "off"
+    | "auto"
+    | "heat"
+    | "cool"
+    | "heat_cool"
+    | "fan_only"
+    | "dry";
 
   /**
    * KNX address for switching between heat/cool mode. DPT 1.100
@@ -683,6 +713,20 @@ interface Cover {
   travelling_time_up?: number;
 }
 
+interface Event {
+  /**
+   * KNX group address to fire events.
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  address: GroupAddresses;
+
+  /**
+   * A type from the value types. The decoded value will be written to the event data `value` key.
+   * https://www.home-assistant.io/integrations/knx/#value-types
+   */
+  type?: ValueType;
+}
+
 interface ExposeTime {
   /**
    * Group address state or attribute updates will be sent to. GroupValueRead requests will be answered.
@@ -692,7 +736,7 @@ interface ExposeTime {
 
   /**
    * Either time, date or datetime.
-   * https://www.home-assistant.io/integrations/knx#type
+   * https://www.home-assistant.io/integrations/knx/#value-types
    */
   type: "time" | "date" | "datetime";
 }
@@ -724,7 +768,7 @@ interface ExposeSensor {
 
   /**
    * Type of the exposed value.
-   * https://www.home-assistant.io/integrations/knx#type
+   * https://www.home-assistant.io/integrations/knx/#value-types
    */
   type: ValueType | "binary" | "time" | "date" | "datetime";
 }
@@ -978,15 +1022,21 @@ interface NumberEntity {
 
   /**
    * Maximum value that can be sent. Defaults to the `type` DPT maximum value.
-   * https://www.home-assistant.io/integrations/knx#max
+   * https://www.home-assistant.io/integrations/knx#number
    */
   max?: number;
 
   /**
    * Minimum value that can be sent. Defaults to the `type` DPT minimum value.
-   * https://www.home-assistant.io/integrations/knx#min
+   * https://www.home-assistant.io/integrations/knx#number
    */
   min?: number;
+
+  /**
+   * Specifies the mode used in the UI.
+   * https://www.home-assistant.io/integrations/knx#number
+   */
+  mode?: "auto" | "box" | "slider";
 
   /**
    * A name for this device used within Home Assistant.
@@ -1008,17 +1058,9 @@ interface NumberEntity {
 
   /**
    * Any supported type of KNX Sensor representing a numeric value (e.g., "percent" or "temperature")
-   * https://www.home-assistant.io/integrations/knx#type
+   * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type: ValueType | "binary" | "time" | "date" | "datetime";
-}
-
-interface Routing {
-  /**
-   * The local IP address of the interface that shall be used to send multicast packets. If omitted the default multicast interface is used.
-   * https://www.home-assistant.io/integrations/knx#local_ip
-   */
-  local_ip?: string;
+  type: ValueType;
 }
 
 interface Scene {
@@ -1134,9 +1176,9 @@ interface Sensor {
 
   /**
    * A type from the value types.
-   * https://www.home-assistant.io/integrations/knx#type
+   * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type: ValueType | "binary" | "time" | "date" | "datetime";
+  type: ValueType;
 }
 
 interface Switch {
@@ -1169,32 +1211,6 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address?: GroupAddresses;
-}
-
-interface Tunneling {
-  /**
-   * P address of the KNX/IP tunneling device.
-   * https://www.home-assistant.io/integrations/knx#host
-   */
-  host: string;
-
-  /**
-   * IP address of the local interface.
-   * https://www.home-assistant.io/integrations/knx#local_ip
-   */
-  local_ip?: string;
-
-  /**
-   * Port of the KNX/IP tunneling device.
-   * https://www.home-assistant.io/integrations/knx#port
-   */
-  port?: Port;
-
-  /**
-   * When True the KNXnet/IP Server shall use the IP address and the port number from the IP package received as the target IP address or port number for the response to the KNXnet/IP Client (for NAT / Docker).
-   * https://www.home-assistant.io/integrations/knx#route_back
-   */
-  route_back?: boolean;
 }
 
 interface Weather {
