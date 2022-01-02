@@ -71,8 +71,8 @@ Evaluate jinja templates via Home Assistant's API and see how they would render.
 
 # Contribution
 
-- [How to update the schemas](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schemas)
-- [Local Development](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Local-development)
+- [How to update the schemas](https://github.com/keesschollaart81/vscode-home-assistant/wiki/HowTo:-Update-the-schema's)
+- [Local Development](https://github.com/keesschollaart81/vscode-home-assistant/wiki/Local-development-of-this-Extension)
 
 # Release Notes
 
