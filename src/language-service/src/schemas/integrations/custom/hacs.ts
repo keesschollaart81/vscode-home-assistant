@@ -9,7 +9,7 @@ export interface Schema {
    * Github Personal Access Token.
    * https://hacs.xyz/docs/configuration/legacy
    *
-   * @TJS-pattern ^[0-9a-fA-F]{40}$
+   * @TJS-pattern ^[0-9a-zA-Z_]{40}$
    */
   token: string;
 
