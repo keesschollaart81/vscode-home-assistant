@@ -15,6 +15,7 @@ export * as HTTP from "./http";
 export * as Hue from "./hue";
 export * as InputBoolean from "./input_boolean";
 export * as InputButton from "./input_button";
+export * as InputDatetime from "./input_datetime";
 export * as InputNumber from "./input_number";
 export * as KNX from "./knx";
 export * as Light from "./light";
