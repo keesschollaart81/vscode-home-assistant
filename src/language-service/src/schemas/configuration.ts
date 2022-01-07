@@ -114,6 +114,12 @@ export interface InternalIntegrations {
   input_button?: integrations.Core.InputButton.Schema | IncludeNamed | null;
 
   /**
+   * The input_datetime integration allows the user to define date and time values that can be controlled via the frontend and can be used within automations and templates.
+   * https://www.home-assistant.io/integrations/input_datetime
+   */
+  input_datetime?: integrations.Core.InputDatetime.Schema | IncludeNamed | null;
+
+  /**
    * The input_number integration allows the user to define values that can be controlled via the frontend and can be used within conditions of automation. The frontend can display a slider, or a numeric input box.
    * https://www.home-assistant.io/integrations/input_number
    */

@@ -49,6 +49,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-input_datetime",
+    "path": "configuration.yaml/input_datetime",
+    "file": "integration-input_datetime.json",
+    "tsFile": "integrations/core/input_datetime.ts",
+    "fromType": "File"
+  },
+  {
     "key": "integration-input_number",
     "path": "configuration.yaml/input_number",
     "file": "integration-input_number.json",
