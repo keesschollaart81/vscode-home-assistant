@@ -108,6 +108,12 @@ export interface InternalIntegrations {
   input_boolean?: integrations.Core.InputBoolean.Schema | IncludeNamed | null;
 
   /**
+   * The Input Button helper integration allows you to define buttons that can be pressed via the user interface, and can be used to trigger things, like an automation.
+   * https://www.home-assistant.io/integrations/input_button
+   */
+  input_button?: integrations.Core.InputButton.Schema | IncludeNamed | null;
+
+  /**
    * The input_number integration allows the user to define values that can be controlled via the frontend and can be used within conditions of automation. The frontend can display a slider, or a numeric input box.
    * https://www.home-assistant.io/integrations/input_number
    */

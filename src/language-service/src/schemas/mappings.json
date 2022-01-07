@@ -42,6 +42,13 @@
     "fromType": "Schema"
   },
   {
+    "key": "integration-input_button",
+    "path": "configuration.yaml/input_button",
+    "file": "integration-input_button.json",
+    "tsFile": "integrations/core/input_button.ts",
+    "fromType": "Schema"
+  },
+  {
     "key": "integration-input_number",
     "path": "configuration.yaml/input_number",
     "file": "integration-input_number.json",
