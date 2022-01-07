@@ -70,6 +70,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-input_text",
+    "path": "configuration.yaml/input_text",
+    "file": "integration-input_text.json",
+    "tsFile": "integrations/core/input_text.ts",
+    "fromType": "File"
+  },
+  {
     "key": "integration-script",
     "path": "configuration.yaml/script",
     "file": "integration-script.json",

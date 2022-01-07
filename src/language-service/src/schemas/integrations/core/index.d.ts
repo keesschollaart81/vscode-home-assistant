@@ -18,6 +18,7 @@ export * as InputButton from "./input_button";
 export * as InputDatetime from "./input_datetime";
 export * as InputNumber from "./input_number";
 export * as InputSelect from "./input_select";
+export * as InputText from "./input_text";
 export * as KNX from "./knx";
 export * as Light from "./light";
 export * as Lock from "./lock";

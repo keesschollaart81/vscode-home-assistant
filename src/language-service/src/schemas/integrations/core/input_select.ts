@@ -21,7 +21,7 @@ interface Item {
    * Initial value when Home Assistant starts.
    * https://www.home-assistant.io/integrations/input_select/#initial
    */
-  initial?: number;
+  initial?: string;
 
   /**
    * Name of the input select.

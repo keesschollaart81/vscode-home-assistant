@@ -132,6 +132,12 @@ export interface InternalIntegrations {
   input_select?: integrations.Core.InputSelect.Schema | IncludeNamed | null;
 
   /**
+   * The input_text integration allows the user to define values that can be controlled via the frontend and can be used within conditions of automation.
+   * https://www.home-assistant.io/integrations/input_text
+   */
+  input_text?: integrations.Core.InputText.Schema | IncludeNamed | null;
+
+  /**
    * This integration allows you to track and control various light bulbs.
    * https://www.home-assistant.io/integrations/light
    */
