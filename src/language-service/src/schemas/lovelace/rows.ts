@@ -251,18 +251,17 @@ interface EntityRow extends EntityConfig {
 }
 
 interface ButtonEntityRow extends EntityRow {
-  
   /**
    * If false, the icon is not shown.
    * https://www.home-assistant.io/lovelace/entities/#show_icon
    */
-   show_icon?: boolean;
-  
+  show_icon?: boolean;
+
   /**
    * If false, the button name is not shown.
    * https://www.home-assistant.io/lovelace/entities/#show_name
    */
-   show_name?: boolean;
+  show_name?: boolean;
 }
 
 export interface SectionRow {
