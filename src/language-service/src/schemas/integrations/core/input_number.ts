@@ -8,6 +8,8 @@ export type Domain = "input_number";
 export interface Schema {
   [key: string]: Item | IncludeNamed | null;
 }
+export type File = Schema | Item;
+
 
 interface Item {
   /**
