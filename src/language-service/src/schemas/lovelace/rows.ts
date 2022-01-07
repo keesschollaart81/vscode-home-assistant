@@ -87,7 +87,7 @@ export interface ButtonsRow {
    * A list of entities to show. Each entry is either an entity ID or a map.
    * https://www.home-assistant.io/lovelace/entities/#entities
    */
-  entities: Entity[];
+  entities: ButtonEntityRow[];
 }
 
 export interface CallServiceRow extends EntityConfig {
@@ -248,6 +248,21 @@ interface EntityRow extends EntityConfig {
    * https://www.home-assistant.io/lovelace/entities/#tap_action
    */
   tap_action?: Action;
+}
+
+interface ButtonEntityRow extends EntityRow {
+  
+  /**
+   * If false, the icon is not shown.
+   * https://www.home-assistant.io/lovelace/entities/#show_icon
+   */
+   show_icon?: boolean;
+  
+  /**
+   * If false, the button name is not shown.
+   * https://www.home-assistant.io/lovelace/entities/#show_name
+   */
+   show_name?: boolean;
 }
 
 export interface SectionRow {
