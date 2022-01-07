@@ -1,4 +1,4 @@
-import { Data, Entity as EntityString } from "../types";
+import { Data } from "../types";
 import { EntityConfig, Condition } from "./types";
 import { Action } from "./actions";
 
