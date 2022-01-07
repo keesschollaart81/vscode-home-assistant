@@ -16,8 +16,6 @@ export type Row =
   | TextRow
   | WeblinkRow;
 
-type Entity = EntityString | EntityConfig;
-
 export interface AttributeRow extends EntityConfig {
   /**
    * A row that shows the attribute value of an entity.
