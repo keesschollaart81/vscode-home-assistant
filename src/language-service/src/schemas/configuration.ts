@@ -108,10 +108,34 @@ export interface InternalIntegrations {
   input_boolean?: integrations.Core.InputBoolean.Schema | IncludeNamed | null;
 
   /**
+   * The Input Button helper integration allows you to define buttons that can be pressed via the user interface, and can be used to trigger things, like an automation.
+   * https://www.home-assistant.io/integrations/input_button
+   */
+  input_button?: integrations.Core.InputButton.Schema | IncludeNamed | null;
+
+  /**
+   * The input_datetime integration allows the user to define date and time values that can be controlled via the frontend and can be used within automations and templates.
+   * https://www.home-assistant.io/integrations/input_datetime
+   */
+  input_datetime?: integrations.Core.InputDatetime.Schema | IncludeNamed | null;
+
+  /**
    * The input_number integration allows the user to define values that can be controlled via the frontend and can be used within conditions of automation. The frontend can display a slider, or a numeric input box.
    * https://www.home-assistant.io/integrations/input_number
    */
   input_number?: integrations.Core.InputNumber.Schema | IncludeNamed | null;
+
+  /**
+   * The input_select integration allows the user to define a list of values that can be selected via the frontend and can be used within conditions of an automation.
+   * https://www.home-assistant.io/integrations/input_select
+   */
+  input_select?: integrations.Core.InputSelect.Schema | IncludeNamed | null;
+
+  /**
+   * The input_text integration allows the user to define values that can be controlled via the frontend and can be used within conditions of automation.
+   * https://www.home-assistant.io/integrations/input_text
+   */
+  input_text?: integrations.Core.InputText.Schema | IncludeNamed | null;
 
   /**
    * This integration allows you to track and control various light bulbs.
