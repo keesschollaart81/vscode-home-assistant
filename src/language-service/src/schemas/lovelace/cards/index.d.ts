@@ -1,4 +1,5 @@
 export * as AlarmPanel from "./alarm_panel";
+export * as Area from "./area";
 export * as Button from "./button";
 export * as Calendar from "./calendar";
 export * as Conditional from "./conditional";
