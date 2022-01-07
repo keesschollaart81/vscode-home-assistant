@@ -126,6 +126,12 @@ export interface InternalIntegrations {
   input_number?: integrations.Core.InputNumber.Schema | IncludeNamed | null;
 
   /**
+   * The input_select integration allows the user to define a list of values that can be selected via the frontend and can be used within conditions of an automation.
+   * https://www.home-assistant.io/integrations/input_select
+   */
+  input_select?: integrations.Core.InputSelect.Schema | IncludeNamed | null;
+
+  /**
    * This integration allows you to track and control various light bulbs.
    * https://www.home-assistant.io/integrations/light
    */
