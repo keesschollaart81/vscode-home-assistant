@@ -10,7 +10,6 @@ export interface Schema {
 }
 export type File = Schema | Item;
 
-
 interface Item {
   /**
    * The icon that shows in the frontend.

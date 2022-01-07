@@ -10,7 +10,6 @@ export interface Schema {
 }
 export type File = Schema | Item;
 
-
 interface Item {
   /**
    * Show a "slider" or a input "box" in the UI frontend. Defaults to "slider".
