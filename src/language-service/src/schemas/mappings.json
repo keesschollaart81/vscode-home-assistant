@@ -63,6 +63,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-input_select",
+    "path": "configuration.yaml/input_select",
+    "file": "integration-input_select.json",
+    "tsFile": "integrations/core/input_select.ts",
+    "fromType": "File"
+  },
+  {
     "key": "integration-script",
     "path": "configuration.yaml/script",
     "file": "integration-script.json",
