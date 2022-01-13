@@ -80,21 +80,122 @@
     "languages": [
       {
         "id": "home-assistant",
-        "configuration": "./yaml-language/language-configuration.json",
+        "configuration": "./syntaxes/yaml-language-configuration.json",
         "extensions": [
           ".yml",
           ".yaml"
         ],
         "aliases": [
-          "Home Assistant"
+          "Home Assistant",
+          "homeassistant",
+          "home-assistant"
         ]
+      },
+      {
+        "comments": "unfortunately this dummy entry is necessary for embedding to work",
+        "id": "home-assistant-jinja",
+        "configuration": "./jinja-language-configuration.json"
       }
     ],
     "grammars": [
       {
+        "comments": [
+          "YAML syntax as base for Home Assistant",
+          "scopeName changed so that we can use it as base for injections"
+        ],
         "language": "home-assistant",
-        "scopeName": "source.yaml",
-        "path": "./yaml-language/yaml.tmLanguage.json"
+        "scopeName": "source.home-assistant",
+        "path": "./syntaxes/external/YAML.tmLanguage"
+      },
+      {
+        "comments": [
+          "Jinja syntax as injection into Home Assistant YAML",
+          "This is so that we do not need to rely on the Jinja extension being installed"
+        ],
+        "language": "home-assistant-jinja",
+        "scopeName": "source.home-assistant-jinja",
+        "path": "./syntaxes/external/jinja.tmLanguage.json"
+      },
+      {
+        "comments": [
+          "Highlighting of Home Assistant keywords in Jinja"
+        ],
+        "path": "./syntaxes/home-assistant/generated/jinja-keywords.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-keywords",
+        "injectTo": [
+          "source.home-assistant-jinja"
+        ]
+      },
+      {
+        "comments": [
+          "Additional Jinja grammars"
+        ],
+        "path": "./syntaxes/home-assistant/generated/jinja-extras.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-extras",
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "Support for Jinja in double curly braces"
+        ],
+        "path": "./syntaxes/home-assistant/generated/jinja-braces.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-braces",
+        "embeddedLanguages": {
+          "meta.embedded.inline.jinja": "home-assistant-jinja"
+        },
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "Support for Jinja in single curly braces with percentage symbol"
+        ],
+        "path": "./syntaxes/home-assistant/generated/jinja-braces-block.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-braces-block",
+        "embeddedLanguages": {
+          "meta.embedded.block.jinja": "home-assistant-jinja"
+        },
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "Support for Jinja in conditionals"
+        ],
+        "path": "./syntaxes/home-assistant/generated/jinja-conditionals.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-conditionals",
+        "embeddedLanguages": {
+          "meta.embedded.inline.jinja": "home-assistant-jinja"
+        },
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "The quote escapes implemented in the conditionals injection do not work inside brackets etc.",
+          "Support for single quote escapes in Jinja"
+        ],
+        "path": "./syntaxes/home-assistant/generated/jinja-single-quote-escape.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-single-quote-escape",
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "The quote escapes implemented in the conditionals injection do not work inside brackets etc.",
+          "Support for double quote escapes in Jinja"
+        ],
+        "path": "./syntaxes/home-assistant/generated/jinja-double-quote-escape.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-double-quote-escape",
+        "injectTo": [
+          "source.home-assistant"
+        ]
       }
     ],
     "commands": [

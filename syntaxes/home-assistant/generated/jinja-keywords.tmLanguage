@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>scopeName</key>
+        <string>injection.homeassistant.jinja-keywords</string>
+        <key>injectionSelector</key>
+        <string>L:variable.other.jinja</string>
+        <key>name</key>
+        <string>Grammar for detecting Home Assistant keywords</string>
+        <key>comment</key>
+        <array>
+            <string>Extracted from:</string>
+            <string>https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/template.py</string>
+        </array>
+        <key>patterns</key>
+        <array>
+            <dict>
+                <key>include</key>
+                <string>#keyword</string>
+            </dict>
+        </array>
+        <key>repository</key>
+        <dict>
+            <key>keyword</key>
+            <dict>
+                <key>name</key>
+                <string>keyword.other.ninja</string>
+                <key>match</key>
+                <string>(?x)
+                    \b(
+                        acos | area_devices | area_entities | area_id | area_name | as_datetime | as_local | as_timestamp
+                        | asin | atan | atan2 | average | base64_decode | base64_encode | bitwise_and | bitwise_or
+                        | closest | cos | device_attr | device_entities | device_id | distance | expand | float
+                        | from_json | int | integration_entities | is_defined | is_device_attr | is_number | is_state
+                        | is_state_attr | log | match | max | min | multiply | now | ord | ordinal | pack | pi | random
+                        | regex_findall | regex_findall_index | regex_match | regex_replace | regex_search | relative_time
+                        | round | search | sin | sqrt | state_attr | states | strptime | tan | tau | timedelta
+                        | timestamp_custom | timestamp_local | timestamp_utc | to_json | today_at | unpack | urlencode
+                        | utcnow | value | value_json
+                    )\b
+                </string>
+            </dict>
+        </dict>
+    </dict>
+</plist>
