@@ -120,7 +120,7 @@
         "comments": [
           "Highlighting of Home Assistant keywords in Jinja"
         ],
-        "path": "./syntaxes/home-assistant/generated/jinja-keywords.tmLanguage",
+        "path": "./syntaxes/home-assistant/jinja-keywords.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-keywords",
         "injectTo": [
           "source.home-assistant-jinja"
@@ -130,7 +130,7 @@
         "comments": [
           "Additional Jinja grammars"
         ],
-        "path": "./syntaxes/home-assistant/generated/jinja-extras.tmLanguage",
+        "path": "./syntaxes/home-assistant/jinja-extras.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-extras",
         "injectTo": [
           "source.home-assistant"
@@ -140,7 +140,7 @@
         "comments": [
           "Support for Jinja in double curly braces"
         ],
-        "path": "./syntaxes/home-assistant/generated/jinja-braces.tmLanguage",
+        "path": "./syntaxes/home-assistant/jinja-braces.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-braces",
         "embeddedLanguages": {
           "meta.embedded.inline.jinja": "home-assistant-jinja"
@@ -153,7 +153,7 @@
         "comments": [
           "Support for Jinja in single curly braces with percentage symbol"
         ],
-        "path": "./syntaxes/home-assistant/generated/jinja-braces-block.tmLanguage",
+        "path": "./syntaxes/home-assistant/jinja-braces-block.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-braces-block",
         "embeddedLanguages": {
           "meta.embedded.block.jinja": "home-assistant-jinja"
@@ -166,7 +166,7 @@
         "comments": [
           "Support for Jinja in conditionals"
         ],
-        "path": "./syntaxes/home-assistant/generated/jinja-conditionals.tmLanguage",
+        "path": "./syntaxes/home-assistant/jinja-conditionals.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-conditionals",
         "embeddedLanguages": {
           "meta.embedded.inline.jinja": "home-assistant-jinja"
@@ -180,7 +180,7 @@
           "The quote escapes implemented in the conditionals injection do not work inside brackets etc.",
           "Support for single quote escapes in Jinja"
         ],
-        "path": "./syntaxes/home-assistant/generated/jinja-single-quote-escape.tmLanguage",
+        "path": "./syntaxes/home-assistant/jinja-single-quote-escape.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-single-quote-escape",
         "injectTo": [
           "source.home-assistant"
@@ -191,7 +191,7 @@
           "The quote escapes implemented in the conditionals injection do not work inside brackets etc.",
           "Support for double quote escapes in Jinja"
         ],
-        "path": "./syntaxes/home-assistant/generated/jinja-double-quote-escape.tmLanguage",
+        "path": "./syntaxes/home-assistant/jinja-double-quote-escape.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-double-quote-escape",
         "injectTo": [
           "source.home-assistant"
