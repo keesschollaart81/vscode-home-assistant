@@ -5,7 +5,7 @@
         <key>scopeName</key>
         <string>injection.homeassistant.jinja-extras</string>
         <key>injectionSelector</key>
-        <string>L:meta.embedded.inline.jinja -string.quoted.double.jinja -string.quoted.single.jinja</string>
+        <string>L:meta.embedded.inline.jinja -string.quoted.double.jinja -string.quoted.single.jinja, L:meta.embedded.block.jinja -string.quoted.double.jinja -string.quoted.single.jinja</string>
         <key>name</key>
         <string>Grammar for Jinja2 syntax highlighting that is not provided out-of-the-box</string>
         <key>patterns</key>

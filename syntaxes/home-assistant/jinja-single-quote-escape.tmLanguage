@@ -5,7 +5,7 @@
         <key>scopeName</key>
         <string>injection.homeassistant.jinja-single-quote-escape</string>
         <key>injectionSelector</key>
-        <string>L:string.quoted.single meta.embedded.inline.jinja</string>
+        <string>L:string.quoted.single meta.embedded.inline.jinja, L:string.quoted.single meta.embedded.block.jinja</string>
         <key>name</key>
         <string>Injection grammar for supproting single quote escapes in Jinja2 expressions</string>
         <key>patterns</key>
