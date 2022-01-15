@@ -196,6 +196,19 @@
         "injectTo": [
           "source.home-assistant"
         ]
+      },
+      {
+        "comments": [
+          "Support for JavaScript in triple square brackets"
+        ],
+        "path": "./syntaxes/home-assistant/javascript-brackets-block.tmLanguage",
+        "scopeName": "injection.homeassistant.javascript-brackets-block",
+        "embeddedLanguages": {
+          "meta.embedded.block.javascript": "javascript"
+        },
+        "injectTo": [
+          "source.home-assistant"
+        ]
       }
     ],
     "commands": [
