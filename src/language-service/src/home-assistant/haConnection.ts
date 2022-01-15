@@ -12,6 +12,7 @@ import type {
 } from "home-assistant-js-websocket";
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
+import { BuiltinFilters } from "../schemas/jinjaFilters";
 
 // Normal require(), and cast to the static type
 const ha =
@@ -24,6 +25,7 @@ export interface IHaConnection {
   getDomainCompletions(): Promise<CompletionItem[]>;
   getEntityCompletions(): Promise<CompletionItem[]>;
   getServiceCompletions(): Promise<CompletionItem[]>;
+  getJinjaCompletions(): CompletionItem[];
 }
 
 export class HaConnection implements IHaConnection {
@@ -262,6 +264,25 @@ export class HaConnection implements IHaConnection {
       }
     }
 
+    return completions;
+  }
+
+  public getJinjaCompletions(): CompletionItem[] {
+    const filters = [...BuiltinFilters];
+    const globals = [];
+
+    const completions: CompletionItem[] = [];
+    for (const filter of filters) {
+      const completionItem = CompletionItem.create(filter);
+      completionItem.kind = CompletionItemKind.Function;
+      completionItem.documentation = <MarkupContent>{
+        kind: "markdown",
+        value: `**${null}:** \r\n \r\n`,
+      };
+      completionItem.data = {};
+      completionItem.data.isJinjaFilter = true;
+      completions.push(completionItem);
+    }
     return completions;
   }
 

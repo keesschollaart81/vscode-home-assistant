@@ -23,6 +23,7 @@ import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DomainCompletionContribution } from "./completionHelpers/domains";
+import { JinjaCompletionContribution } from "./completionHelpers/jinja";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 import { Includetype } from "./haConfig/dto";
@@ -304,6 +305,7 @@ export class HomeAssistantLanguageService {
     properties.entities = EntityIdCompletionContribution.propertyMatches;
     properties.services = ServicesCompletionContribution.propertyMatches;
     properties.domains = DomainCompletionContribution.propertyMatches;
+    properties.jinja = JinjaCompletionContribution.propertyMatches;
 
     const additionalCompletionProvider = this.findAutoCompletionProperty(
       document,
@@ -331,6 +333,16 @@ export class HomeAssistantLanguageService {
         if (!currentCompletions.items.some((x) => x.data && x.data.isService)) {
           additionalCompletion =
             await this.haConnection.getServiceCompletions();
+        }
+        break;
+      case "jinja":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (
+          !currentCompletions.items.some(
+            (x) => x.data && (x.data.isJinjaFilter || x.data.isJinjaGlobal)
+          )
+        ) {
+          additionalCompletion = this.haConnection.getJinjaCompletions();
         }
         break;
     }
