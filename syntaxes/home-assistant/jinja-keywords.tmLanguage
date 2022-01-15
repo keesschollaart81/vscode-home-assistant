@@ -25,7 +25,7 @@
             <key>keyword</key>
             <dict>
                 <key>name</key>
-                <string>keyword.other.ninja</string>
+                <string>constant.other.ninja</string>
                 <key>match</key>
                 <string>(?x)
                     \b(
