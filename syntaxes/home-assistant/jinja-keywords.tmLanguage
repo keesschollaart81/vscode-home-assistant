@@ -5,7 +5,7 @@
         <key>scopeName</key>
         <string>injection.homeassistant.jinja-keywords</string>
         <key>injectionSelector</key>
-        <string>L:variable.other.jinja</string>
+        <string>L:meta.embedded.inline.jinja -string.quoted.double.jinja -string.quoted.single.jinja, L:meta.embedded.block.jinja -string.quoted.double.jinja -string.quoted.single.jinja</string>
         <key>name</key>
         <string>Grammar for detecting Home Assistant keywords</string>
         <key>comment</key>
@@ -25,7 +25,7 @@
             <key>keyword</key>
             <dict>
                 <key>name</key>
-                <string>keyword.other.ninja</string>
+                <string>constant.other.ninja</string>
                 <key>match</key>
                 <string>(?x)
                     \b(

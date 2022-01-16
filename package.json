@@ -123,7 +123,7 @@
         "path": "./syntaxes/home-assistant/jinja-keywords.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-keywords",
         "injectTo": [
-          "source.home-assistant-jinja"
+          "source.home-assistant"
         ]
       },
       {
@@ -169,7 +169,8 @@
         "path": "./syntaxes/home-assistant/jinja-conditionals.tmLanguage",
         "scopeName": "injection.homeassistant.jinja-conditionals",
         "embeddedLanguages": {
-          "meta.embedded.inline.jinja": "home-assistant-jinja"
+          "meta.embedded.inline.jinja": "home-assistant-jinja",
+          "meta.embedded.block.jinja": "home-assistant-jinja"
         },
         "injectTo": [
           "source.home-assistant"
