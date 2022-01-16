@@ -204,6 +204,12 @@ export interface InternalIntegrations {
   switch?: integrations.Core.Switch.Schema | IncludeList;
 
   /**
+   * The template integration allows creating entities which derive their values from other data.
+   * https://www.home-assistant.io/integrations/template
+   */
+  template?: integrations.Core.Template.Schema | IncludeList;
+
+  /**
    * The updater binary sensor will check daily for new releases.
    * https://www.home-assistant.io/integrations/updater
    */
