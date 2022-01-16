@@ -1803,7 +1803,7 @@ export interface FanPlatformSchema extends PlatformSchema {
    * List of speeds this fan is capable of running at. Valid entries are off, low, medium and high.
    * https://www.home-assistant.io/integrations/fan.mqtt/#speeds
    */
-  speeds: Deprecated;
+  speeds?: Deprecated;
 
   /**
    * The MQTT topic subscribed to receive state updates.

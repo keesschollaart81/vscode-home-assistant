@@ -1,0 +1,619 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>scopeName</key>
+        <string>injection.homeassistant.jinja-conditionals</string>
+        <key>name</key>
+        <string>Grammar for Jinja2 expressions in homeassistant conditionals</string>
+        <key>patterns</key>
+        <array>
+            <dict>
+                <key>include</key>
+                <string>#homeassistant-condition</string>
+            </dict>
+        </array>
+        <key>comment</key>
+        <array>
+            <string>Flow style collections are not supported (yet)</string>
+        </array>
+        <key>repository</key>
+        <dict>
+            <key>homeassistant-condition</key>
+            <dict>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>name</key>
+                        <string>meta.flow-unquoted.homeassistant.condition</string>
+                        <key>begin</key>
+                        <string>(?x)
+                            ^(\s*) # 1
+                            (?:(-)(\s+))? # 2, 3; in case it is first key of a list item
+                            \b( # 4
+                                changed_when
+                                | failed_when
+                                | when
+                                | check_mode
+                            )\b
+                            \s* (:) # 5 (?=\s) (?!\s*[|&gt;'"]|\s*$|\s*\#.*$) # starting an unquoted flow
+                        </string>
+                        <key>beginCaptures</key>
+                        <dict>
+                            <key>2</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.block.sequence.item.homeassistant</string>
+                            </dict>
+                            <key>4</key>
+                            <dict>
+                                <key>name</key>
+                                <string>keyword.other.special-method.homeassistant</string>
+                            </dict>
+                            <key>5</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.separator.key-value.mapping.homeassistant</string>
+                            </dict>
+                        </dict>
+                        <key>end</key>
+                        <string>(?x)
+                            ^(?!\1\3\3\s+) # if the indentation is too small; HACK: \3 is used twice to match at least 2 spaces if group 2 matches
+                        </string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>source.homeassistant#comment</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-unquoted-string</string>
+                            </dict>
+                        </array>
+                    </dict>
+                    <dict>
+                        <key>name</key>
+                        <string>meta.flow.homeassistant.condition</string>
+                        <key>begin</key>
+                        <string>(?x)
+                            ^(\s*) # 1
+                            (?:(-)(\s+))? # 2, 3; in case it is first key of a list item
+                            \b( # 4
+                                changed_when
+                                | failed_when
+                                | when
+                                | check_mode
+                            )\b
+                            \s* (:) # 5 (?=\s) (?!\s*[|&gt;]|\s*$|\s*\#.*$) # not starting a block (scalar or other)
+                        </string>
+                        <key>beginCaptures</key>
+                        <dict>
+                            <key>2</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.block.sequence.item.homeassistant</string>
+                            </dict>
+                            <key>4</key>
+                            <dict>
+                                <key>name</key>
+                                <string>keyword.other.special-method.homeassistant</string>
+                            </dict>
+                            <key>5</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.separator.key-value.mapping.homeassistant</string>
+                            </dict>
+                        </dict>
+                        <key>end</key>
+                        <string>(?x)
+                            ^(?!\1\3\3\s+) # if the indentation is too small; HACK: \3 is used twice to match at least 2 spaces if group 2 matches
+                        </string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>source.homeassistant#comment</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-double-quoted-string</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-single-quoted-string</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-unquoted-string</string>
+                            </dict>
+                        </array>
+                    </dict>
+                    <dict>
+                        <key>name</key>
+                        <string>meta.block-scalar.homeassistant.condition</string>
+                        <key>begin</key>
+                        <string>(?x)
+                            ^(\s*) # 1
+                            (?:(-)(\s+))? # 2, 3; in case it is first key of a list item
+                            \b( # 4
+                                changed_when
+                                | failed_when
+                                | when
+                                | check_mode
+                            )\b
+                            \s* (:) # 5
+                            \s+ (?: (\|) | (&gt;) ) ([1-9])? ([-+])? # 6,7,8,9; starting a scalar block
+                            (.*$) # comment or illegal
+                        </string>
+                        <key>beginCaptures</key>
+                        <dict>
+                            <key>2</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.block.sequence.item.homeassistant</string>
+                            </dict>
+                            <key>4</key>
+                            <dict>
+                                <key>name</key>
+                                <string>keyword.other.special-method.homeassistant</string>
+                            </dict>
+                            <key>5</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.separator.key-value.mapping.homeassistant</string>
+                            </dict>
+                            <key>6</key>
+                            <dict>
+                                <key>name</key>
+                                <string>keyword.control.flow.block-scalar.literal.homeassistant</string>
+                            </dict>
+                            <key>7</key>
+                            <dict>
+                                <key>name</key>
+                                <string>keyword.control.flow.block-scalar.folded.homeassistant</string>
+                            </dict>
+                            <key>8</key>
+                            <dict>
+                                <key>name</key>
+                                <string>constant.numeric.indentation-indicator.homeassistant</string>
+                            </dict>
+                            <key>9</key>
+                            <dict>
+                                <key>name</key>
+                                <string>storage.modifier.chomping-indicator.homeassistant</string>
+                            </dict>
+                            <key>10</key>
+                            <dict>
+                                <key>patterns</key>
+                                <array>
+                                    <dict>
+                                        <key>include</key>
+                                        <string>source.homeassistant#comment</string>
+                                    </dict>
+                                    <dict>
+                                        <key>match</key>
+                                        <string>.+</string>
+                                        <key>name</key>
+                                        <string>invalid.illegal.expected-comment-or-newline.homeassistant</string>
+                                    </dict>
+                                </array>
+                            </dict>
+                        </dict>
+                        <key>end</key>
+                        <string>(?x)
+                            ^(?!\1\3\3\s+) # if the indentation is too small; HACK: \3 is used twice to match at least 2 spaces if group 2 matches
+                        </string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-scalar-block</string>
+                            </dict>
+                        </array>
+                    </dict>
+                    <dict>
+                        <key>name</key>
+                        <string>meta.block.homeassistant.condition</string>
+                        <key>begin</key>
+                        <string>(?x)
+                            ^(\s*) # 1
+                            (?:(-)(\s+))? # 2, 3; in case it is first key of a list item
+                            \b( # 4
+                                changed_when
+                                | failed_when
+                                | when
+                                | check_mode
+                            )\b
+                            \s* (:) # 5
+                            (.*$) # comment or illegal
+                        </string>
+                        <key>beginCaptures</key>
+                        <dict>
+                            <key>2</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.block.sequence.item.homeassistant</string>
+                            </dict>
+                            <key>4</key>
+                            <dict>
+                                <key>name</key>
+                                <string>keyword.other.special-method.homeassistant</string>
+                            </dict>
+                            <key>5</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.separator.key-value.mapping.homeassistant</string>
+                            </dict>
+                            <key>6</key>
+                            <dict>
+                                <key>patterns</key>
+                                <array>
+                                    <dict>
+                                        <key>include</key>
+                                        <string>source.homeassistant#comment</string>
+                                    </dict>
+                                    <dict>
+                                        <key>match</key>
+                                        <string>.+</string>
+                                        <key>name</key>
+                                        <string>invalid.illegal.expected-comment-or-newline.homeassistant</string>
+                                    </dict>
+                                </array>
+                            </dict>
+                        </dict>
+                        <key>end</key>
+                        <string>(?x)
+                            ^(?!\1\3\3\s+) # if the indentation is too small; HACK: \3 is used twice to match at least 2 spaces if group 2 matches
+                        </string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-block</string>
+                            </dict>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
+            <key>yaml-block</key>
+            <dict>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>name</key>
+                        <string>meta.yaml-block.homeassistant.condition</string>
+                        <key>comment</key>
+                        <array>
+                            <string>Well-indented block</string>
+                        </array>
+                        <key>begin</key>
+                        <string>(?x) ^(?=(\s+)) # 1
+                        </string>
+                        <key>end</key>
+                        <string>(?x)
+                            (?!\G) # otherwise match is found immediately
+                            ^(?!\1\s+) # if the indentation is too small
+                        </string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>source.homeassistant#comment</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-block-list-item</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-double-quoted-string</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-single-quoted-string</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-unquoted-string-block</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-unquoted-string</string>
+                            </dict>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
+            <key>yaml-block-list-item</key>
+            <dict>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>name</key>
+                        <string>meta.yaml-block-list-item.homeassistant.condition</string>
+                        <key>comment</key>
+                        <array>
+                            <string>Well-indented list item block</string>
+                        </array>
+                        <key>begin</key>
+                        <string>(?x)
+                            ^(\s*) # 1
+                            (-)(\s) # 2, 3
+                        </string>
+                        <key>beginCaptures</key>
+                        <dict>
+                            <key>2</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.block.sequence.item.homeassistant</string>
+                            </dict>
+                        </dict>
+                        <key>end</key>
+                        <string>(?x)
+                            ^(?!\1\3\s+) # if the indentation is too small
+                        </string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>source.homeassistant#comment</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-double-quoted-string</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-single-quoted-string</string>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-unquoted-string</string>
+                            </dict>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
+            <key>yaml-scalar-block</key>
+            <dict>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>name</key>
+                        <string>meta.yaml-scalar-block.homeassistant.condition</string>
+                        <key>comment</key>
+                        <array>
+                            <string>Well-indented scalar block (for `&gt;` and `|`)</string>
+                        </array>
+                        <key>begin</key>
+                        <string>(?x)
+                            ^(\s*) # 1
+                        </string>
+                        <key>end</key>
+                        <string>(?x)
+                            ^(?!\1\s+) # if the indentation is too small
+                        </string>
+                        <key>contentName</key>
+                        <string>keyword.operator.homeassistant meta.embedded.inline.jinja</string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>#yaml-unquoted-string</string>
+                            </dict>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
+            <key>yaml-single-quoted-string</key>
+            <dict>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>name</key>
+                        <string>string.quoted.single.homeassistant.meta</string>
+                        <key>begin</key>
+                        <string>(?&lt;=:\s|-\s|^)\s*'</string>
+                        <key>beginCaptures</key>
+                        <dict>
+                            <key>0</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.string.begin.homeassistant</string>
+                            </dict>
+                        </dict>
+                        <key>end</key>
+                        <string>(?x)
+                            ('(?!')) # 1; match the starting quote
+                            (?: (?=\s+\#) | (.*$) ) # 2; unless it is a comment anything trailing here is illegal
+                        </string>
+                        <key>endCaptures</key>
+                        <dict>
+                            <key>1</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.string.end.homeassistant</string>
+                            </dict>
+                            <key>2</key>
+                            <dict>
+                                <key>name</key>
+                                <string>invalid.illegal.expected-comment-or-newline.homeassistant</string>
+                            </dict>
+                        </dict>
+                        <key>contentName</key>
+                        <string>keyword.operator.homeassistant meta.embedded.inline.jinja</string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>begin</key>
+                                <string>''</string>
+                                <key>beginCaptures</key>
+                                <dict>
+                                    <key>0</key>
+                                    <dict>
+                                        <key>name</key>
+                                        <string>constant.character.escape.single-quoted.homeassistant</string>
+                                    </dict>
+                                </dict>
+                                <key>end</key>
+                                <string>''</string>
+                                <key>endCaptures</key>
+                                <dict>
+                                    <key>0</key>
+                                    <dict>
+                                        <key>name</key>
+                                        <string>constant.character.escape.single-quoted.homeassistant</string>
+                                    </dict>
+                                </dict>
+                                <key>contentName</key>
+                                <string>string.quoted.single.jinja</string>
+                                <key>patterns</key>
+                                <array>
+                                    <dict>
+                                        <key>include</key>
+                                        <string>source.home-assistant-jinja#string</string>
+                                    </dict>
+                                </array>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>source.home-assistant-jinja#expression</string>
+                            </dict>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
+            <key>yaml-double-quoted-string</key>
+            <dict>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>name</key>
+                        <string>string.quoted.double.homeassistant.meta</string>
+                        <key>begin</key>
+                        <string>(?&lt;=:\s|-\s|^)\s*"</string>
+                        <key>beginCaptures</key>
+                        <dict>
+                            <key>0</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.string.begin.homeassistant</string>
+                            </dict>
+                        </dict>
+                        <key>end</key>
+                        <string>(?x)
+                            (") # 1; match the starting quote
+                            (?: (?=\s+\#) | (.*$) ) # 2; unless it is a comment anything trailing here is illegal
+                        </string>
+                        <key>endCaptures</key>
+                        <dict>
+                            <key>1</key>
+                            <dict>
+                                <key>name</key>
+                                <string>punctuation.definition.string.end.homeassistant</string>
+                            </dict>
+                            <key>2</key>
+                            <dict>
+                                <key>name</key>
+                                <string>invalid.illegal.expected-comment-or-newline.homeassistant</string>
+                            </dict>
+                        </dict>
+                        <key>contentName</key>
+                        <string>keyword.operator.homeassistant meta.embedded.inline.jinja</string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>begin</key>
+                                <string>\\"</string>
+                                <key>beginCaptures</key>
+                                <dict>
+                                    <key>0</key>
+                                    <dict>
+                                        <key>name</key>
+                                        <string>constant.character.escape.double-quoted.homeassistant</string>
+                                    </dict>
+                                </dict>
+                                <key>end</key>
+                                <string>\\"</string>
+                                <key>endCaptures</key>
+                                <dict>
+                                    <key>0</key>
+                                    <dict>
+                                        <key>name</key>
+                                        <string>constant.character.escape.double-quoted.homeassistant</string>
+                                    </dict>
+                                </dict>
+                                <key>contentName</key>
+                                <string>string.quoted.double.jinja</string>
+                                <key>patterns</key>
+                                <array>
+                                    <dict>
+                                        <key>include</key>
+                                        <string>source.home-assistant-jinja#string</string>
+                                    </dict>
+                                </array>
+                            </dict>
+                            <dict>
+                                <key>include</key>
+                                <string>source.home-assistant-jinja#expression</string>
+                            </dict>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
+            <key>yaml-unquoted-string</key>
+            <dict>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>comment</key>
+                        <string>Capture any non-whitespace and end as fast as possible (when inner pattern ends)</string>
+                        <key>name</key>
+                        <string>string.unquoted.homeassistant</string>
+                        <key>begin</key>
+                        <string>(?=\S)</string>
+                        <key>end</key>
+                        <string>(?!\G)</string>
+                        <key>contentName</key>
+                        <string>keyword.operator.homeassistant meta.embedded.inline.jinja</string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>source.home-assistant-jinja#expression</string>
+                            </dict>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
+            <key>yaml-unquoted-string-block</key>
+            <dict>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>comment</key>
+                        <string>Capture any non-whitespace at the beginning of a block</string>
+                        <key>name</key>
+                        <string>string.unquoted-block.homeassistant</string>
+                        <key>begin</key>
+                        <string>(?x)
+                            ^(\s*) # 1 (?=\S)</string>
+                        <key>end</key>
+                        <string>(?x)
+                            ^(?!\1\s*) # if the indentation is too small</string>
+                        <key>contentName</key>
+                        <string>keyword.operator.homeassistant meta.embedded.inline.jinja</string>
+                        <key>patterns</key>
+                        <array>
+                            <dict>
+                                <key>include</key>
+                                <string>source.home-assistant-jinja#expression</string>
+                            </dict>
+                        </array>
+                    </dict>
+                </array>
+            </dict>
+        </dict>
+    </dict>
+</plist>

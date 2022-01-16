@@ -40,6 +40,12 @@ export interface Schema {
   days_to_show?: PositiveInteger;
 
   /**
+   * The period of the rendered graph.
+   * https://www.home-assistant.io/lovelace/statistics-graph/#period
+   */
+  period?: "5minute" | "hour" | "day" | "month";
+
+  /**
    * The stat types to render. min, max, mean, sum.
    * https://www.home-assistant.io/lovelace/statistics-graph/#state_types
    */
