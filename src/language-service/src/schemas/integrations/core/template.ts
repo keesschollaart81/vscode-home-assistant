@@ -41,7 +41,7 @@ export interface Item {
    */
   number?: NumberItem[] | IncludeList;
 
-   /**
+  /**
    * List of selects
    * https://www.home-assistant.io/integrations/template#select
    */
@@ -141,7 +141,7 @@ interface ButtonItem extends BaseItem {
    * Defines actions to run to press the button.
    * https://www.home-assistant.io/integrations/template#button
    */
-   press?: Action | Action[];
+  press?: Action | Action[];
 }
 
 interface NumberItem extends BaseItem {
@@ -205,7 +205,7 @@ interface SelectItem extends BaseItem {
    * Template for the select’s current value.
    * https://www.home-assistant.io/integrations/template#state
    */
-   state: Template;
+  state: Template;
 }
 
 interface SensorItem extends BaseItem {
@@ -245,7 +245,6 @@ interface SensorItem extends BaseItem {
    */
   unit_of_measurement?: string;
 }
-
 
 export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
   /**
