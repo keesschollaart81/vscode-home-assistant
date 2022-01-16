@@ -12,7 +12,6 @@ export * as Fan from "./fan";
 export * as Group from "./group";
 export * as HomeAssistant from "./homeassistant";
 export * as HTTP from "./http";
-export * as Hue from "./hue";
 export * as InputBoolean from "./input_boolean";
 export * as InputButton from "./input_button";
 export * as InputDatetime from "./input_datetime";

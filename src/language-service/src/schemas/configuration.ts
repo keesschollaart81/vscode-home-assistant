@@ -234,14 +234,6 @@ export interface CoreIntegrations {
   cloud?: integrations.Core.Cloud.Schema | IncludeNamed | null;
 
   /**
-   * DEPRECATED as of Home Assistant 0.113.0
-   *
-   * The Philips Hue integration allows you to control and monitor the lights and motion sensors connected to your Hue bridge.
-   * https://www.home-assistant.io/integrations/hue
-   */
-  hue?: integrations.Core.Hue.Schema | IncludeNamed;
-
-  /**
    * The KNX integration for Home Assistant allows you to connect to KNX/IP devices.
    * https://www.home-assistant.io/integrations/knx
    */
