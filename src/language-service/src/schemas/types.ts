@@ -33,6 +33,7 @@ export type DeviceClasses =
 export type DeviceClassesBinarySensor =
   | "battery"
   | "battery_charging"
+  | "carbon_monoxide"
   | "cold"
   | "connectivity"
   | "door"
@@ -53,6 +54,7 @@ export type DeviceClassesBinarySensor =
   | "safety"
   | "smoke"
   | "sound"
+  | "tamper"
   | "update"
   | "vibration"
   | "window";
@@ -81,6 +83,7 @@ export type DeviceClassesMediaPlayer = "tv" | "speaker" | "receiver";
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
  */
 export type DeviceClassesSensor =
+  | "apparent_power"
   | "aqi"
   | "battery"
   | "carbon_dioxide"
@@ -88,6 +91,7 @@ export type DeviceClassesSensor =
   | "current"
   | "date"
   | "energy"
+  | "frequency"
   | "gas"
   | "humidity"
   | "illuminance"
