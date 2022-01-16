@@ -16,8 +16,236 @@ import {
 } from "../../types";
 import { Action } from "../actions";
 import { PlatformSchema } from "../platform";
+import { Trigger } from "../triggers";
 
 export type Domain = "template";
+export type Schema = Item[] | IncludeList;
+export type File = Item | Item[];
+
+export interface Item {
+  /**
+   * List of binary sensors
+   * https://www.home-assistant.io/integrations/template#binary_sensor
+   */
+  binary_sensor?: BinarySensorItem[] | IncludeList;
+
+  /**
+   * List of buttons
+   * https://www.home-assistant.io/integrations/template#button
+   */
+  button?: ButtonItem[] | IncludeList;
+
+  /**
+   * List of numbers
+   * https://www.home-assistant.io/integrations/template#number
+   */
+  number?: NumberItem[] | IncludeList;
+
+   /**
+   * List of selects
+   * https://www.home-assistant.io/integrations/template#select
+   */
+  select?: SelectItem[] | IncludeList;
+
+  /**
+   * List of sensors
+   * https://www.home-assistant.io/integrations/template#sensor
+   */
+  sensor?: SensorItem[] | IncludeList;
+
+  /**
+   * Define an automation trigger to update the entities. Optional. If omitted will update based on referenced entities. See trigger documentation.
+   * https://www.home-assistant.io/integrations/template#trigger
+   */
+  trigger?: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * The unique ID for this config block. This will be prefixed to all unique IDs of all entities in this block.
+   * https://www.home-assistant.io/integrations/template#unique_id
+   */
+  unique_id?: string;
+}
+
+interface BaseItem {
+  /**
+   * Defines a template to get the available state of the entity. If the template either fails to render or returns True, "1", "true", "yes", "on", "enable", or a non-zero number, the entity will be available.
+   * https://www.home-assistant.io/integrations/template#availability
+   */
+  availability?: Template;
+
+  /**
+   * Defines a template for the icon of the entity.
+   * https://www.home-assistant.io/integrations/template#icon
+   */
+  icon?: Template;
+
+  /**
+   * Defines a template to get the name of the entity.
+   * https://www.home-assistant.io/integrations/template#name
+   */
+  name?: Template;
+
+  /**
+   * An ID that uniquely identifies this entity. Will be combined with the unique ID of the configuration block if available. This allows changing the name, icon and entity_id from the web interface.
+   * https://www.home-assistant.io/integrations/template#unique_id
+   */
+  unique_id?: string;
+}
+
+interface BinarySensorItem extends BaseItem {
+  /**
+   * Defines a template to get the available state of the entity. If the template either fails to render or returns True, "1", "true", "yes", "on", "enable", or a non-zero number, the entity will be available.
+   * https://www.home-assistant.io/integrations/template#availability
+   */
+  attributes?: { [key: string]: Template };
+
+  /**
+   * **Requires a trigger**. After how much time the entity should turn off after it rendered ‘on’.
+   * https://www.home-assistant.io/integrations/template#auto_off
+   */
+  auto_off?: TimePeriod | Template;
+
+  /**
+   * The amount of time (ie 0:00:05) the template state must be not met before this sensor will switch to on. This can also be a template.
+   * https://www.home-assistant.io/integrations/template#delay_off
+   */
+  delay_off?: TimePeriod | Template;
+
+  /**
+   * The amount of time (ie 0:00:05) the template state must be met before this sensor will switch to on. This can also be a template.
+   * https://www.home-assistant.io/integrations/template#delay_on
+   */
+  delay_on?: TimePeriod | Template;
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the UI (see below). It does not set the unit_of_measurement.
+   * https://www.home-assistant.io/integrations/template#device_class
+   */
+  device_class?: DeviceClassesBinarySensor;
+
+  /**
+   * Defines a template for the entity picture of the sensor.
+   * https://www.home-assistant.io/integrations/template#picture
+   */
+  picture?: Template;
+
+  /**
+   * The sensor is on if the template evaluates as True, yes, on, enable or a positive number. Any other value will render it as off. The actual appearance in the frontend (Open/Closed, Detected/Clear etc) depends on the sensor’s device_class value
+   * https://www.home-assistant.io/integrations/template#state
+   */
+  state?: Template;
+}
+
+interface ButtonItem extends BaseItem {
+  /**
+   * Defines actions to run to press the button.
+   * https://www.home-assistant.io/integrations/template#button
+   */
+   press?: Action | Action[];
+}
+
+interface NumberItem extends BaseItem {
+  /**
+   * Template for the number’s maximum value.
+   * https://www.home-assistant.io/integrations/template#max
+   */
+  max?: Template;
+
+  /**
+   * Template for the number’s minimum value.
+   * https://www.home-assistant.io/integrations/template#min
+   */
+  min?: Template;
+
+  /**
+   * Flag that defines if number works in optimistic mode.
+   * https://www.home-assistant.io/integrations/template#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * Defines actions to run when the number value changes. The variable `value` will contain the number entered.
+   * https://www.home-assistant.io/integrations/template#set_value
+   */
+  set_value: Action | Action[];
+
+  /**
+   * Defines a template to get the state of the sensor.
+   * https://www.home-assistant.io/integrations/template#state
+   */
+  state: Template;
+
+  /**
+   * Template for the number’s increment/decrement step.
+   * https://www.home-assistant.io/integrations/template#step
+   */
+  step: Template;
+}
+
+interface SelectItem extends BaseItem {
+  /**
+   * Flag that defines if select works in optimistic mode.
+   * https://www.home-assistant.io/integrations/template#options
+   */
+  optimistic?: boolean;
+
+  /**
+   * Template for the select’s available options.
+   * https://www.home-assistant.io/integrations/template#options
+   */
+  options: Template;
+
+  /**
+   * Defines actions to run to select an option from the options list. The variable `option` will contain the option selected.
+   * https://www.home-assistant.io/integrations/template#select_option
+   */
+  select_option: Action | Action[];
+
+  /**
+   * Template for the select’s current value.
+   * https://www.home-assistant.io/integrations/template#state
+   */
+   state: Template;
+}
+
+interface SensorItem extends BaseItem {
+  /**
+   * Defines a template to get the available state of the entity. If the template either fails to render or returns True, "1", "true", "yes", "on", "enable", or a non-zero number, the entity will be available.
+   * https://www.home-assistant.io/integrations/template#availability
+   */
+  attributes?: { [key: string]: Template };
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the UI (see below). It does not set the unit_of_measurement.
+   * https://www.home-assistant.io/integrations/template#device_class
+   */
+  device_class?: DeviceClassesSensor;
+
+  /**
+   * Defines a template for the entity picture of the sensor.
+   * https://www.home-assistant.io/integrations/template#picture
+   */
+  picture?: Template;
+
+  /**
+   * The state_class of the sensor. This will also display the value based on the user profile Number Format setting and influence the graphical presentation in the history visualization as a continuous value.
+   * https://www.home-assistant.io/integrations/template#state_class
+   */
+  state_class?: StateClassesSensor;
+
+  /**
+   * Defines a template to get the state of the sensor.
+   * https://www.home-assistant.io/integrations/template#state
+   */
+  state: Template;
+
+  /**
+   * Defines the units of measurement of the sensor, if any. This will also display the value based on the user profile Number Format setting and influence the graphical presentation in the history visualization as a continuous value.
+   * https://www.home-assistant.io/integrations/template#state
+   */
+  unit_of_measurement?: string;
+}
+
 
 export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
   /**
@@ -31,7 +259,7 @@ export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/alarm_control_panel.template/#panels
    */
   panels: {
-    [key: string]: AlarmControlPanelItem | IncludeNamed;
+    [key: string]: AlarmControlPanelPlatformItem | IncludeNamed;
   };
 }
 
@@ -47,7 +275,7 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/binary_sensor.template#sensors
    */
   sensors: {
-    [key: string]: BinarySensorItem | IncludeNamed;
+    [key: string]: BinarySensorPlatformItem | IncludeNamed;
   };
 }
 
@@ -63,7 +291,7 @@ export interface CoverPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/cover.template/#covers
    */
   covers: {
-    [key: string]: CoverItem | IncludeNamed;
+    [key: string]: CoverPlatformItem | IncludeNamed;
   };
 }
 
@@ -79,7 +307,7 @@ export interface FanPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/fan.template/#fans
    */
   fans: {
-    [key: string]: FanItem | IncludeNamed;
+    [key: string]: FanPlatformItem | IncludeNamed;
   };
 }
 
@@ -95,7 +323,7 @@ export interface LightPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/fan.template/#lights
    */
   lights: {
-    [key: string]: LightItem | IncludeNamed;
+    [key: string]: LightPlatformItem | IncludeNamed;
   };
 }
 
@@ -161,7 +389,7 @@ export interface SensorPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/template#sensors
    */
   sensors: {
-    [key: string]: SensorItem | IncludeNamed;
+    [key: string]: SensorPlatformItem | IncludeNamed;
   };
 }
 
@@ -177,7 +405,7 @@ export interface SwitchPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/switch.template#switches
    */
   switches: {
-    [key: string]: SwitchItem | IncludeNamed;
+    [key: string]: SwitchPlatformItem | IncludeNamed;
   };
 }
 
@@ -193,7 +421,7 @@ export interface VacuumPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/vacuum.template#vacuums
    */
   vacuums: {
-    [key: string]: VacuumItem | IncludeNamed;
+    [key: string]: VacuumPlatformItem | IncludeNamed;
   };
 }
 
@@ -277,7 +505,7 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   wind_speed_template?: Template;
 }
 
-interface AlarmControlPanelItem {
+interface AlarmControlPanelPlatformItem {
   /**
    * Defines an action to run when the alarm is armed to away mode.
    * https://www.home-assistant.io/integrations/alarm_control_panel.template/#arm_away
@@ -333,7 +561,7 @@ interface AlarmControlPanelItem {
   value_template?: Template;
 }
 
-interface BinarySensorItem {
+interface BinarySensorPlatformItem {
   /**
    * Defines templates for attributes of the sensor.
    * https://www.home-assistant.io/integrations/binary_sensor.template#attribute_templates
@@ -400,7 +628,7 @@ interface BinarySensorItem {
   value_template: Template;
 }
 
-interface CoverItem {
+interface CoverPlatformItem {
   /**
    * Defines a template to get the available state of the component. If the template returns true, the device is available. If the template returns any other value, the device will be unavailable.
    * https://www.home-assistant.io/integrations/cover.template/#availability_template
@@ -498,7 +726,7 @@ interface CoverItem {
   value_template?: Template;
 }
 
-interface FanItem {
+interface FanPlatformItem {
   /**
    * Defines a template to get the available state of the component. If the template returns true, the device is available.
    * https://www.home-assistant.io/integrations/fan.template/#availability_template
@@ -611,7 +839,7 @@ interface FanItem {
   value_template: Template;
 }
 
-interface LightItem {
+interface LightPlatformItem {
   /**
    * Defines a template to get the available state of the component. If the template returns true, the device is available.
    * https://www.home-assistant.io/integrations/light.template#availability_template
@@ -745,7 +973,7 @@ interface LightItem {
   white_value_template?: Template;
 }
 
-interface SensorItem {
+interface SensorPlatformItem {
   /**
    * Defines templates for attributes of the sensor.
    * https://www.home-assistant.io/integrations/template#attribute_templates
@@ -818,7 +1046,7 @@ interface SensorItem {
   value_template: Template;
 }
 
-interface SwitchItem {
+interface SwitchPlatformItem {
   /**
    * Defines a template to get the available state of the component. If the template returns true, the device is available.
    * https://www.home-assistant.io/integrations/switch.template#availability_template
@@ -868,7 +1096,7 @@ interface SwitchItem {
   value_template?: Template;
 }
 
-interface VacuumItem {
+interface VacuumPlatformItem {
   /**
    * Defines templates for attributes of the sensor.
    * https://www.home-assistant.io/integrations/vacuum.template#attribute_templates

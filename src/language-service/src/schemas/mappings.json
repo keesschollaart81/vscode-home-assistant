@@ -91,6 +91,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-template",
+    "path": "configuration.yaml/template",
+    "file": "integration-template.json",
+    "tsFile": "integrations/core/template.ts",
+    "fromType": "File"
+  },
+  {
     "key": "integration-alarm_control_panel",
     "path": "configuration.yaml/alarm_control_panel",
     "file": "integration-alarm_control_panel.json",
