@@ -29,15 +29,75 @@
                 <key>match</key>
                 <string>(?x)
                     \b(
-                        acos | area_devices | area_entities | area_id | area_name | as_datetime | as_local | as_timestamp
-                        | asin | atan | atan2 | average | base64_decode | base64_encode | bitwise_and | bitwise_or
-                        | closest | cos | device_attr | device_entities | device_id | distance | expand | float
-                        | from_json | int | integration_entities | is_defined | is_device_attr | is_number | is_state
-                        | is_state_attr | log | match | max | min | multiply | now | ord | ordinal | pack | pi | random
-                        | regex_findall | regex_findall_index | regex_match | regex_replace | regex_search | relative_time
-                        | round | search | sin | sqrt | state_attr | states | strptime | tan | tau | timedelta
-                        | timestamp_custom | timestamp_local | timestamp_utc | to_json | today_at | unpack | urlencode
-                        | utcnow | value | value_json
+                        acos
+                        | area_devices
+                        | area_entities
+                        | area_id
+                        | area_name
+                        | as_datetime
+                        | as_local
+                        | as_timestamp
+                        | asin
+                        | atan
+                        | atan2
+                        | average
+                        | base64_decode
+                        | base64_encode
+                        | bitwise_and
+                        | bitwise_or
+                        | closest
+                        | cos
+                        | device_attr
+                        | device_entities
+                        | device_id
+                        | distance
+                        | expand
+                        | float
+                        | from_json
+                        | int
+                        | integration_entities
+                        | is_defined
+                        | is_device_attr
+                        | is_number
+                        | is_state
+                        | is_state_attr
+                        | log
+                        | match
+                        | max
+                        | min
+                        | multiply
+                        | now
+                        | ord
+                        | ordinal
+                        | pack
+                        | pi
+                        | random
+                        | regex_findall
+                        | regex_findall_index
+                        | regex_match
+                        | regex_replace
+                        | regex_search
+                        | relative_time
+                        | round
+                        | search
+                        | sin
+                        | sqrt
+                        | state_attr
+                        | states
+                        | strptime
+                        | tan
+                        | tau
+                        | timedelta
+                        | timestamp_custom
+                        | timestamp_local
+                        | timestamp_utc
+                        | to_json
+                        | today_at
+                        | unpack
+                        | urlencode
+                        | utcnow
+                        | value
+                        | value_json
                     )\b
                 </string>
             </dict>
