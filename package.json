@@ -447,7 +447,7 @@
     "typescript-json-schema": "0.51.0"
   },
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^0.25.0",
     "bufferutil": "^4.0.6",
     "home-assistant-js-websocket": "^6.0.1",
     "utf-8-validate": "^5.0.8",
