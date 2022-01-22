@@ -117,7 +117,7 @@ export class HaConnection implements IHaConnection {
     }
   };
 
-  private getHassEntities = async (): Promise<HassEntities> => {
+  public getHassEntities = async (shouldLog = true): Promise<HassEntities> => {
     if (this.hassEntities !== undefined) {
       return this.hassEntities;
     }
@@ -130,9 +130,11 @@ export class HaConnection implements IHaConnection {
           return reject();
         }
         ha.subscribeEntities(this.connection, (entities) => {
-          console.log(
-            `Got ${Object.keys(entities).length} entities from Home Assistant`
-          );
+          if (shouldLog) {
+            console.log(
+              `Got ${Object.keys(entities).length} entities from Home Assistant`
+            );
+          }
           return resolve(entities);
         });
       }

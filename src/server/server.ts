@@ -178,6 +178,10 @@ connection.onInitialize((params) => {
 
     connection.sendNotification("render_template_completed", outputString);
   });
+  connection.onRequest("fetchEntities", async (_) => {
+    const entities = await haConnection.getHassEntities(false);
+    connection.sendNotification("fetch_entities_completed", entities);
+  });
 
   // fire and forget
   setTimeout(discoverFilesAndUpdateSchemas, 0);

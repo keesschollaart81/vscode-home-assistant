@@ -8,6 +8,9 @@ import {
   ServerOptions,
 } from "vscode-languageclient";
 import TelemetryReporter from "vscode-extension-telemetry";
+import { HassEntity } from "home-assistant-js-websocket";
+import { EntitiesProvider } from "./sidebar/entities";
+import { registerCommandsView } from "./sidebar/commands";
 
 const extensionId = "vscode-home-assistant";
 const telemetryVersion = generateVersionString(
@@ -83,6 +86,9 @@ export async function activate(
   client
     .onReady()
     .then(() => {
+      const entitiesProvider = new EntitiesProvider(context);
+      registerCommandsView(context);
+
       client.onNotification("no-config", async (): Promise<void> => {
         const goToSettings = "Go to Settings (UI)";
         const optionClicked = await vscode.window.showInformationMessage(
@@ -127,6 +133,17 @@ export async function activate(
         haTemplateRendererChannel.clear();
         haTemplateRendererChannel.appendLine(result);
         haTemplateRendererChannel.show();
+      });
+
+      client.onNotification("fetch_entities_completed", async (entities) => {
+        if (entities) {
+          const values: HassEntity[] = Object.values(entities);
+          await vscode.window.showInformationMessage(
+            `Fetched ${values.length} entities`
+          );
+
+          entitiesProvider.updateEntities(values);
+        }
       });
     })
     .catch((reason) => {
@@ -321,6 +338,20 @@ export async function activate(
         await client.sendRequest("renderTemplate", { template: selectedText });
       }
     )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.fetchEntities",
+      async () => {
+        await client.sendRequest("fetchEntities");
+      }
+    )
+  );
+
+  vscode.commands.registerCommand(
+    "vscode-home-assistant.copyEntities",
+    (nodes) => vscode.env.clipboard.writeText(JSON.stringify(nodes))
   );
 
   const fileAssociations = vscode.workspace

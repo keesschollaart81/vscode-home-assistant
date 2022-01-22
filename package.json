@@ -25,6 +25,7 @@
   "license": "MIT",
   "icon": "assets/logo.png",
   "activationEvents": [
+    "onCommand:vscode-home-assistant.fetchEntities",
     "workspaceContains:**/configuration.yaml",
     "workspaceContains:**/ui-lovelace.yaml",
     "onLanguage:home-assistant",
@@ -364,6 +365,15 @@
         "command": "vscode-home-assistant.renderTemplate",
         "title": "Render Template",
         "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.fetchEntities",
+        "title": "Refresh Entities",
+        "icon": "assets/refresh.svg"
+      },
+      {
+        "command": "vscode-home-assistant.copyEntities",
+        "title": "Copy Entity IDs"
       }
     ],
     "menus": {
@@ -379,6 +389,20 @@
           "group": "home-assistant",
           "when": "editorHasSelection"
         }
+      ],
+      "view/title": [
+        {
+          "command": "vscode-home-assistant.fetchEntities",
+          "when": "view == homeassistantEntities",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "vscode-home-assistant.copyEntities",
+          "when": "view == homeassistantEntities && viewItem == entity",
+          "group": "navigation"
+        }
       ]
     },
     "configurationDefaults": {
@@ -392,6 +416,29 @@
         },
         "editor.autoIndent": "advanced"
       }
+    },
+    "views": {
+      "homeassistant": [
+        {
+          "id": "homeassistantEntities",
+          "icon": "media/dep.svg",
+          "name": "Entities"
+        },
+        {
+          "id": "homeassistantCommands",
+          "name": "Reload",
+          "visibility": "collapsed"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "homeassistant",
+          "title": "Home Assistant",
+          "icon": "assets/logo-small-white.svg"
+        }
+      ]
     }
   },
   "husky": {
@@ -451,6 +498,7 @@
     "bufferutil": "^4.0.6",
     "home-assistant-js-websocket": "^6.0.1",
     "utf-8-validate": "^5.0.8",
+    "vscode-ext-help-and-feedback-view": "^1.0.1",
     "vscode-extension-telemetry": "0.4.5",
     "vscode-json-languageservice": "^3.9.1",
     "vscode-languageclient": "6.1.3",
