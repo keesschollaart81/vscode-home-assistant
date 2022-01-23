@@ -13,7 +13,7 @@ export class EntitiesProvider implements vscode.TreeDataProvider<Entity> {
 
   public entities!: HassEntity[];
 
-  private view: vscode.TreeView<Entity>;
+  public view: vscode.TreeView<Entity>;
 
   constructor(context: vscode.ExtensionContext) {
     this.view = vscode.window.createTreeView(`${extensionId}.entities`, {

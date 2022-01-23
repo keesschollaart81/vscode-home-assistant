@@ -88,14 +88,13 @@ export async function activate(
 
   context.subscriptions.push(reporter);
   context.subscriptions.push(client.start());
+  const entitiesProvider = new EntitiesProvider(context);
+  registerCommandsView(context);
+  registerHelpAndFeedbackView(context);
 
   client
     .onReady()
     .then(() => {
-      const entitiesProvider = new EntitiesProvider(context);
-      registerCommandsView(context);
-      registerHelpAndFeedbackView(context);
-
       client.onNotification("no-config", async (): Promise<void> => {
         const goToSettings = "Go to Settings (UI)";
         const optionClicked = await vscode.window.showInformationMessage(
@@ -333,8 +332,22 @@ export async function activate(
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(`${extensionId}.copyEntities`, (nodes) =>
-      vscode.env.clipboard.writeText(nodes.label)
+    vscode.commands.registerCommand(
+      `${extensionId}.copyEntities`,
+      (invokedTreeItem) => {
+        const selectedTreeItems = entitiesProvider.view.selection;
+        let text = invokedTreeItem.label;
+
+        if (selectedTreeItems.length > 1) {
+          const selectedEntities = selectedTreeItems.map(
+            (item) => ` - ${item.label}`
+          );
+          // Copy to clipboard selected entities
+          text = selectedEntities.join("\n");
+        }
+
+        return vscode.env.clipboard.writeText(text);
+      }
     )
   );
 
