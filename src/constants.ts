@@ -1,4 +1,5 @@
 export const extensionId = "vscode-home-assistant";
+export const fullExtensionId = `keesschollaart.${extensionId}`;
 export const languageId = "home-assistant";
 export const inputReloadDomains = [
   "input_boolean",

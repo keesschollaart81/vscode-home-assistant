@@ -446,6 +446,11 @@
           "id": "homeassistantCommands",
           "name": "Reload",
           "visibility": "collapsed"
+        },
+        {
+          "id": "homeassistantHelpAndFeedback",
+          "name": "Help And Feedback",
+          "visibility": "collapsed"
         }
       ]
     },

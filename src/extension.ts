@@ -11,10 +11,16 @@ import TelemetryReporter from "vscode-extension-telemetry";
 import { HassEntity } from "home-assistant-js-websocket";
 import { EntitiesProvider } from "./sidebar/entities";
 import { registerCommandsView } from "./sidebar/commands";
-import { extensionId, inputReloadDomains, languageId } from "./constants";
+import {
+  extensionId,
+  fullExtensionId,
+  inputReloadDomains,
+  languageId,
+} from "./constants";
+import { registerHelpAndFeedbackView } from "./sidebar/helpAndFeedback";
 
 const telemetryVersion = generateVersionString(
-  vscode.extensions.getExtension(`keesschollaart.${extensionId}.`)
+  vscode.extensions.getExtension(fullExtensionId)
 );
 
 let reporter: TelemetryReporter;
@@ -88,6 +94,7 @@ export async function activate(
     .then(() => {
       const entitiesProvider = new EntitiesProvider(context);
       registerCommandsView(context);
+      registerHelpAndFeedbackView(context);
 
       client.onNotification("no-config", async (): Promise<void> => {
         const goToSettings = "Go to Settings (UI)";
