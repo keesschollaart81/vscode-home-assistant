@@ -349,9 +349,39 @@ export async function activate(
     )
   );
 
-  vscode.commands.registerCommand(
-    "vscode-home-assistant.copyEntities",
-    (nodes) => vscode.env.clipboard.writeText(nodes.label)
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.openEntityLogbook",
+      (treeItem) => {
+        const { hostUrl } =
+          vscode.workspace.getConfiguration()["vscode-home-assistant"];
+        return vscode.commands.executeCommand(
+          "vscode.open",
+          vscode.Uri.parse(`${hostUrl}logbook/?entity_id=${treeItem.label}`)
+        );
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.openEntityHistory",
+      (treeItem) => {
+        const { hostUrl } =
+          vscode.workspace.getConfiguration()["vscode-home-assistant"];
+        return vscode.commands.executeCommand(
+          "vscode.open",
+          vscode.Uri.parse(`${hostUrl}history/?entity_id=${treeItem.label}`)
+        );
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.copyEntities",
+      (nodes) => vscode.env.clipboard.writeText(nodes.label)
+    )
   );
 
   const fileAssociations = vscode.workspace

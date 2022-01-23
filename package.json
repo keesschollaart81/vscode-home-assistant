@@ -375,6 +375,16 @@
         "command": "vscode-home-assistant.copyEntities",
         "title": "Copy Entity IDs",
         "icon": "$(file)"
+      },
+      {
+        "command": "vscode-home-assistant.openEntityLogbook",
+        "title": "Show Entity Logbook",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "vscode-home-assistant.openEntityHistory",
+        "title": "Show Entity History",
+        "icon": "$(graph)"
       }
     ],
     "menus": {
@@ -403,6 +413,14 @@
           "command": "vscode-home-assistant.copyEntities",
           "when": "view == homeassistantEntities && viewItem == entity",
           "group": "inline"
+        },
+        {
+          "command": "vscode-home-assistant.openEntityLogbook",
+          "when": "view == homeassistantEntities && viewItem == entity"
+        },
+        {
+          "command": "vscode-home-assistant.openEntityHistory",
+          "when": "view == homeassistantEntities && viewItem == entity"
         }
       ]
     },
@@ -439,7 +457,13 @@
           "icon": "assets/logo-small-white.svg"
         }
       ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "homeassistantEntities",
+        "contents": "No entities found.\n[Fetch Entities](command:vscode-home-assistant.fetchEntities)"
+      }
+    ]
   },
   "husky": {
     "hooks": {
