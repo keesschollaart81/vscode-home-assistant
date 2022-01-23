@@ -3,6 +3,7 @@ import {
   HelpAndFeedbackView,
   Command,
 } from "vscode-ext-help-and-feedback-view";
+import { extensionId } from "../constants";
 
 interface Reload {
   name: string;
@@ -13,111 +14,111 @@ export function registerCommandsView(context: ExtensionContext): void {
   const commands: Reload[] = [
     {
       name: "Scripts",
-      command: "vscode-home-assistant.scriptReload",
+      command: `${extensionId}.scriptReload`,
     },
     {
       name: "Groups",
-      command: "vscode-home-assistant.groupReload",
+      command: `${extensionId}.groupReload`,
     },
     {
       name: "Configuration",
-      command: "vscode-home-assistant.homeassistantReloadCoreConfig",
+      command: `${extensionId}.homeassistantReloadCoreConfig`,
     },
     {
       name: "Automations",
-      command: "vscode-home-assistant.automationReload",
+      command: `${extensionId}.automationReload`,
     },
     {
       name: "Scenes",
-      command: "vscode-home-assistant.sceneReload",
+      command: `${extensionId}.sceneReload`,
     },
     {
       name: "Themes",
-      command: "vscode-home-assistant.themeReload",
+      command: `${extensionId}.themeReload`,
     },
     {
       name: "Inputs",
-      command: "vscode-home-assistant.inputReload",
+      command: `${extensionId}.inputReload`,
     },
     {
       name: "HomeKit",
-      command: "vscode-home-assistant.homekitReload",
+      command: `${extensionId}.homekitReload`,
     },
     {
       name: "File Size",
-      command: "vscode-home-assistant.filesizeReload",
+      command: `${extensionId}.filesizeReload`,
     },
     {
       name: "Min/Max",
-      command: "vscode-home-assistant.minMaxReload",
+      command: `${extensionId}.minMaxReload`,
     },
     {
       name: "Generic Thermostat",
-      command: "vscode-home-assistant.genericThermostatReload",
+      command: `${extensionId}.genericThermostatReload`,
     },
     {
       name: "Generic Camera",
-      command: "vscode-home-assistant.genericCameraReload",
+      command: `${extensionId}.genericCameraReload`,
     },
     {
       name: "Ping",
-      command: "vscode-home-assistant.pingReload",
+      command: `${extensionId}.pingReload`,
     },
     {
       name: "Trend",
-      command: "vscode-home-assistant.trendReload",
+      command: `${extensionId}.trendReload`,
     },
     {
       name: "History Stats",
-      command: "vscode-home-assistant.historyStatsReload",
+      command: `${extensionId}.historyStatsReload`,
     },
     {
       name: "Universal Media Player",
-      command: "vscode-home-assistant.universalReload",
+      command: `${extensionId}.universalReload`,
     },
     {
       name: "Statistics",
-      command: "vscode-home-assistant.statisticsReload",
+      command: `${extensionId}.statisticsReload`,
     },
     {
       name: "Filter",
-      command: "vscode-home-assistant.filterReload",
+      command: `${extensionId}.filterReload`,
     },
     {
       name: "REST",
-      command: "vscode-home-assistant.restReload",
+      command: `${extensionId}.restReload`,
     },
     {
       name: "Command Line",
-      command: "vscode-home-assistant.commandLineReload",
+      command: `${extensionId}.commandLineReload`,
     },
     {
       name: "Bayesian",
-      command: "vscode-home-assistant.bayesianReload",
+      command: `${extensionId}.bayesianReload`,
     },
     {
       name: "Telegram",
-      command: "vscode-home-assistant.telegramReload",
+      command: `${extensionId}.telegramReload`,
     },
     {
       name: "SMTP",
-      command: "vscode-home-assistant.smtpReload",
+      command: `${extensionId}.smtpReload`,
     },
     {
       name: "MQTT",
-      command: "vscode-home-assistant.mqttReload",
+      command: `${extensionId}.mqttReload`,
     },
     {
       name: "Raspberry Pi GPIO",
-      command: "vscode-home-assistant.rpioGpioReload",
+      command: `${extensionId}.rpioGpioReload`,
     },
     {
       name: "KNX",
-      command: "vscode-home-assistant.knxReload",
+      command: `${extensionId}.knxReload`,
     },
     {
       name: "Template Entities",
-      command: "vscode-home-assistant.templateReload",
+      command: `${extensionId}.templateReload`,
     },
   ];
 

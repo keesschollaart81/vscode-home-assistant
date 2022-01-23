@@ -11,17 +11,17 @@ import TelemetryReporter from "vscode-extension-telemetry";
 import { HassEntity } from "home-assistant-js-websocket";
 import { EntitiesProvider } from "./sidebar/entities";
 import { registerCommandsView } from "./sidebar/commands";
+import { extensionId, inputReloadDomains, languageId } from "./constants";
 
-const extensionId = "vscode-home-assistant";
 const telemetryVersion = generateVersionString(
-  vscode.extensions.getExtension(`keesschollaart.${extensionId}`)
+  vscode.extensions.getExtension(`keesschollaart.${extensionId}.`)
 );
 
 let reporter: TelemetryReporter;
 
 const documentSelector = [
-  { language: "home-assistant", scheme: "file" },
-  { language: "home-assistant", scheme: "untitled" },
+  { language: languageId, scheme: "file" },
+  { language: languageId, scheme: "untitled" },
 ];
 
 export async function activate(
@@ -63,20 +63,20 @@ export async function activate(
   const clientOptions: LanguageClientOptions = {
     documentSelector,
     synchronize: {
-      configurationSection: "vscode-home-assistant",
+      configurationSection: extensionId,
       fileEvents: vscode.workspace.createFileSystemWatcher("**/*.?(e)y?(a)ml"),
     },
   };
 
   const client = new LanguageClient(
-    "home-assistant",
+    languageId,
     "Home Assistant Language Server",
     serverOptions,
     clientOptions
   );
 
   // is this really needed?
-  vscode.languages.setLanguageConfiguration("home-assistant", {
+  vscode.languages.setLanguageConfiguration(languageId, {
     wordPattern: /("(?:[^\\"]*(?:\\.)?)*"?)|[^\s{}[\],:]+/,
   });
 
@@ -154,117 +154,81 @@ export async function activate(
     });
 
   const commandMappings = [
+    new CommandMappings(`${extensionId}.scriptReload`, "script", "reload"),
+    new CommandMappings(`${extensionId}.groupReload`, "group", "reload"),
     new CommandMappings(
-      "vscode-home-assistant.scriptReload",
-      "script",
-      "reload"
-    ),
-    new CommandMappings("vscode-home-assistant.groupReload", "group", "reload"),
-    new CommandMappings(
-      "vscode-home-assistant.homeassistantReloadCoreConfig",
+      `${extensionId}.homeassistantReloadCoreConfig`,
       "homeassistant",
       "reload_core_config"
     ),
     new CommandMappings(
-      "vscode-home-assistant.homeassistantRestart",
+      `${extensionId}.homeassistantRestart`,
       "homeassistant",
       "restart"
     ),
     new CommandMappings(
-      "vscode-home-assistant.automationReload",
+      `${extensionId}.automationReload`,
       "automation",
       "reload"
     ),
-    new CommandMappings("vscode-home-assistant.sceneReload", "scene", "reload"),
+    new CommandMappings(`${extensionId}.sceneReload`, "scene", "reload"),
     new CommandMappings(
-      "vscode-home-assistant.themeReload",
+      `${extensionId}.themeReload`,
       "frontend",
       "reload_themes"
     ),
+    new CommandMappings(`${extensionId}.homekitReload`, "homekit", "reload"),
+    new CommandMappings(`${extensionId}.filesizeReload`, "filesize", "reload"),
+    new CommandMappings(`${extensionId}.minMaxReload`, "min_max", "reload"),
     new CommandMappings(
-      "vscode-home-assistant.homekitReload",
-      "homekit",
-      "reload"
-    ),
-    new CommandMappings(
-      "vscode-home-assistant.filesizeReload",
-      "filesize",
-      "reload"
-    ),
-    new CommandMappings(
-      "vscode-home-assistant.minMaxReload",
-      "min_max",
-      "reload"
-    ),
-    new CommandMappings(
-      "vscode-home-assistant.genericThermostatReload",
+      `${extensionId}.genericThermostatReload`,
       "generic_thermostat",
       "reload"
     ),
     new CommandMappings(
-      "vscode-home-assistant.genericCameraReload",
+      `${extensionId}.genericCameraReload`,
       "generic",
       "reload"
     ),
-    new CommandMappings("vscode-home-assistant.pingReload", "ping", "reload"),
-    new CommandMappings("vscode-home-assistant.trendReload", "trend", "reload"),
+    new CommandMappings(`${extensionId}.pingReload`, "ping", "reload"),
+    new CommandMappings(`${extensionId}.trendReload`, "trend", "reload"),
     new CommandMappings(
-      "vscode-home-assistant.historyStatsReload",
+      `${extensionId}.historyStatsReload`,
       "history_stats",
       "reload"
     ),
     new CommandMappings(
-      "vscode-home-assistant.universalReload",
+      `${extensionId}.universalReload`,
       "universal",
       "reload"
     ),
     new CommandMappings(
-      "vscode-home-assistant.statisticsReload",
+      `${extensionId}.statisticsReload`,
       "statistics",
       "reload"
     ),
+    new CommandMappings(`${extensionId}.filterReload`, "filter", "reload"),
+    new CommandMappings(`${extensionId}.restReload`, "rest", "reload"),
     new CommandMappings(
-      "vscode-home-assistant.filterReload",
-      "filter",
-      "reload"
-    ),
-    new CommandMappings("vscode-home-assistant.restReload", "rest", "reload"),
-    new CommandMappings(
-      "vscode-home-assistant.commandLineReload",
+      `${extensionId}.commandLineReload`,
       "command_line",
       "reload"
     ),
+    new CommandMappings(`${extensionId}.bayesianReload`, "bayesian", "reload"),
+    new CommandMappings(`${extensionId}.telegramReload`, "telegram", "reload"),
+    new CommandMappings(`${extensionId}.smtpReload`, "smtp", "reload"),
+    new CommandMappings(`${extensionId}.mqttReload`, "mqtt", "reload"),
+    new CommandMappings(`${extensionId}.rpioGpioReload`, "rpi_gpio", "reload"),
+    new CommandMappings(`${extensionId}.knxReload`, "knx", "reload"),
+    new CommandMappings(`${extensionId}.templateReload`, "template", "reload"),
     new CommandMappings(
-      "vscode-home-assistant.bayesianReload",
-      "bayesian",
-      "reload"
-    ),
-    new CommandMappings(
-      "vscode-home-assistant.telegramReload",
-      "telegram",
-      "reload"
-    ),
-    new CommandMappings("vscode-home-assistant.smtpReload", "smtp", "reload"),
-    new CommandMappings("vscode-home-assistant.mqttReload", "mqtt", "reload"),
-    new CommandMappings(
-      "vscode-home-assistant.rpioGpioReload",
-      "rpi_gpio",
-      "reload"
-    ),
-    new CommandMappings("vscode-home-assistant.knxReload", "knx", "reload"),
-    new CommandMappings(
-      "vscode-home-assistant.templateReload",
-      "template",
-      "reload"
-    ),
-    new CommandMappings(
-      "vscode-home-assistant.hassioAddonRestartGitPull",
+      `${extensionId}.hassioAddonRestartGitPull`,
       "hassio",
       "addon_restart",
       { addon: "core_git_pull" }
     ),
     new CommandMappings(
-      "vscode-home-assistant.hassioHostReboot",
+      `${extensionId}.hassioHostReboot`,
       "hassio",
       "host_reboot"
     ),
@@ -285,53 +249,39 @@ export async function activate(
     );
   });
 
-  const inputReloadDomains = [
-    "input_boolean",
-    "input_datetime",
-    "input_number",
-    "input_select",
-    "input_text",
-  ];
-
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "vscode-home-assistant.inputReload",
-      async (_) => {
-        await Promise.all(
-          inputReloadDomains.map(async (domain) => {
-            await client.sendRequest("callService", {
-              domain,
-              service: "reload",
-            });
-          })
-        );
-        await vscode.window.showInformationMessage(
-          "Home Assistant inputs reload called!"
-        );
-      }
-    )
+    vscode.commands.registerCommand(`${extensionId}.inputReload`, async (_) => {
+      await Promise.all(
+        inputReloadDomains.map(async (domain) => {
+          await client.sendRequest("callService", {
+            domain,
+            service: "reload",
+          });
+        })
+      );
+      await vscode.window.showInformationMessage(
+        "Home Assistant inputs reload called!"
+      );
+    })
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vscode-home-assistant.homeassistantCheckConfig",
+      `${extensionId}.homeassistantCheckConfig`,
       async () => {
         await client.sendRequest("checkConfig");
       }
     )
   );
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "vscode-home-assistant.getErrorLog",
-      async () => {
-        await client.sendRequest("getErrorLog");
-      }
-    )
+    vscode.commands.registerCommand(`${extensionId}.getErrorLog`, async () => {
+      await client.sendRequest("getErrorLog");
+    })
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vscode-home-assistant.renderTemplate",
+      `${extensionId}.renderTemplate`,
       async () => {
         const editor = vscode.window.activeTextEditor;
         const selectedText = editor.document.getText(editor.selection);
@@ -342,7 +292,7 @@ export async function activate(
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vscode-home-assistant.fetchEntities",
+      `${extensionId}.fetchEntities`,
       async () => {
         await client.sendRequest("fetchEntities");
       }
@@ -351,10 +301,9 @@ export async function activate(
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vscode-home-assistant.openEntityLogbook",
+      `${extensionId}.openEntityLogbook`,
       (treeItem) => {
-        const { hostUrl } =
-          vscode.workspace.getConfiguration()["vscode-home-assistant"];
+        const { hostUrl } = vscode.workspace.getConfiguration()[extensionId];
         return vscode.commands.executeCommand(
           "vscode.open",
           vscode.Uri.parse(`${hostUrl}logbook/?entity_id=${treeItem.label}`)
@@ -365,10 +314,9 @@ export async function activate(
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "vscode-home-assistant.openEntityHistory",
+      `${extensionId}.openEntityHistory`,
       (treeItem) => {
-        const { hostUrl } =
-          vscode.workspace.getConfiguration()["vscode-home-assistant"];
+        const { hostUrl } = vscode.workspace.getConfiguration()[extensionId];
         return vscode.commands.executeCommand(
           "vscode.open",
           vscode.Uri.parse(`${hostUrl}history/?entity_id=${treeItem.label}`)
@@ -378,9 +326,8 @@ export async function activate(
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "vscode-home-assistant.copyEntities",
-      (nodes) => vscode.env.clipboard.writeText(nodes.label)
+    vscode.commands.registerCommand(`${extensionId}.copyEntities`, (nodes) =>
+      vscode.env.clipboard.writeText(nodes.label)
     )
   );
 
@@ -389,11 +336,11 @@ export async function activate(
     .get("files.associations");
   if (
     !fileAssociations["*.yaml"] &&
-    Object.values(fileAssociations).indexOf("home-assistant") === -1
+    Object.values(fileAssociations).indexOf(languageId) === -1
   ) {
     await vscode.workspace
       .getConfiguration()
-      .update("files.associations", { "*.yaml": "home-assistant" }, false);
+      .update("files.associations", { "*.yaml": languageId }, false);
   }
 }
 
