@@ -369,11 +369,12 @@
       {
         "command": "vscode-home-assistant.fetchEntities",
         "title": "Refresh Entities",
-        "icon": "assets/refresh.svg"
+        "icon": "$(refresh)"
       },
       {
         "command": "vscode-home-assistant.copyEntities",
-        "title": "Copy Entity IDs"
+        "title": "Copy Entity IDs",
+        "icon": "$(file)"
       }
     ],
     "menus": {
@@ -401,7 +402,7 @@
         {
           "command": "vscode-home-assistant.copyEntities",
           "when": "view == homeassistantEntities && viewItem == entity",
-          "group": "navigation"
+          "group": "inline"
         }
       ]
     },
@@ -421,7 +422,6 @@
       "homeassistant": [
         {
           "id": "homeassistantEntities",
-          "icon": "media/dep.svg",
           "name": "Entities"
         },
         {

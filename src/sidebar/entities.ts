@@ -75,10 +75,5 @@ export class Entity extends vscode.TreeItem {
     this.description = this.friendlyName;
   }
 
-  iconPath = {
-    light: "",
-    dark: "",
-  };
-
   contextValue = "entity";
 }

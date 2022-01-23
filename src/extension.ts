@@ -351,7 +351,7 @@ export async function activate(
 
   vscode.commands.registerCommand(
     "vscode-home-assistant.copyEntities",
-    (nodes) => vscode.env.clipboard.writeText(JSON.stringify(nodes))
+    (nodes) => vscode.env.clipboard.writeText(nodes.label)
   );
 
   const fileAssociations = vscode.workspace
