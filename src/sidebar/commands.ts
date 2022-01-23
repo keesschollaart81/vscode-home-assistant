@@ -139,5 +139,5 @@ export function registerCommandsView(context: ExtensionContext): void {
     }));
 
   // eslint-disable-next-line
-  new HelpAndFeedbackView(context, "homeassistantCommands", items);
+  new HelpAndFeedbackView(context, `${extensionId}.reload`, items);
 }

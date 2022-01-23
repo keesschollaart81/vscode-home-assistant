@@ -217,7 +217,7 @@
         "category": "Home Assistant"
       },
       {
-        "command": "vscode-home-assistant.homeassistantReloadCoreConfig",
+        "command": "vscode-home-assistant.vscode-home-assistant.reloadCoreConfig",
         "title": "Reload Configuration",
         "category": "Home Assistant"
       },
@@ -404,23 +404,23 @@
       "view/title": [
         {
           "command": "vscode-home-assistant.fetchEntities",
-          "when": "view == homeassistantEntities",
+          "when": "view == vscode-home-assistant.entities",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
           "command": "vscode-home-assistant.copyEntities",
-          "when": "view == homeassistantEntities && viewItem == entity",
+          "when": "view == vscode-home-assistant.entities && viewItem == entity",
           "group": "inline"
         },
         {
           "command": "vscode-home-assistant.openEntityLogbook",
-          "when": "view == homeassistantEntities && viewItem == entity"
+          "when": "view == vscode-home-assistant.entities && viewItem == entity"
         },
         {
           "command": "vscode-home-assistant.openEntityHistory",
-          "when": "view == homeassistantEntities && viewItem == entity"
+          "when": "view == vscode-home-assistant.entities && viewItem == entity"
         }
       ]
     },
@@ -439,16 +439,16 @@
     "views": {
       "homeassistant": [
         {
-          "id": "homeassistantEntities",
+          "id": "vscode-home-assistant.entities",
           "name": "Entities"
         },
         {
-          "id": "homeassistantCommands",
+          "id": "vscode-home-assistant.reload",
           "name": "Reload",
           "visibility": "collapsed"
         },
         {
-          "id": "homeassistantHelpAndFeedback",
+          "id": "vscode-home-assistant.helpAndFeedback",
           "name": "Help And Feedback",
           "visibility": "collapsed"
         }
@@ -465,7 +465,7 @@
     },
     "viewsWelcome": [
       {
-        "view": "homeassistantEntities",
+        "view": "vscode-home-assistant.entities",
         "contents": "No entities found.\n[Fetch Entities](command:vscode-home-assistant.fetchEntities)"
       }
     ]

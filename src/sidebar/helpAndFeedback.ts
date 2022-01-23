@@ -3,7 +3,7 @@ import {
   HelpAndFeedbackView,
   StandardLinksProvider,
 } from "vscode-ext-help-and-feedback-view";
-import { fullExtensionId } from "../constants";
+import { extensionId, fullExtensionId } from "../constants";
 
 interface Reload {
   name: string;
@@ -28,5 +28,5 @@ export function registerHelpAndFeedbackView(context: ExtensionContext): void {
   ];
 
   // eslint-disable-next-line
-  new HelpAndFeedbackView(context, "homeassistantHelpAndFeedback", items);
+  new HelpAndFeedbackView(context, `${extensionId}.helpAndFeedback`, items);
 }

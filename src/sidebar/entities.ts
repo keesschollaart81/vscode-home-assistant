@@ -2,6 +2,7 @@
 /* eslint-disable max-classes-per-file */
 import * as vscode from "vscode";
 import { HassEntity } from "home-assistant-js-websocket";
+import { extensionId } from "../constants";
 
 export class EntitiesProvider implements vscode.TreeDataProvider<Entity> {
   private _onDidChangeTreeData: vscode.EventEmitter<Entity | undefined | void> =
@@ -15,7 +16,7 @@ export class EntitiesProvider implements vscode.TreeDataProvider<Entity> {
   private view: vscode.TreeView<Entity>;
 
   constructor(context: vscode.ExtensionContext) {
-    this.view = vscode.window.createTreeView("homeassistantEntities", {
+    this.view = vscode.window.createTreeView(`${extensionId}.entities`, {
       treeDataProvider: this,
       showCollapseAll: true,
       canSelectMany: true,
@@ -24,11 +25,12 @@ export class EntitiesProvider implements vscode.TreeDataProvider<Entity> {
   }
 
   refresh(): void {
-    void vscode.commands.executeCommand("vscode-home-assistant.fetchEntities");
+    void vscode.commands.executeCommand(`${extensionId}.fetchEntities`);
   }
 
   public updateEntities(entities: HassEntity[]): void {
     this.entities = entities;
+    this.view.title = `Entities (${entities.length})`;
     this._onDidChangeTreeData.fire();
   }
 
@@ -70,10 +72,23 @@ export class Entity extends vscode.TreeItem {
     public readonly command?: vscode.Command
   ) {
     super(label, collapsibleState);
-
+    this.state = state;
     this.tooltip = this.state;
     this.description = this.friendlyName;
   }
 
   contextValue = "entity";
+}
+
+export class Domain extends vscode.TreeItem {
+  constructor(
+    public readonly label: string,
+    private readonly count: string,
+    public readonly collapsibleState: vscode.TreeItemCollapsibleState
+  ) {
+    super(label, collapsibleState);
+    this.description = this.count;
+  }
+
+  contextValue = "domain";
 }
