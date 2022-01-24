@@ -18,6 +18,12 @@ import {
   languageId,
 } from "./constants";
 import { registerHelpAndFeedbackView } from "./sidebar/helpAndFeedback";
+import {
+  extensionId,
+  fullExtensionId,
+  inputReloadDomains,
+  languageId,
+} from "./constants";
 
 const telemetryVersion = generateVersionString(
   vscode.extensions.getExtension(fullExtensionId)
