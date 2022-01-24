@@ -217,7 +217,7 @@
         "category": "Home Assistant"
       },
       {
-        "command": "vscode-home-assistant.vscode-home-assistant.reloadCoreConfig",
+        "command": "vscode-home-assistant.homeassistantReloadCoreConfig",
         "title": "Reload Configuration",
         "category": "Home Assistant"
       },
