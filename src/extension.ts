@@ -11,12 +11,6 @@ import TelemetryReporter from "vscode-extension-telemetry";
 import { HassEntity } from "home-assistant-js-websocket";
 import { EntitiesProvider } from "./sidebar/entities";
 import { registerCommandsView } from "./sidebar/commands";
-import {
-  extensionId,
-  fullExtensionId,
-  inputReloadDomains,
-  languageId,
-} from "./constants";
 import { registerHelpAndFeedbackView } from "./sidebar/helpAndFeedback";
 import {
   extensionId,

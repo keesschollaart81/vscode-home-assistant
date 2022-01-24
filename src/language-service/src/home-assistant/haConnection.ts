@@ -316,7 +316,7 @@ export class HaConnection implements IHaConnection {
       });
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       console.log(
-        `Service Call ${domain}.${service} made succesfully, response:`
+        `Service Call ${domain}.${service} made successfully, response:`
       );
       console.log(JSON.stringify(resp.data, null, 1));
     } catch (error) {
