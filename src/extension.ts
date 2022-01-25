@@ -12,6 +12,7 @@ import { HassEntity } from "home-assistant-js-websocket";
 import { EntitiesProvider } from "./sidebar/entities";
 import { registerCommandsView } from "./sidebar/commands";
 import { registerHelpAndFeedbackView } from "./sidebar/helpAndFeedback";
+import { getGroupSnippet, suggestGroupName } from "./queries";
 import {
   extensionId,
   fullExtensionId,
@@ -347,6 +348,45 @@ export async function activate(
         }
 
         return vscode.env.clipboard.writeText(text);
+      }
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      `${extensionId}.createGroup`,
+      async (invokedTreeItem) => {
+        const selectedTreeItems = entitiesProvider.view.selection;
+        const editor = vscode.window.activeTextEditor;
+        const { document } = editor;
+
+        if (selectedTreeItems.length <= 1) {
+          return vscode.window.showInformationMessage(
+            "Please select at least 2 entities to create a group"
+          );
+        }
+
+        if (document.fileName.split(".")[1] !== "yaml") {
+          void vscode.window.showInformationMessage(
+            "Group can be inserted only in .yaml files"
+          );
+        }
+
+        const selectedEntities = selectedTreeItems.map((item) => item.label);
+        const friendlyName = await vscode.window.showInputBox({
+          value: suggestGroupName(selectedEntities),
+          placeHolder: "For example: All Windows",
+        });
+
+        // slugify friendlyName
+        const id = friendlyName.toLowerCase().replace(/\s/g, "_");
+        const position = editor.selection.active;
+        const newPosition = position.with(position.line, 0);
+
+        return editor.insertSnippet(
+          getGroupSnippet(id, friendlyName, selectedEntities),
+          newPosition
+        );
       }
     )
   );

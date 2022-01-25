@@ -377,6 +377,11 @@
         "icon": "$(file)"
       },
       {
+        "command": "vscode-home-assistant.createGroup",
+        "title": "Create a group",
+        "icon": "$(gather)"
+      },
+      {
         "command": "vscode-home-assistant.openEntityLogbook",
         "title": "Show Entity Logbook",
         "icon": "$(list-unordered)"
@@ -413,6 +418,14 @@
           "command": "vscode-home-assistant.copyEntities",
           "when": "view == vscode-home-assistant.entities && viewItem == entity",
           "group": "inline"
+        },
+        {
+          "command": "vscode-home-assistant.copyEntities",
+          "when": "view == vscode-home-assistant.entities && viewItem == entity"
+        },
+        {
+          "command": "vscode-home-assistant.createGroup",
+          "when": "view == vscode-home-assistant.entities && viewItem == entity"
         },
         {
           "command": "vscode-home-assistant.openEntityLogbook",
