@@ -39,14 +39,42 @@
     "path": "configuration.yaml/input_boolean",
     "file": "integration-input_boolean.json",
     "tsFile": "integrations/core/input_boolean.ts",
-    "fromType": "Schema"
+    "fromType": "File"
+  },
+  {
+    "key": "integration-input_button",
+    "path": "configuration.yaml/input_button",
+    "file": "integration-input_button.json",
+    "tsFile": "integrations/core/input_button.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "integration-input_datetime",
+    "path": "configuration.yaml/input_datetime",
+    "file": "integration-input_datetime.json",
+    "tsFile": "integrations/core/input_datetime.ts",
+    "fromType": "File"
   },
   {
     "key": "integration-input_number",
     "path": "configuration.yaml/input_number",
     "file": "integration-input_number.json",
     "tsFile": "integrations/core/input_number.ts",
-    "fromType": "Schema"
+    "fromType": "File"
+  },
+  {
+    "key": "integration-input_select",
+    "path": "configuration.yaml/input_select",
+    "file": "integration-input_select.json",
+    "tsFile": "integrations/core/input_select.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "integration-input_text",
+    "path": "configuration.yaml/input_text",
+    "file": "integration-input_text.json",
+    "tsFile": "integrations/core/input_text.ts",
+    "fromType": "File"
   },
   {
     "key": "integration-script",
@@ -60,6 +88,13 @@
     "path": "configuration.yaml/sensor",
     "file": "integration-sensor.json",
     "tsFile": "integrations/core/sensor.ts",
+    "fromType": "File"
+  },
+  {
+    "key": "integration-template",
+    "path": "configuration.yaml/template",
+    "file": "integration-template.json",
+    "tsFile": "integrations/core/template.ts",
     "fromType": "File"
   },
   {

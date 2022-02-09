@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>scopeName</key>
+        <string>injection.homeassistant.jinja-braces</string>
+        <key>injectionSelector</key>
+        <string>L:string -meta.embedded.inline.jinja</string>
+        <key>name</key>
+        <string>Grammar for Jinja2 expressions surrounded by double curly braces</string>
+        <key>patterns</key>
+        <array>
+            <dict>
+                <key>include</key>
+                <string>#jinja-expression</string>
+            </dict>
+        </array>
+        <key>repository</key>
+        <dict>
+            <key>jinja-expression</key>
+            <dict>
+                <key>comment</key>
+                <string>The 'name' is used to undo highlighting as string</string>
+                <key>name</key>
+                <string>keyword.operator.homeassistant</string>
+                <key>begin</key>
+                <string>\{\{</string>
+                <key>end</key>
+                <string>\}\}</string>
+                <key>beginCaptures</key>
+                <dict>
+                    <key>0</key>
+                    <dict>
+                        <key>name</key>
+                        <string>constant.character.escape.homeassistant</string>
+                    </dict>
+                </dict>
+                <key>endCaptures</key>
+                <dict>
+                    <key>0</key>
+                    <dict>
+                        <key>name</key>
+                        <string>constant.character.escape.homeassistant</string>
+                    </dict>
+                </dict>
+                <key>contentName</key>
+                <string>meta.embedded.inline.jinja</string>
+                <key>patterns</key>
+                <array>
+                    <dict>
+                        <key>include</key>
+                        <string>source.home-assistant-jinja#expression</string>
+                    </dict>
+                </array>
+            </dict>
+        </dict>
+    </dict>
+</plist>

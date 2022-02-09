@@ -47,6 +47,12 @@ export interface Schema {
   name?: string;
 
   /**
+   * Set to true to have icon colored when entity is active.
+   * https://www.home-assistant.io/lovelace/entity/#state_color
+   */
+  state_color?: boolean;
+
+  /**
    * Set to any theme within themes.yaml.
    * https://www.home-assistant.io/lovelace/entity/#theme
    */

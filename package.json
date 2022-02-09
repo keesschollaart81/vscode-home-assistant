@@ -2,7 +2,7 @@
   "name": "vscode-home-assistant",
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
-  "version": "1.22.0",
+  "version": "1.24.0",
   "preview": false,
   "engines": {
     "vscode": "^1.45.1"
@@ -80,21 +80,123 @@
     "languages": [
       {
         "id": "home-assistant",
-        "configuration": "./yaml-language/language-configuration.json",
+        "configuration": "./syntaxes/yaml-language-configuration.json",
         "extensions": [
           ".yml",
           ".yaml"
         ],
         "aliases": [
-          "Home Assistant"
+          "Home Assistant",
+          "homeassistant",
+          "home-assistant"
         ]
+      },
+      {
+        "comments": "unfortunately this dummy entry is necessary for embedding to work",
+        "id": "home-assistant-jinja",
+        "configuration": "./jinja-language-configuration.json"
       }
     ],
     "grammars": [
       {
+        "comments": [
+          "YAML syntax as base for Home Assistant",
+          "scopeName changed so that we can use it as base for injections"
+        ],
         "language": "home-assistant",
-        "scopeName": "source.yaml",
-        "path": "./yaml-language/yaml.tmLanguage.json"
+        "scopeName": "source.home-assistant",
+        "path": "./syntaxes/external/YAML.tmLanguage"
+      },
+      {
+        "comments": [
+          "Jinja syntax as injection into Home Assistant YAML",
+          "This is so that we do not need to rely on the Jinja extension being installed"
+        ],
+        "language": "home-assistant-jinja",
+        "scopeName": "source.home-assistant-jinja",
+        "path": "./syntaxes/external/jinja.tmLanguage.json"
+      },
+      {
+        "comments": [
+          "Highlighting of Home Assistant keywords in Jinja"
+        ],
+        "path": "./syntaxes/home-assistant/jinja-keywords.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-keywords",
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "Additional Jinja grammars"
+        ],
+        "path": "./syntaxes/home-assistant/jinja-extras.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-extras",
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "Support for Jinja in double curly braces"
+        ],
+        "path": "./syntaxes/home-assistant/jinja-braces.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-braces",
+        "embeddedLanguages": {
+          "meta.embedded.inline.jinja": "home-assistant-jinja"
+        },
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "Support for Jinja in single curly braces with percentage symbol"
+        ],
+        "path": "./syntaxes/home-assistant/jinja-braces-block.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-braces-block",
+        "embeddedLanguages": {
+          "meta.embedded.block.jinja": "home-assistant-jinja"
+        },
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "Support for Jinja in conditionals"
+        ],
+        "path": "./syntaxes/home-assistant/jinja-conditionals.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-conditionals",
+        "embeddedLanguages": {
+          "meta.embedded.inline.jinja": "home-assistant-jinja",
+          "meta.embedded.block.jinja": "home-assistant-jinja"
+        },
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "The quote escapes implemented in the conditionals injection do not work inside brackets etc.",
+          "Support for single quote escapes in Jinja"
+        ],
+        "path": "./syntaxes/home-assistant/jinja-single-quote-escape.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-single-quote-escape",
+        "injectTo": [
+          "source.home-assistant"
+        ]
+      },
+      {
+        "comments": [
+          "The quote escapes implemented in the conditionals injection do not work inside brackets etc.",
+          "Support for double quote escapes in Jinja"
+        ],
+        "path": "./syntaxes/home-assistant/jinja-double-quote-escape.tmLanguage",
+        "scopeName": "injection.homeassistant.jinja-double-quote-escape",
+        "injectTo": [
+          "source.home-assistant"
+        ]
       }
     ],
     "commands": [
@@ -317,11 +419,11 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@types/mocha": "9.0.0",
+    "@types/mocha": "9.1.0",
     "@types/node": "16.4.10",
-    "@types/request": "2.48.7",
+    "@types/request": "2.48.8",
     "@types/vscode": "1.45.1",
-    "@types/ws": "8.2.0",
+    "@types/ws": "8.2.2",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "babel-eslint": "^10.1.0",
@@ -329,34 +431,34 @@
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-flowtype": "^7.0.0",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.27.0",
+    "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",
     "eslint-plugin-wc": "^1.3.2",
     "husky": "^7.0.4",
-    "lint-staged": "^11.2.6",
-    "prettier": "^2.4.1",
+    "lint-staged": "^12.3.3",
+    "prettier": "^2.5.1",
     "rimraf": "3.0.2",
     "ts-loader": "^8.0.10",
-    "ts-node": "10.4.0",
-    "typescript": "^4.4.4",
+    "ts-node": "10.5.0",
+    "typescript": "^4.5.5",
     "typescript-json-schema": "0.51.0"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "bufferutil": "^4.0.5",
-    "home-assistant-js-websocket": "^5.11.2",
-    "utf-8-validate": "^5.0.7",
-    "vscode-extension-telemetry": "0.4.3",
+    "axios": "^0.25.0",
+    "bufferutil": "^4.0.6",
+    "home-assistant-js-websocket": "^6.0.1",
+    "utf-8-validate": "^5.0.8",
+    "vscode-extension-telemetry": "0.4.5",
     "vscode-json-languageservice": "^3.9.1",
     "vscode-languageclient": "6.1.3",
     "vscode-languageserver": "6.1.1",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-languageserver-textdocument": "^1.0.2",
-    "vscode-uri": "3.0.2",
-    "ws": "8.2.3",
+    "vscode-uri": "3.0.3",
+    "ws": "8.5.0",
     "yaml": "1.10.2",
     "yaml-language-server": "0.12.0"
   }
