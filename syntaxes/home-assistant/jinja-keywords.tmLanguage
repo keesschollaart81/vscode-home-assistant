@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>scopeName</key>
+        <string>injection.homeassistant.jinja-keywords</string>
+        <key>injectionSelector</key>
+        <string>L:meta.embedded.inline.jinja -string.quoted.double.jinja -string.quoted.single.jinja, L:meta.embedded.block.jinja -string.quoted.double.jinja -string.quoted.single.jinja</string>
+        <key>name</key>
+        <string>Grammar for detecting Home Assistant keywords</string>
+        <key>comment</key>
+        <array>
+            <string>Extracted from:</string>
+            <string>https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/template.py</string>
+            <string>https://jinja.palletsprojects.com/en/3.0.x/templates/#list-of-builtin-filters</string>
+        </array>
+        <key>patterns</key>
+        <array>
+            <dict>
+                <key>include</key>
+                <string>#keyword</string>
+            </dict>
+        </array>
+        <key>repository</key>
+        <dict>
+            <key>keyword</key>
+            <dict>
+                <key>name</key>
+                <string>constant.other.ninja</string>
+                <key>match</key>
+                <string>(?x)
+                    \b(
+                        abs
+                        | acos
+                        | area_devices
+                        | area_entities
+                        | area_id
+                        | area_name
+                        | as_datetime
+                        | as_local
+                        | as_timestamp
+                        | asin
+                        | atan
+                        | atan2
+                        | attr
+                        | average
+                        | base64_decode
+                        | base64_encode
+                        | batch
+                        | bitwise_and
+                        | bitwise_or
+                        | capitalize
+                        | center
+                        | closest
+                        | cos
+                        | count
+                        | default
+                        | device_attr
+                        | device_entities
+                        | device_id
+                        | dictsort
+                        | distance
+                        | escape
+                        | expand
+                        | filesizeformat
+                        | first
+                        | float
+                        | forceescape
+                        | format
+                        | from_json
+                        | groupby
+                        | iif
+                        | indent
+                        | int
+                        | integration_entities
+                        | is_defined
+                        | is_device_attr
+                        | is_number
+                        | is_state
+                        | is_state_attr
+                        | join
+                        | last
+                        | length
+                        | list
+                        | log
+                        | lower
+                        | map
+                        | match
+                        | max
+                        | min
+                        | multiply
+                        | now
+                        | ord
+                        | ordinal
+                        | pack
+                        | pi
+                        | pprint
+                        | random
+                        | regex_findall
+                        | regex_findall_index
+                        | regex_match
+                        | regex_replace
+                        | regex_search
+                        | reject
+                        | rejectattr
+                        | relative_time
+                        | replace
+                        | reverse
+                        | round
+                        | safe
+                        | search
+                        | select
+                        | selectattr
+                        | sin
+                        | slice
+                        | sort
+                        | sqrt
+                        | state_attr
+                        | states
+                        | string
+                        | striptags
+                        | strptime
+                        | sum
+                        | tan
+                        | tau
+                        | timedelta
+                        | timestamp_custom
+                        | timestamp_local
+                        | timestamp_utc
+                        | title
+                        | to_json
+                        | today_at
+                        | tojson
+                        | trim
+                        | truncate
+                        | unique
+                        | unpack
+                        | upper
+                        | urlencode
+                        | urlize
+                        | utcnow
+                        | value
+                        | value_json
+                        | wordcount
+                        | wordwrap
+                        | xmlattr
+                    )\b
+                </string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

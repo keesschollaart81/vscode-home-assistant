@@ -33,6 +33,7 @@ export type DeviceClasses =
 export type DeviceClassesBinarySensor =
   | "battery"
   | "battery_charging"
+  | "carbon_monoxide"
   | "cold"
   | "connectivity"
   | "door"
@@ -53,6 +54,8 @@ export type DeviceClassesBinarySensor =
   | "safety"
   | "smoke"
   | "sound"
+  | "tamper"
+  | "update"
   | "vibration"
   | "window";
 
@@ -80,23 +83,40 @@ export type DeviceClassesMediaPlayer = "tv" | "speaker" | "receiver";
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
  */
 export type DeviceClassesSensor =
+  | "apparent_power"
+  | "aqi"
   | "battery"
+  | "carbon_dioxide"
+  | "carbon_monoxide"
   | "current"
+  | "date"
   | "energy"
+  | "frequency"
+  | "gas"
   | "humidity"
   | "illuminance"
-  | "power"
+  | "monetary"
+  | "nitrogen_dioxide"
+  | "nitrogen_monoxide"
+  | "nitrous_oxide"
+  | "ozone"
+  | "pm1"
+  | "pm10"
+  | "pm25"
   | "power_factor"
+  | "power"
   | "pressure"
   | "signal_strength"
+  | "sulphur_dioxide"
   | "temperature"
   | "timestamp"
+  | "volatile_organic_compounds"
   | "voltage";
 
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
  */
-export type StateClassesSensor = "measurement";
+export type StateClassesSensor = "measurement" | "total" | "total_increasing";
 
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/switch/__init__.py

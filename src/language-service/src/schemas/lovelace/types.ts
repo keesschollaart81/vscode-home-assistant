@@ -6,6 +6,7 @@ export type CardsFile = Card | Card[];
 
 export type Card =
   | cards.AlarmPanel.Schema
+  | cards.Area.Schema
   | cards.Button.Schema
   | cards.Calendar.Schema
   | cards.Conditional.Schema
@@ -14,6 +15,7 @@ export type Card =
   | cards.EnergyDateSelection.Schema
   | cards.EnergyDevicesGraph.Schema
   | cards.EnergyDistribution.Schema
+  | cards.EnergyGasGraph.Schema
   | cards.EnergyGridNeutralityGauge.Schema
   | cards.EnergySolarConsumedGauge.Schema
   | cards.EnergySolarGraph.Schema

@@ -1,4 +1,5 @@
 export * as AlarmPanel from "./alarm_panel";
+export * as Area from "./area";
 export * as Button from "./button";
 export * as Calendar from "./calendar";
 export * as Conditional from "./conditional";
@@ -7,6 +8,7 @@ export * as EnergyCarbonConsumedGauge from "./energy_carbon_consumed_gauge";
 export * as EnergyDateSelection from "./energy_date_selection";
 export * as EnergyDevicesGraph from "./energy_devices_graph";
 export * as EnergyDistribution from "./energy_distribution";
+export * as EnergyGasGraph from "./energy_gas_graph";
 export * as EnergyGridNeutralityGauge from "./energy_grid_neutrality_gauge";
 export * as EnergySolarConsumedGauge from "./energy_solar_consumed_gauge";
 export * as EnergySolarGraph from "./energy_solar_graph";

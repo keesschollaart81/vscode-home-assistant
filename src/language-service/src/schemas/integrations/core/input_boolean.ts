@@ -8,6 +8,7 @@ export type Domain = "input_boolean";
 export interface Schema {
   [key: string]: Item | IncludeNamed | null;
 }
+export type File = Schema | Item;
 
 interface Item {
   /**
