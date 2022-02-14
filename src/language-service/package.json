@@ -67,7 +67,7 @@
   "dependencies": {
     "axios": "^0.26.0",
     "home-assistant-js-websocket": "^6.0.0",
-    "vscode-json-languageservice": "3.9.1",
+    "vscode-json-languageservice": "4.2.0",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-uri": "3.0.3",
     "ws": "8.5.0",
