@@ -65,7 +65,7 @@
     "vscode-test": "^1.4.0"
   },
   "dependencies": {
-    "axios": "^0.25.0",
+    "axios": "^0.26.0",
     "home-assistant-js-websocket": "^6.0.0",
     "vscode-json-languageservice": "3.9.1",
     "vscode-languageserver-protocol": "3.15.3",
