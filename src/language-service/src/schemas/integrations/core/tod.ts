@@ -9,8 +9,8 @@ export type Domain = "tod";
 
 export interface BinarySensorPlatformSchema extends PlatformSchema {
   /**
-   * The uptime sensor platform displays the time since the last Home Assistant restart.
-   * https://www.home-assistant.io/integrations/uptime
+   * The tod platform supports binary sensors which get their values by checking if the current time is within defined time ranges.
+   * https://www.home-assistant.io/integrations/tod
    */
   platform: "tod";
 
