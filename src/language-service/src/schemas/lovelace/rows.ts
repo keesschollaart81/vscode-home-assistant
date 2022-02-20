@@ -194,7 +194,7 @@ export interface DividerRow {
    * Style the element using CSS.
    * https://www.home-assistant.io/lovelace/entities/#style
    */
-  style: { [key: string]: any };
+  style?: { [key: string]: any };
 }
 
 interface EntityRow extends EntityConfig {

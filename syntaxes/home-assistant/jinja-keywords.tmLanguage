@@ -53,6 +53,7 @@
                         | center
                         | closest
                         | cos
+                        | count
                         | default
                         | device_attr
                         | device_entities
