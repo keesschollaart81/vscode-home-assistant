@@ -33,13 +33,13 @@ jobs:
         run: |
           npm install -g vsce
           vsce publish -p $VSCE_TOKEN
-          vsce pack -o vscode-home-assistant.vsix
+          vsce package -o vscode-home-assistant.vsix
         env:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
       - name: 🚀 Open VSX Publish
         uses: HaaLeo/publish-vscode-extension@v1
-        if: success() && github.ref == 'refs/heads/master'
+        # if: success() && github.ref == 'refs/heads/master'
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
           extensionFile: vscode-home-assistant.vsix
