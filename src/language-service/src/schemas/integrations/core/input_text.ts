@@ -42,7 +42,7 @@ interface Item {
    * https://www.home-assistant.io/integrations/input_text#min
    *
    * @TJS-type integer
-   * @minimum 1
+   * @minimum 0
    * @maximum 255
    */
   min?: Integer;
