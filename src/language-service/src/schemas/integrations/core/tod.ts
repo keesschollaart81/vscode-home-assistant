@@ -2,7 +2,7 @@
  * Times of the Day integration
  * Source: https://github.com/home-assistant/core/tree/dev/homeassistant/components/tod/
  */
-import { TimePeriod } from "../../types";
+import { Time, TimePeriod } from "../../types";
 import { PlatformSchema } from "../platform";
 
 export type Domain = "tod";
@@ -24,7 +24,7 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
    * The absolute local time value or sun event for beginning of the time range.
    * https://www.home-assistant.io/integrations/tod/#before
    */
-  before: string | TimePeriod;
+  before: "sunset" | "sunrise" | Time;
 
   /**
    * The time offset of the beginning time range.
@@ -36,7 +36,7 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
    * The absolute local time value or sun event for ending of the time range.
    * https://www.home-assistant.io/integrations/tod/#after
    */
-  after: string | TimePeriod;
+   after: "sunset" | "sunrise" | Time;
 
   /**
    * The time offset of the ending time range.
