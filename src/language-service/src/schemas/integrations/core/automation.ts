@@ -2,7 +2,13 @@
  * Automation integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/__init__.py
  */
-import { Data, Deprecated, DynamicTemplate, IncludeList, PositiveInteger } from "../../types";
+import {
+  Data,
+  Deprecated,
+  DynamicTemplate,
+  IncludeList,
+  PositiveInteger,
+} from "../../types";
 import { Action } from "../actions";
 import { Condition } from "../conditions";
 import { Trigger } from "../triggers";

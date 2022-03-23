@@ -10,7 +10,7 @@ import { Entity as EntityString, PositiveInteger } from "../../types";
 import { EntityConfig, ViewLayout } from "../types";
 
 type Entity = EntityString | EntityConfig;
-type StateType = "max" | "mean" | "min" | "sum";
+type StatType = "max" | "mean" | "min" | "sum";
 
 export interface Schema {
   /**
@@ -47,9 +47,9 @@ export interface Schema {
 
   /**
    * The stat types to render. min, max, mean, sum.
-   * https://www.home-assistant.io/lovelace/statistics-graph/#state_types
+   * https://www.home-assistant.io/lovelace/statistics-graph/#stat_types
    */
-  state_types?: StateType | StateType[];
+  stat_types?: StatType | StatType[];
 
   /**
    * The card title.

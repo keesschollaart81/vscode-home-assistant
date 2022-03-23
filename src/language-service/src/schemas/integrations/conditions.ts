@@ -50,7 +50,7 @@ export interface ShorthandCondition {
    */
   condition: DynamicTemplate;
 }
-  
+
 export interface AndCondition {
   /**
    * Alias for the and condition.
