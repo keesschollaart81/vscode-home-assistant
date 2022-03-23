@@ -20,7 +20,9 @@ import { Trigger } from "../triggers";
 
 export type Domain = "template";
 export type Schema = Item[] | IncludeList;
-export type File = Item | Item[];
+
+// TemplateFile instead of File to avoid JSON schema conflicts
+export type TemplateFile = Item | Item[];
 
 export interface Item {
   /**
