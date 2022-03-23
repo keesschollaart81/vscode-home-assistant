@@ -30,6 +30,7 @@ export type Condition =
   | NotCondition
   | NumericStateCondition
   | OrCondition
+  | ShorthandCondition
   | StateCondition
   | SunCondition
   | TemplateCondition
@@ -37,6 +38,19 @@ export type Condition =
   | TriggerCondition
   | ZoneCondition;
 
+export interface ShorthandCondition {
+  /**
+   * Alias for the and condition.
+   */
+  alias?: string;
+
+  /**
+   * The template condition has a shorthand notation that can be used to make your scripts and automations shorter.
+   * https://www.home-assistant.io/docs/scripts/conditions/#template-condition-shorthand-notation
+   */
+  condition: DynamicTemplate;
+}
+  
 export interface AndCondition {
   /**
    * Alias for the and condition.
