@@ -86,6 +86,14 @@ interface DeviceTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#device-triggers
    */
   id?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface EventTrigger {
@@ -119,6 +127,14 @@ interface EventTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
    */
   id?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface GeolocationTrigger {
@@ -148,6 +164,14 @@ interface GeolocationTrigger {
   source: string;
 
   /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
+
+  /**
    * The zone to trigger on when a entity is appearing in or disappearing from.
    * https://www.home-assistant.io/docs/automation/trigger/#geolocation-trigger
    */
@@ -173,6 +197,14 @@ interface HomeAssistantTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#home-assistant-trigger
    */
   id?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface MqttTrigger {
@@ -223,6 +255,14 @@ interface MqttTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#mqtt-trigger
    */
   value_template?: Template;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface NumericStateTrigger {
@@ -274,6 +314,14 @@ interface NumericStateTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
   attribute?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface StateTrigger {
@@ -319,6 +367,14 @@ interface StateTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
    */
   id?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface SunTrigger {
@@ -346,6 +402,14 @@ interface SunTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#sun-trigger
    */
   offset?: TimePeriod;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface TemplateTrigger {
@@ -373,6 +437,14 @@ interface TemplateTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#template-trigger
    */
   for?: TimePeriod | Template;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface TimeTrigger {
@@ -397,6 +469,14 @@ interface TimeTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#time-trigger
    */
   id?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface TimePatternTrigger {
@@ -433,6 +513,14 @@ interface TimePatternTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#time-pattern-trigger
    */
   seconds?: string | number;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface WebhookTrigger {
@@ -454,6 +542,14 @@ interface WebhookTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
    */
   webhook_id: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface ZoneTrigger {
@@ -490,6 +586,14 @@ interface ZoneTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
    */
   event: "enter" | "leave";
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
 
 interface TagTrigger {
@@ -517,4 +621,12 @@ interface TagTrigger {
    * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
    */
   device_id?: string | string[];
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://next.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
 }
