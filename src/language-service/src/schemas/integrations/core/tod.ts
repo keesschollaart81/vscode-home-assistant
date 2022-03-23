@@ -36,7 +36,7 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
    * The absolute local time value or sun event for ending of the time range.
    * https://www.home-assistant.io/integrations/tod/#after
    */
-   after: "sunset" | "sunrise" | Time;
+  after: "sunset" | "sunrise" | Time;
 
   /**
    * The time offset of the ending time range.
