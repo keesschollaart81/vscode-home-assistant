@@ -95,7 +95,7 @@
     "path": "configuration.yaml/template",
     "file": "integration-template.json",
     "tsFile": "integrations/core/template.ts",
-    "fromType": "File"
+    "fromType": "TemplateFile"
   },
   {
     "key": "integration-alarm_control_panel",
