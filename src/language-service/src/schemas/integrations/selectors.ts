@@ -87,6 +87,12 @@ export interface AreaSelector {
        */
       integration?: Domain;
     };
+
+    /**
+     * Allows selecting multiple areas. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
+     */
+    multiple?: boolean;
   } | null;
 }
 
@@ -125,21 +131,30 @@ export interface DeviceSelector {
        */
       device_class?: DeviceClasses;
     };
+
     /**
      * Can be set to an integration domain. Limits the list of devices to devices provided by the set integration domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
     integration?: Domain;
+
     /**
      * When set, it limits the list of devices to devices provided by the set manufacturer name.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
     manufacturer?: string;
+
     /**
      * When set, it limits the list of devices to devices that have the set model.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
     model?: string;
+
+    /**
+     * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
+     */
+    multiple?: boolean;
   } | null;
 }
 
@@ -154,16 +169,24 @@ export interface EntitySelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
     integration?: Domain;
+
     /**
      * Limits the list of devices that provide entities of a certain domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
     domain?: Domain;
+
     /**
      * Limits the list of entities to entities that have a certain device class.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
     device_class?: DeviceClasses;
+
+    /**
+     * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
+     */
+    multiple?: boolean;
   } | null;
 }
 
