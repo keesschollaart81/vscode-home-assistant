@@ -33,6 +33,7 @@ export type Trigger =
   | TimeTrigger
   | TimePatternTrigger
   | WebhookTrigger
+  | WebOSTvTrigger
   | ZoneTrigger;
 
 type EventType =
@@ -550,6 +551,20 @@ interface WebhookTrigger {
    * https://www.home-assistant.io/docs/automation/trigger#trigger-variables
    */
   variables?: Data;
+}
+
+interface WebOSTvTrigger {
+  /**
+   * Trigger fires when WebOS integration attempts to turn on the TV.
+   * https://www.home-assistant.io/integrations/webostv/#configuration
+   */
+  platform: "webostv.turn_on";
+
+  /**
+   * The entity ID of the TV that wants to get turned on.
+   * https://www.home-assistant.io/integrations/webostv/#configuration
+   */
+   entity_id?: string;
 }
 
 interface ZoneTrigger {
