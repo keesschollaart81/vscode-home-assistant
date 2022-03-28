@@ -17,6 +17,7 @@ export type Selector =
   | DurationSelector
   | EntitySelector
   | IconSelector
+  | LocationSelector
   | NumberSelector
   | ObjectSelector
   | SelectSelector
@@ -261,18 +262,37 @@ export interface EntitySelector {
   } | null;
 }
 
-
 export interface IconSelector {
   /**
    * The icon selector shows an icon picker that allows the user to select an icon.
    * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
    */
-  color_temp: {
+  icon: {
     /**
      * Placeholder icon to show, when no icon is selected.
      * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
      */
     placeholder?: string;
+  };
+}
+
+export interface LocationSelector {
+  /**
+   * The icon selector shows an icon picker that allows the user to select an icon.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#location-selector
+   */
+  location: {
+    /**
+     * An optional icon to show on the map.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#location-selector
+     */
+    icon?: string;
+
+    /**
+     * Allow selecting the radius of the location. If enabled, the radius will be returned in meters.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#location-selector
+     */
+    raduis?: boolean;
   };
 }
 
