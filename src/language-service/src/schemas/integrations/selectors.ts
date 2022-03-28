@@ -2,7 +2,7 @@
  * Selectors
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/selector.py
  */
-import { Domain, DeviceClasses, Entity } from "../types";
+import { Domain, DeviceClasses, Entity, PositiveInteger } from "../types";
 
 export type Selector =
   | ActionSelector
@@ -10,6 +10,7 @@ export type Selector =
   | AreaSelector
   | AttributeSelector
   | BooleanSelector
+  | ColorTempSelector
   | DeviceSelector
   | EntitySelector
   | NumberSelector
@@ -117,6 +118,26 @@ export interface BooleanSelector {
    * https://www.home-assistant.io/docs/blueprint/selectors/#boolean-selector
    */
   boolean: null;
+}
+
+export interface ColorTempSelector {
+  /**
+   *
+   * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+   */
+  color_temp: {
+    /**
+     * The minimum color temperature in mireds.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+     */
+    min_mireds: PositiveInteger;
+
+    /**
+     * The maximum color temperature in mireds.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+     */
+    max_mireds: PositiveInteger;
+  };
 }
 
 export interface DeviceSelector {
