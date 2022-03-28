@@ -18,6 +18,7 @@ export type Selector =
   | EntitySelector
   | IconSelector
   | LocationSelector
+  | MediaSelector
   | NumberSelector
   | ObjectSelector
   | SelectSelector
@@ -273,7 +274,7 @@ export interface IconSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
      */
     placeholder?: string;
-  };
+  } | null;
 }
 
 export interface LocationSelector {
@@ -293,7 +294,15 @@ export interface LocationSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#location-selector
      */
     raduis?: boolean;
-  };
+  } | null;
+}
+
+export interface MediaSelector {
+  /**
+   * The media selector is a powerful selector that allows a user to easily select media to play on a media device.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#media-selector
+   */
+  media: null;
 }
 
 export interface NumberSelector {
