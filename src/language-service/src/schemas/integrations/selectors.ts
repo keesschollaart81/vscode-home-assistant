@@ -10,6 +10,7 @@ export type Selector =
   | AreaSelector
   | AttributeSelector
   | BooleanSelector
+  | ColorRGBSelector
   | ColorTempSelector
   | DateSelector
   | DateTimeSelector
@@ -127,6 +128,14 @@ export interface BooleanSelector {
   boolean: null;
 }
 
+export interface ColorRGBSelector {
+  /**
+   * The date selector shows a date input that allows the user to specify a date.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#date-selector
+   */
+  color_rgb: null;
+}
+
 export interface ColorTempSelector {
   /**
    *
@@ -144,7 +153,7 @@ export interface ColorTempSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
      */
     max_mireds?: PositiveInteger;
-  };
+  } | null;
 }
 
 export interface DateSelector {
@@ -361,7 +370,21 @@ export interface SelectSelector {
      * List of options that the user can choose from.
      * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
      */
-    options: string[];
+    options:
+      | string[]
+      | {
+          /**
+           * The description to show in the UI for this item.
+           * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+           */
+          label: string;
+
+          /**
+           * The value to return when this label is selected.
+           * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+           */
+          value: string;
+        }[];
   };
 }
 
