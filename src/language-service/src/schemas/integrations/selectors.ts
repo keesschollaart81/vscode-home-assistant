@@ -18,6 +18,7 @@ export type Selector =
   | SelectSelector
   | TargetSelector
   | TextSelector
+  | ThemeSelector
   | TimeSelector;
 
 export interface ActionSelector {
@@ -354,6 +355,14 @@ export interface TextSelector {
      */
     multiline?: boolean;
   } | null;
+}
+
+export interface ThemeSelector {
+  /**
+   * The theme selector allows for selecting a theme from the available themes installed in Home Assistant.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#theme-selector
+   */
+  theme: null;
 }
 
 export interface TimeSelector {
