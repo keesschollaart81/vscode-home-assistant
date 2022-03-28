@@ -455,6 +455,31 @@ export interface TextSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
      */
     multiline?: boolean;
+
+    /**
+     * Set to true to display the input as a multi-line text box on the user interface.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
+     */
+    suffix?: string;
+
+    /**
+     * The type of input. This is a browser hint, which can improve the client side validation of the input. The value isn't validated by the backend.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
+     */
+    type?:
+      | "color"
+      | "date"
+      | "datetime-local"
+      | "email"
+      | "month"
+      | "number"
+      | "password"
+      | "search"
+      | "tel"
+      | "text"
+      | "time"
+      | "url"
+      | "week";
   } | null;
 }
 
