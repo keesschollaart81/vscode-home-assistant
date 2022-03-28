@@ -427,7 +427,7 @@ export interface TargetSelector {
        * Limits the targets to entities of a certain domain, for example, light or binary_sensor.
        * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
        */
-      domain?: Domain;
+      domain?: Domain | Domain[];
 
       /**
        * Limits the targets to entities with a certain device class, for example, motion or window.
