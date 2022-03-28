@@ -20,10 +20,6 @@ interface Item {
   /**
    * Initial value when Home Assistant starts.
    * https://www.home-assistant.io/integrations/input_text#initial
-   *
-   * @TJS-type integer
-   * @minimum 1
-   * @maximum 255
    */
   initial?: string;
 
