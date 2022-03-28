@@ -244,7 +244,7 @@ export interface EntitySelector {
      * Limits the list of devices that provide entities of a certain domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
-    domain?: Domain;
+    domain?: Domain | Domain[];
 
     /**
      * Limits the list of entities to entities that have a certain device class.
@@ -254,7 +254,7 @@ export interface EntitySelector {
 
     /**
      * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
-     * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
+     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
     multiple?: boolean;
   } | null;
