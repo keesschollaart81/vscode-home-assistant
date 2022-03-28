@@ -2,12 +2,13 @@
  * Selectors
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/selector.py
  */
-import { Domain, DeviceClasses } from "../types";
+import { Domain, DeviceClasses, Entity } from "../types";
 
 export type Selector =
   | ActionSelector
   | AddonSelector
   | AreaSelector
+  | AttributeSelector
   | BooleanSelector
   | DeviceSelector
   | EntitySelector
@@ -94,6 +95,20 @@ export interface AreaSelector {
      */
     multiple?: boolean;
   } | null;
+}
+
+export interface AttributeSelector {
+  /**
+   * The attributes selector shows a list of state attribites from a provided entity of which one can be selected.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
+   */
+  select: {
+    /**
+     * The entity ID of which an state attribute can be selected from.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
+     */
+    entity_id: Entity;
+  };
 }
 
 export interface BooleanSelector {
