@@ -14,6 +14,7 @@ export type Selector =
   | DateSelector
   | DateTimeSelector
   | DeviceSelector
+  | DurationSelector
   | EntitySelector
   | NumberSelector
   | ObjectSelector
@@ -156,7 +157,7 @@ export interface DateTimeSelector {
    * The date selector shows a date and time input that allows the user to specify a date with a specific time.
    * https://www.home-assistant.io/docs/blueprint/selectors/#date--time-selector
    */
-  date: null;
+  datetime: null;
 }
 
 export interface DeviceSelector {
@@ -210,6 +211,20 @@ export interface DeviceSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
     multiple?: boolean;
+  } | null;
+}
+
+export interface DurationSelector {
+  /**
+   * The duration select allow the user to select a time duration. This can be helpful for, e.g., delays or offsets.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
+   */
+  duration: {
+    /**
+     * Set to true to display the input as a multi-line text box on the user interface.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
+     */
+    enable_days?: boolean;
   } | null;
 }
 
