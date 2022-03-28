@@ -11,6 +11,7 @@ export type Selector =
   | AttributeSelector
   | BooleanSelector
   | ColorTempSelector
+  | DateSelector
   | DeviceSelector
   | EntitySelector
   | NumberSelector
@@ -139,6 +140,14 @@ export interface ColorTempSelector {
      */
     max_mireds: PositiveInteger;
   };
+}
+
+export interface DateSelector {
+  /**
+   * The date selector shows a date input that allows the user to specify a date.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#date-selector
+   */
+  date: null;
 }
 
 export interface DeviceSelector {
