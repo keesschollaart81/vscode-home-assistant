@@ -73,7 +73,7 @@ export interface AreaSelector {
        * Limits the list of areas that provide entities of a certain domain, for example, light or binary_sensor.
        * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
        */
-      domain?: Domain;
+      domain?: Domain | Domain[];
 
       /**
        * Limits the list of areas to areas that have entities with a certain device class, for example, motion or window.
