@@ -314,7 +314,7 @@ export interface LocationSelector {
      * Allow selecting the radius of the location. If enabled, the radius will be returned in meters.
      * https://www.home-assistant.io/docs/blueprint/selectors/#location-selector
      */
-    raduis?: boolean;
+    radius?: boolean;
   } | null;
 }
 
