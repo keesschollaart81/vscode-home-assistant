@@ -16,6 +16,7 @@ export type Selector =
   | DeviceSelector
   | DurationSelector
   | EntitySelector
+  | IconSelector
   | NumberSelector
   | ObjectSelector
   | SelectSelector
@@ -134,13 +135,13 @@ export interface ColorTempSelector {
      * The minimum color temperature in mireds.
      * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
      */
-    min_mireds: PositiveInteger;
+    min_mireds?: PositiveInteger;
 
     /**
      * The maximum color temperature in mireds.
      * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
      */
-    max_mireds: PositiveInteger;
+    max_mireds?: PositiveInteger;
   };
 }
 
@@ -258,6 +259,21 @@ export interface EntitySelector {
      */
     multiple?: boolean;
   } | null;
+}
+
+
+export interface IconSelector {
+  /**
+   * The icon selector shows an icon picker that allows the user to select an icon.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
+   */
+  color_temp: {
+    /**
+     * Placeholder icon to show, when no icon is selected.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
+     */
+    placeholder?: string;
+  };
 }
 
 export interface NumberSelector {
