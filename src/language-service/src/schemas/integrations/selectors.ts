@@ -247,6 +247,18 @@ export interface EntitySelector {
    */
   entity: {
     /**
+     * List of entity IDs to exclude from the selectable list.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     */
+    exclude_entities?: Entity[];
+
+    /**
+     * List of entity IDs to limit the selectable list to.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     */
+    include_entities?: Entity[];
+
+    /**
      * Can be set to an integration domain. Limits the list of devices that provide entities by the set integration domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
