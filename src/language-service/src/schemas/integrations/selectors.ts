@@ -102,7 +102,7 @@ export interface AttributeSelector {
    * The attributes selector shows a list of state attribites from a provided entity of which one can be selected.
    * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
    */
-  select: {
+  attribute: {
     /**
      * The entity ID of which an state attribute can be selected from.
      * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
