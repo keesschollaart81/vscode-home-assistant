@@ -379,6 +379,24 @@ export interface SelectSelector {
    */
   select: {
     /**
+     * Allows the user to enter and select a custom value (or multiple custom values in addition to the listed options if `multiple` is set to true).
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    custom_value?: boolean;
+
+    /**
+     * This can be either `list` or `dropdown` mode. when not specificied, small lists (5 items or less), are displayed as radio buttons. When more items are added, a dropdown list is used.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    mode?: "list" | "dropdown";
+
+    /**
+     * Allows selecting multiple options. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    multiple?: boolean;
+
+    /**
      * List of options that the user can choose from.
      * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
      */
@@ -386,28 +404,10 @@ export interface SelectSelector {
       | string[]
       | {
           /**
-           * Allows the user to enter and select a custom value (or multiple custom values in addition to the listed options if `multiple` is set to true).
-           * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
-           */
-          custom_value?: boolean;
-
-          /**
            * The description to show in the UI for this item.
            * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
            */
           label: string;
-
-          /**
-           * This can be either `list` or `dropdown` mode. when not specificied, small lists (5 items or less), are displayed as radio buttons. When more items are added, a dropdown list is used.
-           * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
-           */
-          mode?: "list" | "dropdown";
-
-          /**
-           * Allows selecting multiple options. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
-           * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
-           */
-          multiple?: boolean;
 
           /**
            * The value to return when this label is selected.
