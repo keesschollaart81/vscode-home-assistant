@@ -93,6 +93,7 @@ type ValueType =
   | "illuminance"
   | "impedance"
   | "kelvin_per_percent"
+  | "latin_1"
   | "length_mm"
   | "length"
   | "light_quantity"
