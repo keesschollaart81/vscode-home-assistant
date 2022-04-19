@@ -25,11 +25,14 @@ export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
 
 export type Condition =
   | AndCondition
+  | AndShorthandCondition
   | DeviceCondition
   | DynamicTemplate
   | NotCondition
+  | NotShorthandCondition
   | NumericStateCondition
   | OrCondition
+  | OrShorthandCondition
   | ShorthandCondition
   | StateCondition
   | SunCondition
@@ -69,6 +72,20 @@ export interface AndCondition {
    */
   conditions: Condition | Condition[] | IncludeList;
 }
+
+export interface AndShorthandCondition {
+  /**
+   * Alias for the and condition.
+   */
+  alias?: string;
+
+  /**
+   * Test multiple conditions in one condition statement. Passes if all embedded conditions are valid.
+   * https://www.home-assistant.io/docs/scripts/conditions/#and-condition
+   */
+  and: Condition | Condition[] | IncludeList;
+}
+
 
 /**
  * @TJS-additionalProperties true
@@ -114,6 +131,20 @@ export interface NotCondition {
    */
   conditions: Condition | Condition[] | IncludeList;
 }
+
+export interface NotShorthandCondition {
+  /**
+   * Alias for the not condition.
+   */
+  alias?: string;
+
+  /**
+   * Test multiple conditions in one condition statement. Passes if all embedded conditions are not valid.
+   * https://www.home-assistant.io/docs/scripts/conditions/#not-condition
+   */
+  not: Condition | Condition[] | IncludeList;
+}
+
 
 export interface NumericStateCondition {
   /**
@@ -176,6 +207,20 @@ export interface OrCondition {
    */
   conditions: Condition | Condition[] | IncludeList;
 }
+
+export interface OrShorthandCondition {
+  /**
+   * Alias for the or condition.
+   */
+  alias?: string;
+
+  /**
+   * Test multiple conditions in one condition statement. Passes if any embedded condition is valid.
+   * https://www.home-assistant.io/docs/scripts/conditions/#or-condition
+   */
+  or: Condition | Condition[] | IncludeList;
+}
+
 
 export interface StateCondition {
   /**
