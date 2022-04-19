@@ -36,6 +36,12 @@ export interface ChooseAction {
   alias?: string;
 
   /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
+
+  /**
    * This action allows you to select a sequence of other actions from a list of sequences.
    * https://www.home-assistant.io/docs/scripts/#choose-a-group-of-actions
    */
@@ -74,6 +80,12 @@ export interface DelayAction {
   alias?: string;
 
   /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
+
+  /**
    * Delays are useful for temporarily suspending your script and start it at a later moment.
    * The time period to delay the executing of the current action sequence for.
    * https://www.home-assistant.io/docs/scripts/#delay
@@ -89,6 +101,12 @@ export interface DeviceAction {
    * Alias for the device action.
    */
   alias?: string;
+
+  /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
 
   /**
    * The internal ID of the device to execute an action on.
@@ -108,6 +126,12 @@ export interface EventAction {
    * Alias for the Event action.
    */
   alias?: string;
+
+  /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
 
   /**
    * The event name to fire.
@@ -135,6 +159,12 @@ export interface RepeatAction {
    * Alias for the repeat action.
    */
   alias?: string;
+
+  /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
 
   /**
    * This action allows you to repeat a sequence of other actions.
@@ -180,6 +210,12 @@ export interface SceneAction {
   alias?: string;
 
   /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
+
+  /**
    * Activate a scene.
    * https://www.home-assistant.io/docs/scripts/#activate-a-scene
    */
@@ -192,6 +228,12 @@ export interface ServiceAction {
    * https://www.home-assistant.io/docs/scripts/service-calls/
    */
   alias?: string;
+
+  /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
 
   /**
    * The most important action is the action to call a service.
@@ -259,6 +301,12 @@ export interface WaitForTriggerAction {
   alias?: string;
 
   /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
+
+  /**
    * The trigger to wait for, before continuing execution of the script.
    * https://www.home-assistant.io/docs/scripts/#wait-for-trigger
    */
@@ -284,6 +332,12 @@ export interface WaitTemplateAction {
   alias?: string;
 
   /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
+
+  /**
    * Wait until some things are complete.
    * https://www.home-assistant.io/docs/scripts/#wait
    */
@@ -307,6 +361,12 @@ export interface VariablesAction {
    * Alias for the variables action.
    */
   alias?: string;
+
+  /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
 
   /**
    * The variable command allows you to set/override variables that will be accessible by templates in actions after it.
