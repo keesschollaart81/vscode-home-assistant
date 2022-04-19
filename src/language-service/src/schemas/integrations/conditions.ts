@@ -260,6 +260,12 @@ export interface StateCondition {
    * https://www.home-assistant.io/docs/scripts/conditions/#state-condition
    */
   attribute?: string;
+
+  /**
+   * How to match in case this condition has multiple entity listed: "all" all entities have to match the state, "any" if any of the entities match the state.
+   * https://www.home-assistant.io/docs/scripts/conditions/#state-condition
+   */
+  match?: "any" | "all";
 }
 
 export interface SunCondition {
