@@ -86,7 +86,6 @@ export interface AndShorthandCondition {
   and: Condition | Condition[] | IncludeList;
 }
 
-
 /**
  * @TJS-additionalProperties true
  */
@@ -144,7 +143,6 @@ export interface NotShorthandCondition {
    */
   not: Condition | Condition[] | IncludeList;
 }
-
 
 export interface NumericStateCondition {
   /**
@@ -220,7 +218,6 @@ export interface OrShorthandCondition {
    */
   or: Condition | Condition[] | IncludeList;
 }
-
 
 export interface StateCondition {
   /**
