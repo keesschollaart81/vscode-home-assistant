@@ -350,10 +350,22 @@ interface StateTrigger {
   from?: any | any[];
 
   /**
+   * The state the entity or entities NOT had before changing to its new state.
+   * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
+   */
+  not_from?: any | any[];
+
+  /**
    * The state the entity or entities have changed to.
    * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
    */
   to?: any | any[];
+
+  /**
+   * The state the entity or entities did NOT changed to.
+   * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
+   */
+  not_to?: any | any[];
 
   /**
    * Use the value of a specific entity attribute to trigger on, instead of the entity state.
