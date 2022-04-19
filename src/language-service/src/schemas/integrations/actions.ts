@@ -148,6 +148,12 @@ export interface RepeatAction {
     count?: Integer | Template;
 
     /**
+     * This repeat form accepts a list of items to iterate over. The list of items can be a pre-defined list, or a list created by a template.
+     * https://www.home-assistant.io/docs/scripts/#for-each
+     */
+    for_each?: Data | Template;
+
+    /**
      * The sequence of actions to be repeatedly performed in the script.
      * https://www.home-assistant.io/integrations/script/#sequence
      */
