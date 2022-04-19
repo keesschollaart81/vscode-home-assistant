@@ -24,6 +24,7 @@ export type Selector =
   | ObjectSelector
   | SelectSelector
   | TargetSelector
+  | TemplateSelector
   | TextSelector
   | ThemeSelector
   | TimeSelector;
@@ -472,6 +473,14 @@ export interface TargetSelector {
       integration?: Domain;
     };
   } | null;
+}
+
+export interface TemplateSelector {
+  /**
+   * The template can be used for allowing the user to input a Jinja2 template.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#template-selector
+   */
+  template: null;
 }
 
 export interface TextSelector {
