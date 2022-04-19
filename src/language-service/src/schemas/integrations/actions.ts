@@ -177,7 +177,7 @@ export interface IfAction {
    * An optional default sequence can be included which will be run if none of the sequences from the list are run.
    * https://www.home-assistant.io/docs/scripts/#if-then
    */
-  then?: Action | Action[] | IncludeList;
+  then: Action | Action[] | IncludeList;
 
   /**
    * An optional default sequence can be included which will be run if none of the sequences from the list are run.
