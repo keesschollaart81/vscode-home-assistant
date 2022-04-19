@@ -51,6 +51,7 @@ export type DeviceClassesBinarySensor =
   | "power"
   | "presence"
   | "problem"
+  | "running"
   | "safety"
   | "smoke"
   | "sound"
