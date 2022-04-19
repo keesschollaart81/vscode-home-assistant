@@ -21,6 +21,7 @@ export type Action =
   | DelayAction
   | DeviceAction
   | EventAction
+  | IfAction
   | RepeatAction
   | SceneAction
   | ServiceAction
@@ -152,6 +153,37 @@ export interface EventAction {
    * https://www.home-assistant.io/docs/scripts/#fire-an-event
    */
   event_data_template?: Deprecated;
+}
+
+export interface IfAction {
+  /**
+   * Alias for the if action.
+   */
+  alias?: string;
+
+  /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
+
+  /**
+   * This action allows you to select a sequence of other actions from a list of sequences.
+   * https://www.home-assistant.io/docs/scripts/#if-then
+   */
+  if: Condition | Condition[] | IncludeList;
+
+  /**
+   * An optional default sequence can be included which will be run if none of the sequences from the list are run.
+   * https://www.home-assistant.io/docs/scripts/#if-then
+   */
+  then: Action | Action[] | IncludeList;
+
+  /**
+   * An optional default sequence can be included which will be run if none of the sequences from the list are run.
+   * https://www.home-assistant.io/docs/scripts/#if-then
+   */
+  else?: Action | Action[] | IncludeList;
 }
 
 export interface RepeatAction {
