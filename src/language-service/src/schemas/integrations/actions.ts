@@ -38,6 +38,12 @@ export interface ChooseAction {
   alias?: string;
 
   /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
    * https://www.home-assistant.io/docs/scripts/#continuing-on-error
    */
@@ -63,6 +69,11 @@ export interface ChooseActionItem {
   alias?: string;
 
   /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+  /**
    * Only preform the sequence of actions if this condition/these conditions match.
    * https://www.home-assistant.io/docs/scripts/#choose-a-group-of-actions
    */
@@ -80,6 +91,12 @@ export interface DelayAction {
    * Alias for the delay action.
    */
   alias?: string;
+
+  /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
 
   /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
@@ -105,6 +122,12 @@ export interface DeviceAction {
   alias?: string;
 
   /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
    * https://www.home-assistant.io/docs/scripts/#continuing-on-error
    */
@@ -128,6 +151,12 @@ export interface EventAction {
    * Alias for the Event action.
    */
   alias?: string;
+
+  /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
 
   /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
@@ -163,6 +192,12 @@ export interface IfAction {
   alias?: string;
 
   /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
    * https://www.home-assistant.io/docs/scripts/#continuing-on-error
    */
@@ -194,6 +229,12 @@ export interface ParallelAction {
   alias?: string;
 
   /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
    * https://www.home-assistant.io/docs/scripts/#continuing-on-error
    */
@@ -211,6 +252,12 @@ export interface RepeatAction {
    * Alias for the repeat action.
    */
   alias?: string;
+
+  /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
 
   /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
@@ -262,6 +309,12 @@ export interface SceneAction {
   alias?: string;
 
   /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
    * https://www.home-assistant.io/docs/scripts/#continuing-on-error
    */
@@ -280,6 +333,12 @@ export interface ServiceAction {
    * https://www.home-assistant.io/docs/scripts/service-calls/
    */
   alias?: string;
+
+  /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
 
   /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
@@ -353,6 +412,12 @@ export interface WaitForTriggerAction {
   alias?: string;
 
   /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
    * https://www.home-assistant.io/docs/scripts/#continuing-on-error
    */
@@ -384,6 +449,12 @@ export interface WaitTemplateAction {
   alias?: string;
 
   /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
    * https://www.home-assistant.io/docs/scripts/#continuing-on-error
    */
@@ -413,6 +484,12 @@ export interface VariablesAction {
    * Alias for the variables action.
    */
   alias?: string;
+
+  /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
 
   /**
    * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.

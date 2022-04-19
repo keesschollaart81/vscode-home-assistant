@@ -69,6 +69,12 @@ interface DeviceTrigger {
   platform: "device";
 
   /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
    * The internal ID of the device to trigger on
    * https://www.home-assistant.io/docs/automation/trigger/#device-triggers
    */
@@ -102,6 +108,12 @@ interface EventTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
    */
   platform: "event";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
 
   /**
    * Additional event context that has to match before triggering.
@@ -145,6 +157,12 @@ interface GeolocationTrigger {
   platform: "geo_location";
 
   /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
    * Trigger when the entity leaves or enters the zone defined.
    * https://www.home-assistant.io/docs/automation/trigger/#geolocation-trigger
    */
@@ -186,6 +204,12 @@ interface HomeAssistantTrigger {
   platform: "homeassistant";
 
   /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
    * Specified the event to listen to: Either the Home Assistant start or shutdown event.
    * https://www.home-assistant.io/docs/automation/trigger/#home-assistant-trigger
    */
@@ -213,6 +237,12 @@ interface MqttTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#mqtt-trigger
    */
   platform: "mqtt";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
 
   /**
    * The default payload encoding is ‘utf-8’.
@@ -273,6 +303,12 @@ interface NumericStateTrigger {
   platform: "numeric_state";
 
   /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
    * The entity ID or list of entity IDs to monitor the numeric state for.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
@@ -330,6 +366,12 @@ interface StateTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
    */
   platform: "state";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
 
   /**
    * The entity ID or list of entity IDs to monitor the state for.
@@ -397,6 +439,12 @@ interface SunTrigger {
   platform: "sun";
 
   /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
    * The event to fire on, either on sunset or sunrise.
    * https://www.home-assistant.io/docs/automation/trigger/#sun-trigger
    */
@@ -430,6 +478,12 @@ interface TemplateTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#template-trigger
    */
   platform: "template";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
 
   /**
    * An personal identifier for this trigger, that is passed into the trigger
@@ -467,6 +521,12 @@ interface TimeTrigger {
   platform: "time";
 
   /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
    * Time of day to trigger on, in HH:MM:SS, 24 hours clock format. For example: "13:30:00"
    * Also accepts input_datetime entities (e.g., input_datetime.start_of_day)
    *
@@ -497,6 +557,12 @@ interface TimePatternTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#time-pattern-trigger
    */
   platform: "time_pattern";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
 
   /**
    * An personal identifier for this trigger, that is passed into the trigger
@@ -543,6 +609,12 @@ interface WebhookTrigger {
   platform: "webhook";
 
   /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
    * An personal identifier for this trigger, that is passed into the trigger
    * variables when the automation triggers using this trigger.
    * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
@@ -570,6 +642,12 @@ interface ZoneTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
    */
   platform: "zone";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
 
   /**
    * An personal identifier for this trigger, that is passed into the trigger
@@ -614,6 +692,12 @@ interface TagTrigger {
    * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
    */
   platform: "tag";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
 
   /**
    * An personal identifier for this trigger, that is passed into the trigger
