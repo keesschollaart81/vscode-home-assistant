@@ -206,7 +206,6 @@ export interface ParallelAction {
   parallel: Action | Action[] | IncludeList;
 }
 
-
 export interface RepeatAction {
   /**
    * Alias for the repeat action.
