@@ -22,6 +22,7 @@ export type Action =
   | DeviceAction
   | EventAction
   | IfAction
+  | ParallelAction
   | RepeatAction
   | SceneAction
   | ServiceAction
@@ -185,6 +186,26 @@ export interface IfAction {
    */
   else?: Action | Action[] | IncludeList;
 }
+
+export interface ParallelAction {
+  /**
+   * Alias for the parallel action.
+   */
+  alias?: string;
+
+  /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
+
+  /**
+   * The sequence of actions to run in parallel.
+   * https://www.home-assistant.io/docs/scripts/#parallelizing-actions
+   */
+  parallel: Action | Action[] | IncludeList;
+}
+
 
 export interface RepeatAction {
   /**
