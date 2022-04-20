@@ -205,6 +205,12 @@ export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#availability_topic
    */
@@ -423,6 +429,12 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability_topic
    */
@@ -611,6 +623,12 @@ export interface CameraPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/light.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability_topic
    */
@@ -767,6 +785,12 @@ export interface ClimatePlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/climate.mqtt/#availability_mode
    */
   availability_mode?: AvailabilityMode;
+
+  /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/climate.mqtt#availability_template
+   */
+  availability_template?: Template;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
@@ -1167,6 +1191,12 @@ export interface CoverPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/cover.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability_topic
    */
@@ -1524,6 +1554,12 @@ export interface FanPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/fan.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/fan.mqtt/#availability_topic
    */
@@ -1866,6 +1902,12 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_mode
    */
   availability_mode?: AvailabilityMode;
+
+  /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/light.mqtt#availability_template
+   */
+  availability_template?: Template;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
@@ -2250,6 +2292,12 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/light.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_topic
    */
@@ -2510,6 +2558,12 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/light.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_topic
    */
@@ -2745,6 +2799,12 @@ export interface LockPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/lock.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/lock.mqtt/#availability_topic
    */
@@ -2939,6 +2999,12 @@ export interface NumberPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/number.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/numbver.mqtt/#availability_topic
    */
@@ -3108,6 +3174,12 @@ export interface SelectPlatformSchema extends PlatformSchema {
   availability_mode?: AvailabilityMode;
 
   /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/select.mqtt#availability_template
+   */
+  availability_template?: Template;
+
+  /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    * https://www.home-assistant.io/integrations/select.mqtt#availability_topic
    */
@@ -3275,6 +3347,12 @@ export interface SensorPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/sensor.mqtt/#availability_mode
    */
   availability_mode?: AvailabilityMode;
+
+  /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#availability_template
+   */
+  availability_template?: Template;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
@@ -3480,6 +3558,12 @@ export interface VacuumPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#availability_mode
    */
   availability_mode?: AvailabilityMode;
+
+  /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_template
+   */
+  availability_template?: Template;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
@@ -3715,6 +3799,12 @@ export interface VacuumLegacyPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#availability_mode
    */
   availability_mode?: AvailabilityMode;
+
+  /**
+   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_template
+   */
+  availability_template?: Template;
 
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
