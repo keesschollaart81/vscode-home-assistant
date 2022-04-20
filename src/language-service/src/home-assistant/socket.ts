@@ -16,6 +16,10 @@ const MSG_TYPE_AUTH_OK = "auth_ok";
 const ERR_CANNOT_CONNECT = 1;
 const ERR_INVALID_AUTH = 2;
 
+interface HaWebSocket extends WebSocket {
+  haVersion: string;
+}
+
 export function createSocket(
   auth: Auth,
   ignoreCertificates: boolean
@@ -40,7 +44,7 @@ export function createSocket(
 
     const socket = new WebSocket(url, {
       rejectUnauthorized: !ignoreCertificates,
-    });
+    }) as HaWebSocket;
 
     // If invalid auth, we will not try to reconnect.
     let invalidAuth = false;
@@ -139,6 +143,7 @@ export function createSocket(
           socket.removeEventListener("message", handleMessage);
           socket.removeEventListener("close", closeMessage);
           socket.removeEventListener("error", errorMessage);
+          socket.haVersion = message.ha_version;
           promResolve(socket);
           break;
 
