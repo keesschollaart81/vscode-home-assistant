@@ -16,7 +16,7 @@ const MSG_TYPE_AUTH_OK = "auth_ok";
 const ERR_CANNOT_CONNECT = 1;
 const ERR_INVALID_AUTH = 2;
 
-export interface HaWebSocket extends WebSocket {
+interface HaWebSocket extends WebSocket {
   haVersion: string;
 }
 
