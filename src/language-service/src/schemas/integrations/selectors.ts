@@ -2,20 +2,31 @@
  * Selectors
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/selector.py
  */
-import { Domain, DeviceClasses } from "../types";
+import { Domain, DeviceClasses, Entity, PositiveInteger } from "../types";
 
 export type Selector =
   | ActionSelector
   | AddonSelector
   | AreaSelector
+  | AttributeSelector
   | BooleanSelector
+  | ColorRGBSelector
+  | ColorTempSelector
+  | DateSelector
+  | DateTimeSelector
   | DeviceSelector
+  | DurationSelector
   | EntitySelector
+  | IconSelector
+  | LocationSelector
+  | MediaSelector
   | NumberSelector
   | ObjectSelector
   | SelectSelector
   | TargetSelector
+  | TemplateSelector
   | TextSelector
+  | ThemeSelector
   | TimeSelector;
 
 export interface ActionSelector {
@@ -73,7 +84,7 @@ export interface AreaSelector {
        * Limits the list of areas that provide entities of a certain domain, for example, light or binary_sensor.
        * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
        */
-      domain?: Domain;
+      domain?: Domain | Domain[];
 
       /**
        * Limits the list of areas to areas that have entities with a certain device class, for example, motion or window.
@@ -87,7 +98,27 @@ export interface AreaSelector {
        */
       integration?: Domain;
     };
+
+    /**
+     * Allows selecting multiple areas. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
+     */
+    multiple?: boolean;
   } | null;
+}
+
+export interface AttributeSelector {
+  /**
+   * The attributes selector shows a list of state attribites from a provided entity of which one can be selected.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
+   */
+  attribute: {
+    /**
+     * The entity ID of which an state attribute can be selected from.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
+     */
+    entity_id: Entity;
+  };
 }
 
 export interface BooleanSelector {
@@ -96,6 +127,50 @@ export interface BooleanSelector {
    * https://www.home-assistant.io/docs/blueprint/selectors/#boolean-selector
    */
   boolean: null;
+}
+
+export interface ColorRGBSelector {
+  /**
+   * The date selector shows a date input that allows the user to specify a date.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#date-selector
+   */
+  color_rgb: null;
+}
+
+export interface ColorTempSelector {
+  /**
+   *
+   * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+   */
+  color_temp: {
+    /**
+     * The minimum color temperature in mireds.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+     */
+    min_mireds?: PositiveInteger;
+
+    /**
+     * The maximum color temperature in mireds.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+     */
+    max_mireds?: PositiveInteger;
+  } | null;
+}
+
+export interface DateSelector {
+  /**
+   * The date selector shows a date input that allows the user to specify a date.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#date-selector
+   */
+  date: null;
+}
+
+export interface DateTimeSelector {
+  /**
+   * The date selector shows a date and time input that allows the user to specify a date with a specific time.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#date--time-selector
+   */
+  datetime: null;
 }
 
 export interface DeviceSelector {
@@ -118,28 +193,51 @@ export interface DeviceSelector {
        * Limits the list of devices that provide entities of a certain domain.
        * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
        */
-      domain?: Domain;
+      domain?: Domain | Domain[];
       /**
        * Limits the list of entities to entities that have a certain device class.
        * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
        */
       device_class?: DeviceClasses;
     };
+
     /**
      * Can be set to an integration domain. Limits the list of devices to devices provided by the set integration domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
     integration?: Domain;
+
     /**
      * When set, it limits the list of devices to devices provided by the set manufacturer name.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
     manufacturer?: string;
+
     /**
      * When set, it limits the list of devices to devices that have the set model.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
     model?: string;
+
+    /**
+     * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
+     */
+    multiple?: boolean;
+  } | null;
+}
+
+export interface DurationSelector {
+  /**
+   * The duration select allow the user to select a time duration. This can be helpful for, e.g., delays or offsets.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
+   */
+  duration: {
+    /**
+     * Set to true to display the input as a multi-line text box on the user interface.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
+     */
+    enable_days?: boolean;
   } | null;
 }
 
@@ -150,21 +248,83 @@ export interface EntitySelector {
    */
   entity: {
     /**
+     * List of entity IDs to exclude from the selectable list.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     */
+    exclude_entities?: Entity[];
+
+    /**
+     * List of entity IDs to limit the selectable list to.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     */
+    include_entities?: Entity[];
+
+    /**
      * Can be set to an integration domain. Limits the list of devices that provide entities by the set integration domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
     integration?: Domain;
+
     /**
      * Limits the list of devices that provide entities of a certain domain.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
-    domain?: Domain;
+    domain?: Domain | Domain[];
+
     /**
      * Limits the list of entities to entities that have a certain device class.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
     device_class?: DeviceClasses;
+
+    /**
+     * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     */
+    multiple?: boolean;
   } | null;
+}
+
+export interface IconSelector {
+  /**
+   * The icon selector shows an icon picker that allows the user to select an icon.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
+   */
+  icon: {
+    /**
+     * Placeholder icon to show, when no icon is selected.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
+     */
+    placeholder?: string;
+  } | null;
+}
+
+export interface LocationSelector {
+  /**
+   * The icon selector shows an icon picker that allows the user to select an icon.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#location-selector
+   */
+  location: {
+    /**
+     * An optional icon to show on the map.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#location-selector
+     */
+    icon?: string;
+
+    /**
+     * Allow selecting the radius of the location. If enabled, the radius will be returned in meters.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#location-selector
+     */
+    radius?: boolean;
+  } | null;
+}
+
+export interface MediaSelector {
+  /**
+   * The media selector is a powerful selector that allows a user to easily select media to play on a media device.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#media-selector
+   */
+  media: null;
 }
 
 export interface NumberSelector {
@@ -220,10 +380,42 @@ export interface SelectSelector {
    */
   select: {
     /**
+     * Allows the user to enter and select a custom value (or multiple custom values in addition to the listed options if `multiple` is set to true).
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    custom_value?: boolean;
+
+    /**
+     * This can be either `list` or `dropdown` mode. when not specificied, small lists (5 items or less), are displayed as radio buttons. When more items are added, a dropdown list is used.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    mode?: "list" | "dropdown";
+
+    /**
+     * Allows selecting multiple options. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    multiple?: boolean;
+
+    /**
      * List of options that the user can choose from.
      * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
      */
-    options: string[];
+    options:
+      | string[]
+      | {
+          /**
+           * The description to show in the UI for this item.
+           * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+           */
+          label: string;
+
+          /**
+           * The value to return when this label is selected.
+           * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+           */
+          value: string;
+        }[];
   };
 }
 
@@ -266,7 +458,7 @@ export interface TargetSelector {
        * Limits the targets to entities of a certain domain, for example, light or binary_sensor.
        * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
        */
-      domain?: Domain;
+      domain?: Domain | Domain[];
 
       /**
        * Limits the targets to entities with a certain device class, for example, motion or window.
@@ -283,6 +475,14 @@ export interface TargetSelector {
   } | null;
 }
 
+export interface TemplateSelector {
+  /**
+   * The template can be used for allowing the user to input a Jinja2 template.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#template-selector
+   */
+  template: null;
+}
+
 export interface TextSelector {
   /**
    * The text selector can be used to input a text string.
@@ -294,7 +494,40 @@ export interface TextSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
      */
     multiline?: boolean;
+
+    /**
+     * Set to true to display the input as a multi-line text box on the user interface.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
+     */
+    suffix?: string;
+
+    /**
+     * The type of input. This is a browser hint, which can improve the client side validation of the input. The value isn't validated by the backend.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
+     */
+    type?:
+      | "color"
+      | "date"
+      | "datetime-local"
+      | "email"
+      | "month"
+      | "number"
+      | "password"
+      | "search"
+      | "tel"
+      | "text"
+      | "time"
+      | "url"
+      | "week";
   } | null;
+}
+
+export interface ThemeSelector {
+  /**
+   * The theme selector allows for selecting a theme from the available themes installed in Home Assistant.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#theme-selector
+   */
+  theme: null;
 }
 
 export interface TimeSelector {
