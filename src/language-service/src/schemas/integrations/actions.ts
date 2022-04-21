@@ -26,6 +26,7 @@ export type Action =
   | RepeatAction
   | SceneAction
   | ServiceAction
+  | StopAction
   | WaitForTriggerAction
   | WaitTemplateAction
   | VariablesAction
@@ -403,6 +404,32 @@ export interface ServiceAction {
         area_id?: Area | Area[] | "none";
       }
     | Template;
+}
+
+export interface StopAction {
+  /**
+   * Stop call alias.
+   * https://www.home-assistant.io/docs/scripts/#stopping-a-script-sequence
+   */
+  alias?: string;
+
+  /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
+   * Stop a automation or script sequence. Provide a text with a reason for stopping.
+   * https://www.home-assistant.io/docs/scripts/#stopping-a-script-sequence
+   */
+  stop: string | null;
+
+  /**
+   * Set to true, if we are stopping with an error / because of unexpected behavior
+   * https://www.home-assistant.io/docs/scripts/#stopping-a-script-sequence
+   */
+  error?: boolean;
 }
 
 export interface WaitForTriggerAction {
