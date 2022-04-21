@@ -426,7 +426,7 @@ export interface StopAction {
   stop: string | null;
 
   /**
-   * The most important action is the action to call a service.
+   * Set to true, if we are stopping with an error / because of unexpected behavior
    * https://www.home-assistant.io/docs/scripts/#stopping-a-script-sequence
    */
   error?: boolean;
