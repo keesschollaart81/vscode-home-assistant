@@ -17,9 +17,11 @@ import {
   SensorEntities,
   NumberEntity,
   SensorEntity,
+  CalendarEntity,
 } from "../types";
 
 export type Trigger =
+  | CalendarTrigger
   | DeviceTrigger
   | EventTrigger
   | GeolocationTrigger
@@ -56,6 +58,47 @@ type EventType =
   | "user_added"
   | "user_removed"
   | "zha_event";
+
+interface CalendarTrigger {
+  /**
+   * Calendar trigger fires when a Calendar event starts or ends.
+   * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
+   */
+  platform: "calendar";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
+   * Trigger on start or end of the calendar event.
+   * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
+   */
+  event?: "start" | "end";
+
+  /**
+   * The entity ID or list of entity IDs to monitor the numeric state for.
+   * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
+   */
+  entity_id: CalendarEntity;
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
+   */
+  id?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://www.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
+}
 
 /**
  * @TJS-additionalProperties true
