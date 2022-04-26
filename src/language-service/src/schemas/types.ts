@@ -91,6 +91,7 @@ export type DeviceClassesSensor =
   | "carbon_monoxide"
   | "current"
   | "date"
+  | "duration"
   | "energy"
   | "frequency"
   | "gas"
