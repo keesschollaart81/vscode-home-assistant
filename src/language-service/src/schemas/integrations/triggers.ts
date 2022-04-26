@@ -79,15 +79,15 @@ interface CalendarTrigger {
   event?: "start" | "end";
 
   /**
-   * The entity ID or list of entity IDs to monitor the numeric state for.
-   * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
+   * The entity ID to monitor the calendar events for.
+   * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
    */
   entity_id: CalendarEntity;
 
   /**
    * An personal identifier for this trigger, that is passed into the trigger
    * variables when the automation triggers using this trigger.
-   * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
+   * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
    */
   id?: string;
 
