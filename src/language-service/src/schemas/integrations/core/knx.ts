@@ -1012,6 +1012,12 @@ interface Notify {
    * https://www.home-assistant.io/integrations/knx#name
    */
   name?: string;
+
+  /**
+   * Any supported type of KNX Sensor representing a string value.
+   * https://www.home-assistant.io/integrations/knx#type
+   */
+  type?: "string" | "latin_1";
 }
 
 interface NumberEntity {

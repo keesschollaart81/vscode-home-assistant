@@ -91,6 +91,7 @@ export type DeviceClassesSensor =
   | "carbon_monoxide"
   | "current"
   | "date"
+  | "duration"
   | "energy"
   | "frequency"
   | "gas"
@@ -167,6 +168,17 @@ export type DeviceTrackerEntity = string;
  * @items.pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
 export type DeviceTrackerEntities = string | string[];
+
+/**
+ * @TJS-pattern ^calendar\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type CalendarEntity = string;
+
+/**
+ * @TJS-pattern ^calendar\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?calendar\.(?!_)[\da-z_]+(?<!_))*$
+ * @items.pattern ^calendar\.(?!_)[\da-z_]+(?<!_)$
+ */
+export type CalendaraEntities = string | string[];
 
 /**
  * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)$
