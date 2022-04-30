@@ -19,9 +19,7 @@ import {
   SensorEntity,
 } from "../types";
 
-import {
-  WebOSTvTrigger
-} from "./core/webostv";
+import { WebOSTvTrigger } from "./core/webostv";
 
 export type Trigger =
   | DeviceTrigger
