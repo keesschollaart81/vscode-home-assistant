@@ -1545,6 +1545,12 @@ export interface FanPlatformSchema extends PlatformSchema {
      * https://www.home-assistant.io/integrations/fan.mqtt/#payload_not_available
      */
     payload_not_available?: string;
+
+    /**
+     * Defines a template to extract device’s availability from the topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+     * https://www.home-assistant.io/integrations/fan.mqtt/#value_template
+     */
+    value_template?: Template;
   }[];
 
   /**
@@ -1566,6 +1572,12 @@ export interface FanPlatformSchema extends PlatformSchema {
   availability_topic?: string;
 
   /**
+   * Defines a template to generate the payload to send to command_topic.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#command_template
+   */
+  command_template?: Template;
+
+  /**
    * The MQTT topic to publish commands to change the fan state.
    * https://www.home-assistant.io/integrations/fan.mqtt/#command_topic
    */
@@ -1576,6 +1588,12 @@ export interface FanPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/fan.mqtt/#device
    */
   device?: {
+    /**
+     * A link to the webpage that can manage the configuration of this device. Can be either an HTTP or HTTPS link.
+     * https://www.home-assistant.io/integrations/fan.mqtt/#configuration_url
+     */
+    configuration_url?: string;
+
     /**
      * A list of connections of the device to the outside world as a list of tuples.
      * https://www.home-assistant.io/integrations/fan.mqtt#connections
@@ -1607,6 +1625,12 @@ export interface FanPlatformSchema extends PlatformSchema {
     name?: string;
 
     /**
+     * Suggest an area if the device isn’t in one yet.
+     * https://www.home-assistant.io/integrations/fan.mqtt/#suggested_area
+     */
+    suggested_area?: string;
+
+    /**
      * The firmware version of the device.
      * https://www.home-assistant.io/integrations/fan.mqtt#sw_version
      */
@@ -1618,6 +1642,24 @@ export interface FanPlatformSchema extends PlatformSchema {
      */
     via_device?: string;
   };
+
+  /**
+   * Flag which defines if the entity should be enabled when first added.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#enabled_by_default
+   */
+  enabled_by_default?: boolean;
+
+  /**
+   * The encoding of the payloads received and published messages. Set to "" to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#encoding
+   */
+  encoding?: string;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#entity_category
+   */
+  entity_category?: string;
 
   /**
    * Icon to use for the entity created.
@@ -1642,6 +1684,12 @@ export interface FanPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/fan.mqtt#name
    */
   name?: string;
+
+  /**
+   * Used instead of name for automatic generation of entity_id
+   * https://www.home-assistant.io/integrations/fan.mqtt/#object_id
+   */
+  object_id?: string;
 
   /**
    * Flag that defines if fan works in optimistic mode.
