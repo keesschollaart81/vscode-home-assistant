@@ -1,6 +1,6 @@
 {
   "name": "home-assistant-language-service",
-  "version": "1.29.1",
+  "version": "1.29.2",
   "description": "Home Assistant Language Service",
   "source": "src/haLanguageService.ts",
   "main": "dist/haLanguageService.js",
@@ -66,7 +66,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
-    "home-assistant-js-websocket": "^7.0.4",
+    "home-assistant-js-websocket": "^7.0.5",
     "vscode-json-languageservice": "3.9.1",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-uri": "3.0.3",
