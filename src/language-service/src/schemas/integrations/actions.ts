@@ -245,7 +245,16 @@ export interface ParallelAction {
    * The sequence of actions to run in parallel.
    * https://www.home-assistant.io/docs/scripts/#parallelizing-actions
    */
-  parallel: Action | Action[] | IncludeList;
+  parallel:
+    | (
+        | {
+            sequence: Action | Action[] | IncludeList;
+          }
+        | Action
+        | Action[]
+        | IncludeList
+      )[]
+    | IncludeList;
 }
 
 export interface RepeatAction {
