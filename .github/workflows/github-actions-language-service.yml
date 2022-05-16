@@ -22,7 +22,7 @@ jobs:
       - name: 🏗 Set up NodeJS
         uses: actions/setup-node@v3.1.1
         with:
-          node-version: "14"
+          node-version: "16"
 
       - name: 🏗 Install NodeJS packages
         working-directory: src/language-service
