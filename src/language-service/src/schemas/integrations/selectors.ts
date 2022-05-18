@@ -34,7 +34,7 @@ export interface ActionSelector {
    * The action selector allows the user to input one or more sequences of actions.
    * https://www.home-assistant.io/docs/blueprint/selectors/#action-selector
    */
-  action: null;
+  action: null | Record<string, never>;
 }
 
 export interface AddonSelector {
@@ -42,7 +42,7 @@ export interface AddonSelector {
    * The add-on selector allows the user to input an add-on slug. On the user interface, it will list all installed add-ons and use the slug of the selected add-on.
    * https://www.home-assistant.io/docs/blueprint/selectors/#add-on-selector
    */
-  addon: null;
+  addon: null | Record<string, never>;
 }
 
 export interface AreaSelector {
@@ -126,7 +126,7 @@ export interface BooleanSelector {
    * The boolean selector shows a toggle that allows the user to turn on or off the selected option.
    * https://www.home-assistant.io/docs/blueprint/selectors/#boolean-selector
    */
-  boolean: null;
+  boolean: null | Record<string, never>;
 }
 
 export interface ColorRGBSelector {
@@ -134,7 +134,7 @@ export interface ColorRGBSelector {
    * The date selector shows a date input that allows the user to specify a date.
    * https://www.home-assistant.io/docs/blueprint/selectors/#date-selector
    */
-  color_rgb: null;
+  color_rgb: null | Record<string, never>;
 }
 
 export interface ColorTempSelector {
@@ -162,7 +162,7 @@ export interface DateSelector {
    * The date selector shows a date input that allows the user to specify a date.
    * https://www.home-assistant.io/docs/blueprint/selectors/#date-selector
    */
-  date: null;
+  date: null | Record<string, never>;
 }
 
 export interface DateTimeSelector {
@@ -170,7 +170,7 @@ export interface DateTimeSelector {
    * The date selector shows a date and time input that allows the user to specify a date with a specific time.
    * https://www.home-assistant.io/docs/blueprint/selectors/#date--time-selector
    */
-  datetime: null;
+  datetime: null | Record<string, never>;
 }
 
 export interface DeviceSelector {
@@ -324,7 +324,7 @@ export interface MediaSelector {
    * The media selector is a powerful selector that allows a user to easily select media to play on a media device.
    * https://www.home-assistant.io/docs/blueprint/selectors/#media-selector
    */
-  media: null;
+  media: null | Record<string, never>;
 }
 
 export interface NumberSelector {
@@ -370,7 +370,7 @@ export interface ObjectSelector {
    * The object selector can be used to input arbitrary data in YAML form. This is useful for e.g. lists and dictionaries like service data.
    * https://www.home-assistant.io/docs/blueprint/selectors/#object-selector
    */
-  object: null;
+  object: null | Record<string, never>;
 }
 
 export interface SelectSelector {
@@ -480,7 +480,7 @@ export interface TemplateSelector {
    * The template can be used for allowing the user to input a Jinja2 template.
    * https://www.home-assistant.io/docs/blueprint/selectors/#template-selector
    */
-  template: null;
+  template: null | Record<string, never>;
 }
 
 export interface TextSelector {
@@ -527,7 +527,7 @@ export interface ThemeSelector {
    * The theme selector allows for selecting a theme from the available themes installed in Home Assistant.
    * https://www.home-assistant.io/docs/blueprint/selectors/#theme-selector
    */
-  theme: null;
+  theme: null | Record<string, never>;
 }
 
 export interface TimeSelector {
@@ -535,5 +535,5 @@ export interface TimeSelector {
    * The time selector shows a time input that allows the user to specify a time of the day.
    * https://www.home-assistant.io/docs/blueprint/selectors/#time-selector
    */
-  time: null;
+  time: null | Record<string, never>;
 }

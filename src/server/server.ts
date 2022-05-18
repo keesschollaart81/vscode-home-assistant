@@ -170,6 +170,7 @@ connection.onInitialize((params) => {
   connection.onRequest("renderTemplate", async (args: { template: string }) => {
     const result = await haConnection.callApi("post", "template", {
       template: args.template,
+      strict: true,
     });
 
     const timePrefix = `[${new Date().toLocaleTimeString()}] `;
