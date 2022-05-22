@@ -444,7 +444,7 @@
     "ts-loader": "^9.3.0",
     "ts-node": "10.7.0",
     "typescript": "^4.6.4",
-    "typescript-json-schema": "0.53.0"
+    "typescript-json-schema": "0.53.1"
   },
   "dependencies": {
     "axios": "^0.27.2",
