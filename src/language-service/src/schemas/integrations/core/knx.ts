@@ -662,6 +662,12 @@ interface Cover {
   invert_position?: boolean;
 
   /**
+   * Set this to true to invert the binary up/down commands from/to your KNX actuator.
+   * https://www.home-assistant.io/integrations/knx#invert_updown
+   */
+  invert_updown?: boolean;
+
+  /**
    * KNX group address for moving the cover full up or down. DPT 1
    * https://www.home-assistant.io/integrations/knx#move_long_address
    */

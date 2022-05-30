@@ -335,6 +335,11 @@ export interface SceneAction {
    * https://www.home-assistant.io/docs/scripts/#activate-a-scene
    */
   scene: SceneEntity;
+
+  /**
+   * Additional data for merely for use with the frontend. Has no functional effect.
+   */
+  metadata?: any;
 }
 
 export interface ServiceAction {
@@ -413,6 +418,11 @@ export interface ServiceAction {
         area_id?: Area | Area[] | "none";
       }
     | Template;
+
+  /**
+   * Additional data for merely for use with the frontend. Has no functional effect.
+   */
+  metadata?: any;
 }
 
 export interface StopAction {
