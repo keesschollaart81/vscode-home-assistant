@@ -85,6 +85,12 @@ interface CalendarTrigger {
   entity_id: CalendarEntity;
 
   /**
+   * Optional time offset to fire a set time before or after event start/end.
+   * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
+   */
+  offset?: TimePeriod;
+
+  /**
    * An personal identifier for this trigger, that is passed into the trigger
    * variables when the automation triggers using this trigger.
    * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
