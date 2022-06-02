@@ -249,7 +249,7 @@ export interface CoreIntegrations {
    * MQTT (aka MQ Telemetry Transport) is a machine-to-machine or “Internet of Things” connectivity protocol on top of TCP/IP. It allows extremely lightweight publish/subscribe messaging transport.
    * https://www.home-assistant.io/integrations/mqtt/
    */
-  mqtt?: integrations.Core.MQTT.Schema;
+  mqtt?: integrations.Core.MQTT.Schema | IncludeNamed;
 
   /**
    * The mqtt_eventstream integration connects two Home Assistant instances via MQTT.

@@ -2354,1260 +2354,1259 @@ export interface VacuumLegacyItem extends BaseItem {
 
 export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt alarm panel platform enables the possibility to control MQTT capable alarm panels. The Alarm icon will change state after receiving a new state from state_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * If defined, specifies a code to enable or disable the alarm in the frontend.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#code
    */
-  code?: string;
+  code?: Deprecated;
 
   /**
-   * If true the code is required to arm the alarm. If false the code is not validated.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#code_arm_required
    */
-  code_arm_required?: boolean;
+  code_arm_required?: Deprecated;
 
   /**
-   * If true the code is required to disarm the alarm. If false the code is not validated.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#code_disarm_required
    */
-  code_disarm_required?: boolean;
+  code_disarm_required?: Deprecated;
 
   /**
-   * The template used for the command payload. Available variables: action and code.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#command_template
    */
-  command_template?: Template;
+  command_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the alarm state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#command_topic
    */
-  command_topic: string;
+  command_topic: Deprecated;
 
   /**
-   * Information about the device this sensor is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT alarm.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * The payload to set armed-away mode on your Alarm Panel.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_arm_away
    */
-  payload_arm_away?: string;
+  payload_arm_away?: Deprecated;
 
   /**
-   * The payload to set armed-home mode on your Alarm Panel.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_arm_home
    */
-  payload_arm_home?: string;
+  payload_arm_home?: Deprecated;
 
   /**
-   * The payload to set armed-night mode on your Alarm Panel.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_arm_night
    */
-  payload_arm_night?: string;
+  payload_arm_night?: Deprecated;
 
   /**
-   * The payload to set armed-custom-bypass mode on your Alarm Panel.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_arm_custom_bypass
    */
-  payload_arm_custom_bypass?: string;
+  payload_arm_custom_bypass?: Deprecated;
 
   /**
-   * The payload that represents the available state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload to disarm your Alarm Panel.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_disarm
    */
-  payload_disarm?: string;
+  payload_disarm?: Deprecated;
 
   /**
-   * The payload that represents the unavailable state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The maximum QoS level of the state topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * Set the retain flag for data from the alarm panel.
-   * Retain is enabled by default.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive sensor's state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#state_topic
    */
-  state_topic: string;
+  state_topic: Deprecated;
 
   /**
-   * An ID that uniquely identifies this sensor. If two sensors have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * Defines a template to extract the value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#value_template
    */
-  value_template?: Template;
+  value_template?: Deprecated;
 }
 
 export interface BinarySensorPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt binary sensor platform uses an MQTT message received to set the binary sensor’s state to on or off.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt
    */
   platform: "mqtt";
 
   /**
-   * Set multiple availability topics for this sensor.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability_topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The type/class of the sensor to set the icon in the frontend.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#device_class
    */
-  device_class?: DeviceClassesBinarySensor;
+  device_class?: Deprecated;
 
   /**
-   * Information about the device this sensor is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/binary_sensor.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Defines the number of seconds after the sensor’s state expires, if it’s not updated. After expiry, the sensor’s state becomes unavailable.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#expire_after
    */
-  expire_after?: PositiveInteger;
+  expire_after?: Deprecated;
 
   /**
-   * Sends update events even if the value hasn’t changed. Useful if you want to have meaningful value graphs in history.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#expire_after
    */
-  force_update?: boolean;
+  force_update?: Deprecated;
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT binary sensor.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * For sensors that only send on state updates (like PIRs), this variable sets a delay in seconds after which the sensor’s state will be updated back to off.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#off_delay
    */
-  off_delay?: PositiveInteger;
+  off_delay?: Deprecated;
 
   /**
-   * The payload that represents the available state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload that represents the unavailable state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The string that represents the off state. It will be compared to the message in the state_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt/#payload_off
    */
-  payload_off?: string;
+  payload_off?: Deprecated;
 
   /**
-   * The string that represents the on state. It will be compared to the message in the state_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt/#payload_on
    */
-  payload_on?: string;
+  payload_on?: Deprecated;
 
   /**
-   * The maximum QoS level of the state topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive sensor's state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#state_topic
    */
-  state_topic: string;
+  state_topic: Deprecated;
 
   /**
-   * An ID that uniquely identifies this sensor. If two sensors have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * Defines a template to extract the value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#value_template
    */
-  value_template?: Template;
+  value_template?: Deprecated;
 }
 
 export interface CameraPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt camera platform allows you to integrate the content of an image file sent through MQTT into Home Assistant as a camera.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * Information about the device this camera is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/camera.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT camera.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe to.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/#device
    */
-  topic: string;
+  topic: Deprecated;
 
   /**
-   * An ID that uniquely identifies this camera. If two cameras have the same unique ID Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 }
 
 export interface ClimatePlatformSchema extends PlatformSchema {
   /**
-   * The mqtt climate platform lets you control your MQTT enabled HVAC devices.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * A template to render the value received on the action_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#action_template
    */
-  action_template?: Template;
+  action_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes of the current action. If this is set, the climate graph uses the value received as data source.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#action_topic
    */
-  action_topic?: string;
+  action_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to switch auxiliary heat.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#aux_command_topic
    */
-  aux_command_topic?: string;
+  aux_command_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the aux_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#aux_state_template
    */
-  aux_state_template?: Template;
+  aux_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes of the auxiliary heat mode. If this is not set, the auxiliary heat mode works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#aux_state_topic
    */
-  aux_state_topic?: string;
+  aux_state_topic?: Deprecated;
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the away mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#away_mode_command_topic
    */
-  away_mode_command_topic?: string;
+  away_mode_command_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the away_mode_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#away_mode_state_template
    */
-  away_mode_state_template?: Template;
+  away_mode_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes of the HVAC away mode. If this is not set, the away mode works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#away_mode_state_topic
    */
-  away_mode_state_topic?: string;
+  away_mode_state_topic?: Deprecated;
 
   /**
-   * A template with which the value received on current_temperature_topic will be rendered.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#current_temperature_template
    */
-  current_temperature_template?: Template;
+  current_temperature_template?: Deprecated;
 
   /**
-   * The MQTT topic on which to listen for the current temperature.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#current_temperature_topic
    */
-  current_temperature_topic?: string;
+  current_temperature_topic?: Deprecated;
 
   /**
-   * Information about the device this HVAC is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/climate.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * The MQTT topic to publish commands to change the fan mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#fan_mode_command_topic
    */
-  fan_mode_command_topic?: string;
+  fan_mode_command_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the fan_mode_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#fan_mode_state_template
    */
-  fan_mode_state_template?: Template;
+  fan_mode_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes of the HVAC fan mode. If this is not set, the fan mode works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#fan_mode_state_topic
    */
-  fan_mode_state_topic?: string;
+  fan_mode_state_topic?: Deprecated;
 
   /**
-   * A list of supported fan modes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#fan_modes
    */
-  fan_modes?: string[];
+  fan_modes?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the hold mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#hold_command_topic
    */
-  hold_command_topic?: string;
+  hold_command_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the hold_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#hold_state_template
    */
-  hold_state_template?: Template;
+  hold_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes of the HVAC hold mode. If this is not set, the hold mode works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#hold_state_topic
    */
-  hold_state_topic?: string;
+  hold_state_topic?: Deprecated;
 
   /**
-   * A list of available hold modes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#hold_modes
    */
-  hold_modes?: string[];
+  hold_modes?: Deprecated;
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Set the initial target temperature.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#initial
    */
-  initial?: Integer;
+  initial?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * Maximum set point available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#max_temp
    */
-  max_temp?: number;
+  max_temp?: Deprecated;
 
   /**
-   * Minimum set point available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#min_temp
    */
-  min_temp?: number;
+  min_temp?: Deprecated;
 
   /**
-   * A template to render the value sent to the mode_command_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#mode_command_template
    */
-  mode_command_template?: Template;
+  mode_command_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the HVAC operation mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#mode_command_topic
    */
-  mode_command_topic?: string;
+  mode_command_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the mode_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#mode_state_template
    */
-  mode_state_template?: Template;
+  mode_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes of the HVAC operation mode. If this is not set, the operation mode works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#mode_state_topic
    */
-  mode_state_topic?: string;
+  mode_state_topic?: Deprecated;
 
   /**
-   * A list of supported modes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#modes
    */
-  modes?: ("auto" | "off" | "cool" | "heat" | "dry" | "fan_only")[];
+  modes?: Deprecated;
 
   /**
-   * The name of the MQTT climate device.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * The payload that represents the available state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload that represents the unavailable state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The payload that represents disabled state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#payload_off
    */
-  payload_off?: string;
+  payload_off?: Deprecated;
 
   /**
-   * The payload that represents enabled state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#payload_on
    */
-  payload_on?: string;
+  payload_on?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the power state. This is useful if your device has a separate power toggle in addition to mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#power_command_topic
    */
-  power_command_topic?: string;
+  power_command_topic?: Deprecated;
 
   /**
-   * The desired precision for this device. Can be used to match your actual thermostat’s precision. Supported values are 0.1, 0.5 and 1.0.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#precision
    */
-  precision?: 0.1 | 0.5 | 1.0;
+  precision?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving and publishing messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * Defines if published messages should have the retain flag set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * Set to false to suppress sending of all MQTT messages when the current mode is Off.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#send_if_off
    */
-  send_if_off: boolean;
+  send_if_off: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the swing mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#swing_mode_command_topic
    */
-  swing_mode_command_topic?: string;
+  swing_mode_command_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the swing_mode_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#swing_mode_state_template
    */
-  swing_mode_state_template?: Template;
+  swing_mode_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes of the HVAC swing mode. If this is not set, the swing mode works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#swing_mode_state_topic
    */
-  swing_mode_state_topic?: string;
+  swing_mode_state_topic?: Deprecated;
 
   /**
-   * A list of supported swing modes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#swing_modes
    */
-  swing_modes?: string[];
+  swing_modes?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the target temperature.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_command_topic
    */
-  temperature_command_topic?: string;
+  temperature_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the high target temperature.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_high_command_topic
    */
-  temperature_high_command_topic?: string;
+  temperature_high_command_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the temperature_high_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_high_state_template
    */
-  temperature_high_state_template?: Template;
+  temperature_high_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes in the target high temperature. If this is not set, the target high temperature works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_high_state_topic
    */
-  temperature_high_state_topic?: string;
+  temperature_high_state_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the target low temperature.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_low_command_topic
    */
-  temperature_low_command_topic?: string;
+  temperature_low_command_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the temperature_low_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_low_state_template
    */
-  temperature_low_state_template?: Template;
+  temperature_low_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes in the target low temperature. If this is not set, the target low temperature works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_low_state_topic
    */
-  temperature_low_state_topic?: string;
+  temperature_low_state_topic?: Deprecated;
 
   /**
-   * A template to render the value received on the temperature_state_topic with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_state_template
    */
-  temperature_state_template?: Template;
+  temperature_state_template?: Deprecated;
 
   /**
-   * The MQTT topic to subscribe for changes in the target temperature. If this is not set, the target temperature works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_state_topic
    */
-  temperature_state_topic?: string;
+  temperature_state_topic?: Deprecated;
 
   /**
-   * Defines the temperature unit of the device, C or F. If this is not set, the temperature unit is set to the system temperature unit.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_unit
    */
-  temperature_unit?: "C" | "F";
+  temperature_unit?: Deprecated;
 
   /**
-   * Step size for temperature set point.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#temp_step
    */
-  temp_step?: number;
+  temp_step?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this HVAC device. If two HVAC devices have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * Default template to render the payloads on all *_state_topics with.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt#value_template
    */
-  value_template?: Template;
+  value_template?: Deprecated;
 }
 
 export interface CoverPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt cover platform allows you to control an MQTT cover (such as blinds, a rollershutter or a garage door).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to control the cover.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#command_topic
    */
-  command_topic?: string;
+  command_topic?: Deprecated;
 
   /**
-   * Information about the device this camera is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/cover.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#device_class
    */
-  device_class?: DeviceClassesCover;
+  device_class?: Deprecated;
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT cover.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * Flag that defines if switch works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#optimistic
    */
-  optimistic?: boolean;
+  optimistic?: Deprecated;
 
   /**
-   * The payload that represents the online state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The command payload that closes the cover.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#payload_close
    */
-  payload_close?: string;
+  payload_close?: Deprecated;
 
   /**
-   * The payload that represents the offline state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The command payload that opens the cover.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#payload_open
    */
-  payload_open?: string;
+  payload_open?: Deprecated;
 
   /**
-   * The command payload that stops the cover.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#payload_stop
    */
-  payload_stop?: string;
+  payload_stop?: Deprecated;
 
   /**
-   * Number which represents closed position.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#position_closed
    */
-  position_closed?: Integer;
+  position_closed?: Deprecated;
 
   /**
-   * Number which represents open position.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#position_open
    */
-  position_open?: Integer;
+  position_open?: Deprecated;
 
   /**
-   * Defines a template that can be used to extract the payload for the `position_topic` topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#position_template
    */
-  position_template?: Template;
+  position_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive cover position messages. If position_topic is set state_topic is ignored.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#position_topic
    */
-  position_topic?: string;
+  position_topic?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving and publishing messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * Defines if published messages should have the retain flag set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * Defines a template to define the position to be sent to the set_position_topic topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#set_position_template
    */
-  set_position_template?: Template;
+  set_position_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish position commands to. You need to set position_topic as well if you want to use position topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#set_position_topic
    */
-  set_position_topic?: string;
+  set_position_topic?: Deprecated;
 
   /**
-   * The payload that represents the closed state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#state_closed
    */
-  state_closed?: string;
+  state_closed?: Deprecated;
 
   /**
-   * The payload that represents the closing state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#state_closing
    */
-  state_closing?: string;
+  state_closing?: Deprecated;
 
   /**
-   * The payload that represents the open state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#state_open
    */
-  state_open?: string;
+  state_open?: Deprecated;
 
   /**
-   * The payload that represents the opening state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#state_opening
    */
-  state_opening?: string;
+  state_opening?: Deprecated;
 
   /**
-   * The payload that represents the stopped state (for covers that do not report open/closed state).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#state_stopped
    */
-  state_stopped?: string;
+  state_stopped?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive cover state messages. Use only if not using position_topic. State topic can only read open/close state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#state_topic
    */
-  state_topic?: string;
+  state_topic?: Deprecated;
 
   /**
-   * The value that will be sent on a close_cover_tilt command.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_closed_value
    */
-  tilt_closed_value?: Integer;
+  tilt_closed_value?: Deprecated;
 
   /**
-   * Defines a template that can be used to extract the payload for the `tilt_command_topic` topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_command_template
    */
-  tilt_command_template?: Template;
+  tilt_command_template?: Deprecated;
 
   /**
    * The MQTT topic to publish commands to control the cover tilt.
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_command_topic
    */
-  tilt_command_topic?: string;
+  tilt_command_topic?: Deprecated;
 
   /**
    * DEPRECATED as of Home Assistant 2021.3.0
@@ -3615,784 +3614,784 @@ export interface CoverPlatformSchema extends PlatformSchema {
   tilt_invert_state?: Deprecated;
 
   /**
-   *The maximum tilt value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_max
    */
-  tilt_max?: Integer;
+  tilt_max?: Deprecated;
 
   /**
-   * The minimum tilt value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_min
    */
-  tilt_min?: Integer;
+  tilt_min?: Deprecated;
 
   /**
-   * The value that will be sent on an open_cover_tilt command.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_opened_value
    */
-  tilt_opened_value?: Integer;
+  tilt_opened_value?: Deprecated;
 
   /**
-   * Flag that determines if tilt works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_optimistic
    */
-  tilt_optimistic?: boolean;
+  tilt_optimistic?: Deprecated;
 
   /**
-   * Defines a template that can be used to extract the payload for the tilt_status_topic topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_status_template
    */
-  tilt_status_template?: Template;
+  tilt_status_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive tilt status update values.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_status_topic
    */
-  tilt_status_topic?: string;
+  tilt_status_topic?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this cover. If two covers have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * Defines a template to extract a value from the payload.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#value_template
    */
-  value_template?: Template;
+  value_template?: Deprecated;
 }
 
 export interface DeviceTrackerPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt device tracker platform allows you to detect presence by monitoring an MQTT topic for new locations.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * List of devices with their topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#devices
    */
-  devices: { [key: string]: string };
+  devices: { [key: string]: Deprecated };
 
   /**
-   * The payload value that represents the ‘home’ state for the device.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#payload_home
    */
-  payload_home?: string;
+  payload_home?: Deprecated;
 
   /**
-   * The payload value that represents the ‘not_home’ state for the device.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#payload_not_home
    */
-  payload_not_home?: string;
+  payload_not_home?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * Attribute of a device tracker that affects state when being used to track a person. Valid options are gps, router, bluetooth, or bluetooth_le.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#source_type
    */
-  source_type?: "bluetooth" | "bluetooth_le" | "gps" | "router";
+  source_type?: Deprecated;
 }
 
 export interface FanPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt fan platform lets you control your MQTT enabled fans.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the fan state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#command_topic
    */
-  command_topic: string;
+  command_topic: Deprecated;
 
   /**
-   * Information about the device this camera is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/fan.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT fan.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * Flag that defines if fan works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#optimistic
    */
-  optimistic?: boolean;
+  optimistic?: Deprecated;
 
   /**
-   * Defines a template to generate the payload to send to oscillation_command_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_value_template
    */
-  oscillation_command_template?: Template;
+  oscillation_command_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the oscillation state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_command_topic
    */
-  oscillation_command_topic?: string;
+  oscillation_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive oscillation state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_state_topic
    */
-  oscillation_state_topic?: string;
+  oscillation_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract a value from the oscillation.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_value_template
    */
-  oscillation_value_template?: Template;
+  oscillation_value_template?: Deprecated;
 
   /**
-   * The payload that represents the online state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload that represents the fan’s high speed.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_high_speed
    */
   payload_high_speed?: Deprecated;
 
   /**
-   * The payload that represents the fan’s low speed.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_low_speed
    */
   payload_low_speed?: Deprecated;
 
   /**
-   * The payload that represents the fan’s medium speed.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_medium_speed
    */
   payload_medium_speed?: Deprecated;
 
   /**
-   * The payload that represents the offline state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The payload that represents the stop state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_off
    */
-  payload_off?: string;
+  payload_off?: Deprecated;
 
   /**
-   * The payload that represents the running state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_on
    */
-  payload_on?: string;
+  payload_on?: Deprecated;
 
   /**
-   * The payload that represents the oscillation off state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_oscillation_off
    */
-  payload_oscillation_off?: string;
+  payload_oscillation_off?: Deprecated;
 
   /**
-   * The payload that represents the oscillation on state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_oscillation_on
    */
-  payload_oscillation_on?: string;
+  payload_oscillation_on?: Deprecated;
 
   /**
-   * A special payload that resets the `percentage` state attribute to `None` when received at the `percentage_state_topic`.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_reset_percentage
    */
-  payload_reset_percentage?: string;
+  payload_reset_percentage?: Deprecated;
 
   /**
-   * A special payload that resets the `preset_mode` state attribute to `None` when received at the `preset_mode_state_topic`.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_reset_preset_mode
    */
-  payload_reset_preset_mode?: string;
+  payload_reset_preset_mode?: Deprecated;
 
   /**
-   * Defines a template to generate the payload to send to `percentage_command_topic`.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_command_template
    */
-  percentage_command_template?: Template;
+  percentage_command_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the fan speed state based on a percentage.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_command_topic
    */
-  percentage_command_topic?: string;
+  percentage_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive fan speed based on percentage.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_state_topic
    */
-  percentage_state_topic?: string;
+  percentage_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract a value from fan percentage speed.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#percentage_value_template
    */
-  percentage_value_template?: string;
+  percentage_value_template?: Deprecated;
 
   /**
-   * Defines a template to generate the payload to send to preset_mode_command_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_command_template
    */
-  preset_mode_command_template?: Template;
+  preset_mode_command_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the preset mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_command_topic
    */
-  preset_mode_command_topic?: string;
+  preset_mode_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive fan speed based on presets.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_state_topic
    */
-  preset_mode_state_topic?: string;
+  preset_mode_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract a value from the preset_mode payload.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#preset_mode_value_template
    */
-  preset_mode_value_template?: string;
+  preset_mode_value_template?: Deprecated;
 
   /**
-   * List of preset modes this fan is capable of running at.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#preset_modes
    */
-  preset_modes?: string[];
+  preset_modes?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving and publishing messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * Defines if published messages should have the retain flag set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * The minimum of numeric output range (off not included, so speed_range_min - 1 represents 0%).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_range_min
    */
-  speed_range_min?: PositiveInteger;
+  speed_range_min?: Deprecated;
 
   /**
-   * The maximum of numeric output range (representing 100%).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_range_max
    */
-  speed_range_max?: PositiveInteger;
+  speed_range_max?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change speed state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_command_topic
    */
   speed_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive speed state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_state_topic
    */
   speed_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract a value from the speed payload.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_value_template
    */
   speed_value_template?: Deprecated;
 
   /**
-   * List of speeds this fan is capable of running at. Valid entries are off, low, medium and high.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#speeds
    */
   speeds?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#state_topic
    */
-  state_topic?: string;
+  state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract a value from the state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#state_value_template
    */
-  state_value_template?: Template;
+  state_value_template?: Deprecated;
 
   /**
    * An ID that uniquely identifies this cover. If two covers have the same unique ID, Home Assistant will raise an exception.
    * https://www.home-assistant.io/integrations/fan.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 }
 
 export interface LightDefaultPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt light platform lets you control your MQTT enabled lights through one of the supported message schemas, default, json or template.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * The mqtt light platform with default schema lets you control your MQTT enabled lights. It supports setting brightness, color temperature, effects, flashing, on/off, RGB colors, transitions, XY colors and white values.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#default-schema---configuration
    */
   schema?: "default";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the light’s brightness.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_command_topic
    */
-  brightness_command_topic?: string;
+  brightness_command_topic?: Deprecated;
 
   /**
-   * Defines the maximum brightness value (i.e., 100%) of the MQTT device.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_scale
    */
-  brightness_scale?: Integer;
+  brightness_scale?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive brightness state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_state_topic
    */
-  brightness_state_topic?: string;
+  brightness_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the brightness value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_value_template
    */
-  brightness_value_template?: Template;
+  brightness_value_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive color mode updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color_mode_state_topic
    */
-  color_mode_state_topic?: string;
+  color_mode_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the color mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color_mode_value_template
    */
-  color_mode_value_template?: Template;
+  color_mode_value_template?: Deprecated;
 
   /**
-   * Defines a template to compose message which will be sent to color_temp_command_topic. Available variables: value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color_temp_command_template
    */
-  color_temp_command_template?: Template;
+  color_temp_command_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the light’s color temperature state. The color temperature command slider has a range of 153 to 500 mireds (micro reciprocal degrees).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color_temp_command_topic
    */
-  color_temp_command_topic?: string;
+  color_temp_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive color temperature state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color_temp_state_topic
    */
-  color_temp_state_topic?: string;
+  color_temp_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the color temperature value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color_temp_value_template
    */
-  color_temp_value_template?: Template;
+  color_temp_value_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the switch state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#command_topic
    */
-  command_topic: string;
+  command_topic: Deprecated;
 
   /**
-   * Information about the device this light is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * The MQTT topic to publish commands to change the light’s effect state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_command_topic
    */
-  effect_command_topic?: string;
+  effect_command_topic?: Deprecated;
 
   /**
-   * The list of effects the light supports.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_list
    */
-  effect_list?: string | string[];
+  effect_list?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive effect state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_state_topic
    */
-  effect_state_topic?: string;
+  effect_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the effect value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_value_template
    */
-  effect_value_template?: Template;
+  effect_value_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the light’s color state in HS format (Hue Saturation). Range for Hue: 0° .. 360°, Range of Saturation: 0..100.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#hs_command_topic
    */
-  hs_command_topic?: string;
+  hs_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive color state updates in HS format.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#hs_state_topic
    */
-  hs_state_topic?: string;
+  hs_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the HS value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#hs_value_template
    */
-  hs_value_template?: Template;
+  hs_value_template?: Deprecated;
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The maximum color temperature in mireds.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#max_mireds
    */
-  max_mireds?: Integer;
+  max_mireds?: Deprecated;
 
   /**
-   * The minimum color temperature in mireds.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#min_mireds
    */
-  min_mireds?: Integer;
+  min_mireds?: Deprecated;
 
   /**
-   * The name of the MQTT light.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * Defines when on the payload_on is sent. Using last (the default) will send any style (brightness, color, etc) topics first and then a payload_on to the command_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#on_command_type
    */
-  on_command_type?: string;
+  on_command_type?: Deprecated;
 
   /**
-   * Flag that defines if light works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#optimistic
    */
-  optimistic?: boolean;
+  optimistic?: Deprecated;
 
   /**
-   * The payload that represents the online state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload that represents the offline state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The payload that represents disabled state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#payload_off
    */
-  payload_off?: string;
+  payload_off?: Deprecated;
 
   /**
-   * The payload that represents enabled state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#payload_on
    */
-  payload_on?: string;
+  payload_on?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving and publishing messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * Defines if published messages should have the retain flag set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * Defines a template to compose message which will be sent to rgb_command_topic. Available variables: red, green and blue.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#rgb_command_template
    */
-  rgb_command_template?: Template;
+  rgb_command_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the light’s RGB state. Please note that the color value sent by Home Assistant is normalized to full brightness if brightness_command_topic is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#rgb_command_topic
    */
-  rgb_command_topic?: string;
+  rgb_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive RGB state updates. The expected payload is the RGB values separated by commas, for example, 255,0,127.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#rgb_state_topic
    */
-  rgb_state_topic?: string;
+  rgb_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the RGB value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#rgb_value_template
    */
-  rgb_value_template?: Template;
+  rgb_value_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#state_topic
    */
-  state_topic?: string;
+  state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract a value from the state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#state_value_template
    */
-  state_value_template?: Template;
+  state_value_template?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this light. If two lights have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the light to white mode with a given brightness.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#white_command_topic
    */
-  white_command_topic?: string;
+  white_command_topic?: Deprecated;
 
   /**
-   * Defines the maximum white level (i.e., 100%) of the MQTT device.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#white_scale
    */
-  white_scale?: Integer;
+  white_scale?: Deprecated;
 
   /**
    * DEPRECATED
@@ -4415,108 +4414,108 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
   white_value_template?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the light’s XY state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#xy_command_topic
    */
-  xy_command_topic?: string;
+  xy_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive XY state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#xy_state_topic
    */
-  xy_state_topic?: string;
+  xy_state_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the XY value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#xy_value_template
    */
-  xy_value_template?: Template;
+  xy_value_template?: Deprecated;
 }
 
 export interface LightJSONPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt light platform lets you control your MQTT enabled lights through one of the supported message schemas, default, json or template.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * The mqtt light platform with default schema lets you control your MQTT enabled lights. It supports setting brightness, color temperature, effects, flashing, on/off, RGB colors, transitions, XY colors and white values.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#json-schema---configuration
    */
   schema?: "json";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * Flag that defines if the light supports brightness.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness
    */
-  brightness?: boolean;
+  brightness?: Deprecated;
 
   /**
-   * Defines the maximum brightness value (i.e., 100%) of the MQTT device.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_scale
    */
-  brightness_scale?: Integer;
+  brightness_scale?: Deprecated;
 
   /**
-   * Flag that defines if the light supports color modes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color
    */
-  color_mode?: boolean;
+  color_mode?: Deprecated;
 
   /**
-   * Flag that defines if the light supports color temperature.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color_temp
    */
-  color_temp?: boolean;
+  color_temp?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the switch state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#command_topic
    */
-  command_topic: string;
+  command_topic: Deprecated;
 
   /**
    * Information about the device this light is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
@@ -4524,421 +4523,421 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Flag that defines if the light supports effects.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#effect
    */
-  effect?: boolean;
+  effect?: Deprecated;
 
   /**
-   * The list of effects the light supports.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_list
    */
-  effect_list?: string | string[];
+  effect_list?: Deprecated;
 
   /**
-   * The duration, in seconds, of a “long” flash.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#flash_time_long
    */
-  flash_time_long?: Integer;
+  flash_time_long?: Deprecated;
 
   /**
-   * The duration, in seconds, of a “short” flash.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#flash_time_short
    */
-  flash_time_short?: Integer;
+  flash_time_short?: Deprecated;
 
   /**
-   * Flag that defines if the light supports HS colors.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#hs
    */
-  hs?: boolean;
+  hs?: Deprecated;
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The maximum color temperature in mireds.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#max_mireds
    */
-  max_mireds?: Integer;
+  max_mireds?: Deprecated;
 
   /**
-   * The minimum color temperature in mireds.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#min_mireds
    */
-  min_mireds?: Integer;
+  min_mireds?: Deprecated;
 
   /**
-   * The name of the MQTT light.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * Flag that defines if light works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#optimistic
    */
-  optimistic?: boolean;
+  optimistic?: Deprecated;
 
   /**
-   * The payload that represents the online state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload that represents the offline state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving and publishing messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * Defines if published messages should have the retain flag set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * Flag that defines if the light supports RGB colors.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#rgb
    */
-  rgb?: boolean;
+  rgb?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#state_topic
    */
-  state_topic?: string;
+  state_topic?: Deprecated;
 
   /**
-   * A list of color modes supported by the light.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#supported_color_modes
    */
-  supported_color_modes?: ColorMode[];
+  supported_color_modes?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this light. If two lights have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * Flag that defines if the light supports white values.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#white_value
    */
-  white_value?: boolean;
+  white_value?: Deprecated;
 
   /**
-   * Flag that defines if the light supports XY colors.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#xy
    */
-  xy?: boolean;
+  xy?: Deprecated;
 }
 
 export interface LightTemplatePlatformSchema extends PlatformSchema {
   /**
-   * The mqtt light platform lets you control your MQTT enabled lights through one of the supported message schemas, default, json or template.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * The mqtt light platform with default schema lets you control your MQTT enabled lights. It supports setting brightness, color temperature, effects, flashing, on/off, RGB colors, transitions, XY colors and white values.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#json-schema---configuration
    */
   schema?: "template";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * Template to extract blue color from the state payload value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#blue_template
    */
-  blue_template?: Template;
+  blue_template?: Deprecated;
 
   /**
-   * Template to extract brightness from the state payload value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#brightness_template
    */
-  brightness_template?: Template;
+  brightness_template?: Deprecated;
 
   /**
-   * Template to extract color temperature from the state payload value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#color_temp_template
    */
-  color_temp_template?: Template;
+  color_temp_template?: Deprecated;
 
   /**
-   * The template for off state changes. Available variables: state and transition.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#command_off_template
    */
-  command_off_template: Template;
+  command_off_template: Deprecated;
 
   /**
    * The template for on state changes. Available variables: state, brightness, red, green, blue, white_value, flash, transition and effect.
    * https://www.home-assistant.io/integrations/light.mqtt/#command_on_template
    */
-  command_on_template: Template;
+  command_on_template: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the switch state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#command_topic
    */
-  command_topic: string;
+  command_topic: Deprecated;
 
   /**
-   * Information about the device this light is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/light.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * The list of effects the light supports.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_list
    */
-  effect_list?: string | string[];
+  effect_list?: Deprecated;
 
   /**
-   * Template to extract effect from the state payload value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#effect_template
    */
-  effect_template?: Template;
+  effect_template?: Deprecated;
 
   /**
-   * Template to extract green color from the state payload value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#green_template
    */
-  green_template?: Template;
+  green_template?: Deprecated;
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The maximum color temperature in mireds.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#max_mireds
    */
-  max_mireds?: Integer;
+  max_mireds?: Deprecated;
 
   /**
-   * The minimum color temperature in mireds.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#min_mireds
    */
-  min_mireds?: Integer;
+  min_mireds?: Deprecated;
 
   /**
-   * The name of the MQTT light.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * Flag that defines if light works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#optimistic
    */
-  optimistic?: boolean;
+  optimistic?: Deprecated;
 
   /**
-   * The payload that represents the online state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload that represents the offline state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving and publishing messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * Template to extract red color from the state payload value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#red_template
    */
-  red_template?: string;
+  red_template?: Deprecated;
 
   /**
-   * Template to extract red color from the state payload value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#state_template
    */
-  state_template?: string;
+  state_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#state_topic
    */
-  state_topic?: string;
+  state_topic?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this light. If two lights have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
    * DEPRECATED
@@ -4948,1054 +4947,1054 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
 
 export interface LockPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt lock platform lets you control your MQTT enabled locks.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the lock state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#command_topic
    */
-  command_topic: string;
+  command_topic: Deprecated;
 
   /**
-   * Information about the device this lock is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/lock.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT lock.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * Flag that defines if lock works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#optimistic
    */
-  optimistic?: boolean;
+  optimistic?: Deprecated;
 
   /**
-   * The payload that represents the online state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload that represents enabled/locked state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#payload_lock
    */
-  payload_lock?: string;
+  payload_lock?: Deprecated;
 
   /**
-   * The payload that represents the offline state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The value that represents the lock to be in unlocked state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#state_unlocked
    */
-  payload_unlock?: string;
+  payload_unlock?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving and publishing messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * If the published message should have the retain flag on or not.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * The value that represents the lock to be in locked state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#state_locked
    */
-  state_locked?: string;
+  state_locked?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#state_topic
    */
-  state_topic?: string;
+  state_topic?: Deprecated;
 
   /**
-   * The value that represents the lock to be in unlocked state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#state_unlocked
    */
-  state_unlocked?: string;
+  state_unlocked?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this light. If two lights have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * Defines a template to extract a value from the payload.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#value_template
    */
-  value_template?: Template;
+  value_template?: Deprecated;
 }
 
 export interface NumberPlatformSchema extends PlatformSchema {
   /**
-   * The MQTT number platform.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/
    */
   platform: "mqtt";
 
   /**
-   * A list of MQTT topics subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#availability
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt/#topic
      */
-    topic: string;
+    topic: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt/#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt/#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/numbver.mqtt/#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to change the number state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#command_topic
    */
-  command_topic: string;
+  command_topic: Deprecated;
 
   /**
-   * Information about the device this number is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/number.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as entity attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * Maximum value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt#max
    */
-  max?: number;
+  max?: Deprecated;
 
   /**
-   * Minimum value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt#min
    */
-  min?: number;
+  min?: Deprecated;
 
   /**
-   * The name of the MQTT number.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * Flag that defines if the number works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#optimistic
    */
-  optimistic?: boolean;
+  optimistic?: Deprecated;
 
   /**
-   * The maximum QoS level to be used when receiving and publishing messages.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * If the published message should have the retain flag on or not.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive state updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#state_topic
    */
-  state_topic?: string;
+  state_topic?: Deprecated;
 
   /**
-   * Step value. Smallest value `0.001`.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#step
    */
-  step?: number;
+  step?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this number. If two numbers have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 }
 
 export interface SelectPlatformSchema extends PlatformSchema {
   /**
-   * This mqtt select platform uses the MQTT message payload as the select value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt
    */
   platform: "mqtt";
 
   /**
-   * Set multiple availability topics for this select.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#availability_topic
      */
-    topic?: string;
+    topic?: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to control the select.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt/#command_topic
    */
-  command_topic: string;
+  command_topic: Deprecated;
 
   /**
-   * Information about the device this select is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/select.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Flag which defines if the entity should be enabled when first added.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#enabled_by_default
    */
-  enabled_by_default?: boolean;
+  enabled_by_default?: Deprecated;
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as entity attributes. Implies force_update of the current select state when a message is received on this topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT select.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * Flag that defines the select works in optimistic mode.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt/#optimistic
    */
-  optimistic?: boolean;
+  optimistic?: Deprecated;
 
   /**
-   * List of options to choose from in the select.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt/#options
    */
-  options?: string[];
+  options?: Deprecated;
 
   /**
-   * The maximum QoS level of the state topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#qos
    */
   qos?: QOS;
 
   /**
-   * If the published message should have the retain flag on or not.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive the select value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#state_topic
    */
-  state_topic?: string;
+  state_topic?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this select. If two selects have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * Defines a template to extract a value from the payload.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/select.mqtt/#value_template
    */
-  value_template?: Template;
+  value_template?: Deprecated;
 }
 
 export interface SensorPlatformSchema extends PlatformSchema {
   /**
-   * This mqtt sensor platform uses the MQTT message payload as the sensor value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt
    */
   platform: "mqtt";
 
   /**
-   * Set multiple availability topics for this sensor.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#availability_topic
      */
-    topic?: string;
+    topic?: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The type/class of the sensor to set the icon in the frontend.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#device_class
    */
-  device_class?: DeviceClassesSensor;
+  device_class?: Deprecated;
 
   /**
-   * Information about the device this sensor is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * Suggest an area if the device isn’t in one yet.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#suggested_area
      */
-    suggested_area?: string;
+    suggested_area?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/sensor.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * Defines the number of seconds after the sensor’s state expires, if it’s not updated. After expiry, the sensor’s state becomes unavailable.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#expire_after
    */
-  expire_after?: PositiveInteger;
+  expire_after?: Deprecated;
 
   /**
-   * Sends update events even if the value hasn’t changed. Useful if you want to have meaningful value graphs in history.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#expire_after
    */
-  force_update?: boolean;
+  force_update?: Deprecated;
 
   /**
-   * The icon for the sensor.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes. Implies force_update of the current sensor state when a message is received on this topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive timestamps for when an accumulating sensor such as an energy meter was reset. If the sensor never resets, set last_reset_topic to same as state_topic and set the last_reset_value_template to a constant valid timstamp, for example UNIX epoch 0: 1970-01-01T00:00:00+00:00.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#last_reset_topic
    */
-  last_reset_topic?: string;
+  last_reset_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the last_reset. Available variables: entity_id. The entity_id can be used to reference the entity’s attributes.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#last_reset_value_template
    */
-  last_reset_value_template?: string;
+  last_reset_value_template?: Deprecated;
 
   /**
-   * The name of the MQTT sensor.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * The payload that represents the available state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload that represents the unavailable state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The maximum QoS level of the state topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * The state_class of the sensor.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#state_class
    */
-  state_class?: StateClassesSensor;
+  state_class?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive sensor values.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#state_topic
    */
-  state_topic: string;
+  state_topic: Deprecated;
 
   /**
-   * An ID that uniquely identifies this sensor. If two sensors have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 
   /**
-   * Defines the units of measurement of the sensor, if any.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#unit_of_measurement
    */
-  unit_of_measurement?: string;
+  unit_of_measurement?: Deprecated;
 
   /**
-   * Defines a template to extract the value.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#value_template
    */
-  value_template?: Template;
+  value_template?: Deprecated;
 }
 
 export interface VacuumPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt vacuum integration allows you to control your MQTT-enabled vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt
    */
   platform: "mqtt";
 
   /**
-   * The schema to use. Must be state to select the state schema.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#schema
    */
   schema: "state";
 
   /**
-   * Set multiple availability topics for this vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_topic
      */
-    topic?: string;
+    topic?: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to control the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#command_topic
    */
-  command_topic?: string;
+  command_topic?: Deprecated;
 
   /**
-   * Information about the device this vacuum is a part of to tie it into the device registry. Only works through MQTT discovery and when unique_id is set.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#device
    */
   device?: {
     /**
-     * A list of connections of the device to the outside world as a list of tuples.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#connections
      */
-    connections?: { [key: string]: string };
+    connections?: { [key: string]: Deprecated };
 
     /**
-     * A list of IDs that uniquely identify the device. For example a serial number.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#identifiers
      */
-    identifier?: string;
+    identifier?: Deprecated;
 
     /**
-     * The manufacturer of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#manufacturer
      */
-    manufacturer?: string;
+    manufacturer?: Deprecated;
 
     /**
-     * The model of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#model
      */
-    model?: string;
+    model?: Deprecated;
 
     /**
-     * The name of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#name
      */
-    name?: string;
+    name?: Deprecated;
 
     /**
-     * The firmware version of the device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#sw_version
      */
-    sw_version?: string;
+    sw_version?: Deprecated;
 
     /**
-     * Identifier of a device that routes messages between this device and Home Assistant. Examples of such devices are hubs, or parent devices of a sub-device.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#via_device
      */
-    via_device?: string;
+    via_device?: Deprecated;
   };
 
   /**
-   * List of possible fan speeds for the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#fan_speed_list
    */
-  fan_speed_list?: string[];
+  fan_speed_list?: Deprecated;
 
   /**
-   * Defines a template to define the fan speed of the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#fan_speed_template
    */
-  fan_speed_template?: Template;
+  fan_speed_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive fan speed values from the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#fan_speed_topic
    */
-  fan_speed_topic?: string;
+  fan_speed_topic?: Deprecated;
 
   /**
-   * Icon to use for the entity created.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#icon
    */
-  icon?: string;
+  icon?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes. Implies force_update of the current sensor state when a message is received on this topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * The payload that represents the available state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to begin a spot cleaning cycle.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_clean_spot
    */
-  payload_clean_spot?: string;
+  payload_clean_spot?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to locate the vacuum (typically plays a song).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_locate
    */
-  payload_locate?: string;
+  payload_locate?: Deprecated;
 
   /**
-   * The payload that represents the unavailable state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to pause the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_pause
    */
-  payload_pause?: string;
+  payload_pause?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to tell the vacuum to return to base.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_return_to_base
    */
-  payload_return_to_base?: string;
+  payload_return_to_base?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to begin the cleaning cycle.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_start
    */
-  payload_start?: string;
+  payload_start?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to stop the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_stop
    */
-  payload_stop?: string;
+  payload_stop?: Deprecated;
 
   /**
-   * The maximum QoS level of the state topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * If the published message should have the retain flag on or not.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * The MQTT topic to publish custom commands to the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#send_command_topic
    */
-  send_command_topic?: string;
+  send_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to control the vacuum’s fan speed.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#set_fan_speed_topic
    */
-  set_fan_speed_topic?: string;
+  set_fan_speed_topic?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive state messages from the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#state_topic
    */
-  state_topic: string;
+  state_topic: Deprecated;
 
   /**
-   * List of features that the vacuum supports (possible values are start, stop, pause, return_home, battery, status, locate, clean_spot, fan_speed, send_command).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#supported_features
    */
-  supported_features?: string[];
+  supported_features?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this vacuum. If two vacuums have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 }
 
 export interface VacuumLegacyPlatformSchema extends PlatformSchema {
   /**
-   * The mqtt vacuum integration allows you to control your MQTT-enabled vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt
    */
   platform: "mqtt";
 
   /**
-   * The schema to use. Must be state to select the state schema.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#schema
    */
   schema?: "legacy";
 
   /**
-   * Set multiple availability topics for this vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
   availability?: {
     /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_topic
      */
-    topic?: string;
+    topic?: Deprecated;
 
     /**
-     * The payload that represents the available state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_available
      */
-    payload_available?: string;
+    payload_available?: Deprecated;
 
     /**
-     * The payload that represents the unavailable state.
+     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
      * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_not_available
      */
-    payload_not_available?: string;
+    payload_not_available?: Deprecated;
   }[];
 
   /**
-   * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#availability_mode
    */
-  availability_mode?: AvailabilityMode;
+  availability_mode?: Deprecated;
 
   /**
-   * Defines a template to extract device’s availability from the availability_topic. To determine the devices’s availability result of this template will be compared to payload_available and payload_not_available.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_template
    */
-  availability_template?: Template;
+  availability_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_topic
    */
-  availability_topic?: string;
+  availability_topic?: Deprecated;
 
   /**
    * DEPRECATED
@@ -6040,10 +6039,10 @@ export interface VacuumLegacyPlatformSchema extends PlatformSchema {
   cleaning_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to control the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#command_topic
    */
-  command_topic?: string;
+  command_topic?: Deprecated;
 
   /**
    * DEPRECATED
@@ -6074,70 +6073,70 @@ export interface VacuumLegacyPlatformSchema extends PlatformSchema {
   error_topic?: Deprecated;
 
   /**
-   * List of possible fan speeds for the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#fan_speed_list
    */
-  fan_speed_list?: string[];
+  fan_speed_list?: Deprecated;
 
   /**
-   * Defines a template to define the fan speed of the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#fan_speed_template
    */
-  fan_speed_template?: Template;
+  fan_speed_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive fan speed values from the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#fan_speed_topic
    */
-  fan_speed_topic?: string;
+  fan_speed_topic?: Deprecated;
 
   /**
-   * Defines a template to extract the JSON dictionary from messages received on the json_attributes_topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#json_attributes_template
    */
-  json_attributes_template?: Template;
+  json_attributes_template?: Deprecated;
 
   /**
-   * The MQTT topic subscribed to receive a JSON dictionary payload and then set as sensor attributes. Implies force_update of the current sensor state when a message is received on this topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#json_attributes_topic
    */
-  json_attributes_topic?: string;
+  json_attributes_topic?: Deprecated;
 
   /**
-   * The name of the MQTT vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#name
    */
-  name?: string;
+  name?: Deprecated;
 
   /**
-   * The payload that represents the available state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_available
    */
-  payload_available?: string;
+  payload_available?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to begin a spot cleaning cycle.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_clean_spot
    */
-  payload_clean_spot?: string;
+  payload_clean_spot?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to locate the vacuum (typically plays a song).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_locate
    */
-  payload_locate?: string;
+  payload_locate?: Deprecated;
 
   /**
-   * The payload that represents the unavailable state.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_not_available
    */
-  payload_not_available?: string;
+  payload_not_available?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to tell the vacuum to return to base.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_return_to_base
    */
-  payload_return_to_base?: string;
+  payload_return_to_base?: Deprecated;
 
   /**
    * DEPRECATED
@@ -6147,10 +6146,10 @@ export interface VacuumLegacyPlatformSchema extends PlatformSchema {
   payload_start_pause?: Deprecated;
 
   /**
-   * The payload to send to the command_topic to stop the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#payload_stop
    */
-  payload_stop?: string;
+  payload_stop?: Deprecated;
 
   /**
    * DEPRECATED
@@ -6166,38 +6165,38 @@ export interface VacuumLegacyPlatformSchema extends PlatformSchema {
   payload_turn_off?: Deprecated;
 
   /**
-   * The maximum QoS level of the state topic.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/sensor.mqtt#qos
    */
-  qos?: QOS;
+  qos?: Deprecated;
 
   /**
-   * If the published message should have the retain flag on or not.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#retain
    */
-  retain?: boolean;
+  retain?: Deprecated;
 
   /**
-   * The MQTT topic to publish custom commands to the vacuum.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#send_command_topic
    */
-  send_command_topic?: string;
+  send_command_topic?: Deprecated;
 
   /**
-   * The MQTT topic to publish commands to control the vacuum’s fan speed.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#set_fan_speed_topic
    */
-  set_fan_speed_topic?: string;
+  set_fan_speed_topic?: Deprecated;
 
   /**
-   * List of features that the vacuum supports (possible values are start, stop, pause, return_home, battery, status, locate, clean_spot, fan_speed, send_command).
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#supported_features
    */
-  supported_features?: string[];
+  supported_features?: Deprecated;
 
   /**
-   * An ID that uniquely identifies this vacuum. If two vacuums have the same unique ID, Home Assistant will raise an exception.
+   * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/vacuum.mqtt#unique_id
    */
-  unique_id?: string;
+  unique_id?: Deprecated;
 }
