@@ -115,6 +115,8 @@ export type DeviceClassesSensor =
   | "volatile_organic_compounds"
   | "voltage";
 
+export type EntityCategory = "config" | "diagnostic";
+
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
  */
