@@ -41,7 +41,7 @@ interface Item {
   /**
    * Additional data for merely for use with the frontend. Has no functional effect.
    */
-   metadata?: any;
+  metadata?: any;
 }
 
 /**
