@@ -37,6 +37,11 @@ interface Item {
    * https://www.home-assistant.io/integrations/scene#name
    */
   name: string;
+
+  /**
+   * Additional data for merely for use with the frontend. Has no functional effect.
+   */
+   metadata?: any;
 }
 
 /**
