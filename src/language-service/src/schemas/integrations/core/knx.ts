@@ -7,6 +7,7 @@ import {
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   Entity,
+  EntityCategory,
   Integer,
   StateClassesSensor,
 } from "../../types";
@@ -378,6 +379,12 @@ interface Button {
   address: GroupAddress;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * A name for this device used within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#name
    */
@@ -463,6 +470,12 @@ interface Climate {
     | "heat_cool"
     | "fan_only"
     | "dry";
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * KNX address for switching between heat/cool mode. DPT 1.100
@@ -650,6 +663,12 @@ interface Cover {
   device_class?: DeviceClassesCover;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * Set this to true if your actuator reports fully closed tilt as 0% in KNX.
    * https://www.home-assistant.io/integrations/knx#invert_angle
    */
@@ -788,6 +807,12 @@ interface Fan {
   address: GroupAddresses;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * The maximum amount of steps for a step-controlled fan. If set, the integration will convert percentages to steps automatically.
    * https://www.home-assistant.io/integrations/knx#max_step
    *
@@ -896,6 +921,12 @@ interface Light {
    * https://www.home-assistant.io/integrations/knx#color_temperature_state_address
    */
   color_temperature_state_address?: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * KNX group address for setting the hue of the light color in degrees. DPT 5.003
@@ -1034,6 +1065,12 @@ interface NumberEntity {
   address: GroupAddresses;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * Maximum value that can be sent. Defaults to the `type` DPT maximum value.
    * https://www.home-assistant.io/integrations/knx#number
    */
@@ -1084,6 +1121,12 @@ interface Scene {
   address?: GroupAddresses;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * A name for this device used within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#name
    */
@@ -1106,6 +1149,12 @@ interface Select {
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * A name for this device used within Home Assistant.
@@ -1164,6 +1213,12 @@ interface Sensor {
   always_callback?: boolean;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * A name for this device used within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#name
    */
@@ -1200,6 +1255,12 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * Invert the telegrams payload before processing or sending.
@@ -1298,6 +1359,12 @@ interface Weather {
    * https://www.home-assistant.io/integrations/knx#address_wind_speed
    */
   address_wind_speed?: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * A name for this device used within Home Assistant.
