@@ -47,6 +47,12 @@ export interface Schema {
   needle?: boolean;
 
   /**
+   * List of colors and their corresponding start values. Segments will override the severity settings.
+   * https://www.home-assistant.io/dashboards/gauge/#segments
+   */
+  segments?: Segment[];
+
+  /**
    * Allows setting of colors for different numbers.
    * https://www.home-assistant.io/lovelace/gauge/#severity
    */
@@ -88,4 +94,18 @@ interface Severity {
    * https://www.home-assistant.io/lovelace/gauge/#yellow
    */
   yellow?: number;
+}
+
+interface Segment {
+  /**
+   * Value from which to start the color.
+   * https://www.home-assistant.io/dashboards/gauge/#from
+   */
+  from: number;
+
+  /**
+   * Value from which to start red color.
+   * https://www.home-assistant.io/dashboards/gauge/#red
+   */
+  color: string;
 }
