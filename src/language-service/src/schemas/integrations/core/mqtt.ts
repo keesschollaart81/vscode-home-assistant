@@ -20,6 +20,27 @@ import { PlatformSchema } from "../platform";
 export type Domain = "mqtt";
 type QOS = 0 | 1 | 2;
 type AvailabilityMode = "all" | "any" | "latest";
+type Availability = {
+  /**
+   * The MQTT topic subscribed to receive availability (online/offline) updates.
+   */
+  topic: string;
+
+  /**
+   * The payload that represents the available state.
+   */
+  payload_available?: string;
+
+  /**
+   * The payload that represents the unavailable state.
+   */
+  payload_not_available?: string;
+
+  /**
+   * Defines a template to extract the value for payload_available and payload_not_available.
+   */
+  value_template?: Template;
+};
 
 export interface Schema {
   /**
@@ -288,22 +309,7 @@ interface BaseItem {
   /**
    * A list of MQTT topics subscribed to receive availability (online/offline) updates.
    */
-  availability?: {
-    /**
-     * The MQTT topic subscribed to receive availability (online/offline) updates.
-     */
-    topic: string;
-
-    /**
-     * The payload that represents the available state.
-     */
-    payload_available?: string;
-
-    /**
-     * The payload that represents the unavailable state.
-     */
-    payload_not_available?: string;
-  }[];
+  availability?: Availability[];
 
   /**
    * When availability is configured, this controls the conditions needed to set the entity to available. Valid entries are all, any, and latest.
@@ -2363,25 +2369,7 @@ export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -2586,25 +2574,7 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/binary_sensor.mqtt#availability_topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/binary_sensor.mqtt#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/binary_sensor.mqtt#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -2780,25 +2750,7 @@ export interface CameraPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/camera.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/camera.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/camera.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/camera.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -2944,25 +2896,7 @@ export interface ClimatePlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/climate.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/climate.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/climate.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -3348,25 +3282,7 @@ export interface CoverPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/cover.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/cover.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/cover.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/cover.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -3711,25 +3627,7 @@ export interface FanPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/fan.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/fan.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/fan.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/fan.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -4061,25 +3959,7 @@ export interface LightDefaultPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -4449,25 +4329,7 @@ export interface LightJSONPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -4715,25 +4577,7 @@ export interface LightTemplatePlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/light.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/light.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -4956,25 +4800,7 @@ export interface LockPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/lock.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/lock.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/lock.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/lock.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -5156,25 +4982,7 @@ export interface NumberPlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/number.mqtt/#availability
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/number.mqtt/#topic
-     */
-    topic: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/number.mqtt/#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/number.mqtt/#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -5331,25 +5139,7 @@ export interface SelectPlatformSchema extends PlatformSchema {
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/select.mqtt#availability_topic
-     */
-    topic?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/select.mqtt#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/select.mqtt#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -5506,25 +5296,7 @@ export interface SensorPlatformSchema extends PlatformSchema {
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/sensor.mqtt#availability_topic
-     */
-    topic?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/sensor.mqtt#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/sensor.mqtt#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -5717,25 +5489,7 @@ export interface VacuumPlatformSchema extends PlatformSchema {
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_topic
-     */
-    topic?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
@@ -5958,25 +5712,7 @@ export interface VacuumLegacyPlatformSchema extends PlatformSchema {
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    */
-  availability?: {
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/vacuum.mqtt#availability_topic
-     */
-    topic?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_available
-     */
-    payload_available?: Deprecated;
-
-    /**
-     * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
-     * https://www.home-assistant.io/integrations/vacuum.mqtt#payload_not_available
-     */
-    payload_not_available?: Deprecated;
-  }[];
+  availability?: Availability[];
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
