@@ -3268,7 +3268,7 @@ export interface ClimatePlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#send_if_off
    */
-  send_if_off: Deprecated;
+  send_if_off?: Deprecated;
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
