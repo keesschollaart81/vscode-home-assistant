@@ -68,7 +68,7 @@
     "axios": "^0.27.2",
     "home-assistant-js-websocket": "^7.0.5",
     "vscode-json-languageservice": "3.9.1",
-    "vscode-languageserver-protocol": "3.15.3",
+    "vscode-languageserver-protocol": "3.17.1",
     "vscode-uri": "3.0.3",
     "ws": "8.8.0",
     "yaml": "1.10.2",
