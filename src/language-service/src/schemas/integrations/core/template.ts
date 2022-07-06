@@ -10,9 +10,13 @@ import {
   IncludeList,
   IncludeNamed,
   PositiveInteger,
+  PressureUnit,
   StateClassesSensor,
+  TemperatureUnit,
   Template,
   TimePeriod,
+  VisibilityUnit,
+  WindSpeedUnit,
 } from "../../types";
 import { Action } from "../actions";
 import { PlatformSchema } from "../platform";
@@ -476,10 +480,22 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   pressure_template?: Template;
 
   /**
+   * Unit for pressure_template output.
+   * https://www.home-assistant.io/integrations/weather.template#pressure_unit
+   */
+  pressure_unit?: PressureUnit;
+
+  /**
    * Defines templates for the current temperature.
    * https://www.home-assistant.io/integrations/weather.template#temperature_template
    */
   temperature_template: Template;
+
+  /**
+   * Unit for temperature_template output.
+   * https://www.home-assistant.io/integrations/weather.template#temperature_unit
+   */
+  temperature_unit?: TemperatureUnit;
 
   /**
    * An ID that uniquely identifies this weather entity. Set this to a unique value to allow customization through the UI.
@@ -494,6 +510,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   visibility_template?: Template;
 
   /**
+   * Unit for visibility_template output.
+   * https://www.home-assistant.io/integrations/weather.template#visibility_unit
+   */
+  visibility_unit?: VisibilityUnit;
+
+  /**
    * The current wind bearing.
    * https://www.home-assistant.io/integrations/weather.template#wind_bearing_template
    */
@@ -504,6 +526,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/weather.template#wind_speed_template
    */
   wind_speed_template?: Template;
+
+  /**
+   * Unit for wind_speed_template output.
+   * https://www.home-assistant.io/integrations/weather.template#wind_speed_unit
+   */
+   wind_speed_unit?: WindSpeedUnit;
 }
 
 interface AlarmControlPanelPlatformItem {
