@@ -531,7 +531,7 @@ export interface WeatherPlatformSchema extends PlatformSchema {
    * Unit for wind_speed_template output.
    * https://www.home-assistant.io/integrations/weather.template#wind_speed_unit
    */
-   wind_speed_unit?: WindSpeedUnit;
+  wind_speed_unit?: WindSpeedUnit;
 }
 
 interface AlarmControlPanelPlatformItem {
