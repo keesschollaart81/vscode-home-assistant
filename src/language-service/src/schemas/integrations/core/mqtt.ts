@@ -642,6 +642,12 @@ export interface ClimateItem extends BaseItem {
   current_temperature_topic?: string;
 
   /**
+   * A template to render the value sent to the fan_mode_command_topic with.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#fan_mode_command_template
+   */
+  fan_mode_command_template?: Template;
+
+  /**
    * The MQTT topic to publish commands to change the fan mode.
    * https://www.home-assistant.io/integrations/climate.mqtt/#fan_mode_command_topic
    */
@@ -664,6 +670,12 @@ export interface ClimateItem extends BaseItem {
    * https://www.home-assistant.io/integrations/climate.mqtt/#fan_modes
    */
   fan_modes?: string[];
+
+  /**
+   * A template to render the value sent to the hold_command_topic with.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#hold_command_template
+   */
+  hold_command_template?: Template;
 
   /**
    * The MQTT topic to publish commands to change the hold mode.
@@ -786,6 +798,12 @@ export interface ClimateItem extends BaseItem {
   send_if_off: boolean;
 
   /**
+   * A template to render the value sent to the swing_mode_command_topic with.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#swing_mode_command_template
+   */
+  swing_mode_command_template?: Template;
+
+  /**
    * The MQTT topic to publish commands to change the swing mode.
    * https://www.home-assistant.io/integrations/climate.mqtt/#swing_mode_command_topic
    */
@@ -810,10 +828,22 @@ export interface ClimateItem extends BaseItem {
   swing_modes?: string[];
 
   /**
+   * A template to render the value sent to the temperature_command_topic with.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#temperature_command_template
+   */
+  temperature_command_template?: Template;
+
+  /**
    * The MQTT topic to publish commands to change the target temperature.
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_command_topic
    */
   temperature_command_topic?: string;
+
+  /**
+   * A template to render the value sent to the temperature_high_command_topic with.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#temperature_high_command_template
+   */
+  temperature_high_command_template?: Template;
 
   /**
    * The MQTT topic to publish commands to change the high target temperature.
@@ -832,6 +862,12 @@ export interface ClimateItem extends BaseItem {
    * https://www.home-assistant.io/integrations/climate.mqtt#temperature_high_state_topic
    */
   temperature_high_state_topic?: string;
+
+  /**
+   * A template to render the value sent to the temperature_high_command_topic with.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#temperature_high_command_template
+   */
+  temperature_low_command_template?: Template;
 
   /**
    * The MQTT topic to publish commands to change the target low temperature.
@@ -3166,7 +3202,7 @@ export interface ClimatePlatformSchema extends PlatformSchema {
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
    * https://www.home-assistant.io/integrations/climate.mqtt/#send_if_off
    */
-  send_if_off: Deprecated;
+  send_if_off?: Deprecated;
 
   /**
    * As of Home Assistant 2022.6, MQTT uses a new configuration format. Please check the documentation
