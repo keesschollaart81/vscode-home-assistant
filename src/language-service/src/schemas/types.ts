@@ -1196,3 +1196,32 @@ export type TimeZone =
 
 export type UnitSystem = "metric" | "imperial";
 export type TemperatureUnit = "C" | "F";
+export type PressureUnit =
+  | "Pa"
+  | "hPa"
+  | "kPa"
+  | "bar"
+  | "cbar"
+  | "mbar"
+  | "mmHg"
+  | "inHg"
+  | "psi";
+export type WindSpeedUnit = "m/s" | "km/h" | "mph" | "mm/d" | "in/d" | "in/h";
+export type VisibilityUnit =
+  | "km"
+  | "mi"
+  | "ft"
+  | "m"
+  | "cm"
+  | "mm"
+  | "in"
+  | "yd";
+export type PrecipitationUnit =
+  | "km"
+  | "mi"
+  | "ft"
+  | "m"
+  | "cm"
+  | "mm"
+  | "in"
+  | "yd";
