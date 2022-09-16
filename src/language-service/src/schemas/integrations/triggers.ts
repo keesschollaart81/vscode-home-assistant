@@ -379,7 +379,7 @@ interface NumericStateTrigger {
    * Alias for the numeric state trigger.
    */
   alias?: string;
-  
+
   /**
    * Fires when numeric value of an entity’s state crosses a given threshold.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
