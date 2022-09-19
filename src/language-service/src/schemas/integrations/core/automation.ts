@@ -4,7 +4,6 @@
  */
 import {
   Data,
-  Deprecated,
   DynamicTemplate,
   IncludeList,
   PositiveInteger,
@@ -40,12 +39,6 @@ interface BaseItem {
    * https://www.home-assistant.io/docs/automation/
    */
   description?: string;
-
-  /**
-   * DEPRECATED since Home Assistant 0.112.
-   * This option has no effect. Please remove it from your configuration.
-   */
-  hide_entity?: Deprecated;
 
   /**
    * When you create a new automation, it will be enabled unless you explicitly add initial_state: false to it or turn it off manually via UI/another automation/developer tools.

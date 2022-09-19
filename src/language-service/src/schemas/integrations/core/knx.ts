@@ -3,7 +3,6 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/knx/__init__.py
  */
 import {
-  Deprecated,
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   Entity,
@@ -208,11 +207,6 @@ export interface Schema {
   event?: Event[];
 
   /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  event_filter?: Deprecated;
-
-  /**
    * KNX integration is able to expose entity states or attributes to KNX bus.
    * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
@@ -225,25 +219,10 @@ export interface Schema {
   fan?: Fan[];
 
   /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  individual_address?: Deprecated;
-
-  /**
    * The KNX light integration is used as an interface to control KNX actuators for lighting applications.
    * https://www.home-assistant.io/integrations/knx#light
    */
   light?: Light[];
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  multicast_group?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  multicast_port?: Deprecated;
 
   /**
    * The KNX notify platform allows you to send notifications to KNX devices as DPT16 strings.
@@ -256,16 +235,6 @@ export interface Schema {
    * https://www.home-assistant.io/integrations/knx#number
    */
   number?: NumberEntity[];
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  rate_limit?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  routing?: Deprecated;
 
   /**
    * The KNX scenes platform allows you to trigger KNX scenes.
@@ -286,20 +255,10 @@ export interface Schema {
   sensor?: Sensor[];
 
   /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  state_updater?: Deprecated;
-
-  /**
    * The KNX switch platform is used as an interface to switching actuators.
    * https://www.home-assistant.io/integrations/knx#switch
    */
   switch?: Switch[];
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  tunneling?: Deprecated;
 
   /**
    * The KNX weather platform is used as an interface to KNX weather stations.
@@ -359,16 +318,6 @@ interface BinarySensor {
    * https://www.home-assistant.io/integrations/knx#sync_state
    */
   sync_state?: boolean | string;
-
-  /**
-   * DEPRECATED
-   */
-  automation?: Deprecated;
-
-  /**
-   * DEPRECATED
-   */
-  significant_bit?: Deprecated;
 }
 
 interface Button {
@@ -631,16 +580,6 @@ interface Climate {
    * @maximum 2
    */
   temperature_step?: number;
-
-  /**
-   * DEPRECATED as of Home Assistant Core 2021.6
-   */
-  create_temperature_sensors?: Deprecated;
-
-  /**
-   * DEPRECATED
-   */
-  setpoint_shift_step?: Deprecated;
 }
 
 interface Cover {
@@ -1383,9 +1322,4 @@ interface Weather {
    * https://www.home-assistant.io/integrations/knx#temperature_address
    */
   address_temperature: GroupAddresses;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.6
-   */
-  create_sensors?: Deprecated;
 }
