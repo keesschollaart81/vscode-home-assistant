@@ -202,7 +202,11 @@ export interface Schema {
    */
   binary_sensor?: BinarySensorItem | BinarySensorItem[] | IncludeList;
 
-  // button?: TODO
+  /**
+   * The mqtt button platform lets you send an MQTT message when the button is pressed in the frontend or the button press service is called.
+   * https://www.home-assistant.io/integrations/button.mqtt
+   */
+  button?: any;
 
   /**
    * The mqtt camera platform allows you to integrate the content of an image file sent through MQTT into Home Assistant as a camera.
