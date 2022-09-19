@@ -210,12 +210,6 @@ export interface InternalIntegrations {
   template?: integrations.Core.Template.Schema | IncludeList;
 
   /**
-   * The updater binary sensor will check daily for new releases.
-   * https://www.home-assistant.io/integrations/updater
-   */
-  updater?: integrations.Core.Updater.Schema | null;
-
-  /**
    * The vacuum integration enables the ability to control home cleaning robots within Home Assistant.
    * https://www.home-assistant.io/integrations/vacuum
    */
