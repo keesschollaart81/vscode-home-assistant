@@ -4,7 +4,6 @@
  */
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
-import { CameraPlatformSchema as MQTTPlatformSchema } from "./mqtt";
 
 export type Domain = "camera";
 export type Schema = Item[] | IncludeList;
@@ -15,10 +14,7 @@ export type File = Item | Item[];
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface OtherPlatform extends PlatformSchema {
-  /**
-   * @TJS-pattern ^(?!(mqtt)$)\w+$
-   */
   platform: string;
 }
 
-type Item = MQTTPlatformSchema | OtherPlatform;
+type Item = OtherPlatform;

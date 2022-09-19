@@ -5,7 +5,6 @@
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
 import { BinarySensorPlatformSchema as GroupPlatformSchema } from "./group";
-import { BinarySensorPlatformSchema as MQTTPlatformSchema } from "./mqtt";
 import { BinarySensorPlatformSchema as TemplatePlatformSchema } from "./template";
 import { BinarySensorPlatformSchema as TodPlatformSchema } from "./tod";
 
@@ -19,14 +18,13 @@ export type File = Item | Item[];
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(group|mqtt|template|tod)$)\w+$
+   * @TJS-pattern ^(?!(group|template|tod)$)\w+$
    */
   platform: string;
 }
 
 type Item =
   | GroupPlatformSchema
-  | MQTTPlatformSchema
   | TemplatePlatformSchema
   | TodPlatformSchema
   | OtherPlatform;

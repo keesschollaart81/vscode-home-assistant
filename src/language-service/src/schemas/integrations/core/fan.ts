@@ -4,7 +4,6 @@
  */
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
-import { FanPlatformSchema as MQTTPlatformSchema } from "./mqtt";
 import { FanPlatformSchema as TemplatePlatformSchema } from "./template";
 
 export type Domain = "fan";
@@ -16,9 +15,9 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(mqtt|template)$)\w+$
+   * @TJS-pattern ^(?!(template)$)\w+$
    */
   platform: string;
 }
 
-type Item = MQTTPlatformSchema | TemplatePlatformSchema | OtherPlatform;
+type Item = TemplatePlatformSchema | OtherPlatform;
