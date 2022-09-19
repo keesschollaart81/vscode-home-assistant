@@ -2,7 +2,6 @@ import { ConfigurationRoot } from "../../configuration";
 
 import {
   Currency,
-  Deprecated,
   DeviceClasses,
   IncludeNamed,
   Integer,
@@ -132,12 +131,6 @@ export interface Schema {
    * https://www.home-assistant.io/docs/configuration/basic/#temperature_unit
    */
   temperature_unit?: TemperatureUnit;
-
-  /**
-   * DEPRECATED as of Home Assistant 0.113.0.
-   * Replace it with "allowlist_external_dirs".
-   */
-  whitelist_external_dirs?: Deprecated;
 }
 
 interface CoreCustomize {

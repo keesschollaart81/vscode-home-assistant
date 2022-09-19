@@ -3,7 +3,6 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/template/
  */
 import {
-  Deprecated,
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   DeviceClassesSensor,
@@ -622,11 +621,6 @@ interface BinarySensorPlatformItem {
   device_class?: DeviceClassesBinarySensor;
 
   /**
-   * DEPRECATED as of Home Assistant 0.115.0
-   */
-  entity_id?: Deprecated;
-
-  /**
    * Defines a template for the entity picture of the sensor.
    * https://www.home-assistant.io/integrations/binary_sensor.template#entity_picture_template
    */
@@ -823,25 +817,10 @@ interface FanPlatformItem {
   set_preset_mode?: Action | Action[];
 
   /**
-   * DEPRECATED as of Home Assistant 2021.3.0
-   */
-  set_speed?: Deprecated;
-
-  /**
    * The number of speeds the fan supports. Used to calculate the percentage step for the fan.increase_speed and fan.decrease_speed services.
    * https://www.home-assistant.io/integrations/fan.template/#speed_count
    */
   speed_count?: PositiveInteger;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.3.0
-   */
-  speed_template?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.3.0
-   */
-  speeds?: Deprecated;
 
   /**
    * Defines an action to run when the fan is turned off.
@@ -1020,11 +999,6 @@ interface SensorPlatformItem {
    * https://www.home-assistant.io/integrations/template#device_class
    */
   device_class?: DeviceClassesSensor;
-
-  /**
-   * DEPRECATED as of Home Assistant 0.115.0
-   */
-  entity_id?: Deprecated;
 
   /**
    * Defines a template for the entity picture of the sensor.

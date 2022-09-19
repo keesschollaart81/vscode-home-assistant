@@ -146,12 +146,6 @@ export interface Schema {
   tls_insecure?: boolean;
 
   /**
-   * DEPRECATED as of Home Assistant 0.115.0.
-   * Please remove this option form your configuration.
-   */
-  tls_version?: Deprecated;
-
-  /**
    * The username to use with your MQTT broker.
    * https://www.home-assistant.io/docs/mqtt/broker#username
    */
@@ -1063,11 +1057,6 @@ export interface CoverItem extends BaseItem {
   tilt_command_topic?: string;
 
   /**
-   * DEPRECATED as of Home Assistant 2021.3.0
-   */
-  tilt_invert_state?: Deprecated;
-
-  /**
    *The maximum tilt value.
    * https://www.home-assistant.io/integrations/cover.mqtt/#tilt_max
    */
@@ -1186,24 +1175,6 @@ export interface FanItem extends BaseItem {
   oscillation_value_template?: Template;
 
   /**
-   * The payload that represents the fan’s high speed.
-   * https://www.home-assistant.io/integrations/fan.mqtt/#payload_high_speed
-   */
-  payload_high_speed?: Deprecated;
-
-  /**
-   * The payload that represents the fan’s low speed.
-   * https://www.home-assistant.io/integrations/fan.mqtt/#payload_low_speed
-   */
-  payload_low_speed?: Deprecated;
-
-  /**
-   * The payload that represents the fan’s medium speed.
-   * https://www.home-assistant.io/integrations/fan.mqtt/#payload_medium_speed
-   */
-  payload_medium_speed?: Deprecated;
-
-  /**
    * The payload that represents the stop state.
    * https://www.home-assistant.io/integrations/fan.mqtt/#payload_off
    */
@@ -1316,30 +1287,6 @@ export interface FanItem extends BaseItem {
    * https://www.home-assistant.io/integrations/fan.mqtt/#speed_range_max
    */
   speed_range_max?: PositiveInteger;
-
-  /**
-   * The MQTT topic to publish commands to change speed state.
-   * https://www.home-assistant.io/integrations/fan.mqtt/#speed_command_topic
-   */
-  speed_command_topic?: Deprecated;
-
-  /**
-   * The MQTT topic subscribed to receive speed state updates.
-   * https://www.home-assistant.io/integrations/fan.mqtt/#speed_state_topic
-   */
-  speed_state_topic?: Deprecated;
-
-  /**
-   * Defines a template to extract a value from the speed payload.
-   * https://www.home-assistant.io/integrations/fan.mqtt/#speed_value_template
-   */
-  speed_value_template?: Deprecated;
-
-  /**
-   * List of speeds this fan is capable of running at. Valid entries are off, low, medium and high.
-   * https://www.home-assistant.io/integrations/fan.mqtt/#speeds
-   */
-  speeds?: Deprecated;
 
   /**
    * The MQTT topic subscribed to receive state updates.
@@ -1570,26 +1517,6 @@ export interface LightDefaultItem extends BaseItem {
    * https://www.home-assistant.io/integrations/light.mqtt#white_scale
    */
   white_scale?: Integer;
-
-  /**
-   * DEPRECATED
-   */
-  white_value_command_topic?: Deprecated;
-
-  /**
-   * DEPRECATED
-   */
-  white_value_scale?: Deprecated;
-
-  /**
-   * DEPRECATED
-   */
-  white_value_state_topic?: Deprecated;
-
-  /**
-   * DEPRECATED
-   */
-  white_value_template?: Deprecated;
 
   /**
    * The MQTT topic to publish commands to change the light’s XY state.
@@ -1852,11 +1779,6 @@ export interface LightTemplateItem extends BaseItem {
    * https://www.home-assistant.io/integrations/light.mqtt/#state_topic
    */
   state_topic?: string;
-
-  /**
-   * DEPRECATED
-   */
-  white_value_template?: Deprecated;
 }
 
 export interface LockItem extends BaseItem {
