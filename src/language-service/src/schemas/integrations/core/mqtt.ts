@@ -789,12 +789,6 @@ export interface ClimateItem extends BaseItem {
   retain?: boolean;
 
   /**
-   * Set to false to suppress sending of all MQTT messages when the current mode is Off.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#send_if_off
-   */
-  send_if_off: boolean;
-
-  /**
    * A template to render the value sent to the swing_mode_command_topic with.
    * https://www.home-assistant.io/integrations/climate.mqtt/#swing_mode_command_template
    */
