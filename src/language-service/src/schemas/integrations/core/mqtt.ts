@@ -585,10 +585,10 @@ export interface ClimateItem extends BaseItem {
   action_template?: Template;
 
   /**
-   * The MQTT topic to subscribe for changes of the current action. If this is set, the climate graph uses the value received as data source.
+   * The MQTT topic to subscribe for changes of the current action. If this is set, the climate graph uses the value received as data source. Valid values: off, heating, cooling, drying, idle, fan.
    * https://www.home-assistant.io/integrations/climate.mqtt/#action_topic
    */
-  action_topic?: string;
+  action_topic?: "off" | "heating" | "cooling" | "drying" | "idle" | "fan";
 
   /**
    * The MQTT topic to publish commands to switch auxiliary heat.
@@ -609,24 +609,6 @@ export interface ClimateItem extends BaseItem {
   aux_state_topic?: string;
 
   /**
-   * The MQTT topic to publish commands to change the away mode.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#away_mode_command_topic
-   */
-  away_mode_command_topic?: string;
-
-  /**
-   * A template to render the value received on the away_mode_state_topic with.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#away_mode_state_template
-   */
-  away_mode_state_template?: Template;
-
-  /**
-   * The MQTT topic to subscribe for changes of the HVAC away mode. If this is not set, the away mode works in optimistic mode.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#away_mode_state_topic
-   */
-  away_mode_state_topic?: string;
-
-  /**
    * A template with which the value received on current_temperature_topic will be rendered.
    * https://www.home-assistant.io/integrations/climate.mqtt/#current_temperature_template
    */
@@ -637,6 +619,12 @@ export interface ClimateItem extends BaseItem {
    * https://www.home-assistant.io/integrations/climate.mqtt/#current_temperature_topic
    */
   current_temperature_topic?: string;
+
+  /**
+   * The encoding of the payloads received and published messages. Set to "" to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#encoding
+   */
+  encoding?: string;
 
   /**
    * A template to render the value sent to the fan_mode_command_topic with.
@@ -667,36 +655,6 @@ export interface ClimateItem extends BaseItem {
    * https://www.home-assistant.io/integrations/climate.mqtt/#fan_modes
    */
   fan_modes?: string[];
-
-  /**
-   * A template to render the value sent to the hold_command_topic with.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#hold_command_template
-   */
-  hold_command_template?: Template;
-
-  /**
-   * The MQTT topic to publish commands to change the hold mode.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#hold_command_topic
-   */
-  hold_command_topic?: string;
-
-  /**
-   * A template to render the value received on the hold_state_topic with.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#hold_state_template
-   */
-  hold_state_template?: Template;
-
-  /**
-   * The MQTT topic to subscribe for changes of the HVAC hold mode. If this is not set, the hold mode works in optimistic mode.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#hold_state_topic
-   */
-  hold_state_topic?: string;
-
-  /**
-   * A list of available hold modes.
-   * https://www.home-assistant.io/integrations/climate.mqtt/#hold_modes
-   */
-  hold_modes?: string[];
 
   /**
    * Set the initial target temperature.
@@ -741,13 +699,13 @@ export interface ClimateItem extends BaseItem {
   mode_state_topic?: string;
 
   /**
-   * A list of supported modes.
+   * A list of supported modes. Needs to be a subset of the default values.
    * https://www.home-assistant.io/integrations/climate.mqtt/#modes
    */
   modes?: ("auto" | "off" | "cool" | "heat" | "dry" | "fan_only")[];
 
   /**
-   * The name of the MQTT climate device.
+   * The name of the HVAC.
    * https://www.home-assistant.io/integrations/climate.mqtt#name
    */
   name?: string;
@@ -775,6 +733,35 @@ export interface ClimateItem extends BaseItem {
    * https://www.home-assistant.io/integrations/climate.mqtt/#precision
    */
   precision?: 0.1 | 0.5 | 1.0;
+
+  /**
+   * Defines a template to generate the payload to send to preset_mode_command_topic.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#preset_mode_command_template
+   */
+  preset_mode_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the preset mode.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#preset_mode_command_topic
+   */
+  preset_mode_command_topic?: string;
+  /**
+   * The MQTT topic subscribed to receive climate speed based on presets. When preset ‘none’ is received or None the preset_mode will be reset.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#preset_mode_state_topic
+   */
+  preset_mode_state_topic?: string;
+
+  /**
+   * Defines a template to extract the preset_mode value from the payload received on preset_mode_state_topic.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#preset_mode_value_template
+   */
+  preset_mode_value_template?: string;
+
+  /**
+   * List of preset modes this climate is supporting. Common examples include eco, away, boost, comfort, home, sleep and activity.
+   * https://www.home-assistant.io/integrations/climate.mqtt/#preset_modes
+   */
+  preset_modes?: string[];
 
   /**
    * The maximum QoS level to be used when receiving and publishing messages.
