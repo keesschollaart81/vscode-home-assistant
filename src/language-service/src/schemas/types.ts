@@ -113,7 +113,8 @@ export type DeviceClassesSensor =
   | "temperature"
   | "timestamp"
   | "volatile_organic_compounds"
-  | "voltage";
+  | "voltage"
+  | "water";
 
 export type EntityCategory = "config" | "diagnostic";
 
