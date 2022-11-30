@@ -22,6 +22,7 @@ export type Deprecated = any | any[];
 
 export type DeviceClasses =
   | DeviceClassesBinarySensor
+  | DeviceClassesCamera
   | DeviceClassesCover
   | DeviceClassesMediaPlayer
   | DeviceClassesSensor
@@ -59,6 +60,12 @@ export type DeviceClassesBinarySensor =
   | "update"
   | "vibration"
   | "window";
+
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/camera/__init__.py
+ */
+export type DeviceClassesCamera =
+  | "camera"
 
 /**
  * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/cover/__init__.py
@@ -118,6 +125,7 @@ export type DeviceClassesSensor =
   | "volatile_organic_compounds"
   | "voltage"
   | "volume"
+  | "water"
   | "weight";
 
 /**
