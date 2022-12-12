@@ -2,9 +2,11 @@ import { ConfigurationRoot } from "../../configuration";
 
 import {
   Currency,
+  CountryTags,
   DeviceClasses,
   IncludeNamed,
   Integer,
+  LanguageTags,
   TemperatureUnit,
   TimeZone,
   UnitSystem,
@@ -26,6 +28,12 @@ export interface Schema {
    * https://www.home-assistant.io/docs/configuration/basic/#allowlist_external_urls
    */
   allowlist_external_urls?: string[];
+
+  /**
+   * Country in which Home Assistant is running. This may, for example, influence radio settings to comply with local regulations. The country should be specified as an ISO 3166.1 alpha-2 code. Pick your country from the column Code of Wikipedia’s list of ISO 31661 alpha-2 officially assigned code codes.
+   * https://www.home-assistant.io/docs/configuration/basic/#country
+   */
+  country?: CountryTags;
 
   /**
    * Set the default currency for Home Assistant to use.
@@ -68,6 +76,12 @@ export interface Schema {
    * https://www.home-assistant.io/docs/configuration/basic/#internal_url
    */
   internal_url?: string;
+
+  /**
+   * Default language used by Home Assistant. This may, for example, influence the language used by voice assistants. The language should be specified as an RFC 5646 language tag, and must be a language which Home Assistant is translated to.
+   * https://www.home-assistant.io/docs/configuration/basic/#language
+   */
+  language?: LanguageTags;
 
   /**
    * Latitude of your location required to calculate the time the sun rises and sets.
