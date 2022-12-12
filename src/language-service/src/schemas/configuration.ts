@@ -192,12 +192,6 @@ export interface InternalIntegrations {
   sensor?: integrations.Core.Sensor.Schema | IncludeList;
 
   /**
-   * The Spotify media player integration allows you to control Spotify playback from Home Assistant.
-   * https://www.home-assistant.io/integrations/spotify
-   */
-  spotify?: integrations.Core.Spotify.Schema;
-
-  /**
    * Keeps track which switches are in your environment, their state and allows you to control them.
    * https://www.home-assistant.io/integrations/switch
    */
