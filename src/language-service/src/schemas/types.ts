@@ -91,12 +91,14 @@ export type DeviceClassesSensor =
   | "carbon_monoxide"
   | "current"
   | "date"
+  | "distance"
   | "duration"
   | "energy"
   | "frequency"
   | "gas"
   | "humidity"
   | "illuminance"
+  | "moisture"
   | "monetary"
   | "nitrogen_dioxide"
   | "nitrogen_monoxide"
@@ -108,13 +110,16 @@ export type DeviceClassesSensor =
   | "power_factor"
   | "power"
   | "pressure"
+  | "reactive_power"
   | "signal_strength"
   | "sulphur_dioxide"
   | "temperature"
   | "timestamp"
   | "volatile_organic_compounds"
   | "voltage"
-  | "water";
+  | "volume"
+  | "water"
+  | "weight";
 
 export type EntityCategory = "config" | "diagnostic";
 
