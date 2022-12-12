@@ -118,6 +118,7 @@ export type DeviceClassesSensor =
   | "volatile_organic_compounds"
   | "voltage"
   | "volume"
+  | "water"
   | "weight";
 
 export type EntityCategory = "config" | "diagnostic";
