@@ -14,7 +14,6 @@ export type File = Item | Item[];
  */
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface OtherPlatform extends PlatformSchema {
-
   /**
    * @TJS-pattern ^(?!(mqtt)$)\w+$
    */
