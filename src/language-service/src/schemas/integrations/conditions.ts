@@ -3,7 +3,6 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/config_validation.py
  */
 import {
-  Deprecated,
   DeviceTrackerEntities,
   DynamicTemplate,
   Entities,
@@ -302,12 +301,6 @@ export interface StateCondition {
   for?: TimePeriod | Template;
 
   /**
-   * DEPRECATED
-   * This option has no effect, please remove it.
-   */
-  from?: Deprecated;
-
-  /**
    * Use the value of a specific entity attribute to test against, instead of the entity state.
    * https://www.home-assistant.io/docs/scripts/conditions/#state-condition
    */
@@ -476,13 +469,6 @@ export interface ZoneCondition {
    * @items.pattern ^(device_tracker|person)\.(?!_)[\da-z_]+(?<!_)$
    */
   entity_id: DeviceTrackerEntities | PersonEntities;
-
-  /**
-   * DEPRECATED.
-   *
-   * This option has been deprecated, please remove it from your configuration.
-   */
-  event?: Deprecated;
 
   /**
    * The zone(s) conditionally check against for the given device tracker(s).

@@ -4,7 +4,6 @@
  */
 import {
   Data,
-  Deprecated,
   DynamicTemplate,
   IncludeList,
   PositiveInteger,
@@ -42,21 +41,15 @@ interface BaseItem {
   description?: string;
 
   /**
-   * DEPRECATED since Home Assistant 0.112.
-   * This option has no effect. Please remove it from your configuration.
-   */
-  hide_entity?: Deprecated;
-
-  /**
    * When you create a new automation, it will be enabled unless you explicitly add initial_state: false to it or turn it off manually via UI/another automation/developer tools.
    * In case automations need to be always enabled or disabled when Home Assistant starts, then you can set the initial_state in your automations. Otherwise, the previous state will be restored.
-   * https://www.home-assistant.io/docs/automation/#automation-initial-state
+   * https://www.home-assistant.io/docs/automation/yaml/#initial_state
    */
   initial_state?: boolean;
 
   /**
    * For both queued and parallel modes, configuration option max controls the maximum number of runs that can be executing and/or queued up at a time. The default is 10.
-   * https://www.home-assistant.io/docs/automation/#automation-modes
+   * https://www.home-assistant.io/docs/automation/modes/
    *
    * @minimum 2
    */
@@ -64,13 +57,13 @@ interface BaseItem {
 
   /**
    * The automation’s mode configuration option controls what happens when the automation is triggered while the actions are still running from a previous trigger.
-   * https://www.home-assistant.io/docs/automation/#automation-modes
+   * https://www.home-assistant.io/docs/automation/modes/
    */
   mode?: Mode;
 
   /**
    * When `max` is exceeded (which is effectively 1 for `single` mode) a log message will be emitted to indicate this has happened. This controls the severity level of that log message
-   * https://www.home-assistant.io/docs/automation/#automation-modes
+   * https://www.home-assistant.io/docs/automation/modes/
    */
   max_exceeded?:
     | "silent"
@@ -97,13 +90,13 @@ interface BaseItem {
 
   /**
    * Variables that will be available inside your templates and conditions.
-   * https://www.home-assistant.io/docs/automation/#automation-basics
+   * https://www.home-assistant.io/docs/automation/basics/
    */
   variables?: Data;
 
   /**
    * Conditions are optional tests that can limit an automation rule to only work in your specific use cases. A condition will test against the current state of the system. This includes the current time, devices, people and other things like the sun.
-   * https://www.home-assistant.io/docs/automation/#automation-basics
+   * https://www.home-assistant.io/docs/automation/basics/
    */
   condition?: Condition | Condition[] | DynamicTemplate | IncludeList;
 }
@@ -111,7 +104,7 @@ interface BaseItem {
 export interface AutomationItem extends BaseItem {
   /**
    * Triggers describe events that should trigger the automation rule.
-   * https://www.home-assistant.io/docs/automation/#automation-basics
+   * https://www.home-assistant.io/docs/automation/basics/
    */
   trigger: Trigger | Trigger[] | IncludeList;
 
@@ -123,7 +116,7 @@ export interface AutomationItem extends BaseItem {
 
   /**
    * The action(s) which will be performed when a rule is triggered and all conditions are met. For example, it can turn a light on, set the temperature on your thermostat or activate a scene.
-   * https://www.home-assistant.io/docs/automation/#automation-basics
+   * https://www.home-assistant.io/docs/automation/basics/
    */
   action: Action | Action[] | IncludeList;
 }
@@ -136,13 +129,13 @@ interface BlueprintItem extends BaseItem {
 
   /**
    * Triggers describe events that should trigger the automation rule.
-   * https://www.home-assistant.io/docs/automation/#automation-basics
+   * https://www.home-assistant.io/docs/automation/basics/
    */
   trigger?: Trigger | Trigger[] | IncludeList;
 
   /**
    * The action(s) which will be performed when a rule is triggered and all conditions are met. For example, it can turn a light on, set the temperature on your thermostat or activate a scene.
-   * https://www.home-assistant.io/docs/automation/#automation-basics
+   * https://www.home-assistant.io/docs/automation/basics/
    */
   action?: Action | Action[] | IncludeList;
 }

@@ -1,4 +1,4 @@
-import { Deprecated, Entity, IncludeList } from "../types";
+import { Entity, IncludeList } from "../types";
 import { Badge, Card } from "./types";
 
 type Badges = Badge | Entity;
@@ -67,12 +67,6 @@ export interface MasonryView extends BaseView {
    * https://www.home-assistant.io/lovelace/dashboards-and-views/#badges
    */
   badges?: Badges[];
-
-  /**
-   * Deprecated, used "type: panel" instead.
-   * https://www.home-assistant.io/lovelace/dashboards-and-views/#panel
-   */
-  panel?: Deprecated;
 }
 
 export interface PanelView extends BaseView {

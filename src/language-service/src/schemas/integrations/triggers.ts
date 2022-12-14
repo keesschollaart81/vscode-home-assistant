@@ -61,6 +61,11 @@ type EventType =
 
 interface CalendarTrigger {
   /**
+   * Alias for the calendar trigger.
+   */
+  alias?: string;
+
+  /**
    * Calendar trigger fires when a Calendar event starts or ends.
    * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
    */
@@ -111,6 +116,11 @@ interface CalendarTrigger {
  */
 interface DeviceTrigger {
   /**
+   * Alias for the device trigger.
+   */
+  alias?: string;
+
+  /**
    * Device triggers encompass a set of events that are defined by an integration.
    * In contrast to state triggers, device triggers are tied to a device and not necessarily an entity. To use a device trigger, set up an automation through the browser frontend.
    * https://www.home-assistant.io/docs/automation/trigger/#device-triggers
@@ -152,6 +162,11 @@ interface DeviceTrigger {
 }
 
 interface EventTrigger {
+  /**
+   * Alias for the event trigger.
+   */
+  alias?: string;
+
   /**
    * Fires when an event is being received. Events are the raw building blocks of Home Assistant. You can match events on just the event name or also require specific event data to be present.
    * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
@@ -200,6 +215,11 @@ interface EventTrigger {
 
 interface GeolocationTrigger {
   /**
+   * Alias for the geolocation trigger.
+   */
+  alias?: string;
+
+  /**
    * Geolocation trigger fires when an entity is appearing in or disappearing from a zone.
    * https://www.home-assistant.io/docs/automation/trigger/#geolocation-trigger
    */
@@ -247,6 +267,11 @@ interface GeolocationTrigger {
 
 interface HomeAssistantTrigger {
   /**
+   * Alias for the home assistant trigger.
+   */
+  alias?: string;
+
+  /**
    * This trigger fires when Home Assistant has started up or going to shut down.
    * https://www.home-assistant.io/docs/automation/trigger/#home-assistant-trigger
    */
@@ -281,6 +306,11 @@ interface HomeAssistantTrigger {
 }
 
 interface MqttTrigger {
+  /**
+   * Alias for the mqtt trigger.
+   */
+  alias?: string;
+
   /**
    * Fires when a specific message is received on given MQTT topic
    * https://www.home-assistant.io/docs/automation/trigger/#mqtt-trigger
@@ -346,6 +376,11 @@ interface MqttTrigger {
 
 interface NumericStateTrigger {
   /**
+   * Alias for the numeric state trigger.
+   */
+  alias?: string;
+
+  /**
    * Fires when numeric value of an entity’s state crosses a given threshold.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
@@ -410,6 +445,11 @@ interface NumericStateTrigger {
 }
 
 interface StateTrigger {
+  /**
+   * Alias for the state trigger.
+   */
+  alias?: string;
+
   /**
    * This trigger fires when the state of any of given entities changes.
    * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
@@ -482,6 +522,11 @@ interface StateTrigger {
 
 interface SunTrigger {
   /**
+   * Alias for the sun trigger.
+   */
+  alias?: string;
+
+  /**
    * This trigger fires when the sun is setting or rising.
    * https://www.home-assistant.io/docs/automation/trigger/#sun-trigger
    */
@@ -522,6 +567,11 @@ interface SunTrigger {
 }
 
 interface TemplateTrigger {
+  /**
+   * Alias for the template trigger.
+   */
+  alias?: string;
+
   /**
    * Template triggers work by evaluating a template on every state change for all of the recognized entities. The trigger will fire if the state change caused the template to render ‘true’.
    * https://www.home-assistant.io/docs/automation/trigger/#template-trigger
@@ -564,6 +614,11 @@ interface TemplateTrigger {
 
 interface TimeTrigger {
   /**
+   * Alias for the time trigger.
+   */
+  alias?: string;
+
+  /**
    * The time trigger is configured to fire once at a specific point in time each day.
    * https://www.home-assistant.io/docs/automation/trigger/#time-trigger
    */
@@ -601,6 +656,11 @@ interface TimeTrigger {
 }
 
 interface TimePatternTrigger {
+  /**
+   * Alias for the time pattern trigger.
+   */
+  alias?: string;
+
   /**
    * With the time pattern trigger, you can match if the hour, minute or second of the current time matches a specific value.
    * https://www.home-assistant.io/docs/automation/trigger/#time-pattern-trigger
@@ -652,6 +712,11 @@ interface TimePatternTrigger {
 
 interface WebhookTrigger {
   /**
+   * Alias for the webhook trigger.
+   */
+  alias?: string;
+
+  /**
    * Webhook trigger fires when a web request is made to the webhook endpoint.
    * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
    */
@@ -686,6 +751,11 @@ interface WebhookTrigger {
 }
 
 interface ZoneTrigger {
+  /**
+   * Alias for the zone trigger.
+   */
+  alias?: string;
+
   /**
    * Zone trigger fires when an entity is entering or leaving the zone. For zone automation to work, you need to have setup a device tracker platform that supports reporting GPS coordinates.
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
@@ -736,6 +806,11 @@ interface ZoneTrigger {
 }
 
 interface TagTrigger {
+  /**
+   * Alias for the tag trigger.
+   */
+  alias?: string;
+
   /**
    * This trigger fired when a tag is scanned.
    * https://www.home-assistant.io/docs/automation/trigger#tag-trigger

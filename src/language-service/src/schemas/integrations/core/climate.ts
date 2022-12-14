@@ -4,7 +4,6 @@
  */
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
-import { ClimatePlatformSchema as MQTTPlatformSchema } from "./mqtt";
 
 export type Domain = "climate";
 export type Schema = Item[] | IncludeList;
@@ -21,4 +20,4 @@ interface OtherPlatform extends PlatformSchema {
   platform: string;
 }
 
-type Item = MQTTPlatformSchema | OtherPlatform;
+type Item = OtherPlatform;

@@ -28,16 +28,22 @@ interface CallServiceAction {
   service: string;
 
   /**
-   * Service data to include (e.g., entity_id: media_player.bedroom).
-   * https://www.home-assistant.io/lovelace/actions/#service_data
+   * Service data to include. Note: Has been replaced by "data".
+   * https://www.home-assistant.io/lovelace/actions/#data
    */
   service_data?: ServiceData;
+
+  /**
+   * Service data to include (e.g., entity_id: media_player.bedroom).
+   * https://www.home-assistant.io/lovelace/actions/#data
+   */
+  data?: ServiceData;
 
   /**
    * Present a confirmation dialog to confirm the action. See confirmation object below
    * https://www.home-assistant.io/lovelace/actions/#confirmation
    */
-  confirmation?: Confirmation;
+  confirmation?: Confirmation | boolean;
 }
 
 interface ServiceData {

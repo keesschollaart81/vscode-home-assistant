@@ -4,7 +4,6 @@
  */
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
-import { NumberPlatformSchema as MQTTNumberPlatformSchema } from "./mqtt";
 
 export type Domain = "number";
 export type Schema = Item[] | IncludeList;
@@ -20,4 +19,4 @@ interface OtherPlatform extends PlatformSchema {
   platform: string;
 }
 
-type Item = MQTTNumberPlatformSchema | OtherPlatform;
+type Item = OtherPlatform;

@@ -153,16 +153,20 @@ interface AlexaEntity {
    */
   display_categories?:
     | "ACTIVITY_TRIGGER"
+    | "AIR_CONDITIONER"
     | "AIR_FRESHENER"
     | "AIR_PURIFIER"
     | "AUTO_ACCESSORY"
+    | "BLUETOOTH_SPEAKER"
     | "CAMERA"
     | "CHRISTMAS_TREE"
     | "COFFEE_MAKER"
     | "COMPUTER"
     | "CONTACT_SENSOR"
+    | "DISHWASHER"
     | "DOOR"
     | "DOORBELL"
+    | "DRYER"
     | "EXTERIOR_BLIND"
     | "FAN"
     | "GAME_CONSOLE"
@@ -181,7 +185,7 @@ interface AlexaEntity {
     | "OVEN"
     | "PHONE"
     | "PRINTER"
-    | "ROUTE"
+    | "ROUTER"
     | "SCENE_TRIGGER"
     | "SCREEN"
     | "SECURITY_PANEL"
@@ -197,6 +201,9 @@ interface AlexaEntity {
     | "THERMOSTAT"
     | "TV"
     | "VACUUM_CLEANER"
+    | "VEHICLE"
+    | "WASHER"
+    | "WATER_HEATER"
     | "WEARABLE";
 
   /**

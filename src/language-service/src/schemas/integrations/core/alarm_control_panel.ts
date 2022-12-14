@@ -4,7 +4,6 @@
  */
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
-import { AlarmControlPanelPlatformSchema as MQTTPlatformSchema } from "./mqtt";
 import { AlarmControlPanelPlatformSchema as TemplatePlatformSchema } from "./template";
 
 export type Domain = "alarm_control_panel";
@@ -16,9 +15,9 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(mqtt|template)$)\w+$
+   * @TJS-pattern ^(?!(template|mqtt)$)\w+$
    */
   platform: string;
 }
 
-type Item = MQTTPlatformSchema | TemplatePlatformSchema | OtherPlatform;
+type Item = TemplatePlatformSchema | OtherPlatform;

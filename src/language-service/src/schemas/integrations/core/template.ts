@@ -3,16 +3,19 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/template/
  */
 import {
-  Deprecated,
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   DeviceClassesSensor,
   IncludeList,
   IncludeNamed,
   PositiveInteger,
+  PressureUnit,
   StateClassesSensor,
+  TemperatureUnit,
   Template,
   TimePeriod,
+  VisibilityUnit,
+  WindSpeedUnit,
 } from "../../types";
 import { Action } from "../actions";
 import { PlatformSchema } from "../platform";
@@ -476,10 +479,22 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   pressure_template?: Template;
 
   /**
+   * Unit for pressure_template output.
+   * https://www.home-assistant.io/integrations/weather.template#pressure_unit
+   */
+  pressure_unit?: PressureUnit;
+
+  /**
    * Defines templates for the current temperature.
    * https://www.home-assistant.io/integrations/weather.template#temperature_template
    */
   temperature_template: Template;
+
+  /**
+   * Unit for temperature_template output.
+   * https://www.home-assistant.io/integrations/weather.template#temperature_unit
+   */
+  temperature_unit?: TemperatureUnit;
 
   /**
    * An ID that uniquely identifies this weather entity. Set this to a unique value to allow customization through the UI.
@@ -494,6 +509,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   visibility_template?: Template;
 
   /**
+   * Unit for visibility_template output.
+   * https://www.home-assistant.io/integrations/weather.template#visibility_unit
+   */
+  visibility_unit?: VisibilityUnit;
+
+  /**
    * The current wind bearing.
    * https://www.home-assistant.io/integrations/weather.template#wind_bearing_template
    */
@@ -504,6 +525,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/weather.template#wind_speed_template
    */
   wind_speed_template?: Template;
+
+  /**
+   * Unit for wind_speed_template output.
+   * https://www.home-assistant.io/integrations/weather.template#wind_speed_unit
+   */
+  wind_speed_unit?: WindSpeedUnit;
 }
 
 interface AlarmControlPanelPlatformItem {
@@ -592,11 +619,6 @@ interface BinarySensorPlatformItem {
    * https://www.home-assistant.io/integrations/binary_sensor.template#device_class
    */
   device_class?: DeviceClassesBinarySensor;
-
-  /**
-   * DEPRECATED as of Home Assistant 0.115.0
-   */
-  entity_id?: Deprecated;
 
   /**
    * Defines a template for the entity picture of the sensor.
@@ -795,25 +817,10 @@ interface FanPlatformItem {
   set_preset_mode?: Action | Action[];
 
   /**
-   * DEPRECATED as of Home Assistant 2021.3.0
-   */
-  set_speed?: Deprecated;
-
-  /**
    * The number of speeds the fan supports. Used to calculate the percentage step for the fan.increase_speed and fan.decrease_speed services.
    * https://www.home-assistant.io/integrations/fan.template/#speed_count
    */
   speed_count?: PositiveInteger;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.3.0
-   */
-  speed_template?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.3.0
-   */
-  speeds?: Deprecated;
 
   /**
    * Defines an action to run when the fan is turned off.
@@ -992,11 +999,6 @@ interface SensorPlatformItem {
    * https://www.home-assistant.io/integrations/template#device_class
    */
   device_class?: DeviceClassesSensor;
-
-  /**
-   * DEPRECATED as of Home Assistant 0.115.0
-   */
-  entity_id?: Deprecated;
 
   /**
    * Defines a template for the entity picture of the sensor.

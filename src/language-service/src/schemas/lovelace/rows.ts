@@ -102,10 +102,16 @@ export interface CallServiceRow extends EntityConfig {
   service: string;
 
   /**
-   * Data to pass into the service call.
-   * https://www.home-assistant.io/lovelace/entities/#action_name
+   * Service data to include. Note: Has been replaced by "data".
+   * https://www.home-assistant.io/lovelace/entities/#data
    */
   service_data?: Data;
+
+  /**
+   * Data to pass into the service call.
+   * https://www.home-assistant.io/lovelace/entities/#data
+   */
+  data?: Data;
 
   /**
    * Button label.

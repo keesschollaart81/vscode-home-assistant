@@ -3,10 +3,10 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/knx/__init__.py
  */
 import {
-  Deprecated,
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   Entity,
+  EntityCategory,
   Integer,
   StateClassesSensor,
 } from "../../types";
@@ -207,11 +207,6 @@ export interface Schema {
   event?: Event[];
 
   /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  event_filter?: Deprecated;
-
-  /**
    * KNX integration is able to expose entity states or attributes to KNX bus.
    * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
@@ -224,25 +219,10 @@ export interface Schema {
   fan?: Fan[];
 
   /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  individual_address?: Deprecated;
-
-  /**
    * The KNX light integration is used as an interface to control KNX actuators for lighting applications.
    * https://www.home-assistant.io/integrations/knx#light
    */
   light?: Light[];
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  multicast_group?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  multicast_port?: Deprecated;
 
   /**
    * The KNX notify platform allows you to send notifications to KNX devices as DPT16 strings.
@@ -255,16 +235,6 @@ export interface Schema {
    * https://www.home-assistant.io/integrations/knx#number
    */
   number?: NumberEntity[];
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  rate_limit?: Deprecated;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  routing?: Deprecated;
 
   /**
    * The KNX scenes platform allows you to trigger KNX scenes.
@@ -285,20 +255,10 @@ export interface Schema {
   sensor?: Sensor[];
 
   /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  state_updater?: Deprecated;
-
-  /**
    * The KNX switch platform is used as an interface to switching actuators.
    * https://www.home-assistant.io/integrations/knx#switch
    */
   switch?: Switch[];
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.12.0
-   */
-  tunneling?: Deprecated;
 
   /**
    * The KNX weather platform is used as an interface to KNX weather stations.
@@ -358,16 +318,6 @@ interface BinarySensor {
    * https://www.home-assistant.io/integrations/knx#sync_state
    */
   sync_state?: boolean | string;
-
-  /**
-   * DEPRECATED
-   */
-  automation?: Deprecated;
-
-  /**
-   * DEPRECATED
-   */
-  significant_bit?: Deprecated;
 }
 
 interface Button {
@@ -376,6 +326,12 @@ interface Button {
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddress;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * A name for this device used within Home Assistant.
@@ -463,6 +419,12 @@ interface Climate {
     | "heat_cool"
     | "fan_only"
     | "dry";
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * KNX address for switching between heat/cool mode. DPT 1.100
@@ -618,16 +580,6 @@ interface Climate {
    * @maximum 2
    */
   temperature_step?: number;
-
-  /**
-   * DEPRECATED as of Home Assistant Core 2021.6
-   */
-  create_temperature_sensors?: Deprecated;
-
-  /**
-   * DEPRECATED
-   */
-  setpoint_shift_step?: Deprecated;
 }
 
 interface Cover {
@@ -648,6 +600,12 @@ interface Cover {
    * https://www.home-assistant.io/integrations/knx#device_class
    */
   device_class?: DeviceClassesCover;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * Set this to true if your actuator reports fully closed tilt as 0% in KNX.
@@ -788,6 +746,12 @@ interface Fan {
   address: GroupAddresses;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * The maximum amount of steps for a step-controlled fan. If set, the integration will convert percentages to steps automatically.
    * https://www.home-assistant.io/integrations/knx#max_step
    *
@@ -896,6 +860,12 @@ interface Light {
    * https://www.home-assistant.io/integrations/knx#color_temperature_state_address
    */
   color_temperature_state_address?: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * KNX group address for setting the hue of the light color in degrees. DPT 5.003
@@ -1034,6 +1004,12 @@ interface NumberEntity {
   address: GroupAddresses;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * Maximum value that can be sent. Defaults to the `type` DPT maximum value.
    * https://www.home-assistant.io/integrations/knx#number
    */
@@ -1084,6 +1060,12 @@ interface Scene {
   address?: GroupAddresses;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * A name for this device used within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#name
    */
@@ -1106,6 +1088,12 @@ interface Select {
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * A name for this device used within Home Assistant.
@@ -1164,6 +1152,12 @@ interface Sensor {
   always_callback?: boolean;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * A name for this device used within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#name
    */
@@ -1200,6 +1194,12 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * Invert the telegrams payload before processing or sending.
@@ -1300,6 +1300,12 @@ interface Weather {
   address_wind_speed?: GroupAddresses;
 
   /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
    * A name for this device used within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#name
    */
@@ -1316,9 +1322,4 @@ interface Weather {
    * https://www.home-assistant.io/integrations/knx#temperature_address
    */
   address_temperature: GroupAddresses;
-
-  /**
-   * DEPRECATED as of Home Assistant 2021.6
-   */
-  create_sensors?: Deprecated;
 }
