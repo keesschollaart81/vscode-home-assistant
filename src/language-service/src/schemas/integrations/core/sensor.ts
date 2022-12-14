@@ -17,7 +17,7 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(mqtt_room|template|uptime)$)\w+$
+   * @TJS-pattern ^(?!(mqtt_room|template|uptime|mqtt)$)\w+$
    */
   platform: string;
 }
