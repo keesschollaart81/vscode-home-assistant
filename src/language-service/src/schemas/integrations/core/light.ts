@@ -16,7 +16,7 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(group|template)$)\w+$
+   * @TJS-pattern ^(?!(group|template|mqtt)$)\w+$
    */
   platform: string;
 }
