@@ -1888,6 +1888,12 @@ export interface NumberItem extends BaseItem {
    * https://www.home-assistant.io/integrations/number.mqtt/#step
    */
   step?: number;
+
+  /**
+   * Defines the units of measurement, if any.
+   * https://www.home-assistant.io/integrations/number.mqtt#unit_of_measurement
+   */
+  unit_of_measurement?: string;
 }
 
 export interface SelectItem extends BaseItem {
