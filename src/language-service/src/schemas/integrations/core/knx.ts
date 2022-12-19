@@ -263,6 +263,12 @@ export interface Schema {
   switch?: Switch[];
 
   /**
+   * The KNX text platform is used as an interface for sending text.
+   * https://www.home-assistant.io/integrations/knx#text
+   */
+  text?: TextEntity[];
+
+  /**
    * The KNX weather platform is used as an interface to KNX weather stations.
    * https://www.home-assistant.io/integrations/knx#weather
    */
@@ -1246,6 +1252,50 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address?: GroupAddresses;
+}
+
+interface TextEntity {
+  /**
+   * KNX group address for sending a text.
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
+   * Specifies the mode used in the UI.
+   * https://www.home-assistant.io/integrations/knx#text
+   */
+  mode?: "text" | "password";
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#text
+   */
+  name?: string;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus.
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * DPT to encode the text. Either `latin_1` for DPT 16.001 or `string` for DPT 16.000 (ASCII).
+   * https://www.home-assistant.io/integrations/knx/#value-types
+   */
+  type: ValueType;
 }
 
 interface Weather {
