@@ -1000,7 +1000,7 @@ interface Notify {
 
 interface NumberEntity {
   /**
-   * KNX group address for setting the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * KNX group address for sending a new value.
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddresses;
