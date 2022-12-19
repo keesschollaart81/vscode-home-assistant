@@ -5,6 +5,8 @@
 import {
   DeviceClassesBinarySensor,
   DeviceClassesCover,
+  DeviceClassesSensor,
+  DeviceClassesSwitch,
   Entity,
   EntityCategory,
   Integer,
@@ -1046,6 +1048,14 @@ interface NumberEntity {
   state_address?: GroupAddresses;
 
   /**
+   * Step value. Defaults to the step size defined for the DPT in the KNX specifications.
+   * https://www.home-assistant.io/integrations/knx#temperature_step
+   *
+   * @minimum 0
+   */
+  step?: number;
+
+  /**
    * Any supported type of KNX Sensor representing a numeric value (e.g., "percent" or "temperature")
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
@@ -1158,6 +1168,12 @@ interface Sensor {
   entity_category?: EntityCategory;
 
   /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/knx#device_class
+   */
+  device_class?: DeviceClassesSensor;
+
+  /**
    * A name for this device used within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#name
    */
@@ -1200,6 +1216,12 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#entity_category
    */
   entity_category?: EntityCategory;
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/knx#device_class
+   */
+  device_class?: DeviceClassesSwitch;
 
   /**
    * Invert the telegrams payload before processing or sending.
