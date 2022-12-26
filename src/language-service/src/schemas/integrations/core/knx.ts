@@ -5,6 +5,7 @@
 import {
   DeviceClassesBinarySensor,
   DeviceClassesCover,
+  DeviceClassesSensor,
   Entity,
   EntityCategory,
   Integer,
@@ -1150,6 +1151,12 @@ interface Sensor {
    * https://www.home-assistant.io/integrations/knx#always_callback
    */
   always_callback?: boolean;
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/knx#device_class
+   */
+  device_class?: DeviceClassesSensor;
 
   /**
    * The category of the entity.
