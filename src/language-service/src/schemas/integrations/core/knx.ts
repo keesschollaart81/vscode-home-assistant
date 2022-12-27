@@ -720,6 +720,14 @@ interface ExposeSensor {
   attribute?: string;
 
   /**
+   * Minimum time in seconds between two sent telegrams.
+   * https://www.home-assistant.io/integrations/knx#cooldown
+   *
+   * @minimum 0
+   */
+  cooldown?: number;
+
+  /**
    * Default value to send to the bus if the state or attribute value is None.
    * https://www.home-assistant.io/integrations/knx#default
    */
@@ -730,6 +738,12 @@ interface ExposeSensor {
    * https://www.home-assistant.io/integrations/knx#entity_id
    */
   entity_id: Entity;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
 
   /**
    * Type of the exposed value.
