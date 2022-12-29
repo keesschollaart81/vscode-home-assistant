@@ -5,6 +5,8 @@
 import {
   DeviceClassesBinarySensor,
   DeviceClassesCover,
+  DeviceClassesSensor,
+  DeviceClassesSwitch,
   Entity,
   EntityCategory,
   Integer,
@@ -259,6 +261,12 @@ export interface Schema {
    * https://www.home-assistant.io/integrations/knx#switch
    */
   switch?: Switch[];
+
+  /**
+   * The KNX text platform is used as an interface for sending text.
+   * https://www.home-assistant.io/integrations/knx#text
+   */
+  text?: TextEntity[];
 
   /**
    * The KNX weather platform is used as an interface to KNX weather stations.
@@ -998,7 +1006,7 @@ interface Notify {
 
 interface NumberEntity {
   /**
-   * KNX group address for setting the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * KNX group address for sending a new value.
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddresses;
@@ -1044,6 +1052,14 @@ interface NumberEntity {
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address?: GroupAddresses;
+
+  /**
+   * Step value. Defaults to the step size defined for the DPT in the KNX specifications.
+   * https://www.home-assistant.io/integrations/knx#temperature_step
+   *
+   * @minimum 0
+   */
+  step?: number;
 
   /**
    * Any supported type of KNX Sensor representing a numeric value (e.g., "percent" or "temperature")
@@ -1158,6 +1174,12 @@ interface Sensor {
   entity_category?: EntityCategory;
 
   /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/knx#device_class
+   */
+  device_class?: DeviceClassesSensor;
+
+  /**
    * A name for this device used within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#name
    */
@@ -1202,6 +1224,12 @@ interface Switch {
   entity_category?: EntityCategory;
 
   /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/knx#device_class
+   */
+  device_class?: DeviceClassesSwitch;
+
+  /**
    * Invert the telegrams payload before processing or sending.
    * https://www.home-assistant.io/integrations/knx#invert
    */
@@ -1224,6 +1252,50 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address?: GroupAddresses;
+}
+
+interface TextEntity {
+  /**
+   * KNX group address for sending a text.
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
+   * Specifies the mode used in the UI.
+   * https://www.home-assistant.io/integrations/knx#text
+   */
+  mode?: "text" | "password";
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#text
+   */
+  name?: string;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus.
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * DPT to encode the text. Either `latin_1` for DPT 16.001 or `string` for DPT 16.000 (ASCII).
+   * https://www.home-assistant.io/integrations/knx/#value-types
+   */
+  type: ValueType;
 }
 
 interface Weather {
