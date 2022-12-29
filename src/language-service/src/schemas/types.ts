@@ -86,18 +86,23 @@ export type DeviceClassesMediaPlayer = "tv" | "speaker" | "receiver";
 export type DeviceClassesSensor =
   | "apparent_power"
   | "aqi"
+  | "atmospheric_pressure"
   | "battery"
   | "carbon_dioxide"
   | "carbon_monoxide"
   | "current"
+  | "data_rate"
+  | "data_size"
   | "date"
   | "distance"
   | "duration"
   | "energy"
+  | "enum"
   | "frequency"
   | "gas"
   | "humidity"
   | "illuminance"
+  | "irradiance"
   | "moisture"
   | "monetary"
   | "nitrogen_dioxide"
@@ -109,9 +114,12 @@ export type DeviceClassesSensor =
   | "pm25"
   | "power_factor"
   | "power"
+  | "precipitation_intensity"
+  | "precipitation"
   | "pressure"
   | "reactive_power"
   | "signal_strength"
+  | "sound_pressure"
   | "sulphur_dioxide"
   | "temperature"
   | "timestamp"
@@ -119,7 +127,8 @@ export type DeviceClassesSensor =
   | "voltage"
   | "volume"
   | "water"
-  | "weight";
+  | "weight"
+  | "wind_speed";
 
 export type EntityCategory = "config" | "diagnostic";
 
