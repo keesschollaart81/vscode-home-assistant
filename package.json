@@ -459,7 +459,7 @@
     "vscode-languageserver-textdocument": "^1.0.8",
     "vscode-uri": "3.0.7",
     "ws": "8.11.0",
-    "yaml": "1.10.2",
+    "yaml": "2.2.0",
     "yaml-language-server": "0.12.0"
   }
 }
