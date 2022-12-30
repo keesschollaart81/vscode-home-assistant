@@ -439,7 +439,7 @@
     "eslint-plugin-wc": "^1.4.0",
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
+    "prettier": "^2.8.1",
     "rimraf": "3.0.2",
     "ts-loader": "^9.4.2",
     "ts-node": "10.9.1",
