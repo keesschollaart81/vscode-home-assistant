@@ -47,7 +47,7 @@ export interface Schema {
 
   /**
    * Overwrites friendly name.
-   * ttps://www.home-assistant.io/dashboards/tile/#name
+   * https://www.home-assistant.io/dashboards/tile/#name
    */
   name?: string;
 
