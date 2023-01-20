@@ -50,7 +50,7 @@ interface Item {
 
   /**
    * Text or template to return.
-     * https://www.home-assistant.io/integrations/intent_script/#speech
+   * https://www.home-assistant.io/integrations/intent_script/#speech
    */
   speech?: {
     /**
