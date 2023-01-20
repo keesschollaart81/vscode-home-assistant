@@ -236,5 +236,12 @@
     "file": "blueprint-script.json",
     "tsFile": "integrations/core/blueprint.ts",
     "fromType": "ScriptBlueprint"
+  },
+  {
+    "key": "custom-sentences",
+    "path": "custom_sentences.yaml",
+    "file": "custom-sentences.json",
+    "tsFile": "integrations/core/conversation.ts",
+    "fromType": "CustomSentence"
   }
 ]
