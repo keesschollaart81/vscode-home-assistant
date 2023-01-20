@@ -21,7 +21,4 @@ interface OtherPlatform extends PlatformSchema {
   platform: string;
 }
 
-type Item =
-  | MQTTRoomPlatformSchema
-  | TemplatePlatformSchema
-  | OtherPlatform;
+type Item = MQTTRoomPlatformSchema | TemplatePlatformSchema | OtherPlatform;
