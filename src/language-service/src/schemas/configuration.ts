@@ -59,6 +59,13 @@ export interface InternalIntegrations {
    * https://www.home-assistant.io/integrations/climate
    */
   climate?: integrations.Core.Climate.Schema | IncludeList;
+
+  /**
+   * The conversation integration allows you to converse with Home Assistant.
+   * https://www.home-assistant.io/integrations/conversation
+   */
+  conversation?: null;
+
   /**
    * The counter integration allows one to count occurrences fired by automations.
    * https://www.home-assistant.io/integrations/counter
