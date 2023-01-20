@@ -145,6 +145,11 @@ export interface InternalIntegrations {
   input_text?: integrations.Core.InputText.Schema | IncludeNamed | null;
 
   /**
+   * The intent script integration allows users to configure actions and responses to intents. Intents can be fired by any integration that supports it.
+   */
+  intent_script?: integrations.Core.IntentScript.Schema | IncludeNamed | null;
+
+  /**
    * This integration allows you to track and control various light bulbs.
    * https://www.home-assistant.io/integrations/light
    */
