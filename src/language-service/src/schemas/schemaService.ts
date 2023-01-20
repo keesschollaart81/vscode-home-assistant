@@ -50,6 +50,10 @@ export class SchemaServiceForIncludes {
         sourceFileMappingPath = "configuration.yaml/automation";
       }
 
+      if (sourceFileMappingPath.startsWith("custom_sentences/")) {
+        sourceFileMappingPath = "custom_sentences.yaml";
+      }
+
       const relatedPathToSchemaMapping = this.mappings.find(
         (x) => x.path === sourceFileMappingPath
       );
