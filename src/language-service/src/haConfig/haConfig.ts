@@ -109,7 +109,7 @@ export class HomeAssistantConfiguration {
       "blueprints/automation/",
       "blueprints/script/",
       "automations/",
-      "custom_sentences/"
+      "custom_sentences/",
     ];
 
     const rootFiles = ourFiles.filter((f) => filesInRoot.some((y) => y === f));
