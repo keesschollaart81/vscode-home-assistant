@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import * as integrations from "./integrations";
 import { IncludeList, IncludeNamed } from "./types";
 

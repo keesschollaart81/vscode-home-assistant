@@ -263,13 +263,11 @@ export class HomeAssistantYamlFile {
 
   private collectScripts(node: Collection) {
     for (const item of node.items) {
-      // @ts-ignore
       const isNamed = item.value && item.value.type === Type.MAP;
 
       const filepath = vscodeUri.URI.file(path.resolve(this.filename)).fsPath;
       const filename = path.parse(filepath).base.replace(".yaml", "");
 
-      // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const key = isNamed ? item.key.toJSON() : filename;
 

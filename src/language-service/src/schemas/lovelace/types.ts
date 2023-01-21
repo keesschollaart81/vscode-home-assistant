@@ -1,5 +1,4 @@
 import { Entity } from "../types";
-// eslint-disable-next-line import/extensions
 import * as cards from "./cards";
 
 export type CardsFile = Card | Card[];

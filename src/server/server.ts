@@ -75,7 +75,7 @@ connection.onInitialize((params) => {
     }
   };
 
-  let homeAsisstantLanguageService = new HomeAssistantLanguageService(
+  const homeAsisstantLanguageService = new HomeAssistantLanguageService(
     yamlLanguageService,
     haConfig,
     haConnection,
