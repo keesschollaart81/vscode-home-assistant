@@ -3,7 +3,14 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/conversation/__init__.py
  */
 export type Domain = "conversation";
-export type Schema = null;
+
+export interface Schema {
+  /**
+   * Intents that the conversation integration should understand.
+   * https://www.home-assistant.io/integrations/conversation#intents
+   */
+  intents?: { [key: string]: string | string[] };
+}
 
 export interface CustomSentence {
   /**
