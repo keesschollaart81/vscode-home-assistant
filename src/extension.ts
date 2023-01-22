@@ -269,6 +269,7 @@ export async function activate(
   });
 
   const inputReloadDomains = [
+    "input_button",
     "input_boolean",
     "input_datetime",
     "input_number",
