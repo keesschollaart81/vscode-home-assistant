@@ -63,7 +63,7 @@ export interface InternalIntegrations {
    * The conversation integration allows you to converse with Home Assistant.
    * https://www.home-assistant.io/integrations/conversation
    */
-  conversation?: null;
+  conversation?: integrations.Core.Conversation.Schema | IncludeNamed | null;
 
   /**
    * The counter integration allows one to count occurrences fired by automations.
