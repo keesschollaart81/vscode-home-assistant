@@ -43,4 +43,10 @@ export interface SensorPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/mqtt_room/#away_timeout
    */
   away_timeout?: PositiveInteger;
+
+  /**
+   * An ID that uniquely identifies this room sensor. If two sensors have the same unique ID, Home Assistant will raise an exception.
+   * https://www.home-assistant.io/integrations/mqtt_room/#unique_id
+   */
+  unique_id?: string;
 }
