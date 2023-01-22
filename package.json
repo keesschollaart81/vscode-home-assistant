@@ -231,6 +231,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.conversationReload",
+        "title": "Reload conversation intents",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.sceneReload",
         "title": "Reload Scenes",
         "category": "Home Assistant"
