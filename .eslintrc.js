@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = {
   root: true,
   env: {
@@ -5,40 +6,18 @@ module.exports = {
     es2020: true,
   },
   extends: [
-    "airbnb-typescript/base",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:wc/recommended",
     "prettier",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: "module",
-    project: "./tsconfig.json",
   },
   rules: {
-    "@typescript-eslint/ban-ts-comment": 0,
-    "@typescript-eslint/ban-ts-ignore": 0,
-    "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/no-explicit-any": 0,
-    "@typescript-eslint/no-misused-promises": 0, // This one really needs to go
-    "@typescript-eslint/no-unsafe-assignment": 0,
-    "@typescript-eslint/no-unsafe-member-access": 0,
     "@typescript-eslint/no-unused-vars": 0,
-    "@typescript-eslint/no-use-before-define": 0,
-    "@typescript-eslint/restrict-template-expressions": 0,
-    "class-methods-use-this": 0,
-    "default-case": 0,
-    "import/no-cycle": 0,
-    "import/prefer-default-export": 0,
-    "no-console": 0,
-    "no-continue": 0,
-    "no-param-reassign": 0,
-    "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
-    "no-void": 0,
-    "prefer-destructuring": 0,
-    "vars-on-top": 0,
-    strict: 0,
   },
 };

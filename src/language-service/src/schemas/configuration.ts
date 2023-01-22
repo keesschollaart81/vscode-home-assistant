@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/extensions
 import * as integrations from "./integrations";
 import { IncludeList, IncludeNamed } from "./types";
 
@@ -59,6 +58,13 @@ export interface InternalIntegrations {
    * https://www.home-assistant.io/integrations/climate
    */
   climate?: integrations.Core.Climate.Schema | IncludeList;
+
+  /**
+   * The conversation integration allows you to converse with Home Assistant.
+   * https://www.home-assistant.io/integrations/conversation
+   */
+  conversation?: integrations.Core.Conversation.Schema | IncludeNamed | null;
+
   /**
    * The counter integration allows one to count occurrences fired by automations.
    * https://www.home-assistant.io/integrations/counter
@@ -136,6 +142,11 @@ export interface InternalIntegrations {
    * https://www.home-assistant.io/integrations/input_text
    */
   input_text?: integrations.Core.InputText.Schema | IncludeNamed | null;
+
+  /**
+   * The intent script integration allows users to configure actions and responses to intents. Intents can be fired by any integration that supports it.
+   */
+  intent_script?: integrations.Core.IntentScript.Schema | IncludeNamed | null;
 
   /**
    * This integration allows you to track and control various light bulbs.

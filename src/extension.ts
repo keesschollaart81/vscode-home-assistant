@@ -158,6 +158,11 @@ export async function activate(
       "automation",
       "reload"
     ),
+    new CommandMappings(
+      "vscode-home-assistant.conversationReload",
+      "conversation",
+      "reload"
+    ),
     new CommandMappings("vscode-home-assistant.sceneReload", "scene", "reload"),
     new CommandMappings(
       "vscode-home-assistant.themeReload",
@@ -269,6 +274,7 @@ export async function activate(
   });
 
   const inputReloadDomains = [
+    "input_button",
     "input_boolean",
     "input_datetime",
     "input_number",

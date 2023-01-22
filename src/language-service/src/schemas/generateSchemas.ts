@@ -1,5 +1,4 @@
 import { resolve } from "path";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as TJS from "typescript-json-schema";
 import * as fs from "fs";
 import * as path from "path";

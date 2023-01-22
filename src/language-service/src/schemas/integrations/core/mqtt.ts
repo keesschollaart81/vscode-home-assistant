@@ -345,7 +345,7 @@ interface BaseItem {
     /**
      * A list of IDs that uniquely identify the device. For example a serial number.
      */
-    identifier?: string;
+    identifiers?: string | string[];
 
     /**
      * The manufacturer of the device.

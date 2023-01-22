@@ -2,7 +2,7 @@
   "name": "vscode-home-assistant",
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
-  "version": "1.32.0",
+  "version": "1.33.0",
   "preview": false,
   "engines": {
     "vscode": "^1.45.1"
@@ -231,6 +231,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.conversationReload",
+        "title": "Reload conversation intents",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.sceneReload",
         "title": "Reload Scenes",
         "category": "Home Assistant"
@@ -423,34 +428,25 @@
     "@types/node": "16.4.10",
     "@types/request": "2.48.8",
     "@types/vscode": "1.45.1",
-    "@types/ws": "8.5.3",
+    "@types/ws": "8.5.4",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
-    "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
-    "eslint-config-airbnb-typescript": "^12.3.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-flowtype": "^7.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.31.11",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-plugin-wc": "^1.4.0",
-    "husky": "^8.0.2",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.7.1",
+    "eslint-config-prettier": "^8.6.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.0",
+    "prettier": "^2.8.1",
     "rimraf": "3.0.2",
     "ts-loader": "^9.4.2",
     "ts-node": "10.9.1",
     "typescript": "^4.9.4",
-    "typescript-json-schema": "0.54.0"
+    "typescript-json-schema": "0.55.0"
   },
   "dependencies": {
-    "axios": "^1.2.1",
+    "axios": "^1.2.2",
     "bufferutil": "^4.0.7",
     "home-assistant-js-websocket": "^8.0.1",
-    "utf-8-validate": "^5.0.9",
+    "utf-8-validate": "^5.0.10",
     "vscode-extension-telemetry": "0.4.5",
     "vscode-json-languageservice": "3.9.1",
     "vscode-languageclient": "6.1.3",
