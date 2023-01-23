@@ -446,7 +446,7 @@
     "axios": "^1.2.2",
     "bufferutil": "^4.0.7",
     "home-assistant-js-websocket": "^8.0.1",
-    "utf-8-validate": "^5.0.10",
+    "utf-8-validate": "^6.0.1",
     "vscode-extension-telemetry": "0.4.5",
     "vscode-json-languageservice": "3.9.1",
     "vscode-languageclient": "6.1.3",
