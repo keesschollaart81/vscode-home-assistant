@@ -70,7 +70,7 @@ export interface CustomSentence {
         }
       | {
           range: {
-            type: "number" | "percentage" | "temperature";
+            type?: "number" | "percentage" | "temperature";
             from: number;
             to: number;
           };
