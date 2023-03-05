@@ -237,7 +237,7 @@ export interface DurationSelector {
      * Set to true to display the input as a multi-line text box on the user interface.
      * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
      */
-    enable_days?: boolean;
+    enable_day?: boolean;
   } | null;
 }
 
