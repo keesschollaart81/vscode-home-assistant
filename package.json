@@ -71,10 +71,6 @@
       {
         "language": "home-assistant",
         "path": "./out/snippets/homeassistant_script.json"
-      },
-      {
-        "language": "home-assistant",
-        "path": "./out/snippets/homeassistant_sensor.json"
       }
     ],
     "languages": [
