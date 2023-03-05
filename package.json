@@ -5,7 +5,8 @@
   "version": "1.33.0",
   "preview": false,
   "engines": {
-    "vscode": "^1.45.1"
+    "vscode": "^1.45.1",
+    "node": ">=14.0.0 <15.0.0-0 || >=16.0.0"
   },
   "categories": [
     "Other",
