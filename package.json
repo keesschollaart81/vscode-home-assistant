@@ -66,10 +66,6 @@
       },
       {
         "language": "home-assistant",
-        "path": "./out/snippets/homeassistant_group.json"
-      },
-      {
-        "language": "home-assistant",
         "path": "./out/snippets/homeassistant_script.json"
       },
       {
