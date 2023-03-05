@@ -138,6 +138,11 @@ export async function activate(
 
   const commandMappings = [
     new CommandMappings(
+      "vscode-home-assistant.reloadAll",
+      "homeassistant",
+      "reload_all"
+    ),
+    new CommandMappings(
       "vscode-home-assistant.scriptReload",
       "script",
       "reload"

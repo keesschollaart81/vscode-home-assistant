@@ -201,6 +201,11 @@
     ],
     "commands": [
       {
+        "command": "vscode-home-assistant.reloadAll",
+        "title": "Reload All",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.scriptReload",
         "title": "Reload Scripts",
         "category": "Home Assistant"
