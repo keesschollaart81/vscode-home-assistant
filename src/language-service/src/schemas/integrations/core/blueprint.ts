@@ -30,6 +30,12 @@ export interface ScriptBlueprint extends ScriptItem {
 
 interface Blueprint {
   /**
+   * Defines the name of the author of this Blueprint
+   * https://www.home-assistant.io/docs/blueprint/schema/#author
+   */
+  authior?: string;
+
+  /**
    * The description of the blueprint. While optional, this field is highly recommended. The description can include Markdown.
    * https://www.home-assistant.io/docs/blueprint/schema/#description
    */
