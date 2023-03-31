@@ -436,7 +436,7 @@
     "rimraf": "4.4.1",
     "ts-loader": "^9.4.2",
     "ts-node": "10.9.1",
-    "typescript": "^5.0.2",
+    "typescript": "^5.0.3",
     "typescript-json-schema": "0.55.0"
   },
   "dependencies": {
