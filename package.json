@@ -348,6 +348,11 @@
         "category": "Home Assistant"
       },
       {
+        "command": "vscode-home-assistant.customTemplatesReload",
+        "title": "Reload custom Jinja2 templates",
+        "category": "Home Assistant"
+      },
+      {
         "command": "vscode-home-assistant.hassioAddonRestartGitPull",
         "title": "Restart 'Git Pull' Add-on",
         "category": "Home Assistant"
