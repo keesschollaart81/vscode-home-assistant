@@ -82,6 +82,13 @@ export interface LightPlatformSchema extends PlatformSchema {
   platform: "group";
 
   /**
+   * Set this to true if the group state should only turn on if all grouped entities are on, false otherwise.
+   * https://www.home-assistant.io/integrations/light.group/#all
+   */
+  all?: boolean;
+
+  /**
+   *
    * A list of entities to be included in the light group.
    * https://www.home-assistant.io/integrations/light.group/#entities
    */
