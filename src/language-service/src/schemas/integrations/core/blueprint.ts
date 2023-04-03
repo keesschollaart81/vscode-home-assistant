@@ -33,7 +33,7 @@ interface Blueprint {
    * Defines the name of the author of this Blueprint
    * https://www.home-assistant.io/docs/blueprint/schema/#author
    */
-  authior?: string;
+  author?: string;
 
   /**
    * The description of the blueprint. While optional, this field is highly recommended. The description can include Markdown.
