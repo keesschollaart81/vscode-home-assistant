@@ -1,6 +1,6 @@
 {
   "name": "home-assistant-language-service",
-  "version": "1.35.0",
+  "version": "1.35.1",
   "description": "Home Assistant Language Service",
   "source": "src/haLanguageService.ts",
   "main": "dist/haLanguageService.js",
@@ -52,7 +52,7 @@
     "ts-loader": "^9.2.8",
     "ts-node": "10.9.1",
     "typescript": "5.0.3",
-    "typescript-json-schema": "0.55.0",
+    "typescript-json-schema": "0.56.0",
     "vscode-test": "^1.4.0"
   },
   "dependencies": {
