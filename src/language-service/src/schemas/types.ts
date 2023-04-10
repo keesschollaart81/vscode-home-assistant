@@ -97,6 +97,7 @@ export type DeviceClassesSensor =
   | "distance"
   | "duration"
   | "energy"
+  | "energy_storage"
   | "enum"
   | "frequency"
   | "gas"
@@ -126,6 +127,7 @@ export type DeviceClassesSensor =
   | "volatile_organic_compounds"
   | "voltage"
   | "volume"
+  | "volume_storage"
   | "water"
   | "weight"
   | "wind_speed";
