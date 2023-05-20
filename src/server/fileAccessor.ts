@@ -42,7 +42,7 @@ export class VsCodeFileAccessor implements FileAccessor {
         if (!exists) {
           c(null);
         }
-        fs.readFile(uri, "UTF-8", (err, result) => {
+        fs.readFile(uri, "utf-8", (err, result) => {
           if (err) {
             e(err);
           } else {
