@@ -3,6 +3,7 @@ import * as TJS from "typescript-json-schema";
 import * as fs from "fs";
 import * as path from "path";
 import { PathToSchemaMapping } from "./schemaService";
+import { exit } from "process";
 
 const settings: TJS.PartialArgs = {
   required: true,
@@ -36,6 +37,10 @@ if (fs.readdirSync(outputFolder).length > 0 && process.argv[2] === "--quick") {
       compilerOptions
     );
     const schema = TJS.generateSchema(program, mapping.fromType, settings);
+    if (schema === null) {
+      console.error("Schema generation failed");
+      exit(1);
+    }
     fs.writeFileSync(
       path.join(outputFolder, mapping.file),
       JSON.stringify(schema)
