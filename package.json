@@ -427,7 +427,7 @@
   },
   "devDependencies": {
     "@types/mocha": "10.0.1",
-    "@types/node": "16.18.31",
+    "@types/node": "20.3.2",
     "@types/request": "2.48.8",
     "@types/vscode": "1.45.1",
     "@types/ws": "8.5.5",
