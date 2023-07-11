@@ -2,7 +2,13 @@
  * Selectors
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/helpers/selector.py
  */
-import { Domain, DeviceClasses, Entity, PositiveInteger } from "../types";
+import {
+  Domain,
+  DeviceClasses,
+  Entity,
+  PositiveInteger,
+  Deprecated,
+} from "../types";
 
 export type Selector =
   | ActionSelector
@@ -55,49 +61,13 @@ export interface AreaSelector {
      * When device options are provided, the list of areas is filtered by areas that at least provide one device that matches the given conditions.
      * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
      */
-    device?: {
-      /**
-       * Can be set to an integration domain. Limits the list of areas that provide devices by the set integration domain.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
-       */
-      integration?: Domain;
-
-      /**
-       * When set, it limits the list of areas that provide devices by the set manufacturer name.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
-       */
-      manufacturer?: string;
-
-      /**
-       * When set, it limits the list of areas that provide devices that have the set model.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
-       */
-      model?: string;
-    };
+    device?: DeviceSelectorFilter | DeviceSelectorFilter[];
 
     /**
      * When entity options are provided, the list of areas is filtered by areas that at least provide one entity that matches the given conditions.
      * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
      */
-    entity?: {
-      /**
-       * Limits the list of areas that provide entities of a certain domain, for example, light or binary_sensor.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
-       */
-      domain?: Domain | Domain[];
-
-      /**
-       * Limits the list of areas to areas that have entities with a certain device class, for example, motion or window.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
-       */
-      device_class?: DeviceClasses;
-
-      /**
-       * Can be set to an integration domain. Limits the list of areas that provide entities by the set integration domain.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#area-selector
-       */
-      integration?: Domain;
-    };
+    entity?: EntitySelectorFilter | EntitySelectorFilter[];
 
     /**
      * Allows selecting multiple areas. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
@@ -173,6 +143,26 @@ export interface DateTimeSelector {
   datetime: null | Record<string, never>;
 }
 
+interface DeviceSelectorFilter {
+  /**
+   * Can be set to an integration domain. Limits the list of devices to devices provided by the set integration domain.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
+   */
+  integration?: Domain;
+
+  /**
+   * When set, it limits the list of devices to devices provided by the set manufacturer name.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
+   */
+  manufacturer?: string;
+
+  /**
+   * When set, it limits the list of devices to devices that have the set model.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
+   */
+  model?: string;
+}
+
 export interface DeviceSelector {
   /**
    * The device selector shows a device finder that can pick a single device.
@@ -183,41 +173,31 @@ export interface DeviceSelector {
      * When entity options are provided, the list of devices is filtered by devices that at least provide one entity that matches the given conditions.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
-    entity?: {
-      /**
-       * Can be set to an integration domain. Limits the list of devices that provide entities by the set integration domain.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
-       */
-      integration?: Domain;
-      /**
-       * Limits the list of devices that provide entities of a certain domain.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
-       */
-      domain?: Domain | Domain[];
-      /**
-       * Limits the list of entities to entities that have a certain device class.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
-       */
-      device_class?: DeviceClasses;
-    };
+    entity?: EntitySelectorFilter | EntitySelectorFilter[];
 
     /**
-     * Can be set to an integration domain. Limits the list of devices to devices provided by the set integration domain.
+     * When filter options are provided, the list of devices is filtered by devices that at least provide one entity that matches the given conditions.
      * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
      */
-    integration?: Domain;
+    filter?: DeviceSelectorFilter | DeviceSelectorFilter[];
 
     /**
-     * When set, it limits the list of devices to devices provided by the set manufacturer name.
-     * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
+     * DEPRECATED.
+     * You can use filter parameter to filter devices".
      */
-    manufacturer?: string;
+    integration?: Deprecated;
 
     /**
-     * When set, it limits the list of devices to devices that have the set model.
-     * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
+     * DEPRECATED.
+     * You can use filter parameter to filter devices".
      */
-    model?: string;
+    manufacturer?: Deprecated;
+
+    /**
+     * DEPRECATED.
+     * You can use filter parameter to filter devices".
+     */
+    model?: Deprecated;
 
     /**
      * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
@@ -241,6 +221,29 @@ export interface DurationSelector {
   } | null;
 }
 
+interface EntitySelectorFilter {
+  /**
+   * Can be set to an integration domain. Limits the list of devices that provide entities by the set integration domain.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+   */
+  integration?: Domain;
+  /**
+   * Limits the list of devices that provide entities of a certain domain.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+   */
+  domain?: Domain | Domain[];
+  /**
+   * Limits the list of entities to entities that have a certain device class.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+   */
+  device_class?: DeviceClasses | DeviceClasses[];
+  /**
+   * Limits the list of entities to entities that have a certain supported feature.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+   */
+  supported_features?: number | number[];
+}
+
 export interface EntitySelector {
   /**
    * The entity selector shows an entity finder that can pick a single entity.
@@ -260,23 +263,28 @@ export interface EntitySelector {
     include_entities?: Entity[];
 
     /**
-     * Can be set to an integration domain. Limits the list of devices that provide entities by the set integration domain.
-     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     * DEPRECATED.
+     * You can use filter parameter to filter entities".
      */
-    integration?: Domain;
+    integration?: Deprecated;
 
     /**
-     * Limits the list of devices that provide entities of a certain domain.
-     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     * DEPRECATED.
+     * You can use filter parameter to filter entities".
      */
-    domain?: Domain | Domain[];
+    domain?: Deprecated;
 
     /**
-     * Limits the list of entities to entities that have a certain device class.
+     * DEPRECATED.
+     * You can use filter parameter to filter entities".
+     */
+    device_class?: Deprecated;
+
+    /**
+     * When filter options are provided, the entities are limited by entities that at least match the given conditions.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
-    device_class?: DeviceClasses;
-
+    filter?: EntitySelectorFilter | EntitySelectorFilter[];
     /**
      * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
@@ -429,49 +437,13 @@ export interface TargetSelector {
      * When device options are provided, the targets are limited by devices that at least match the given conditions.
      * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
      */
-    device?: {
-      /**
-       * Can be set to an integration domain. Limits the device targets that are provided devices by the set integration domain.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
-       */
-      integration?: Domain;
-
-      /**
-       * When set, it limits the targets to devices provided by the set manufacturer name.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
-       */
-      manufacturer?: string;
-
-      /**
-       * When set, it limits the targets to devices by the set model.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
-       */
-      model?: string;
-    };
+    device?: DeviceSelectorFilter | DeviceSelectorFilter[];
 
     /**
      * When entity options are provided, the targets are limited by entities that at least match the given conditions.
      * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
      */
-    entity?: {
-      /**
-       * Limits the targets to entities of a certain domain, for example, light or binary_sensor.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
-       */
-      domain?: Domain | Domain[];
-
-      /**
-       * Limits the targets to entities with a certain device class, for example, motion or window.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
-       */
-      device_class?: DeviceClasses;
-
-      /**
-       * Can be set to an integration domain. Limits targets to entities provided by the set integration domain.
-       * https://www.home-assistant.io/docs/blueprint/selectors/#target-selector
-       */
-      integration?: Domain;
-    };
+    entity?: EntitySelectorFilter | EntitySelectorFilter[];
   } | null;
 }
 
