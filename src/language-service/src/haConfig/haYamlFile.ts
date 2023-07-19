@@ -20,7 +20,7 @@ export class HomeAssistantYamlFile {
     private fileAccessor: FileAccessor,
     private filename: string,
     // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
-    public path: string
+    public path: string,
   ) {}
 
   private async parse(): Promise<void> {
@@ -108,13 +108,13 @@ export class HomeAssistantYamlFile {
         <Schema.Tag>{
           tag: `!${x}`,
           resolve: (_doc: any, cst: any) => Symbol.for(cst.strValue),
-        }
+        },
     );
   }
 
   private parseAstRecursive = async (
     node: Collection | Node | null,
-    currentPath: string
+    currentPath: string,
   ): Promise<void> => {
     if (!node) {
       // null object like 'frontend:'
@@ -148,8 +148,8 @@ export class HomeAssistantYamlFile {
                 results.push(
                   this.parseAstRecursive(
                     item.value,
-                    `${currentPath}/${this.getKeyName(item.key)}`
-                  )
+                    `${currentPath}/${this.getKeyName(item.key)}`,
+                  ),
                 );
                 break;
               case Type.BLOCK_FOLDED:
@@ -231,7 +231,7 @@ export class HomeAssistantYamlFile {
     if (includeType === Includetype.include) {
       const relativeFilePath = this.fileAccessor.getRelativePath(
         this.filename,
-        String(value)
+        String(value),
       );
       // single file include
       files.push(relativeFilePath);
@@ -239,14 +239,14 @@ export class HomeAssistantYamlFile {
       // multiple file include
       const filesInThisFolder = this.fileAccessor.getFilesInFolderRelativeFrom(
         String(value),
-        this.filename
+        this.filename,
       );
       files = filesInThisFolder.filter((f) => path.extname(f) === ".yaml");
     }
 
     if (files.length === 0) {
       console.log(
-        `The include could not be resolved because no file(s) found in '${value}' included with '${Includetype[includeType]}' from '${this.filename}'`
+        `The include could not be resolved because no file(s) found in '${value}' included with '${Includetype[includeType]}' from '${this.filename}'`,
       );
     }
 
@@ -344,7 +344,7 @@ export class HomeAssistantYamlFile {
    */
   private getLinePos(
     offset: number,
-    cst: string | ParsedCST | undefined
+    cst: string | ParsedCST | undefined,
   ): LinePos | null {
     if (typeof offset !== "number" || offset < 0) {
       return null;

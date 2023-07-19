@@ -37,7 +37,7 @@ export class HomeAssistantConfiguration {
     const homeAssistantYamlFile = new HomeAssistantYamlFile(
       this.fileAccessor,
       filename,
-      ourFile.path
+      ourFile.path,
     );
     this.files[filename] = homeAssistantYamlFile;
 
@@ -114,18 +114,18 @@ export class HomeAssistantConfiguration {
 
     const rootFiles = ourFiles.filter((f) => filesInRoot.some((y) => y === f));
     const subfolderFiles = filesInRoot.filter((f) =>
-      ourFolders.some((y) => f.startsWith(y))
+      ourFolders.some((y) => f.startsWith(y)),
     );
     const files = [...rootFiles, ...subfolderFiles];
 
     if (files.length === 0) {
       const areOurFilesSomehwere = filesInRoot.filter((f) =>
-        ourFiles.some((ourFile) => f.endsWith(ourFile))
+        ourFiles.some((ourFile) => f.endsWith(ourFile)),
       );
       if (areOurFilesSomehwere.length > 0) {
         this.subFolder = areOurFilesSomehwere[0].substr(
           0,
-          areOurFilesSomehwere[0].lastIndexOf("/")
+          areOurFilesSomehwere[0].lastIndexOf("/"),
         );
         return areOurFilesSomehwere;
       }
@@ -143,8 +143,8 @@ export class HomeAssistantConfiguration {
         this.discoverCore(
           rootFile,
           rootFile.substring(this.subFolder.length),
-          this.files
-        )
+          this.files,
+        ),
       );
     }
     results = await Promise.all(results);
@@ -158,7 +158,7 @@ export class HomeAssistantConfiguration {
     filename: string,
     // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
     path: string,
-    files: FilesCollection
+    files: FilesCollection,
   ): Promise<FilesCollection> => {
     if (path.startsWith("/")) {
       path = path.substring(1);
@@ -167,7 +167,7 @@ export class HomeAssistantConfiguration {
     const homeAssistantYamlFile = new HomeAssistantYamlFile(
       this.fileAccessor,
       filename,
-      path
+      path,
     );
     files[filename] = homeAssistantYamlFile;
 

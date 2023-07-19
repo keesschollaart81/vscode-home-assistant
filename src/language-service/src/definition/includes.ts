@@ -8,7 +8,7 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
 
   public onDefinition = async (
     line: string,
-    uri: string
+    uri: string,
     // eslint-disable-next-line @typescript-eslint/require-await
   ): Promise<Definition[]> => {
     const matches = /(.*)(!include\S*)\s+(["'])?(.+)\3/.exec(line);
@@ -22,7 +22,7 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
         // eslint-disable-next-line no-case-declarations
         const destination = this.fileAccessor.getRelativePathAsFileUri(
           uri,
-          whatToInclude
+          whatToInclude,
         );
         return [
           Location.create(destination, {
@@ -37,19 +37,19 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
         // eslint-disable-next-line no-case-declarations
         let files = this.fileAccessor.getFilesInFolderRelativeFromAsFileUri(
           whatToInclude,
-          uri
+          uri,
         );
         files = files.filter((f) => path.extname(f) === ".yaml");
         if (files.length === 0) {
           console.warn(
-            `There were no files found in folder '${whatToInclude}' referenced with '${includeType}' from '${uri}'`
+            `There were no files found in folder '${whatToInclude}' referenced with '${includeType}' from '${uri}'`,
           );
         }
         return files.map((f) =>
           Location.create(f, {
             start: { line: 0, character: 0 },
             end: { line: 0, character: 0 },
-          })
+          }),
         );
       default:
         return [];

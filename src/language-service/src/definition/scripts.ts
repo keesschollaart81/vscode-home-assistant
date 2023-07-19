@@ -7,7 +7,7 @@ export class ScriptDefinitionProvider implements DefinitionProvider {
 
   public onDefinition = async (
     line: string,
-    uri: string
+    uri: string,
   ): Promise<Definition[]> => {
     const matches = /(.*)(script\.([\S]*))([\s]*)*(.*)/.exec(line);
     if (!matches || matches.length !== 6) {

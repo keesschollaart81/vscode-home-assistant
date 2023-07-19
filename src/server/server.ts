@@ -30,7 +30,7 @@ documents.listen(connection);
 
 connection.onInitialize((params) => {
   connection.console.log(
-    `[Home Assistant Language Server(${process.pid})] Started and initialize received`
+    `[Home Assistant Language Server(${process.pid})] Started and initialize received`,
   );
 
   const configurationService = new ConfigurationService();
@@ -54,7 +54,7 @@ connection.onInitialize((params) => {
     // eslint-disable-next-line @typescript-eslint/require-await
     async () => "",
     null,
-    jsonWorkerContributions
+    jsonWorkerContributions,
   );
 
   const sendDiagnostics = (uri: string, diagnostics: Diagnostic[]) => {
@@ -70,7 +70,7 @@ connection.onInitialize((params) => {
       homeAsisstantLanguageService.findAndApplySchemas();
     } catch (e) {
       console.error(
-        `Unexpected error during file discovery / schema configuration: ${e}`
+        `Unexpected error during file discovery / schema configuration: ${e}`,
       );
     }
   };
@@ -85,15 +85,15 @@ connection.onInitialize((params) => {
     () => {
       documents.all().forEach(async (d) => {
         const diagnostics = await homeAsisstantLanguageService.getDiagnostics(
-          d
+          d,
         );
         sendDiagnostics(d.uri, diagnostics);
       });
-    }
+    },
   );
 
   documents.onDidChangeContent((e) =>
-    homeAsisstantLanguageService.onDocumentChange(e)
+    homeAsisstantLanguageService.onDocumentChange(e),
   );
   documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e));
 
@@ -105,35 +105,35 @@ connection.onInitialize((params) => {
 
   connection.onDocumentSymbol((p) =>
     homeAsisstantLanguageService.onDocumentSymbol(
-      documents.get(p.textDocument.uri)
-    )
+      documents.get(p.textDocument.uri),
+    ),
   );
   connection.onDocumentFormatting((p) =>
     homeAsisstantLanguageService.onDocumentFormatting(
       documents.get(p.textDocument.uri),
-      p.options
-    )
+      p.options,
+    ),
   );
   connection.onCompletion((p) =>
     homeAsisstantLanguageService.onCompletion(
       documents.get(p.textDocument.uri),
-      p.position
-    )
+      p.position,
+    ),
   );
   connection.onCompletionResolve((p) =>
-    homeAsisstantLanguageService.onCompletionResolve(p)
+    homeAsisstantLanguageService.onCompletionResolve(p),
   );
   connection.onHover((p) =>
     homeAsisstantLanguageService.onHover(
       documents.get(p.textDocument.uri),
-      p.position
-    )
+      p.position,
+    ),
   );
   connection.onDefinition((p) =>
     homeAsisstantLanguageService.onDefinition(
       documents.get(p.textDocument.uri),
-      p.position
-    )
+      p.position,
+    ),
   );
 
   connection.onDidChangeConfiguration(async (config) => {
@@ -151,15 +151,15 @@ connection.onInitialize((params) => {
       void haConnection.callService(
         args.domain,
         args.service,
-        args.serviceData
+        args.serviceData,
       );
-    }
+    },
   );
 
   connection.onRequest("checkConfig", async (_) => {
     const result = await haConnection.callApi(
       "post",
-      "config/core/check_config"
+      "config/core/check_config",
     );
     connection.sendNotification("configuration_check_completed", result);
   });
