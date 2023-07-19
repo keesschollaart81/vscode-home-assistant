@@ -477,7 +477,13 @@ export interface TextSelector {
     multiline?: boolean;
 
     /**
-     * Set to true to display the input as a multi-line text box on the user interface.
+     * Allows adding a prefix to the input field.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
+     */
+    prefix?: string;
+
+    /**
+     * Allows adding a suffix to the input field.
      * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
      */
     suffix?: string;
