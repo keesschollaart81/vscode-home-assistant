@@ -59,6 +59,8 @@ type EventType =
   | "user_removed"
   | "zha_event";
 
+type AllowedMethods = "POST" | "PUT" | "GET" | "HEAD";
+
 interface CalendarTrigger {
   /**
    * Alias for the calendar trigger.
@@ -748,6 +750,18 @@ interface WebhookTrigger {
    * https://www.home-assistant.io/docs/automation/trigger#trigger-variables
    */
   variables?: Data;
+
+  /**
+   * Controls to only allow local requests to trigger the webhook.
+   * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
+   */
+  local_only?: boolean;
+
+  /**
+   * Controls to only allow requests with a valid API password to trigger the webhook.
+   * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
+   */
+  allowed_methods: AllowedMethods[];
 }
 
 interface ZoneTrigger {
