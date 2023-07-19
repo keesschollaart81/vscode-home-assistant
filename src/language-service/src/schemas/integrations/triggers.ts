@@ -28,6 +28,7 @@ export type Trigger =
   | HomeAssistantTrigger
   | MqttTrigger
   | NumericStateTrigger
+  | PersistentNotificationTrigger
   | StateTrigger
   | SunTrigger
   | TagTrigger
@@ -58,6 +59,9 @@ type EventType =
   | "user_added"
   | "user_removed"
   | "zha_event";
+
+type AllowedMethods = "POST" | "PUT" | "GET" | "HEAD";
+type PersistentNotificationUpdateType = "added" | "removed";
 
 interface CalendarTrigger {
   /**
@@ -444,6 +448,37 @@ interface NumericStateTrigger {
   variables?: Data;
 }
 
+interface PersistentNotificationTrigger {
+  /**
+   * Alias for the persistent notification trigger.
+   */
+  alias?: string;
+
+  /**
+   * Persistent notification triggers are fired when a persistent_notification is added or removed that matches the configuration options.
+   * https://www.home-assistant.io/docs/automation/trigger/#persistent-notification-trigger
+   */
+  platform: "persistent_notification";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
+   * Define the type of persistent notification to trigger on.
+   * https://www.home-assistant.io/docs/automation/trigger/#persistent-notification-trigger
+   */
+  update_type?: PersistentNotificationUpdateType[];
+
+  /**
+   * The notification ID to trigger on.
+   * https://www.home-assistant.io/docs/automation/trigger/#persistent-notification-trigger
+   */
+  notification_id?: string;
+}
+
 interface StateTrigger {
   /**
    * Alias for the state trigger.
@@ -748,6 +783,18 @@ interface WebhookTrigger {
    * https://www.home-assistant.io/docs/automation/trigger#trigger-variables
    */
   variables?: Data;
+
+  /**
+   * Controls to only allow local requests to trigger the webhook.
+   * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
+   */
+  local_only?: boolean;
+
+  /**
+   * Controls to only allow requests with a valid API password to trigger the webhook.
+   * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
+   */
+  allowed_methods: AllowedMethods[];
 }
 
 interface ZoneTrigger {

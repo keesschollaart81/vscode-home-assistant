@@ -3,11 +3,11 @@ export interface FileAccessor {
   getFilesInFolder(subFolder: string): string[];
   getFilesInFolderRelativeFrom(
     subFolder: string,
-    relativeFrom: string
+    relativeFrom: string,
   ): string[];
   getFilesInFolderRelativeFromAsFileUri(
     subFolder: string,
-    relativeFrom: string
+    relativeFrom: string,
   ): string[];
   getRelativePath(relativeFrom: string, filename: string): string;
   getRelativePathAsFileUri(relativeFrom: string, filename: string): string;

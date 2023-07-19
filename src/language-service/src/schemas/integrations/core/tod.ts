@@ -43,4 +43,10 @@ export interface BinarySensorPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/tod/#after_offset
    */
   after_offset?: TimePeriod;
+
+  /**
+   * The unique ID for this config block. This will be prefixed to all unique IDs of all entities in this block.
+   * https://www.home-assistant.io/integrations/tod/#unique_id
+   */
+  unique_id?: string;
 }

@@ -25,7 +25,7 @@ if (!fs.existsSync(outputFolder)) {
 
 if (fs.readdirSync(outputFolder).length > 0 && process.argv[2] === "--quick") {
   console.debug(
-    "Skipping schema generation because there already schema files"
+    "Skipping schema generation because there already schema files",
   );
 } else {
   console.log("Generating schemas...");
@@ -34,7 +34,7 @@ if (fs.readdirSync(outputFolder).length > 0 && process.argv[2] === "--quick") {
     console.log(mapping.path);
     const program = TJS.getProgramFromFiles(
       [resolve(path.join(__dirname, mapping.tsFile))],
-      compilerOptions
+      compilerOptions,
     );
     const schema = TJS.generateSchema(program, mapping.fromType, settings);
     if (schema === null) {
@@ -43,7 +43,7 @@ if (fs.readdirSync(outputFolder).length > 0 && process.argv[2] === "--quick") {
     }
     fs.writeFileSync(
       path.join(outputFolder, mapping.file),
-      JSON.stringify(schema)
+      JSON.stringify(schema),
     );
   });
 }
