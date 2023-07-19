@@ -28,11 +28,11 @@ export class SchemaServiceForIncludes {
     for (const [sourceFile, sourceFileMapping] of haFiles.entries()) {
       let sourceFileMappingPath = sourceFileMapping.path.replace(
         "homeassistant/packages/",
-        ""
+        "",
       );
       sourceFileMappingPath = sourceFileMappingPath.replace(
         /cards\/cards/g,
-        "cards"
+        "cards",
       );
 
       if (sourceFileMappingPath.startsWith("blueprints/automation/")) {
@@ -55,20 +55,20 @@ export class SchemaServiceForIncludes {
       }
 
       const relatedPathToSchemaMapping = this.mappings.find(
-        (x) => x.path === sourceFileMappingPath
+        (x) => x.path === sourceFileMappingPath,
       );
       if (relatedPathToSchemaMapping) {
         const id = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
         let absolutePath = path.resolve(
           process.cwd(),
-          haFiles[sourceFile].filename
+          haFiles[sourceFile].filename,
         );
         absolutePath = absolutePath.replace("\\", "/");
         const fileass = encodeURI(absolutePath);
         let resultEntry = results.find((x) => x.uri === id);
 
         console.log(
-          `Assigning ${fileass} the ${relatedPathToSchemaMapping.path} schema`
+          `Assigning ${fileass} the ${relatedPathToSchemaMapping.path} schema`,
         );
 
         if (!resultEntry) {

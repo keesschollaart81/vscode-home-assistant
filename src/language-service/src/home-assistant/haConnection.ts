@@ -87,7 +87,7 @@ export class HaConnection implements IHaConnection {
     this.connection = undefined;
     const tokenIndication = `${this.configurationService.token}`.substring(
       0,
-      5
+      5,
     );
     let errorText = error;
     switch (error) {
@@ -131,11 +131,11 @@ export class HaConnection implements IHaConnection {
         }
         ha.subscribeEntities(this.connection, (entities) => {
           console.log(
-            `Got ${Object.keys(entities).length} entities from Home Assistant`
+            `Got ${Object.keys(entities).length} entities from Home Assistant`,
           );
           return resolve(entities);
         });
-      }
+      },
     );
     return this.hassEntities;
   };
@@ -213,11 +213,13 @@ export class HaConnection implements IHaConnection {
           }
           ha.subscribeServices(this.connection, (services) => {
             console.log(
-              `Got ${Object.keys(services).length} services from Home Assistant`
+              `Got ${
+                Object.keys(services).length
+              } services from Home Assistant`,
             );
             return resolve(services);
           });
-        }
+        },
       );
     }
     return this.hassServices;
@@ -235,7 +237,7 @@ export class HaConnection implements IHaConnection {
     for (const [domainKey, domainValue] of Object.entries(services)) {
       for (const [serviceKey, serviceValue] of Object.entries(domainValue)) {
         const completionItem = CompletionItem.create(
-          `${domainKey}.${serviceKey}`
+          `${domainKey}.${serviceKey}`,
         );
         completionItem.kind = CompletionItemKind.EnumMember;
         completionItem.filterText = `${domainKey}.${serviceKey}`;
@@ -278,7 +280,7 @@ export class HaConnection implements IHaConnection {
     method: Method,
     api: string,
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    requestBody?: any
+    requestBody?: any,
   ): Promise<any> => {
     try {
       const resp = await axios.request({
@@ -301,7 +303,7 @@ export class HaConnection implements IHaConnection {
     domain: string,
     service: string,
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    serviceData: any
+    serviceData: any,
   ): Promise<any> => {
     try {
       const resp = await axios.request({
@@ -314,7 +316,7 @@ export class HaConnection implements IHaConnection {
       });
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       console.log(
-        `Service Call ${domain}.${service} made succesfully, response:`
+        `Service Call ${domain}.${service} made succesfully, response:`,
       );
       console.log(JSON.stringify(resp.data, null, 1));
     } catch (error) {

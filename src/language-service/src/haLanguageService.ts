@@ -36,9 +36,9 @@ export class HomeAssistantLanguageService {
     private schemaServiceForIncludes: SchemaServiceForIncludes,
     private sendDiagnostics: (
       fileUri: string,
-      diagnostics: Diagnostic[]
+      diagnostics: Diagnostic[],
     ) => void,
-    private diagnoseAllFiles: () => void
+    private diagnoseAllFiles: () => void,
   ) {}
 
   public findAndApplySchemas = (): void => {
@@ -46,7 +46,7 @@ export class HomeAssistantLanguageService {
       const haFiles = this.haConfig.getAllFiles();
       if (haFiles && haFiles.length > 0) {
         console.log(
-          `Applying schemas to ${haFiles.length} of your configuration files...`
+          `Applying schemas to ${haFiles.length} of your configuration files...`,
         );
       }
 
@@ -65,7 +65,7 @@ export class HomeAssistantLanguageService {
       const message: string = error.message;
       console.error(
         `Unexpected error updating the schemas, message: ${message}`,
-        error
+        error,
       );
     }
     console.log(`Schemas updated!`);
@@ -88,7 +88,7 @@ export class HomeAssistantLanguageService {
   private onDocumentChangeDebounce: NodeJS.Timer | undefined;
 
   public onDocumentChange = (
-    textDocumentChangeEvent: TextDocumentChangeEvent
+    textDocumentChangeEvent: TextDocumentChangeEvent,
   ): void => {
     if (this.onDocumentChangeDebounce !== undefined) {
       clearTimeout(this.onDocumentChangeDebounce);
@@ -96,18 +96,18 @@ export class HomeAssistantLanguageService {
 
     this.onDocumentChangeDebounce = setTimeout(async (): Promise<void> => {
       const singleFileUpdate = await this.haConfig.updateFile(
-        textDocumentChangeEvent.document.uri
+        textDocumentChangeEvent.document.uri,
       );
       if (singleFileUpdate.isValidYaml && singleFileUpdate.newFilesFound) {
         console.log(
-          `Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`
+          `Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`,
         );
         await this.haConfig.discoverFiles();
         this.findAndApplySchemas();
       }
 
       const diagnostics = await this.getDiagnostics(
-        textDocumentChangeEvent.document
+        textDocumentChangeEvent.document,
       );
 
       this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
@@ -115,17 +115,17 @@ export class HomeAssistantLanguageService {
   };
 
   public onDocumentOpen = async (
-    textDocumentChangeEvent: TextDocumentChangeEvent
+    textDocumentChangeEvent: TextDocumentChangeEvent,
   ): Promise<void> => {
     const diagnostics = await this.getDiagnostics(
-      textDocumentChangeEvent.document
+      textDocumentChangeEvent.document,
     );
 
     this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
   };
 
   public getDiagnostics = async (
-    document: TextDocument
+    document: TextDocument,
   ): Promise<Diagnostic[]> => {
     if (!document || document.getText().length === 0) {
       return [];
@@ -133,7 +133,7 @@ export class HomeAssistantLanguageService {
 
     const diagnosticResults = await this.yamlLanguageService.doValidation(
       document,
-      false
+      false,
     );
 
     if (!diagnosticResults) {
@@ -147,8 +147,8 @@ export class HomeAssistantLanguageService {
           diagnosticItem.range.start.line,
           diagnosticItem.range.start.character - 8,
           diagnosticItem.range.end.line,
-          diagnosticItem.range.start.character - 1
-        )
+          diagnosticItem.range.start.character - 1,
+        ),
       );
 
       // Skip errors about secrets, we simply have no idea what is in them
@@ -160,8 +160,8 @@ export class HomeAssistantLanguageService {
           diagnosticItem.range.start.line,
           diagnosticItem.range.start.character - 7,
           diagnosticItem.range.end.line,
-          diagnosticItem.range.start.character - 1
-        )
+          diagnosticItem.range.start.character - 1,
+        ),
       );
 
       // Skip errors about input, that is up to the Blueprint creator
@@ -173,8 +173,8 @@ export class HomeAssistantLanguageService {
           diagnosticItem.range.start.line,
           diagnosticItem.range.start.character - 9,
           diagnosticItem.range.end.line,
-          diagnosticItem.range.start.character - 1
-        )
+          diagnosticItem.range.start.character - 1,
+        ),
       );
 
       // Skip errors about include, everything can be included
@@ -196,7 +196,7 @@ export class HomeAssistantLanguageService {
 
   public onDocumentFormatting = (
     document: TextDocument,
-    options: FormattingOptions
+    options: FormattingOptions,
   ): TextEdit[] => {
     if (!document) {
       return [];
@@ -217,7 +217,7 @@ export class HomeAssistantLanguageService {
 
   public onCompletion = async (
     textDocument: TextDocument,
-    position: Position
+    position: Position,
   ): Promise<CompletionList> => {
     const result: CompletionList = {
       items: [],
@@ -234,7 +234,7 @@ export class HomeAssistantLanguageService {
     const additionalCompletions = await this.getServiceAndEntityCompletions(
       textDocument,
       position,
-      currentCompletions
+      currentCompletions,
     );
 
     if (additionalCompletions.length === 0) {
@@ -245,13 +245,13 @@ export class HomeAssistantLanguageService {
   };
 
   public onCompletionResolve = async (
-    completionItem: CompletionItem
+    completionItem: CompletionItem,
   ): Promise<CompletionItem> =>
     this.yamlLanguageService.doResolve(completionItem);
 
   public onHover = async (
     document: TextDocument,
-    position: Position
+    position: Position,
   ): Promise<Hover | null> => {
     if (!document) {
       return null;
@@ -262,7 +262,7 @@ export class HomeAssistantLanguageService {
 
   public onDefinition = async (
     textDocument: TextDocument,
-    position: Position
+    position: Position,
   ): Promise<Definition | DefinitionLink[] | undefined> => {
     if (!textDocument) {
       return undefined;
@@ -292,7 +292,7 @@ export class HomeAssistantLanguageService {
   private getServiceAndEntityCompletions = async (
     document: TextDocument,
     textDocumentPosition: Position,
-    currentCompletions: CompletionList
+    currentCompletions: CompletionList,
   ): Promise<CompletionItem[]> => {
     // sadly this is needed here.
     // the normal completion engine cannot provide completions for type `string | string[]`
@@ -308,7 +308,7 @@ export class HomeAssistantLanguageService {
     const additionalCompletionProvider = this.findAutoCompletionProperty(
       document,
       textDocumentPosition,
-      properties
+      properties,
     );
     let additionalCompletion: CompletionItem[] = [];
     switch (additionalCompletionProvider) {
@@ -340,7 +340,7 @@ export class HomeAssistantLanguageService {
   private findAutoCompletionProperty = (
     document: TextDocument,
     textDocumentPosition: Position,
-    properties: { [provider: string]: string[] }
+    properties: { [provider: string]: string[] },
   ): string | null => {
     let currentLine = textDocumentPosition.line;
     while (currentLine >= 0) {
@@ -356,7 +356,7 @@ export class HomeAssistantLanguageService {
 
       // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
       const isOtherItemInList = thisLine.match(
-        /-\s*([-"\w]+)?(\.)?([-"\w]+?)?\s*$/
+        /-\s*([-"\w]+)?(\.)?([-"\w]+?)?\s*$/,
       );
       if (isOtherItemInList) {
         currentLine -= 1;
@@ -367,8 +367,8 @@ export class HomeAssistantLanguageService {
           properties[key].some((propertyName) =>
             // eslint-disable-next-line no-useless-escape
             new RegExp(`(.*)${propertyName}(:)([\s]*)([\w]*)(\s*)`).test(
-              thisLine
-            )
+              thisLine,
+            ),
           )
         ) {
           return key;

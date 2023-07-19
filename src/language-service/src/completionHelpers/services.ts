@@ -14,7 +14,7 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
 
   public collectDefaultCompletions(
     resource: string,
-    result: CompletionsCollector
+    result: CompletionsCollector,
   ): Thenable<any> {
     return Promise.reject();
   }
@@ -25,7 +25,7 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
     currentWord: string,
     addValue: boolean,
     isLast: boolean,
-    result: CompletionsCollector
+    result: CompletionsCollector,
   ): Promise<any> => {
     if (location.length < 2) {
       return;
@@ -34,7 +34,7 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
     const parentNode = location[location.length - 2]; // in case or arrays, currentNode is the indexer for the array position
     if (
       !ServicesCompletionContribution.propertyMatches.some(
-        (x) => x === currentNode || x === parentNode
+        (x) => x === currentNode || x === parentNode,
       )
     ) {
       return;
@@ -47,11 +47,11 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
     resource: string,
     location: JSONPath,
     currentKey: string,
-    result: CompletionsCollector
+    result: CompletionsCollector,
   ): Promise<any> => {
     if (
       !ServicesCompletionContribution.propertyMatches.some(
-        (x) => x === currentKey
+        (x) => x === currentKey,
       )
     ) {
       return;
@@ -62,7 +62,7 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
 
   public getInfoContribution(
     resource: string,
-    location: JSONPath
+    location: JSONPath,
   ): Thenable<MarkedString[]> {
     return Promise.resolve([]);
   }
