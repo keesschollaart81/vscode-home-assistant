@@ -18,6 +18,7 @@ export type Selector =
   | BooleanSelector
   | ColorRGBSelector
   | ColorTempSelector
+  | ConditionSelector
   | DateSelector
   | DateTimeSelector
   | DeviceSelector
@@ -125,6 +126,14 @@ export interface ColorTempSelector {
      */
     max_mireds?: PositiveInteger;
   } | null;
+}
+
+export interface ConditionSelector {
+  /**
+   * The condition selector allows the user to input one or more conditions..
+   * https://www.home-assistant.io/docs/blueprint/selectors/#condition-selector
+   */
+  condition: null | Record<string, never>;
 }
 
 export interface DateSelector {
