@@ -22,6 +22,7 @@ import {
 
 export type Trigger =
   | CalendarTrigger
+  | ConversationTrigger
   | DeviceTrigger
   | EventTrigger
   | GeolocationTrigger
@@ -105,6 +106,39 @@ interface CalendarTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
    */
   id?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://www.home-assistant.io/docs/automation/trigger#trigger-variables
+   */
+  variables?: Data;
+}
+
+interface ConversationTrigger {
+  /**
+   * Alias for the conversation pattern trigger.
+   */
+  alias?: string;
+
+  /**
+   * With the sentence trigger, you can match a sentence from a voice assistant.
+   * https://www.home-assistant.io/docs/automation/trigger/#sentence-trigger
+   */
+  platform: "conversation";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
+   */
+  enabled?: boolean;
+
+  /**
+   * A sentence or a list of sentences for this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#sentence-trigger
+   */
+  command: string | string[];
 
   /**
    * This allows you to define variables that will be set when the trigger fires.
