@@ -117,6 +117,15 @@
     ],
     "description": "Add a Home Assistant time_pattern trigger for automation"
   },
+  "trigger conversation": {
+    "prefix": "trigger-conversation",
+    "body": [
+      "- platform: conversation",
+      "  command:",
+      "    - \"${1:my sentence}\""
+    ],
+    "description": "Add a Home Assistant conversation trigger for automation"
+  },
   "action service": {
     "prefix": "action-service",
     "body": [
