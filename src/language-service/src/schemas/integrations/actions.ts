@@ -423,6 +423,12 @@ export interface ServiceAction {
    * Additional data for merely for use with the frontend. Has no functional effect.
    */
   metadata?: any;
+
+  /**
+   * Add a response_variable to pass a variable of key/value pairs back to an automation or script.
+   * https://www.home-assistant.io/docs/scripts/service-calls/#use-templates-to-handle-response-data
+   */
+  response_variable?: string;
 }
 
 export interface StopAction {
@@ -449,6 +455,12 @@ export interface StopAction {
    * https://www.home-assistant.io/docs/scripts/#stopping-a-script-sequence
    */
   error?: boolean;
+
+  /**
+   * Add a response_variable to pass a variable of key/value pairs back to an automation or script
+   * https://www.home-assistant.io/docs/scripts/#stopping-a-script-sequence
+   */
+  response_variable?: string;
 }
 
 export interface WaitForTriggerAction {

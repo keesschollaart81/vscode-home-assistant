@@ -19,6 +19,7 @@ export type Selector =
   | ColorRGBSelector
   | ColorTempSelector
   | ConditionSelector
+  | ConfigEntrySelector
   | DateSelector
   | DateTimeSelector
   | DeviceSelector
@@ -134,6 +135,20 @@ export interface ConditionSelector {
    * https://www.home-assistant.io/docs/blueprint/selectors/#condition-selector
    */
   condition: null | Record<string, never>;
+}
+
+export interface ConfigEntrySelector {
+  /**
+   * The config entry selector allows the user to select an integration configuration entry. The selector returns the entry ID of the selected integration configuration entry.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#config-entry-selector
+   */
+  config_entry: {
+    /**
+     * Can be set to an integration domain. Limits the list of config entries provided by the set integration domain.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#config-entry-selector
+     */
+    integration?: Domain;
+  } | null;
 }
 
 export interface DateSelector {
