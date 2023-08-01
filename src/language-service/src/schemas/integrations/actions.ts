@@ -451,9 +451,9 @@ export interface StopAction {
   error?: boolean;
 
   /**
-  * Add a response_variable to pass a variable of key/value pairs back to an automation or script
-  * https://www.home-assistant.io/docs/scripts/#stopping-a-script-sequence
-  */
+   * Add a response_variable to pass a variable of key/value pairs back to an automation or script
+   * https://www.home-assistant.io/docs/scripts/#stopping-a-script-sequence
+   */
   response_variable?: string;
 }
 
