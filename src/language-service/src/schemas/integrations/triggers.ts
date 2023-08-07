@@ -141,6 +141,13 @@ interface ConversationTrigger {
   command: string | string[];
 
   /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#sentence-trigger
+   */
+  id?: string;
+
+  /**
    * This allows you to define variables that will be set when the trigger fires.
    * These can be used in the automation actions or conditions. Templates
    * can be used in these variables.
