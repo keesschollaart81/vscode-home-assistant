@@ -74,6 +74,9 @@ export interface CustomSentence {
             from: number;
             to: number;
           };
+        }
+      | {
+          wildcard: boolean;
         };
   };
 
