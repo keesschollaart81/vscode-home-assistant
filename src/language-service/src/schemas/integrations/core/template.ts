@@ -47,6 +47,12 @@ export interface Item {
   number?: NumberItem[] | IncludeList;
 
   /**
+   * List of images
+   * https://www.home-assistant.io/integrations/template/#image
+   */
+  image?: ImageItem[] | IncludeList;
+
+  /**
    * List of selects
    * https://www.home-assistant.io/integrations/template#select
    */
@@ -147,6 +153,21 @@ interface ButtonItem extends BaseItem {
    * https://www.home-assistant.io/integrations/template#button
    */
   press?: Action | Action[];
+}
+
+interface ImageItem extends BaseItem {
+  /**
+   * The URL on which the image is served.
+   * https://www.home-assistant.io/integrations/template/#url
+   */
+  url: Template;
+
+  /**
+   * Enable or disable SSL certificate verification.
+   * Set to false to use an http-only URL, or you have a self-signed SSL certificate and haven’t installed the CA certificate to enable verification.
+   * https://www.home-assistant.io/integrations/template/#verify_ssl
+   */
+  verify_ssl?: boolean;
 }
 
 interface NumberItem extends BaseItem {
