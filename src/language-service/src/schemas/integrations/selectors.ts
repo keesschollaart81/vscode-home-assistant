@@ -8,6 +8,7 @@ import {
   Entity,
   PositiveInteger,
   Deprecated,
+  SupportedFeature,
 } from "../types";
 
 export type Selector =
@@ -265,7 +266,7 @@ interface EntitySelectorFilter {
    * Limits the list of entities to entities that have a certain supported feature.
    * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
    */
-  supported_features?: number | number[];
+  supported_features?: SupportedFeature | SupportedFeature[];
 }
 
 export interface EntitySelector {

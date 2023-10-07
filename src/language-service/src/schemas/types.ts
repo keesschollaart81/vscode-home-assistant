@@ -1,3 +1,14 @@
+import { SupportedFeature as SupportedFeatureAlarmControlPanel } from "./integrations/core/alarm_control_panel";
+import { SupportedFeature as SupportedFeatureCamera } from "./integrations/core/camera";
+import { SupportedFeature as SupportedFeatureClimate } from "./integrations/core/climate";
+import { SupportedFeature as SupportedFeatureCover } from "./integrations/core/cover";
+import { SupportedFeature as SupportedFeatureFan } from "./integrations/core/fan";
+import { SupportedFeature as SupportedFeatureLight } from "./integrations/core/light";
+import { SupportedFeature as SupportedFeatureLock } from "./integrations/core/lock";
+import { SupportedFeature as SupportedFeatureUpdate } from "./integrations/core/update";
+import { SupportedFeature as SupportedFeatureVacuum } from "./integrations/core/vacuum";
+import { SupportedFeature as SupportedFeatureWeather } from "./integrations/core/weather";
+
 export type Area = string;
 
 export type ColorMode =
@@ -1556,3 +1567,15 @@ export type PrecipitationUnit =
   | "mm"
   | "in"
   | "yd";
+
+export type SupportedFeature =
+  | SupportedFeatureAlarmControlPanel
+  | SupportedFeatureCamera
+  | SupportedFeatureClimate
+  | SupportedFeatureCover
+  | SupportedFeatureFan
+  | SupportedFeatureLight
+  | SupportedFeatureLock
+  | SupportedFeatureUpdate
+  | SupportedFeatureVacuum
+  | SupportedFeatureWeather;

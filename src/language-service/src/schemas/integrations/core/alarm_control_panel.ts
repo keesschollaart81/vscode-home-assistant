@@ -21,3 +21,11 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = TemplatePlatformSchema | OtherPlatform;
+
+export type SupportedFeature =
+  | "camera.AlarmControlPanelEntityFeature.ARM_HOME"
+  | "camera.AlarmControlPanelEntityFeature.ARM_AWAY"
+  | "camera.AlarmControlPanelEntityFeature.ARM_NIGHT"
+  | "camera.AlarmControlPanelEntityFeature.TRIGGER"
+  | "camera.AlarmControlPanelEntityFeature.ARM_CUSTOM_BYPASS"
+  | "camera.AlarmControlPanelEntityFeature.ARM_VACATION";
