@@ -99,7 +99,8 @@ export class HomeAssistantConfiguration {
   };
 
   private getRootFiles = (): string[] => {
-    const filesInRoot = this.fileAccessor.getFilesInFolder("");
+    console.log(`Searching from "${path.join(this.fileAccessor.getRoot(), this.subFolder)}"`);
+    const filesInRoot = this.fileAccessor.getFilesInFolder(this.subFolder);
     const ourFiles = [
       "configuration.yaml",
       "ui-lovelace.yaml",

@@ -55,6 +55,11 @@
           "vscode-home-assistant.ignoreCertificates": {
             "type": "boolean",
             "description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
+          },
+          "vscode-home-assistant.searchPath": {
+            "type": "string",
+            "description": "The path from which your Home Assistant configuration files will be searched. Empty by default, so all files in your workspace will be evaluated. On large workspaces, setting this specifically to the path where your configuration files are located can improve performance drastically. Path can be absolute or relative to the workspace root.",
+            "default": ""
           }
         }
       }

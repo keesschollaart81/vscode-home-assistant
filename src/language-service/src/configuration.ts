@@ -3,6 +3,7 @@ import * as vscodeUri from "vscode-uri";
 
 export interface IConfigurationService {
   isConfigured: boolean;
+  searchPath?: string;
   token?: string;
   url?: string;
   ignoreCertificates: boolean;
@@ -13,10 +14,13 @@ export interface HomeAssistantConfiguration {
   longLivedAccessToken?: string;
   hostUrl?: string;
   ignoreCertificates: boolean;
+  searchPath?: string;
 }
 
 export class ConfigurationService implements IConfigurationService {
   public isConfigured = false;
+
+  public searchPath?: string;
 
   public token?: string;
 
@@ -41,6 +45,7 @@ export class ConfigurationService implements IConfigurationService {
       this.url = this.getUri(incoming.hostUrl);
     }
     this.ignoreCertificates = !!incoming.ignoreCertificates;
+    this.searchPath = incoming.searchPath;
 
     this.setConfigViaEnvironmentVariables();
 
@@ -48,6 +53,9 @@ export class ConfigurationService implements IConfigurationService {
   };
 
   private setConfigViaEnvironmentVariables() {
+    if (!this.searchPath && process.env.HASS_SEARCH_PATH) {
+      this.searchPath = this.getUri(process.env.HASS_SEARCH_PATH);
+    }
     if (!this.url && process.env.HASS_SERVER) {
       this.url = this.getUri(process.env.HASS_SERVER);
     }

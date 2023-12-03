@@ -3,22 +3,7 @@ import { TextDocument } from "vscode-languageserver-textdocument";
 import * as fs from "fs";
 import * as path from "path";
 import * as vscodeUri from "vscode-uri";
-
-export interface FileAccessor {
-  getFileContents(fileName: string): Promise<string>;
-  getFilesInFolder(subFolder: string): string[];
-  getFilesInFolderRelativeFrom(
-    subFolder: string,
-    relativeFrom: string,
-  ): string[];
-  getFilesInFolderRelativeFromAsFileUri(
-    subFolder: string,
-    relativeFrom: string,
-  ): string[];
-  getRelativePath(relativeFrom: string, filename: string): string;
-  getRelativePathAsFileUri(relativeFrom: string, filename: string): string;
-  fromUriToLocalPath(uri: string): string;
-}
+import { FileAccessor } from "../language-service/src/fileAccessor";
 
 export class VsCodeFileAccessor implements FileAccessor {
   private ourRoot: string;
@@ -27,7 +12,11 @@ export class VsCodeFileAccessor implements FileAccessor {
     private workspaceFolder: string,
     private documents: TextDocuments<TextDocument>,
   ) {
-    this.ourRoot = path.resolve();
+    this.ourRoot = path.resolve(workspaceFolder);
+  }
+
+  getRoot(): string {
+    return this.ourRoot;
   }
 
   public async getFileContents(uri: string): Promise<string> {
@@ -58,21 +47,22 @@ export class VsCodeFileAccessor implements FileAccessor {
     filelist: string[] = [],
   ): string[] {
     subFolder = path.normalize(subFolder);
+    console.log(`fileAccessor.tf:getFilesInFolder:subFolder: ${subFolder}`);
 
     try {
-      fs.readdirSync(subFolder).forEach((file) => {
+      fs.readdirSync(path.join(this.ourRoot, subFolder)).forEach((file) => {
         // ignore dot files
         if (file.charAt(0) === ".") {
           return;
         }
         filelist =
-          fs.statSync(path.join(subFolder, file)).isDirectory() &&
+          fs.statSync(path.join(this.ourRoot, subFolder, file)).isDirectory() &&
           !file.startsWith(".")
             ? this.getFilesInFolder(path.join(subFolder, file), filelist)
             : filelist.concat(path.join(subFolder, file));
       });
     } catch (err) {
-      console.log(`Cannot find the files in folder ${subFolder}`);
+      console.log(`Cannot find the files in folder ${subFolder}: ${err}`);
     }
     return filelist;
   }
