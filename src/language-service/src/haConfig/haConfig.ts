@@ -99,7 +99,7 @@ export class HomeAssistantConfiguration {
   };
 
   private getRootFiles = (): string[] => {
-    console.log(`Searching from "${this.subFolder}"`);
+    console.log(`Searching from "${path.join(this.fileAccessor.getRoot(), this.subFolder)}"`);
     const filesInRoot = this.fileAccessor.getFilesInFolder(this.subFolder);
     const ourFiles = [
       "configuration.yaml",
