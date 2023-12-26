@@ -855,12 +855,6 @@ interface LightPlatformItem {
   availability_template?: Template;
 
   /**
-   * Defines a template to get the color of the light. Must render a tuple (hue, saturation).
-   * https://www.home-assistant.io/integrations/light.template#color_template
-   */
-  color_template?: Template;
-
-  /**
    * Defines a template to get the list of supported effects. Must render a list.
    * https://www.home-assistant.io/integrations/light.template#effect_list_template
    */
@@ -883,6 +877,12 @@ interface LightPlatformItem {
    * https://www.home-assistant.io/integrations/light.template#friendly_name
    */
   friendly_name?: string;
+
+  /**
+   * Defines a template to get the HS color of the light. Must render a tuple (hue, saturation).
+   * https://www.home-assistant.io/integrations/light.template#hs_template
+   */
+  hs_template?: Template;
 
   /**
    * Defines a template for an icon or picture, e.g., showing a different icon for different states.
@@ -909,10 +909,22 @@ interface LightPlatformItem {
   min_mireds_template?: Template;
 
   /**
-   * Defines an action to run when the light is given a color command.
-   * https://www.home-assistant.io/integrations/light.template#set_color
+   * Defines a template to get the RGB color of the light. Must render a tuple or a list (red, green, blue).
+   * https://www.home-assistant.io/integrations/light.template#rgb_template
    */
-  set_color?: Action | Action[];
+  rgb_template?: Template;
+
+  /**
+   * Defines a template to get the RGBW color of the light. Must render a tuple or a list (red, green, blue, white).
+   * https://www.home-assistant.io/integrations/light.template#rgbw_template
+   */
+  rgbw_template?: Template;
+
+  /**
+   * Defines a template to get the RGBWW color of the light. Must render a tuple or a list (red, green, blue, cold white, warm white).
+   * https://www.home-assistant.io/integrations/light.template#rgbww_template
+   */
+  rgbww_template?: Template;
 
   /**
    * Defines an action to run when the light is given a effect command.
@@ -921,22 +933,40 @@ interface LightPlatformItem {
   set_effect?: Action | Action[];
 
   /**
+   * Defines an action to run when the light is given a hs color command. Available variables: `hs` as a tuple, `h` and `s`.
+   * https://www.home-assistant.io/integrations/light.template#set_hs
+   */
+  set_hs?: Action | Action[];
+
+  /**
    * Defines an action to run when the light is given a brightness command.
    * https://www.home-assistant.io/integrations/light.template#set_level
    */
   set_level?: Action | Action[];
 
   /**
+   * Defines an action to run when the light is given an RGB color command. Available variables: `rgb` as a tuple, `r`, `g` and `b`.
+   * https://www.home-assistant.io/integrations/light.template#set_rgb
+   */
+  set_rgb?: Action | Action[];
+
+  /**
+   * Defines an action to run when the light is given an RGBW color command. Available variables: `rgbw` as a tuple, `rgb` as a tuple, `r`, `g`, `b` and `w`.
+   * https://www.home-assistant.io/integrations/light.template#set_rgbw
+   */
+  set_rgbw?: Action | Action[];
+
+  /**
+   * Defines an action to run when the light is given an RGBWW color command. Available variables: `rgbww` as a tuple, `rgb` as a tuple, `r`, `g`, `b`, `cw` and `ww`.
+   * https://www.home-assistant.io/integrations/light.template#set_rgbww
+   */
+  set_rgbww?: Action | Action[];
+
+  /**
    * Defines an action to run when the light is given a color temperature command.
    * https://www.home-assistant.io/integrations/light.template#set_temperature
    */
   set_temperature?: Action | Action[];
-
-  /**
-   * Defines an action to run when the light is given a white value command.
-   * https://www.home-assistant.io/integrations/light.template#set_white_value
-   */
-  set_white_value?: Action | Action[];
 
   /**
    * Defines a template to get if light supports transition.
@@ -973,12 +1003,6 @@ interface LightPlatformItem {
    * https://www.home-assistant.io/integrations/light.template#value_template
    */
   value_template?: Template;
-
-  /**
-   * Defines a template to get the white value of the light.
-   * https://www.home-assistant.io/integrations/light.template#white_value_template
-   */
-  white_value_template?: Template;
 }
 
 interface SensorPlatformItem {
