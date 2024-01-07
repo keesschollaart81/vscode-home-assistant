@@ -22,3 +22,8 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = GroupPlatformSchema | TemplatePlatformSchema | OtherPlatform;
+
+export type SupportedFeature =
+  | "light.LightEntityFeature.EFFECT"
+  | "light.LightEntityFeature.FLASH"
+  | "light.LightEntityFeature.TRANSITION";

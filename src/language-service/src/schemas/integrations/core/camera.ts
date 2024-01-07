@@ -21,3 +21,7 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = OtherPlatform;
+
+export type SupportedFeature =
+  | "camera.CameraEntityFeature.ON_OFF"
+  | "camera.CameraEntityFeature.STREAM";
