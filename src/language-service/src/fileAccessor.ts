@@ -1,4 +1,5 @@
 export interface FileAccessor {
+  getRoot(): string;
   getFileContents(fileName: string): Promise<string>;
   getFilesInFolder(subFolder: string): string[];
   getFilesInFolderRelativeFrom(
