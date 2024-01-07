@@ -21,3 +21,5 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = TemplatePlatformSchema | OtherPlatform;
+
+export type SupportedFeature = "lock.LockEntityFeature.OPEN";

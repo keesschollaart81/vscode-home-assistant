@@ -84,9 +84,8 @@ connection.onInitialize((params) => {
     sendDiagnostics,
     () => {
       documents.all().forEach(async (d) => {
-        const diagnostics = await homeAsisstantLanguageService.getDiagnostics(
-          d,
-        );
+        const diagnostics =
+          await homeAsisstantLanguageService.getDiagnostics(d);
         sendDiagnostics(d.uri, diagnostics);
       });
     },

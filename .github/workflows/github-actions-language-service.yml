@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: 🏗 Set up NodeJS
-        uses: actions/setup-node@v3.7.0
+        uses: actions/setup-node@v4.0.1
         with:
           node-version: "16"
 
