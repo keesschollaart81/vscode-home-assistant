@@ -65,6 +65,13 @@ export interface Item {
   sensor?: SensorItem[] | IncludeList;
 
   /**
+   * Define actions to be executed when the trigger fires. Optional. Variables set by the action script are available when evaluating entity templates.
+   * This can be used to interact with anything via services, in particular services with response data. See action documentation.
+   * https://www.home-assistant.io/integrations/template/#action
+   */
+  action?: Action | Action[];
+
+  /**
    * Define an automation trigger to update the entities. Optional. If omitted will update based on referenced entities. See trigger documentation.
    * https://www.home-assistant.io/integrations/template#trigger
    */
