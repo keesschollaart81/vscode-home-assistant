@@ -378,7 +378,7 @@ export interface ServiceAction {
    * Specify other parameters beside the entity to target. For example, the light turn on service allows specifying the brightness.
    * https://www.home-assistant.io/docs/scripts/service-calls/#passing-data-to-the-service-call
    */
-  data?: Data;
+  data?: Data | Template;
 
   /**
    * DEPRECATED as of Home Assistant 0.115.
