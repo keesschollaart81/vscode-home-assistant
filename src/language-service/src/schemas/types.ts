@@ -232,6 +232,8 @@ export type ClimateEntity = string;
  */
 export type ClimateEntities = string | string[];
 
+export type Floor = string;
+
 /**
  * @TJS-pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)$
  */
