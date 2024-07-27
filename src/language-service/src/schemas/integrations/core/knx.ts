@@ -325,7 +325,7 @@ interface BinarySensor {
    * Actively read the value from the bus.
    * https://www.home-assistant.io/integrations/knx#sync_state
    */
-  sync_state?: boolean | string;
+  sync_state?: boolean | number | string;
 }
 
 interface Button {
