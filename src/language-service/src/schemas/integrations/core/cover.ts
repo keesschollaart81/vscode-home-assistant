@@ -21,13 +21,3 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = TemplatePlatformSchema | OtherPlatform;
-
-export type SupportedFeature =
-  | "cover.CoverEntityFeature.OPEN"
-  | "cover.CoverEntityFeature.CLOSE"
-  | "cover.CoverEntityFeature.SET_POSITION"
-  | "cover.CoverEntityFeature.STOP"
-  | "cover.CoverEntityFeature.OPEN_TILT"
-  | "cover.CoverEntityFeature.CLOSE_TILT"
-  | "cover.CoverEntityFeature.STOP_TILT"
-  | "cover.CoverEntityFeature.SET_TILT_POSITION";
