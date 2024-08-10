@@ -1620,7 +1620,7 @@ export type SupportedFeatureUpdate =
   | "update.UpdateEntityFeature.BACKUP"
   | "update.UpdateEntityFeature.RELEASE_NOTES";
 
-  export type SupportedFeatureVacuum =
+export type SupportedFeatureVacuum =
   | "vacuum.VacuumEntityFeature.TURN_ON"
   | "vacuum.VacuumEntityFeature.TURN_OFF"
   | "vacuum.VacuumEntityFeature.PAUSE"
@@ -1636,8 +1636,7 @@ export type SupportedFeatureUpdate =
   | "vacuum.VacuumEntityFeature.STATE"
   | "vacuum.VacuumEntityFeature.START";
 
-
 export type SupportedFeatureWeather =
-| "weather.WeatherEntityFeature.FORECAST_DAILY"
-| "weather.WeatherEntityFeature.FORECAST_HOURLY"
-| "weather.WeatherEntityFeature.FORECAST_TWICE_DAILY";
+  | "weather.WeatherEntityFeature.FORECAST_DAILY"
+  | "weather.WeatherEntityFeature.FORECAST_HOURLY"
+  | "weather.WeatherEntityFeature.FORECAST_TWICE_DAILY";
