@@ -163,7 +163,6 @@ export class HomeAssistantYamlFile {
                 results.push(this.parseAstRecursive(item, currentPath));
                 break;
               default:
-                console.log(`huh ${currentPath}`);
                 break;
             }
           }
