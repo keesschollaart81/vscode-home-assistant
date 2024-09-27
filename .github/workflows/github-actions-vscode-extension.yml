@@ -14,7 +14,7 @@ jobs:
       - name: 🏗 Set up NodeJS
         uses: actions/setup-node@v4.0.2
         with:
-          node-version: "16"
+          node-version: "18"
 
       - name: 🏗 Install NodeJS packages
         run: npm install
@@ -31,7 +31,7 @@ jobs:
       - name: 🚀 VSCode Marketplace Publish
         if: success() && github.ref == 'refs/heads/master'
         run: |
-          npm install -g vsce
+          npm install -g @vscode/vsce
           vsce publish -p $VSCE_TOKEN
           vsce package -o vscode-home-assistant.vsix
         env:
