@@ -2,8 +2,6 @@
 
 <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/header.png" alt="Home Assistant Config Helper for Visual Studio Code"/>
 
-[![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/keesschollaart.vscode-home-assistant.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=keesschollaart.vscode-home-assistant) [![GitHub release](https://img.shields.io/github/release-pre/keesschollaart81/vscode-home-assistant.svg)](https://github.com/keesschollaart81/vscode-home-assistant/releases)
-
 </h1>
 
 # Getting started
