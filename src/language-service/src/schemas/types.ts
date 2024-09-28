@@ -278,6 +278,8 @@ export type InputNumberEntity = string;
  */
 export type InputNumberEntities = string | string[];
 
+export type Label = string;
+
 /**
  * @TJS-pattern ^light\.(?!_)[\da-z_]+(?<!_)$
  */
