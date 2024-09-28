@@ -1,5 +1,5 @@
 /**
- * HTTP ntegration
+ * HTTP integration
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/http/__init__.py
  */
 import { Deprecated, IncludeList, Port, PositiveInteger } from "../../types";

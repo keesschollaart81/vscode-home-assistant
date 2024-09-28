@@ -1,14 +1,3 @@
-import { SupportedFeature as SupportedFeatureAlarmControlPanel } from "./integrations/core/alarm_control_panel";
-import { SupportedFeature as SupportedFeatureCamera } from "./integrations/core/camera";
-import { SupportedFeature as SupportedFeatureClimate } from "./integrations/core/climate";
-import { SupportedFeature as SupportedFeatureCover } from "./integrations/core/cover";
-import { SupportedFeature as SupportedFeatureFan } from "./integrations/core/fan";
-import { SupportedFeature as SupportedFeatureLight } from "./integrations/core/light";
-import { SupportedFeature as SupportedFeatureLock } from "./integrations/core/lock";
-import { SupportedFeature as SupportedFeatureUpdate } from "./integrations/core/update";
-import { SupportedFeature as SupportedFeatureVacuum } from "./integrations/core/vacuum";
-import { SupportedFeature as SupportedFeatureWeather } from "./integrations/core/weather";
-
 export type Area = string;
 
 export type ColorMode =
@@ -1579,3 +1568,75 @@ export type SupportedFeature =
   | SupportedFeatureUpdate
   | SupportedFeatureVacuum
   | SupportedFeatureWeather;
+
+export type SupportedFeatureAlarmControlPanel =
+  | "camera.AlarmControlPanelEntityFeature.ARM_HOME"
+  | "camera.AlarmControlPanelEntityFeature.ARM_AWAY"
+  | "camera.AlarmControlPanelEntityFeature.ARM_NIGHT"
+  | "camera.AlarmControlPanelEntityFeature.TRIGGER"
+  | "camera.AlarmControlPanelEntityFeature.ARM_CUSTOM_BYPASS"
+  | "camera.AlarmControlPanelEntityFeature.ARM_VACATION";
+
+export type SupportedFeatureCamera =
+  | "camera.CameraEntityFeature.ON_OFF"
+  | "camera.CameraEntityFeature.STREAM";
+
+export type SupportedFeatureClimate =
+  | "climate.ClimateEntityFeature.TARGET_TEMPERATURE"
+  | "climate.ClimateEntityFeature.TARGET_TEMPERATURE_RANGE"
+  | "climate.ClimateEntityFeature.TARGET_HUMIDITY"
+  | "climate.ClimateEntityFeature.FAN_MODE"
+  | "climate.ClimateEntityFeature.PRESET_MODE"
+  | "climate.ClimateEntityFeature.SWING_MODE"
+  | "climate.ClimateEntityFeature.AUX_HEAT";
+
+export type SupportedFeatureCover =
+  | "cover.CoverEntityFeature.OPEN"
+  | "cover.CoverEntityFeature.CLOSE"
+  | "cover.CoverEntityFeature.SET_POSITION"
+  | "cover.CoverEntityFeature.STOP"
+  | "cover.CoverEntityFeature.OPEN_TILT"
+  | "cover.CoverEntityFeature.CLOSE_TILT"
+  | "cover.CoverEntityFeature.STOP_TILT"
+  | "cover.CoverEntityFeature.SET_TILT_POSITION";
+
+export type SupportedFeatureFan =
+  | "fan.FanEntityFeature.SET_SPEED"
+  | "fan.FanEntityFeature.OSCILLATE"
+  | "fan.FanEntityFeature.DIRECTION"
+  | "fan.FanEntityFeature.PRESET_MODE";
+
+export type SupportedFeatureLight =
+  | "light.LightEntityFeature.EFFECT"
+  | "light.LightEntityFeature.FLASH"
+  | "light.LightEntityFeature.TRANSITION";
+
+export type SupportedFeatureLock = "lock.LockEntityFeature.OPEN";
+
+export type SupportedFeatureUpdate =
+  | "update.UpdateEntityFeature.INSTALL"
+  | "update.UpdateEntityFeature.SPECIFIC_VERSION"
+  | "update.UpdateEntityFeature.PROGRESS"
+  | "update.UpdateEntityFeature.BACKUP"
+  | "update.UpdateEntityFeature.RELEASE_NOTES";
+
+export type SupportedFeatureVacuum =
+  | "vacuum.VacuumEntityFeature.TURN_ON"
+  | "vacuum.VacuumEntityFeature.TURN_OFF"
+  | "vacuum.VacuumEntityFeature.PAUSE"
+  | "vacuum.VacuumEntityFeature.STOP"
+  | "vacuum.VacuumEntityFeature.RETURN_HOME"
+  | "vacuum.VacuumEntityFeature.FAN_SPEED"
+  | "vacuum.VacuumEntityFeature.BATTERY"
+  | "vacuum.VacuumEntityFeature.STATUS"
+  | "vacuum.VacuumEntityFeature.SEND_COMMAND"
+  | "vacuum.VacuumEntityFeature.LOCATE"
+  | "vacuum.VacuumEntityFeature.CLEAN_SPOT"
+  | "vacuum.VacuumEntityFeature.MAP"
+  | "vacuum.VacuumEntityFeature.STATE"
+  | "vacuum.VacuumEntityFeature.START";
+
+export type SupportedFeatureWeather =
+  | "weather.WeatherEntityFeature.FORECAST_DAILY"
+  | "weather.WeatherEntityFeature.FORECAST_HOURLY"
+  | "weather.WeatherEntityFeature.FORECAST_TWICE_DAILY";

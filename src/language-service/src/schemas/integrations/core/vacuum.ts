@@ -21,19 +21,3 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = TemplatePlatformSchema | OtherPlatform;
-
-export type SupportedFeature =
-  | "vacuum.VacuumEntityFeature.TURN_ON"
-  | "vacuum.VacuumEntityFeature.TURN_OFF"
-  | "vacuum.VacuumEntityFeature.PAUSE"
-  | "vacuum.VacuumEntityFeature.STOP"
-  | "vacuum.VacuumEntityFeature.RETURN_HOME"
-  | "vacuum.VacuumEntityFeature.FAN_SPEED"
-  | "vacuum.VacuumEntityFeature.BATTERY"
-  | "vacuum.VacuumEntityFeature.STATUS"
-  | "vacuum.VacuumEntityFeature.SEND_COMMAND"
-  | "vacuum.VacuumEntityFeature.LOCATE"
-  | "vacuum.VacuumEntityFeature.CLEAN_SPOT"
-  | "vacuum.VacuumEntityFeature.MAP"
-  | "vacuum.VacuumEntityFeature.STATE"
-  | "vacuum.VacuumEntityFeature.START";

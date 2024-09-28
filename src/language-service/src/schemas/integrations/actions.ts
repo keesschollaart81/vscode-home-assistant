@@ -362,10 +362,16 @@ export interface ServiceAction {
   continue_on_error?: boolean;
 
   /**
-   * The most important action is the action to call a service.
+   * The 'service' keyword is being replaced by 'action' keyword
+   * https://www.home-assistant.io/blog/2024/08/07/release-20248/#goodbye-service-calls-hello-actions-
+   */
+  service?: Deprecated;
+
+  /**
+   * The most important action is to call an action.
    * https://www.home-assistant.io/docs/scripts/service-calls/
    */
-  service?: string;
+  action?: string;
 
   /**
    * DEPRECATED as of Home Assistant 0.115.

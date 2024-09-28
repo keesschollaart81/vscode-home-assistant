@@ -21,12 +21,3 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = OtherPlatform;
-
-export type SupportedFeature =
-  | "climate.ClimateEntityFeature.TARGET_TEMPERATURE"
-  | "climate.ClimateEntityFeature.TARGET_TEMPERATURE_RANGE"
-  | "climate.ClimateEntityFeature.TARGET_HUMIDITY"
-  | "climate.ClimateEntityFeature.FAN_MODE"
-  | "climate.ClimateEntityFeature.PRESET_MODE"
-  | "climate.ClimateEntityFeature.SWING_MODE"
-  | "climate.ClimateEntityFeature.AUX_HEAT";
