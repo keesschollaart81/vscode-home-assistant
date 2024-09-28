@@ -7,6 +7,7 @@ import {
   Data,
   Deprecated,
   Entities,
+  Floor,
   IncludeList,
   Integer,
   SceneEntity,
@@ -422,6 +423,13 @@ export interface ServiceAction {
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
         area_id?: Area | Area[] | "none";
+
+        /**
+         * The floor (or floors) to execute this service call on.
+         * https://www.home-assistant.io/docs/scripts/service-calls
+         */
+        floor_id?: Floor | Floor[] | "none";
+
       }
     | Template;
 
