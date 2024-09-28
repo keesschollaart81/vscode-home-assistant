@@ -7,8 +7,10 @@ import {
   Data,
   Deprecated,
   Entities,
+  Floor,
   IncludeList,
   Integer,
+  Label,
   SceneEntity,
   Template,
   TimePeriod,
@@ -362,10 +364,16 @@ export interface ServiceAction {
   continue_on_error?: boolean;
 
   /**
-   * The most important action is the action to call a service.
+   * The 'service' keyword is being replaced by 'action' keyword
+   * https://www.home-assistant.io/blog/2024/08/07/release-20248/#goodbye-service-calls-hello-actions-
+   */
+  service?: Deprecated;
+
+  /**
+   * The most important action is to call an action.
    * https://www.home-assistant.io/docs/scripts/service-calls/
    */
-  service?: string;
+  action?: string;
 
   /**
    * DEPRECATED as of Home Assistant 0.115.
@@ -416,6 +424,18 @@ export interface ServiceAction {
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
         area_id?: Area | Area[] | "none";
+
+        /**
+         * The floor (or floors) to execute this service call on.
+         * https://www.home-assistant.io/docs/scripts/service-calls
+         */
+        floor_id?: Floor | Floor[] | "none";
+
+        /**
+         * The labels (or labels) to execute this service call on.
+         * https://www.home-assistant.io/docs/scripts/service-calls
+         */
+        label_id?: Label | Label[] | "none";
       }
     | Template;
 

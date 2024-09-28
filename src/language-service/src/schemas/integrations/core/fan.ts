@@ -21,9 +21,3 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = TemplatePlatformSchema | OtherPlatform;
-
-export type SupportedFeature =
-  | "fan.FanEntityFeature.SET_SPEED"
-  | "fan.FanEntityFeature.OSCILLATE"
-  | "fan.FanEntityFeature.DIRECTION"
-  | "fan.FanEntityFeature.PRESET_MODE";

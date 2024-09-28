@@ -21,8 +21,3 @@ interface OtherPlatform extends PlatformSchema {
 }
 
 type Item = TemplatePlatformSchema | OtherPlatform;
-
-export type SupportedFeature =
-  | "weather.WeatherEntityFeature.FORECAST_DAILY"
-  | "weather.WeatherEntityFeature.FORECAST_HOURLY"
-  | "weather.WeatherEntityFeature.FORECAST_TWICE_DAILY";

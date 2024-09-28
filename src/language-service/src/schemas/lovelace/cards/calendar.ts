@@ -25,7 +25,7 @@ export interface Schema {
    * The view that will show first when the card is loaded onto the page.
    * https://www.home-assistant.io/lovelace/calendar/#initial_view
    */
-  initial_view?: "dayGridMonth" | "dayGridWeek" | "dayGridDay" | "list";
+  initial_view?: "dayGridMonth" | "dayGridWeek" | "dayGridDay" | "listWeek";
 
   /**
    * The card theme, which may be set to any theme from the themes.yaml file.
