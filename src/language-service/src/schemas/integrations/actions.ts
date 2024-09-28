@@ -10,6 +10,7 @@ import {
   Floor,
   IncludeList,
   Integer,
+  Label,
   SceneEntity,
   Template,
   TimePeriod,
@@ -429,6 +430,12 @@ export interface ServiceAction {
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
         floor_id?: Floor | Floor[] | "none";
+
+        /**
+         * The labels (or labels) to execute this service call on.
+         * https://www.home-assistant.io/docs/scripts/service-calls
+         */
+        label_id?: Label | Label[] | "none";
       }
     | Template;
 
