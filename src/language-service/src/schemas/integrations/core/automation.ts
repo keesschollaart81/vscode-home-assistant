@@ -112,13 +112,13 @@ export interface AutomationItem extends BaseItem {
    * Triggers describe events that should trigger the automation rule.
    * https://www.home-assistant.io/docs/automation/basics/
    */
-  trigger: Trigger | Trigger[] | IncludeList;
+  trigger?: Trigger | Trigger[] | IncludeList;
 
   /**
    * Triggers describe events that should trigger the automation rule.
    * https://www.home-assistant.io/docs/automation/basics/
    */
-  triggers: Trigger | Trigger[] | IncludeList;
+  triggers?: Trigger | Trigger[] | IncludeList;
 
   /**
    * Available in trigger templates with the difference that only limited templates can be used to pass a value to the trigger variable.
@@ -130,13 +130,13 @@ export interface AutomationItem extends BaseItem {
    * The action(s) which will be performed when a rule is triggered and all conditions are met. For example, it can turn a light on, set the temperature on your thermostat or activate a scene.
    * https://www.home-assistant.io/docs/automation/basics/
    */
-  action: Action | Action[] | IncludeList;
+  action?: Action | Action[] | IncludeList;
 
   /**
    * The action(s) which will be performed when a rule is triggered and all conditions are met. For example, it can turn a light on, set the temperature on your thermostat or activate a scene.
    * https://www.home-assistant.io/docs/automation/basics/
    */
-  actions: Action | Action[] | IncludeList;
+  actions?: Action | Action[] | IncludeList;
 }
 
 interface BlueprintItem extends BaseItem {
