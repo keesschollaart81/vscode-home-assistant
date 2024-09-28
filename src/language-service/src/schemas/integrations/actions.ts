@@ -429,7 +429,6 @@ export interface ServiceAction {
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
         floor_id?: Floor | Floor[] | "none";
-
       }
     | Template;
 
