@@ -480,7 +480,19 @@ export interface WeatherPlatformSchema extends PlatformSchema {
    * Defines templates for the daily forcast data.
    * https://www.home-assistant.io/integrations/weather.template#forecast_template
    */
-  forecast_template?: Template;
+  forecast_daily_template?: Template;
+
+  /**
+   * Defines templates for the twice daily forcast data.
+   * https://www.home-assistant.io/integrations/weather.template#forecast_template
+   */
+  forecast_twice_daily_template?: Template;
+
+  /**
+   * Defines templates for the hourly forcast data.
+   * https://www.home-assistant.io/integrations/weather.template#forecast_template
+   */
+  forecast_hourly_template?: Template;
 
   /**
    * Defines templates for the current humidity.
