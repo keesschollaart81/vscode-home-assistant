@@ -465,16 +465,34 @@ export interface WeatherPlatformSchema extends PlatformSchema {
   platform: "template";
 
   /**
+   * Defines a template for the current apparent temperature.
+   * https://www.home-assistant.io/integrations/weather.template#apparent_temperature_template
+   */
+  apparent_temperature_template?: Template;
+
+  /**
    * The attribution to be shown in the frontend.
    * https://www.home-assistant.io/integrations/weather.template#attribution_template
    */
   attribution_template?: Template;
 
   /**
+   * Defines templates for the current cloud coverage.
+   * https://www.home-assistant.io/integrations/weather.template#cloud_coverage_template
+   */
+  cloud_coverage_template?: Template;
+
+  /**
    * Defines templates for the current weather condition.
    * https://www.home-assistant.io/integrations/weather.template#condition_template
    */
   condition_template: Template;
+
+  /**
+   * Defines templates for the current dew point.
+   * https://www.home-assistant.io/integrations/weather.template#dew_point_template
+   */
+  dew_point_template?: Template;
 
   /**
    * Defines templates for the daily forcast data.
@@ -511,6 +529,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/weather.template#ozone_template
    */
   ozone_template?: Template;
+
+  /**
+   * The unit of measurement for the precipitation output.
+   * https://www.home-assistant.io/integrations/weather.template#precipitation_unit
+   */
+  precipitation_unit?: string;
 
   /**
    * Defines templates for the current air pressure.
@@ -559,6 +583,12 @@ export interface WeatherPlatformSchema extends PlatformSchema {
    * https://www.home-assistant.io/integrations/weather.template#wind_bearing_template
    */
   wind_bearing_template?: Template;
+
+  /**
+   * Defines templates for the current wind gust speed.
+   * https://www.home-assistant.io/integrations/weather.template#wind_gust_speed_template
+   */
+  wind_gust_speed_template?: Template;
 
   /**
    * Defines templates for the current wind speed.
