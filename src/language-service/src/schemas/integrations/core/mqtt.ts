@@ -1894,6 +1894,12 @@ export interface NumberItem extends BaseItem {
    * https://www.home-assistant.io/integrations/number.mqtt#unit_of_measurement
    */
   unit_of_measurement?: string;
+
+  /**
+   * Defines a template to extract the value.
+   * https://www.home-assistant.io/integrations/number.mqtt#value_template
+   */
+  value_template?: Template;
 }
 
 export interface SelectItem extends BaseItem {
