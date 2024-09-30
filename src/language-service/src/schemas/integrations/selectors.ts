@@ -493,6 +493,12 @@ export interface TextSelector {
     multiline?: boolean;
 
     /**
+     * llows adding list of text strings. If set to true, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
+     */
+    multiple?: boolean;
+
+    /**
      * Allows adding a prefix to the input field.
      * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
      */
