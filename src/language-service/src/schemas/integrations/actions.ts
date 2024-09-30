@@ -28,6 +28,7 @@ export type Action =
   | RepeatAction
   | SceneAction
   | ServiceAction
+  | SequenceAction
   | StopAction
   | WaitForTriggerAction
   | WaitTemplateAction
@@ -247,16 +248,7 @@ export interface ParallelAction {
    * The sequence of actions to run in parallel.
    * https://www.home-assistant.io/docs/scripts/#parallelizing-actions
    */
-  parallel:
-    | (
-        | {
-            sequence: Action | Action[] | IncludeList;
-          }
-        | Action
-        | Action[]
-        | IncludeList
-      )[]
-    | IncludeList;
+  parallel: (Action | Action[] | IncludeList)[] | IncludeList;
 }
 
 export interface RepeatAction {
@@ -342,6 +334,31 @@ export interface SceneAction {
    * Additional data for merely for use with the frontend. Has no functional effect.
    */
   metadata?: any;
+}
+
+export interface SequenceAction {
+  /**
+   * Alias for the sequence action.
+   */
+  alias?: string;
+
+  /**
+   * Every individual action can be disabled, without removing it.
+   * https://www.home-assistant.io/docs/scripts/#disabling-an-action
+   */
+  enabled?: boolean;
+
+  /**
+   * Set it to true if you’d like to continue the action sequence, regardless of whether that action encounters an error.
+   * https://www.home-assistant.io/docs/scripts/#continuing-on-error
+   */
+  continue_on_error?: boolean;
+
+  /**
+   * The sequence of actions to run in serial
+   * https://www.home-assistant.io/docs/scripts/#grouping-actions
+   */
+  sequence: Action | Action[] | IncludeList;
 }
 
 export interface ServiceAction {
