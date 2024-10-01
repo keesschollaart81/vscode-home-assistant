@@ -1530,7 +1530,7 @@ export type TimeZone =
   | "Zulu";
 
 export type UnitSystem = "metric" | "imperial";
-export type TemperatureUnit = "C" | "F";
+export type TemperatureUnit = "°C" | "°F" | "K";
 export type PressureUnit =
   | "Pa"
   | "hPa"
