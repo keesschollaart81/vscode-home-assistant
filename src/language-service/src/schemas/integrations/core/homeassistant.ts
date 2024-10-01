@@ -7,7 +7,6 @@ import {
   IncludeNamed,
   Integer,
   LanguageTags,
-  TemperatureUnit,
   TimeZone,
   UnitSystem,
 } from "../../types";
@@ -144,7 +143,7 @@ export interface Schema {
    * "C" for Celsius, "F" for Fahrenheit.
    * https://www.home-assistant.io/docs/configuration/basic/#temperature_unit
    */
-  temperature_unit?: TemperatureUnit;
+  temperature_unit?: "C" | "F";
 }
 
 interface CoreCustomize {
