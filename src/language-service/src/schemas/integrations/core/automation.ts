@@ -142,7 +142,7 @@ export interface AutomationItem extends BaseItem {
 interface BlueprintItem extends BaseItem {
   use_blueprint: {
     path: string;
-    input: { [key: string]: any };
+    input?: { [key: string]: any };
   };
 
   /**
