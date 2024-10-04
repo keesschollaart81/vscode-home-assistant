@@ -19,7 +19,10 @@ import {
   LanguageSettings,
 } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
+import { AreaCompletionContribution } from "./completionHelpers/areas";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
+import { FloorCompletionContribution } from "./completionHelpers/floors";
+import { LabelCompletionContribution } from "./completionHelpers/labels";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DomainCompletionContribution } from "./completionHelpers/domains";
@@ -301,7 +304,10 @@ export class HomeAssistantLanguageService {
     // we need to add entity_id's to the completion list
 
     const properties: { [provider: string]: string[] } = {};
+    properties.areas = AreaCompletionContribution.propertyMatches;
     properties.entities = EntityIdCompletionContribution.propertyMatches;
+    properties.floors = FloorCompletionContribution.propertyMatches;
+    properties.labels = LabelCompletionContribution.propertyMatches;
     properties.services = ServicesCompletionContribution.propertyMatches;
     properties.domains = DomainCompletionContribution.propertyMatches;
 
@@ -312,6 +318,12 @@ export class HomeAssistantLanguageService {
     );
     let additionalCompletion: CompletionItem[] = [];
     switch (additionalCompletionProvider) {
+      case "areas":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isArea)) {
+          additionalCompletion = await this.haConnection.getAreaCompletions();
+        }
+        break;
       case "entities":
         // sometimes the entities are already added, do not add them twice
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -324,6 +336,18 @@ export class HomeAssistantLanguageService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         if (!currentCompletions.items.some((x) => x.data && x.data.isDomain)) {
           additionalCompletion = await this.haConnection.getDomainCompletions();
+        }
+        break;
+      case "floors":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isFloor)) {
+          additionalCompletion = await this.haConnection.getFloorCompletions();
+        }
+        break;
+      case "labels":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isLabel)) {
+          additionalCompletion = await this.haConnection.getLabelCompletions();
         }
         break;
       case "services":

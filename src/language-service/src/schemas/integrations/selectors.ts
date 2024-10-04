@@ -7,8 +7,8 @@ import {
   DeviceClasses,
   Entity,
   PositiveInteger,
-  Deprecated,
   SupportedFeature,
+  LegacySyntax,
 } from "../types";
 
 export type Selector =
@@ -207,22 +207,19 @@ export interface DeviceSelector {
     filter?: DeviceSelectorFilter | DeviceSelectorFilter[];
 
     /**
-     * DEPRECATED.
      * You can use filter parameter to filter devices".
      */
-    integration?: Deprecated;
+    integration?: LegacySyntax;
 
     /**
-     * DEPRECATED.
      * You can use filter parameter to filter devices".
      */
-    manufacturer?: Deprecated;
+    manufacturer?: LegacySyntax;
 
     /**
-     * DEPRECATED.
      * You can use filter parameter to filter devices".
      */
-    model?: Deprecated;
+    model?: LegacySyntax;
 
     /**
      * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
@@ -288,22 +285,19 @@ export interface EntitySelector {
     include_entities?: Entity[];
 
     /**
-     * DEPRECATED.
      * You can use filter parameter to filter entities".
      */
-    integration?: Deprecated;
+    integration?: LegacySyntax;
 
     /**
-     * DEPRECATED.
      * You can use filter parameter to filter entities".
      */
-    domain?: Deprecated;
+    domain?: LegacySyntax;
 
     /**
-     * DEPRECATED.
      * You can use filter parameter to filter entities".
      */
-    device_class?: Deprecated;
+    device_class?: LegacySyntax;
 
     /**
      * When filter options are provided, the entities are limited by entities that at least match the given conditions.

@@ -20,6 +20,12 @@ export type Data = {
  */
 export type Deprecated = any | any[];
 
+/**
+ * @TJS-pattern LEGACY_SYNTAX^
+ * @items.pattern LEGACY_SYNTAX^
+ */
+export type LegacySyntax = any | any[];
+
 export type DeviceClasses =
   | DeviceClassesBinarySensor
   | DeviceClassesCover

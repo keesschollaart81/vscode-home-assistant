@@ -2,7 +2,7 @@
   "name": "vscode-home-assistant",
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
-  "version": "1.41.3",
+  "version": "1.42.0",
   "preview": false,
   "engines": {
     "vscode": "^1.45.1"
@@ -426,7 +426,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@types/mocha": "10.0.6",
+    "@types/mocha": "10.0.8",
     "@types/node": "20.4.8",
     "@types/request": "2.48.12",
     "@types/vscode": "1.45.1",
