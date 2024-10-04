@@ -19,6 +19,7 @@ import {
   LanguageSettings,
 } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
+import { AreaCompletionContribution } from "./completionHelpers/areas";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
@@ -301,6 +302,7 @@ export class HomeAssistantLanguageService {
     // we need to add entity_id's to the completion list
 
     const properties: { [provider: string]: string[] } = {};
+    properties.areas = AreaCompletionContribution.propertyMatches;
     properties.entities = EntityIdCompletionContribution.propertyMatches;
     properties.services = ServicesCompletionContribution.propertyMatches;
     properties.domains = DomainCompletionContribution.propertyMatches;
@@ -312,6 +314,12 @@ export class HomeAssistantLanguageService {
     );
     let additionalCompletion: CompletionItem[] = [];
     switch (additionalCompletionProvider) {
+      case "areas":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isArea)) {
+          additionalCompletion = await this.haConnection.getAreaCompletions();
+        }
+        break;
       case "entities":
         // sometimes the entities are already added, do not add them twice
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
