@@ -36,7 +36,7 @@ export type HassFloor = {
 };
 
 export type HassFloors = {
-  [area_id: string]: HassArea;
+  [floor_id: string]: HassFloor;
 };
 
 // Normal require(), and cast to the static type
@@ -227,7 +227,7 @@ export class HaConnection implements IHaConnection {
           return reject();
         }
         this.connection
-          ?.sendMessagePromise<HassArea[]>({
+          ?.sendMessagePromise<HassFloor[]>({
             type: "config/floor_registry/list",
           })
           .then((floors) => {
