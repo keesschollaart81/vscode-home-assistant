@@ -18,6 +18,7 @@ import {
   NumberEntity,
   SensorEntity,
   CalendarEntity,
+  LegacySyntax,
 } from "../types";
 
 export type Trigger =
@@ -74,7 +75,12 @@ interface CalendarTrigger {
    * Calendar trigger fires when a Calendar event starts or ends.
    * https://www.home-assistant.io/docs/automation/trigger/#calendar-trigger
    */
-  platform: "calendar";
+  trigger?: "calendar";
+
+  /**
+   * Legacy syntax, use "trigger: calendar" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -126,7 +132,12 @@ interface ConversationTrigger {
    * With the sentence trigger, you can match a sentence from a voice assistant.
    * https://www.home-assistant.io/docs/automation/trigger/#sentence-trigger
    */
-  platform: "conversation";
+  trigger?: "conversation";
+
+  /**
+   * Legacy syntax, use "trigger: conversation" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -170,7 +181,12 @@ interface DeviceTrigger {
    * In contrast to state triggers, device triggers are tied to a device and not necessarily an entity. To use a device trigger, set up an automation through the browser frontend.
    * https://www.home-assistant.io/docs/automation/trigger/#device-triggers
    */
-  platform: "device";
+  trigger?: "device";
+
+  /**
+   * Legacy syntax, use "trigger: device" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -216,7 +232,12 @@ interface EventTrigger {
    * Fires when an event is being received. Events are the raw building blocks of Home Assistant. You can match events on just the event name or also require specific event data to be present.
    * https://www.home-assistant.io/docs/automation/trigger/#event-trigger
    */
-  platform: "event";
+  trigger?: "event";
+
+  /**
+   * Legacy syntax, use "trigger: event" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -268,7 +289,12 @@ interface GeolocationTrigger {
    * Geolocation trigger fires when an entity is appearing in or disappearing from a zone.
    * https://www.home-assistant.io/docs/automation/trigger/#geolocation-trigger
    */
-  platform: "geo_location";
+  trigger?: "geo_location";
+
+  /**
+   * Legacy syntax, use "trigger: geo_location" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -320,7 +346,12 @@ interface HomeAssistantTrigger {
    * This trigger fires when Home Assistant has started up or going to shut down.
    * https://www.home-assistant.io/docs/automation/trigger/#home-assistant-trigger
    */
-  platform: "homeassistant";
+  trigger?: "homeassistant";
+
+  /**
+   * Legacy syntax, use "trigger: homeassistant" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -360,7 +391,12 @@ interface MqttTrigger {
    * Fires when a specific message is received on given MQTT topic
    * https://www.home-assistant.io/docs/automation/trigger/#mqtt-trigger
    */
-  platform: "mqtt";
+  trigger?: "mqtt";
+
+  /**
+   * Legacy syntax, use "trigger: mqtt" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -429,7 +465,12 @@ interface NumericStateTrigger {
    * Fires when numeric value of an entity’s state crosses a given threshold.
    * https://www.home-assistant.io/docs/automation/trigger/#numeric-state-trigger
    */
-  platform: "numeric_state";
+  trigger?: "numeric_state";
+
+  /**
+   * Legacy syntax, use "trigger: numeric_state" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -499,7 +540,12 @@ interface PersistentNotificationTrigger {
    * Persistent notification triggers are fired when a persistent_notification is added or removed that matches the configuration options.
    * https://www.home-assistant.io/docs/automation/trigger/#persistent-notification-trigger
    */
-  platform: "persistent_notification";
+  trigger?: "persistent_notification";
+
+  /**
+   * Legacy syntax, use "trigger: persistent_notification" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -530,7 +576,12 @@ interface StateTrigger {
    * This trigger fires when the state of any of given entities changes.
    * https://www.home-assistant.io/docs/automation/trigger/#state-trigger
    */
-  platform: "state";
+  trigger?: "state";
+
+  /**
+   * Legacy syntax, use "trigger: state" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -606,7 +657,12 @@ interface SunTrigger {
    * This trigger fires when the sun is setting or rising.
    * https://www.home-assistant.io/docs/automation/trigger/#sun-trigger
    */
-  platform: "sun";
+  trigger?: "sun";
+
+  /**
+   * Legacy syntax, use "trigger: device" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -652,7 +708,12 @@ interface TemplateTrigger {
    * Template triggers work by evaluating a template on every state change for all of the recognized entities. The trigger will fire if the state change caused the template to render ‘true’.
    * https://www.home-assistant.io/docs/automation/trigger/#template-trigger
    */
-  platform: "template";
+  trigger?: "template";
+
+  /**
+   * Legacy syntax, use "trigger: template" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -698,7 +759,12 @@ interface TimeTrigger {
    * The time trigger is configured to fire once at a specific point in time each day.
    * https://www.home-assistant.io/docs/automation/trigger/#time-trigger
    */
-  platform: "time";
+  trigger?: "time";
+
+  /**
+   * Legacy syntax, use "trigger: time" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -741,7 +807,12 @@ interface TimePatternTrigger {
    * With the time pattern trigger, you can match if the hour, minute or second of the current time matches a specific value.
    * https://www.home-assistant.io/docs/automation/trigger/#time-pattern-trigger
    */
-  platform: "time_pattern";
+  trigger?: "time_pattern";
+
+  /**
+   * Legacy syntax, use "trigger: time_pattern" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -796,7 +867,12 @@ interface WebhookTrigger {
    * Webhook trigger fires when a web request is made to the webhook endpoint.
    * https://www.home-assistant.io/docs/automation/trigger/#webhook-trigger
    */
-  platform: "webhook";
+  trigger?: "webhook";
+
+  /**
+   * Legacy syntax, use "trigger: webhook" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -848,7 +924,12 @@ interface ZoneTrigger {
    * Zone trigger fires when an entity is entering or leaving the zone. For zone automation to work, you need to have setup a device tracker platform that supports reporting GPS coordinates.
    * https://www.home-assistant.io/docs/automation/trigger/#zone-trigger
    */
-  platform: "zone";
+  trigger?: "zone";
+
+  /**
+   * Legacy syntax, use "trigger: zone" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.
@@ -903,7 +984,12 @@ interface TagTrigger {
    * This trigger fired when a tag is scanned.
    * https://www.home-assistant.io/docs/automation/trigger#tag-trigger
    */
-  platform: "tag";
+  trigger?: "tag";
+
+  /**
+   * Legacy syntax, use "trigger: tag" instead.
+   */
+  platform?: LegacySyntax;
 
   /**
    * Every individual trigger in an automation can be disabled, without removing it.

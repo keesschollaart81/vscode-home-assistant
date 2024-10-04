@@ -5,12 +5,12 @@
 import {
   Area,
   Data,
-  Deprecated,
   Entities,
   Floor,
   IncludeList,
   Integer,
   Label,
+  LegacySyntax,
   SceneEntity,
   Template,
   TimePeriod,
@@ -182,11 +182,10 @@ export interface EventAction {
   event_data?: Data;
 
   /**
-   * DEPRECATED as of Home Assistant 0.115.
    * You can use templates directly in the event_data parameter, replace "event_data_template" with just "event_data".
    * https://www.home-assistant.io/docs/scripts/#fire-an-event
    */
-  event_data_template?: Deprecated;
+  event_data_template?: LegacySyntax;
 }
 
 export interface IfAction {
@@ -381,10 +380,9 @@ export interface ServiceAction {
   continue_on_error?: boolean;
 
   /**
-   * The 'service' keyword is being replaced by 'action' keyword
-   * https://www.home-assistant.io/blog/2024/08/07/release-20248/#goodbye-service-calls-hello-actions-
+   * Legacy syntax, use "action" instead.
    */
-  service?: Deprecated;
+  service?: LegacySyntax;
 
   /**
    * The most important action is to call an action.
@@ -393,11 +391,10 @@ export interface ServiceAction {
   action?: string;
 
   /**
-   * DEPRECATED as of Home Assistant 0.115.
    * You can use templates directly in the service parameter, replace "service_template" with just "service".
    * https://www.home-assistant.io/docs/scripts/service-calls/#use-templates-to-decide-which-service-to-call
    */
-  service_template?: Deprecated;
+  service_template?: LegacySyntax;
 
   /**
    * Specify other parameters beside the entity to target. For example, the light turn on service allows specifying the brightness.
@@ -406,11 +403,10 @@ export interface ServiceAction {
   data?: Data | Template;
 
   /**
-   * DEPRECATED as of Home Assistant 0.115.
    * You can use templates directly in the data parameter, replace "data_template" with just "data".
    * https://www.home-assistant.io/docs/scripts/service-calls/#use-templates-to-determine-the-attributes
    */
-  data_template?: Deprecated;
+  data_template?: LegacySyntax;
 
   /**
    * The entity (or entities) to execute this service call on.
