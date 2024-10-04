@@ -21,6 +21,7 @@ import {
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { AreaCompletionContribution } from "./completionHelpers/areas";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
+import { FloorCompletionContribution } from "./completionHelpers/floors";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DomainCompletionContribution } from "./completionHelpers/domains";
@@ -304,6 +305,7 @@ export class HomeAssistantLanguageService {
     const properties: { [provider: string]: string[] } = {};
     properties.areas = AreaCompletionContribution.propertyMatches;
     properties.entities = EntityIdCompletionContribution.propertyMatches;
+    properties.floors = FloorCompletionContribution.propertyMatches;
     properties.services = ServicesCompletionContribution.propertyMatches;
     properties.domains = DomainCompletionContribution.propertyMatches;
 
@@ -332,6 +334,12 @@ export class HomeAssistantLanguageService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         if (!currentCompletions.items.some((x) => x.data && x.data.isDomain)) {
           additionalCompletion = await this.haConnection.getDomainCompletions();
+        }
+        break;
+      case "floors":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isFloor)) {
+          additionalCompletion = await this.haConnection.getFloorCompletions();
         }
         break;
       case "services":
