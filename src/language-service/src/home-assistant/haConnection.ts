@@ -39,6 +39,18 @@ export type HassFloors = {
   [floor_id: string]: HassFloor;
 };
 
+export type HassLabel = {
+  label_id: string;
+  name: string;
+  icon: string | null;
+  color: string | null;
+  description: string | null;
+};
+
+export type HassLabels = {
+  [label_id: string]: HassLabel;
+};
+
 // Normal require(), and cast to the static type
 const ha =
   // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
@@ -51,6 +63,7 @@ export interface IHaConnection {
   getDomainCompletions(): Promise<CompletionItem[]>;
   getEntityCompletions(): Promise<CompletionItem[]>;
   getFloorCompletions(): Promise<CompletionItem[]>;
+  getLabelCompletions(): Promise<CompletionItem[]>;
   getServiceCompletions(): Promise<CompletionItem[]>;
 }
 
@@ -62,6 +75,8 @@ export class HaConnection implements IHaConnection {
   private hassEntities!: Promise<HassEntities>;
 
   private hassFloors!: Promise<HassFloors>;
+
+  private hassLabels!: Promise<HassLabels>;
 
   private hassServices!: Promise<HassServices>;
 
@@ -292,6 +307,63 @@ export class HaConnection implements IHaConnection {
     );
     return this.hassEntities;
   };
+
+  private getHassLabels = async (): Promise<HassLabels> => {
+    if (this.hassLabels !== undefined) {
+      return this.hassLabels;
+    }
+
+    await this.createConnection();
+
+    this.hassLabels = new Promise<HassLabels>(
+      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      async (resolve, reject) => {
+        if (!this.connection) {
+          return reject();
+        }
+        this.connection
+          ?.sendMessagePromise<HassLabel[]>({
+            type: "config/label_registry/list",
+          })
+          .then((labels) => {
+            console.log(`Got ${labels.length} labels from Home Assistant`);
+            const repacked_labels: HassLabels = {};
+            labels.forEach((label) => {
+              repacked_labels[label.label_id] = label;
+            });
+            return resolve(repacked_labels);
+          });
+      },
+    );
+    return this.hassLabels;
+  };
+
+  public async getLabelCompletions(): Promise<CompletionItem[]> {
+    const labels = await this.getHassLabels();
+
+    if (!labels) {
+      return [];
+    }
+
+    const completions: CompletionItem[] = [];
+
+    for (const [, value] of Object.entries(labels)) {
+      const completionItem = CompletionItem.create(`${value.label_id}`);
+      completionItem.detail = value.name;
+      completionItem.kind = CompletionItemKind.Variable;
+      completionItem.filterText = `${value.label_id} ${value.name}`;
+      completionItem.insertText = value.label_id;
+      completionItem.data = {};
+      completionItem.data.isLabel = true;
+
+      completionItem.documentation = <MarkupContent>{
+        kind: "markdown",
+        value: `**${value.label_id}** \r\n`,
+      };
+      completions.push(completionItem);
+    }
+    return completions;
+  }
 
   public async getEntityCompletions(): Promise<CompletionItem[]> {
     const entities = await this.getHassEntities();

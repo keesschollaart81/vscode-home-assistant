@@ -22,6 +22,7 @@ import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { AreaCompletionContribution } from "./completionHelpers/areas";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { FloorCompletionContribution } from "./completionHelpers/floors";
+import { LabelCompletionContribution } from "./completionHelpers/labels";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DomainCompletionContribution } from "./completionHelpers/domains";
@@ -306,6 +307,7 @@ export class HomeAssistantLanguageService {
     properties.areas = AreaCompletionContribution.propertyMatches;
     properties.entities = EntityIdCompletionContribution.propertyMatches;
     properties.floors = FloorCompletionContribution.propertyMatches;
+    properties.labels = LabelCompletionContribution.propertyMatches;
     properties.services = ServicesCompletionContribution.propertyMatches;
     properties.domains = DomainCompletionContribution.propertyMatches;
 
@@ -340,6 +342,12 @@ export class HomeAssistantLanguageService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         if (!currentCompletions.items.some((x) => x.data && x.data.isFloor)) {
           additionalCompletion = await this.haConnection.getFloorCompletions();
+        }
+        break;
+      case "labels":
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        if (!currentCompletions.items.some((x) => x.data && x.data.isLabel)) {
+          additionalCompletion = await this.haConnection.getLabelCompletions();
         }
         break;
       case "services":
