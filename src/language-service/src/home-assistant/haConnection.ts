@@ -4,14 +4,28 @@ import {
   MarkupContent,
 } from "vscode-languageserver-protocol";
 import axios, { Method } from "axios";
-import type {
-  Connection,
-  HassEntities,
-  HassServices,
-  AuthData,
+import {
+  type Connection,
+  type HassEntities,
+  type HassServices,
+  type AuthData,
 } from "home-assistant-js-websocket";
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
+
+export type HassArea = {
+  area_id: string;
+  floor_id: string | null;
+  name: string;
+  picture: string | null;
+  icon: string | null;
+  labels: string[];
+  aliases: string[];
+};
+
+export type HassAreas = {
+  [area_id: string]: HassArea;
+};
 
 // Normal require(), and cast to the static type
 const ha =
@@ -21,6 +35,7 @@ const ha =
 export interface IHaConnection {
   tryConnect(): Promise<void>;
   notifyConfigUpdate(conf: any): Promise<void>;
+  getAreaCompletions(): Promise<CompletionItem[]>;
   getDomainCompletions(): Promise<CompletionItem[]>;
   getEntityCompletions(): Promise<CompletionItem[]>;
   getServiceCompletions(): Promise<CompletionItem[]>;
@@ -28,6 +43,8 @@ export interface IHaConnection {
 
 export class HaConnection implements IHaConnection {
   private connection: Connection | undefined;
+
+  private hassAreas!: Promise<HassAreas>;
 
   private hassEntities!: Promise<HassEntities>;
 
@@ -116,6 +133,70 @@ export class HaConnection implements IHaConnection {
       // so be it, error is now displayed in logs
     }
   };
+
+  private getHassAreas = async (): Promise<HassAreas> => {
+    if (this.hassAreas !== undefined) {
+      return this.hassAreas;
+    }
+
+    await this.createConnection();
+
+    this.hassAreas = new Promise<HassAreas>(
+      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      async (resolve, reject) => {
+        if (!this.connection) {
+          return reject();
+        }
+        this.connection
+          ?.sendMessagePromise<HassArea[]>({
+            type: "config/area_registry/list",
+          })
+          .then((areas) => {
+            console.log(`Got ${areas.length} areas from Home Assistant`);
+            const repacked_areas: HassAreas = {};
+            areas.forEach((area) => {
+              repacked_areas[area.area_id] = area;
+            });
+            return resolve(repacked_areas);
+          });
+      },
+    );
+    return this.hassAreas;
+  };
+
+  public async getAreaCompletions(): Promise<CompletionItem[]> {
+    const areas = await this.getHassAreas();
+
+    if (!areas) {
+      return [];
+    }
+
+    const completions: CompletionItem[] = [];
+
+    for (const [, value] of Object.entries(areas)) {
+      const completionItem = CompletionItem.create(`${value.area_id}`);
+      completionItem.detail = value.name;
+      completionItem.kind = CompletionItemKind.Variable;
+      completionItem.filterText = `${value.area_id} ${value.name}`;
+      completionItem.insertText = value.area_id;
+      completionItem.data = {};
+      completionItem.data.isArea = true;
+
+      completionItem.documentation = <MarkupContent>{
+        kind: "markdown",
+        value: `**${value.area_id}** \r\n \r\n`,
+      };
+
+      let floor = value.floor_id;
+      if (!floor) {
+        floor = "No floor assigned";
+      }
+      completionItem.documentation.value += `Floor: ${floor} \r\n \r\n`;
+
+      completions.push(completionItem);
+    }
+    return completions;
+  }
 
   private getHassEntities = async (): Promise<HassEntities> => {
     if (this.hassEntities !== undefined) {
