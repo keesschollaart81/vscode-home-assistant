@@ -27,6 +27,18 @@ export type HassAreas = {
   [area_id: string]: HassArea;
 };
 
+export type HassFloor = {
+  floor_id: string;
+  name: string;
+  level: number | null;
+  icon: string | null;
+  aliases: string[];
+};
+
+export type HassFloors = {
+  [floor_id: string]: HassFloor;
+};
+
 // Normal require(), and cast to the static type
 const ha =
   // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
@@ -38,6 +50,7 @@ export interface IHaConnection {
   getAreaCompletions(): Promise<CompletionItem[]>;
   getDomainCompletions(): Promise<CompletionItem[]>;
   getEntityCompletions(): Promise<CompletionItem[]>;
+  getFloorCompletions(): Promise<CompletionItem[]>;
   getServiceCompletions(): Promise<CompletionItem[]>;
 }
 
@@ -47,6 +60,8 @@ export class HaConnection implements IHaConnection {
   private hassAreas!: Promise<HassAreas>;
 
   private hassEntities!: Promise<HassEntities>;
+
+  private hassFloors!: Promise<HassFloors>;
 
   private hassServices!: Promise<HassServices>;
 
@@ -193,6 +208,63 @@ export class HaConnection implements IHaConnection {
       }
       completionItem.documentation.value += `Floor: ${floor} \r\n \r\n`;
 
+      completions.push(completionItem);
+    }
+    return completions;
+  }
+
+  private getHassFloors = async (): Promise<HassFloors> => {
+    if (this.hassFloors !== undefined) {
+      return this.hassFloors;
+    }
+
+    await this.createConnection();
+
+    this.hassFloors = new Promise<HassFloors>(
+      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      async (resolve, reject) => {
+        if (!this.connection) {
+          return reject();
+        }
+        this.connection
+          ?.sendMessagePromise<HassFloor[]>({
+            type: "config/floor_registry/list",
+          })
+          .then((floors) => {
+            console.log(`Got ${floors.length} floors from Home Assistant`);
+            const repacked_floors: HassFloors = {};
+            floors.forEach((floor) => {
+              repacked_floors[floor.floor_id] = floor;
+            });
+            return resolve(repacked_floors);
+          });
+      },
+    );
+    return this.hassFloors;
+  };
+
+  public async getFloorCompletions(): Promise<CompletionItem[]> {
+    const floors = await this.getHassFloors();
+
+    if (!floors) {
+      return [];
+    }
+
+    const completions: CompletionItem[] = [];
+
+    for (const [, value] of Object.entries(floors)) {
+      const completionItem = CompletionItem.create(`${value.floor_id}`);
+      completionItem.detail = value.name;
+      completionItem.kind = CompletionItemKind.Variable;
+      completionItem.filterText = `${value.floor_id} ${value.name}`;
+      completionItem.insertText = value.floor_id;
+      completionItem.data = {};
+      completionItem.data.isFloor = true;
+
+      completionItem.documentation = <MarkupContent>{
+        kind: "markdown",
+        value: `**${value.floor_id}** \r\n`,
+      };
       completions.push(completionItem);
     }
     return completions;
