@@ -316,6 +316,12 @@ export interface DurationSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
      */
     enable_day?: boolean;
+
+    /**
+     * When true, the duration selector will allow selecting milliseconds.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
+     */
+    enable_millisecond?: boolean;
   } | null;
 }
 
