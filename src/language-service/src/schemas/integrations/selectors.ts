@@ -34,6 +34,7 @@ export type Selector =
   | FloorSelector
   | IconSelector
   | LabelSelector
+  | LanguageSelector
   | LocationSelector
   | MediaSelector
   | NumberSelector
@@ -443,9 +444,35 @@ export interface LabelSelector {
   label: {
     /**
      * Allows selecting multiple labels. If set to true, the resulting value of this selector will be a list instead of a single string value
-     *https://www.home-assistant.io/docs/blueprint/selectors/#label-selector
+     * https://www.home-assistant.io/docs/blueprint/selectors/#label-selector
      */
     multiple?: boolean;
+  } | null;
+}
+
+export interface LanguageSelector {
+  /**
+   * The language selector allows a user to pick a language from a list of languages.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#language-selector
+   */
+  language: {
+    /**
+     * A list of languages to pick from, this should be RFC 5646 languages codes.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#language-selector
+     */
+    languages?: string[];
+
+    /**
+     * Should the name of the languages be shown in the language of the user, or in the language itself.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#language-selector
+     */
+    native_name?: boolean;
+
+    /**
+     * Should the options be sorted by name, if set to true, the order of the provided languages is kept.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#language-selector
+     */
+    no_sort?: boolean;
   } | null;
 }
 
