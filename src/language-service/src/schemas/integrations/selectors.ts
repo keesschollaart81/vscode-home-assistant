@@ -25,6 +25,7 @@ export type Selector =
   | ConfigEntrySelector
   | ConstantSelector
   | ConversationAgentSelector
+  | CountrySelector
   | DateSelector
   | DateTimeSelector
   | DeviceSelector
@@ -203,6 +204,26 @@ export interface ConversationAgentSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#conversation-agent-selector
      */
     language?: string;
+  } | null;
+}
+
+export interface CountrySelector {
+  /**
+   * The country selector allows a user to pick a country from a list of countries.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#country-selector
+   */
+  country: {
+    /**
+     * A list of countries to pick from, this should be ISO 3166 country codes.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#country-selector
+     */
+    countries?: string[];
+
+    /**
+     * Should the options be sorted by name, if set to true, the order of the provided countries is kept.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#country-selector
+     */
+    no_sort?: boolean;
   } | null;
 }
 
