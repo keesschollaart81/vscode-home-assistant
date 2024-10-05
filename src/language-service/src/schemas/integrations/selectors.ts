@@ -16,6 +16,7 @@ export type Selector =
   | AddonSelector
   | AreaSelector
   | AttributeSelector
+  | AssistPipelineSelectors
   | BooleanSelector
   | ColorRGBSelector
   | ColorTempSelector
@@ -78,6 +79,14 @@ export interface AreaSelector {
      */
     multiple?: boolean;
   } | null;
+}
+
+export interface AssistPipelineSelectors {
+  /**
+   * The assist pipeline selector shows all available assist pipelines (assistants) of which one can be selected.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#assist-pipeline-selector
+   */
+  assist_pipeline: null | Record<string, never>;
 }
 
 export interface AttributeSelector {
