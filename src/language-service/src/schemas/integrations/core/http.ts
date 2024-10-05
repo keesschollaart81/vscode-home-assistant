@@ -86,4 +86,10 @@ export interface Schema {
    * https://www.home-assistant.io/integrations/http#use_x_forwarded_for
    */
   use_x_forwarded_for?: boolean;
+
+  /**
+   * Controls the `X-Frame-Options` header to help prevent clickjacking.
+   * https://www.home-assistant.io/integrations/http#use_x_frame_options
+   */
+  use_x_frame_options?: boolean;
 }

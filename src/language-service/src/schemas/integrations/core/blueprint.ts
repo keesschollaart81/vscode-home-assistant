@@ -62,7 +62,7 @@ interface Blueprint {
    * https://www.home-assistant.io/docs/blueprint/schema/#input
    */
   input?: {
-    [key: string]: BlueprintInputSchema;
+    [key: string]: BlueprintInputSchema | BlueprintInputSectionSchema;
   };
 
   /**
@@ -101,4 +101,38 @@ interface BlueprintInputSchema {
    * https://www.home-assistant.io/docs/blueprint/schema/#default
    */
   selector?: Selector;
+}
+
+interface BlueprintInputSectionSchema {
+  /**
+   * A name for the section. If omitted the key of the section is used.
+   * https://www.home-assistant.io/docs/blueprint/schema/#name
+   */
+  name?: string;
+
+  /**
+   * An optional description of this section, which will be displayed at the top of the section. The description can include Markdown.
+   * https://www.home-assistant.io/docs/blueprint/schema/#description
+   */
+  description?: string;
+
+  /**
+   * An icon to display next to the name of the section.
+   * https://www.home-assistant.io/docs/blueprint/schema/#icon
+   */
+  icon?: string;
+
+  /**
+   * If true, the section will be collapsed by default. Useful for optional or less important inputs. All collapsed inputs must also have a defined default before they can be hidden.
+   * https://www.home-assistant.io/docs/blueprint/schema/#collapsed
+   */
+  collapsed?: boolean;
+
+  /**
+   * A dictionary of defined user inputs within this section.
+   * https://www.home-assistant.io/docs/blueprint/schema/#input
+   */
+  input: {
+    [key: string]: BlueprintInputSchema;
+  };
 }

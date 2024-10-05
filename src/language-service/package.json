@@ -1,6 +1,6 @@
 {
   "name": "home-assistant-language-service",
-  "version": "1.42.0",
+  "version": "1.43.0",
   "description": "Home Assistant Language Service",
   "source": "src/haLanguageService.ts",
   "main": "dist/haLanguageService.js",

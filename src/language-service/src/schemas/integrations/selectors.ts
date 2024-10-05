@@ -15,28 +15,38 @@ export type Selector =
   | ActionSelector
   | AddonSelector
   | AreaSelector
+  | AssistPipelineSelector
   | AttributeSelector
+  | BackupLocationSelector
   | BooleanSelector
   | ColorRGBSelector
   | ColorTempSelector
   | ConditionSelector
   | ConfigEntrySelector
+  | ConstantSelector
+  | ConversationAgentSelector
+  | CountrySelector
   | DateSelector
   | DateTimeSelector
   | DeviceSelector
   | DurationSelector
   | EntitySelector
+  | FloorSelector
   | IconSelector
+  | LabelSelector
+  | LanguageSelector
   | LocationSelector
   | MediaSelector
   | NumberSelector
   | ObjectSelector
+  | QRCodeSelector
   | SelectSelector
   | TargetSelector
   | TemplateSelector
   | TextSelector
   | ThemeSelector
-  | TimeSelector;
+  | TimeSelector
+  | TriggerSelector;
 
 export interface ActionSelector {
   /**
@@ -80,6 +90,14 @@ export interface AreaSelector {
   } | null;
 }
 
+export interface AssistPipelineSelector {
+  /**
+   * The assist pipeline selector shows all available assist pipelines (assistants) of which one can be selected.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#assist-pipeline-selector
+   */
+  assist_pipeline: null | Record<string, never>;
+}
+
 export interface AttributeSelector {
   /**
    * The attributes selector shows a list of state attribites from a provided entity of which one can be selected.
@@ -92,6 +110,14 @@ export interface AttributeSelector {
      */
     entity_id: Entity;
   };
+}
+
+export interface BackupLocationSelector {
+  /**
+   * The backup location selector shows a list of places a backup could go, depending on what you have configured in storage.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#backup-location-selector
+   */
+  backup_location: null | Record<string, never>;
 }
 
 export interface BooleanSelector {
@@ -149,6 +175,60 @@ export interface ConfigEntrySelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#config-entry-selector
      */
     integration?: Domain;
+  } | null;
+}
+
+export interface ConstantSelector {
+  /**
+   * The constant selector shows a toggle that allows the user to enable the selected option. This is similar to the boolean selector, the difference is that the constant selector has no value when it’s not enabled.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
+   */
+  constant: {
+    /**
+     * The label that is show in the UI for this constant.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
+     */
+    label: string;
+
+    /**
+     * Value that is returned when this constant is enabled by the user
+     * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
+     */
+    value: string;
+  };
+}
+
+export interface ConversationAgentSelector {
+  /**
+   * The conversation agent selector allows picking a conversation agent.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#conversation-agent-selector
+   */
+  conversation_agent: {
+    /**
+     * Limits the list of conversation agents to those supporting the specified language.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#conversation-agent-selector
+     */
+    language?: string;
+  } | null;
+}
+
+export interface CountrySelector {
+  /**
+   * The country selector allows a user to pick a country from a list of countries.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#country-selector
+   */
+  country: {
+    /**
+     * A list of countries to pick from, this should be ISO 3166 country codes.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#country-selector
+     */
+    countries?: string[];
+
+    /**
+     * Should the options be sorted by name, if set to true, the order of the provided countries is kept.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#country-selector
+     */
+    no_sort?: boolean;
   } | null;
 }
 
@@ -240,6 +320,12 @@ export interface DurationSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
      */
     enable_day?: boolean;
+
+    /**
+     * When true, the duration selector will allow selecting milliseconds.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
+     */
+    enable_millisecond?: boolean;
   } | null;
 }
 
@@ -312,6 +398,32 @@ export interface EntitySelector {
   } | null;
 }
 
+export interface FloorSelector {
+  /**
+   * The icon selector shows an icon picker that allows the user to select an icon.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#floor-selector
+   */
+  floor: {
+    /**
+     * When device options are provided, the list of floors is filtered by floors that have at least one device matching the given conditions.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#floor-selector
+     */
+    device?: DeviceSelectorFilter | DeviceSelectorFilter[];
+
+    /**
+     * When entity options are provided, the list only includes floors that at least have one entity that matches the given conditions.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#floor-selector
+     */
+    entity?: EntitySelectorFilter | EntitySelectorFilter[];
+
+    /**
+     * Allows selecting multiple floors. If set to true, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#floor-selector
+     */
+    multiple?: boolean;
+  } | null;
+}
+
 export interface IconSelector {
   /**
    * The icon selector shows an icon picker that allows the user to select an icon.
@@ -323,6 +435,46 @@ export interface IconSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
      */
     placeholder?: string;
+  } | null;
+}
+
+export interface LabelSelector {
+  /**
+   * The label selector shows a label finder that can pick labels.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#label-selector
+   */
+  label: {
+    /**
+     * Allows selecting multiple labels. If set to true, the resulting value of this selector will be a list instead of a single string value
+     * https://www.home-assistant.io/docs/blueprint/selectors/#label-selector
+     */
+    multiple?: boolean;
+  } | null;
+}
+
+export interface LanguageSelector {
+  /**
+   * The language selector allows a user to pick a language from a list of languages.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#language-selector
+   */
+  language: {
+    /**
+     * A list of languages to pick from, this should be RFC 5646 languages codes.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#language-selector
+     */
+    languages?: string[];
+
+    /**
+     * Should the name of the languages be shown in the language of the user, or in the language itself.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#language-selector
+     */
+    native_name?: boolean;
+
+    /**
+     * Should the options be sorted by name, if set to true, the order of the provided languages is kept.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#language-selector
+     */
+    no_sort?: boolean;
   } | null;
 }
 
@@ -398,6 +550,32 @@ export interface ObjectSelector {
    * https://www.home-assistant.io/docs/blueprint/selectors/#object-selector
    */
   object: null | Record<string, never>;
+}
+
+export interface QRCodeSelector {
+  /**
+   * The QR code selector shows a QR code.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#qr-code-selector
+   */
+  qr_code: {
+    /**
+     * The data that should be represented in the QR code.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#qr-code-selector
+     */
+    data: any;
+
+    /**
+     * The scale factor to use, this will make the QR code bigger or smaller.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#qr-code-selector
+     */
+    scale?: PositiveInteger;
+
+    /**
+     * The error correction level of the QR code, with a higher error correction level the QR code can be scanned even when some pieces are missing.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#qr-code-selector
+     */
+    error_correction_level?: "low" | "medium" | "quartile" | "high";
+  };
 }
 
 export interface SelectSelector {
@@ -539,4 +717,12 @@ export interface TimeSelector {
    * https://www.home-assistant.io/docs/blueprint/selectors/#time-selector
    */
   time: null | Record<string, never>;
+}
+
+export interface TriggerSelector {
+  /**
+   * The triggers selector allows the user to input one or more triggers. On the user interface, the trigger part of the automation editor is shown.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#trigger-selector
+   */
+  trigger: null | Record<string, never>;
 }
