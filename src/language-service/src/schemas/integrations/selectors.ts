@@ -33,6 +33,7 @@ export type Selector =
   | EntitySelector
   | FloorSelector
   | IconSelector
+  | LabelSelector
   | LocationSelector
   | MediaSelector
   | NumberSelector
@@ -431,6 +432,20 @@ export interface IconSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#icon-selector
      */
     placeholder?: string;
+  } | null;
+}
+
+export interface LabelSelector {
+  /**
+   * The label selector shows a label finder that can pick labels.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#label-selector
+   */
+  label: {
+    /**
+     * Allows selecting multiple labels. If set to true, the resulting value of this selector will be a list instead of a single string value
+     *https://www.home-assistant.io/docs/blueprint/selectors/#label-selector
+     */
+    multiple?: boolean;
   } | null;
 }
 
