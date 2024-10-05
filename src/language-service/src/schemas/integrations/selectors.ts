@@ -23,6 +23,7 @@ export type Selector =
   | ColorTempSelector
   | ConditionSelector
   | ConfigEntrySelector
+  | ConstantSelector
   | DateSelector
   | DateTimeSelector
   | DeviceSelector
@@ -168,6 +169,26 @@ export interface ConfigEntrySelector {
      */
     integration?: Domain;
   } | null;
+}
+
+export interface ConstantSelector {
+  /**
+   * The constant selector shows a toggle that allows the user to enable the selected option. This is similar to the boolean selector, the difference is that the constant selector has no value when it’s not enabled.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
+   */
+  constant: {
+    /**
+     * The label that is show in the UI for this constant.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
+     */
+    label: string;
+
+    /**
+     * Value that is returned when this constant is enabled by the user
+     * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
+     */
+    value: string;
+  };
 }
 
 export interface DateSelector {
