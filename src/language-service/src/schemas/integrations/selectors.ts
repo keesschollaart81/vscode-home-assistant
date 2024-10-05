@@ -24,6 +24,7 @@ export type Selector =
   | ConditionSelector
   | ConfigEntrySelector
   | ConstantSelector
+  | ConversationAgentSelector
   | DateSelector
   | DateTimeSelector
   | DeviceSelector
@@ -189,6 +190,20 @@ export interface ConstantSelector {
      */
     value: string;
   };
+}
+
+export interface ConversationAgentSelector {
+  /**
+   * The conversation agent selector allows picking a conversation agent.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#conversation-agent-selector
+   */
+  conversation_agent: {
+    /**
+     * Limits the list of conversation agents to those supporting the specified language.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#conversation-agent-selector
+     */
+    language?: string;
+  } | null;
 }
 
 export interface DateSelector {
