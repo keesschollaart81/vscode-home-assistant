@@ -31,6 +31,7 @@ export type Selector =
   | DeviceSelector
   | DurationSelector
   | EntitySelector
+  | FloorSelector
   | IconSelector
   | LocationSelector
   | MediaSelector
@@ -382,6 +383,32 @@ export interface EntitySelector {
     /**
      * Allows selecting multiple devices. If set to `true`, the resulting value of this selector will be a list instead of a single string value.
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     */
+    multiple?: boolean;
+  } | null;
+}
+
+export interface FloorSelector {
+  /**
+   * The icon selector shows an icon picker that allows the user to select an icon.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#floor-selector
+   */
+  floor: {
+    /**
+     * When device options are provided, the list of floors is filtered by floors that have at least one device matching the given conditions.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#floor-selector
+     */
+    device?: DeviceSelectorFilter | DeviceSelectorFilter[];
+
+    /**
+     * When entity options are provided, the list only includes floors that at least have one entity that matches the given conditions.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#floor-selector
+     */
+    entity?: EntitySelectorFilter | EntitySelectorFilter[];
+
+    /**
+     * Allows selecting multiple floors. If set to true, the resulting value of this selector will be a list instead of a single string value.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#floor-selector
      */
     multiple?: boolean;
   } | null;
