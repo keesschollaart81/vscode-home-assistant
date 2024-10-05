@@ -45,7 +45,8 @@ export type Selector =
   | TemplateSelector
   | TextSelector
   | ThemeSelector
-  | TimeSelector;
+  | TimeSelector
+  | TriggerSelector;
 
 export interface ActionSelector {
   /**
@@ -716,4 +717,12 @@ export interface TimeSelector {
    * https://www.home-assistant.io/docs/blueprint/selectors/#time-selector
    */
   time: null | Record<string, never>;
+}
+
+export interface TriggerSelector {
+  /**
+   * The triggers selector allows the user to input one or more triggers. On the user interface, the trigger part of the automation editor is shown.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#trigger-selector
+   */
+  trigger: null | Record<string, never>;
 }
