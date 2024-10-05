@@ -15,8 +15,9 @@ export type Selector =
   | ActionSelector
   | AddonSelector
   | AreaSelector
+  | AssistPipelineSelector
   | AttributeSelector
-  | AssistPipelineSelectors
+  | BackupLocationSelector
   | BooleanSelector
   | ColorRGBSelector
   | ColorTempSelector
@@ -81,7 +82,7 @@ export interface AreaSelector {
   } | null;
 }
 
-export interface AssistPipelineSelectors {
+export interface AssistPipelineSelector {
   /**
    * The assist pipeline selector shows all available assist pipelines (assistants) of which one can be selected.
    * https://www.home-assistant.io/docs/blueprint/selectors/#assist-pipeline-selector
@@ -101,6 +102,14 @@ export interface AttributeSelector {
      */
     entity_id: Entity;
   };
+}
+
+export interface BackupLocationSelector {
+  /**
+   * The backup location selector shows a list of places a backup could go, depending on what you have configured in storage.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#backup-location-selector
+   */
+  backup_location: null | Record<string, never>;
 }
 
 export interface BooleanSelector {
