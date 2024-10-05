@@ -10,7 +10,6 @@ import {
   DeviceClassesSensor,
   IncludeList,
   Integer,
-  Port,
   PositiveInteger,
   StateClassesSensor,
   Template,
@@ -41,7 +40,9 @@ type Availability = {
   value_template?: Template;
 };
 
-export interface Schema {
+export type Schema = Item | Item[];
+
+interface Item {
   /**
    * The mqtt alarm panel platform enables the possibility to control MQTT capable alarm panels. The Alarm icon will change state after receiving a new state from state_topic.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/
