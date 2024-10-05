@@ -39,6 +39,7 @@ export type Selector =
   | MediaSelector
   | NumberSelector
   | ObjectSelector
+  | QRCodeSelector
   | SelectSelector
   | TargetSelector
   | TemplateSelector
@@ -548,6 +549,32 @@ export interface ObjectSelector {
    * https://www.home-assistant.io/docs/blueprint/selectors/#object-selector
    */
   object: null | Record<string, never>;
+}
+
+export interface QRCodeSelector {
+  /**
+   * The QR code selector shows a QR code.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#qr-code-selector
+   */
+  qr_code: {
+    /**
+     * The data that should be represented in the QR code.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#qr-code-selector
+     */
+    data: any;
+
+    /**
+     * The scale factor to use, this will make the QR code bigger or smaller.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#qr-code-selector
+     */
+    scale?: PositiveInteger;
+
+    /**
+     * The error correction level of the QR code, with a higher error correction level the QR code can be scanned even when some pieces are missing.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#qr-code-selector
+     */
+    error_correction_level?: "low" | "medium" | "quartile" | "high";
+  };
 }
 
 export interface SelectSelector {
