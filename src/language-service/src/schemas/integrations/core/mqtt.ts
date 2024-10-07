@@ -101,6 +101,12 @@ interface Item {
   humidifier?: any;
 
   /**
+   * The mqtt image platform allows you to integrate the content of an image file sent through MQTT into Home Assistant as an image.
+   * https://www.home-assistant.io/integrations/image.mqtt
+   */
+  image?: ImageItem | ImageItem[] | IncludeList;
+
+  /**
    * The mqtt light platform lets you control your MQTT enabled lights through one of the supported message schemas, default, json or template.
    * https://www.home-assistant.io/integrations/light.mqtt/
    */
@@ -1171,6 +1177,44 @@ export interface FanItem extends BaseItem {
    * https://www.home-assistant.io/integrations/fan.mqtt/#state_value_template
    */
   state_value_template?: Template;
+}
+
+export interface ImageItem extends BaseItem {
+  /**
+   * The name of the MQTT image.
+   * https://www.home-assistant.io/integrations/image.mqtt#name
+   */
+  name?: string;
+
+  /**
+   * The content type of an image data message received on image_topic.
+   * https://www.home-assistant.io/integrations/image.mqtt#content_type
+   */
+  content_type?: string;
+
+  /**
+   * The encoding of the image payloads received.
+   * https://www.home-assistant.io/integrations/image.mqtt#image_encoding
+   */
+  image_encoding?: string;
+
+  /**
+   * The MQTT topic to subscribe to receive the image payload of the image to be downloaded.
+   * https://www.home-assistant.io/integrations/image.mqtt#image_topic
+   */
+  image_topic?: string;
+
+  /**
+   * Defines a template to extract the image URL from a message received at url_topic.
+   * https://www.home-assistant.io/integrations/image.mqtt#url_template
+   */
+  url_template?: Template;
+
+  /**
+   * The MQTT topic to subscribe to receive an image URL.
+   * https://www.home-assistant.io/integrations/image.mqtt#url_topic
+   */
+  url_topic?: string;
 }
 
 export interface LightDefaultItem extends BaseItem {
