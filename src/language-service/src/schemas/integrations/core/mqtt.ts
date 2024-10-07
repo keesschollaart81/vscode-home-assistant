@@ -200,9 +200,19 @@ interface BaseItem {
    */
   device?: {
     /**
+     * A link to the webpage that can manage the configuration of this device. Can be either an http://, https:// or an internal homeassistant:// URL
+     */
+    configuration_url?: string;
+
+    /**
      * A list of connections of the device to the outside world as a list of tuples.
      */
     connections?: { [key: string]: string };
+
+    /**
+     * The hardware version of the device.
+     */
+    hw_version?: string;
 
     /**
      * A list of IDs that uniquely identify the device. For example a serial number.
@@ -220,9 +230,24 @@ interface BaseItem {
     model?: string;
 
     /**
+     * The model identifier of the device.
+     */
+    model_id?: string;
+
+    /**
      * The name of the device.
      */
     name?: string;
+
+    /**
+     * The serial number of the device.
+     */
+    serial_number?: string;
+
+    /**
+     * Suggest an area if the device isn’t in one yet.
+     */
+    suggested_area?: string;
 
     /**
      * The firmware version of the device.
