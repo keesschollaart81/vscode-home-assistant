@@ -32,116 +32,135 @@ connection.onInitialize((params) => {
   connection.console.log(
     `[Home Assistant Language Server(${process.pid})] Started and initialize received`,
   );
-
   const configurationService = new ConfigurationService();
+
   const haConnection = new HaConnection(configurationService);
-  const fileAccessor = new VsCodeFileAccessor(params.rootUri, documents);
-  const haConfig = new HomeAssistantConfiguration(fileAccessor);
 
-  const definitionProviders = [
-    new IncludeDefinitionProvider(fileAccessor),
-    new ScriptDefinitionProvider(haConfig),
-  ];
-
-  const jsonWorkerContributions = [
-    new EntityIdCompletionContribution(haConnection),
-    new ServicesCompletionContribution(haConnection),
-  ];
-
-  const schemaServiceForIncludes = new SchemaServiceForIncludes();
-
-  const yamlLanguageService = getLanguageService(
-    // eslint-disable-next-line @typescript-eslint/require-await
-    async () => "",
-    null,
-    jsonWorkerContributions,
-  );
-
-  const sendDiagnostics = (uri: string, diagnostics: Diagnostic[]) => {
-    connection.sendDiagnostics({
-      uri,
-      diagnostics,
-    });
-  };
-
-  const discoverFilesAndUpdateSchemas = async () => {
-    try {
-      await haConfig.discoverFiles();
-      homeAsisstantLanguageService.findAndApplySchemas();
-    } catch (e) {
-      console.error(
-        `Unexpected error during file discovery / schema configuration: ${e}`,
-      );
-    }
-  };
-
-  const homeAsisstantLanguageService = new HomeAssistantLanguageService(
-    yamlLanguageService,
-    haConfig,
-    haConnection,
-    definitionProviders,
-    schemaServiceForIncludes,
-    sendDiagnostics,
-    () => {
-      documents.all().forEach(async (d) => {
-        const diagnostics =
-          await homeAsisstantLanguageService.getDiagnostics(d);
-        sendDiagnostics(d.uri, diagnostics);
-      });
-    },
-  );
-
-  documents.onDidChangeContent((e) =>
-    homeAsisstantLanguageService.onDocumentChange(e),
-  );
-  documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e));
-
-  let onDidSaveDebounce: NodeJS.Timer;
-  documents.onDidSave(() => {
-    clearTimeout(onDidSaveDebounce);
-    onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 100);
-  });
-
-  connection.onDocumentSymbol((p) =>
-    homeAsisstantLanguageService.onDocumentSymbol(
-      documents.get(p.textDocument.uri),
-    ),
-  );
-  connection.onDocumentFormatting((p) =>
-    homeAsisstantLanguageService.onDocumentFormatting(
-      documents.get(p.textDocument.uri),
-      p.options,
-    ),
-  );
-  connection.onCompletion((p) =>
-    homeAsisstantLanguageService.onCompletion(
-      documents.get(p.textDocument.uri),
-      p.position,
-    ),
-  );
-  connection.onCompletionResolve((p) =>
-    homeAsisstantLanguageService.onCompletionResolve(p),
-  );
-  connection.onHover((p) =>
-    homeAsisstantLanguageService.onHover(
-      documents.get(p.textDocument.uri),
-      p.position,
-    ),
-  );
-  connection.onDefinition((p) =>
-    homeAsisstantLanguageService.onDefinition(
-      documents.get(p.textDocument.uri),
-      p.position,
-    ),
-  );
-
+  // Wait for configuration to be loaded before initialising the rest
   connection.onDidChangeConfiguration(async (config) => {
+    connection.console.log(
+      `[Home Assistant Language Server(${process.pid})] didChangeConfiguration received`,
+      )
     configurationService.updateConfiguration(config);
+
+    const haConnection = new HaConnection(configurationService);
+    console.log(`configurationService.url: ${configurationService.url}`)
+    console.log(`configurationService.searchPath: ${configurationService.searchPath}`)
+    console.log(`params.rootUri: ${params.rootUri}`)
+    let rootUri = params.rootUri;
+    if (configurationService.searchPath !== undefined) {
+      rootUri = configurationService.searchPath;
+    }
+    console.log(`rootUri: ${rootUri}`)
+    const fileAccessor = new VsCodeFileAccessor(rootUri, documents);
+    const haConfig = new HomeAssistantConfiguration(fileAccessor);
+
+    const definitionProviders = [
+      new IncludeDefinitionProvider(fileAccessor),
+      new ScriptDefinitionProvider(haConfig),
+    ];
+
+    const jsonWorkerContributions = [
+      new EntityIdCompletionContribution(haConnection),
+      new ServicesCompletionContribution(haConnection),
+    ];
+
+    const schemaServiceForIncludes = new SchemaServiceForIncludes();
+
+    const yamlLanguageService = getLanguageService(
+      // eslint-disable-next-line @typescript-eslint/require-await
+      async () => "",
+      null,
+      jsonWorkerContributions,
+    );
+
+    const sendDiagnostics = (uri: string, diagnostics: Diagnostic[]) => {
+      connection.sendDiagnostics({
+        uri,
+        diagnostics,
+      });
+    };
+
+    const discoverFilesAndUpdateSchemas = async () => {
+      try {
+        await haConfig.discoverFiles();
+        homeAsisstantLanguageService.findAndApplySchemas();
+      } catch (e) {
+        console.error(
+          `Unexpected error during file discovery / schema configuration: ${e}`,
+        );
+      }
+    };
+
+    const homeAsisstantLanguageService = new HomeAssistantLanguageService(
+      yamlLanguageService,
+      haConfig,
+      haConnection,
+      definitionProviders,
+      schemaServiceForIncludes,
+      sendDiagnostics,
+      () => {
+        documents.all().forEach(async (d) => {
+          const diagnostics = await homeAsisstantLanguageService.getDiagnostics(
+            d,
+          );
+          sendDiagnostics(d.uri, diagnostics);
+        });
+      },
+    );
+
+    documents.onDidChangeContent((e) =>
+      homeAsisstantLanguageService.onDocumentChange(e),
+    );
+    documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e));
+
+    let onDidSaveDebounce: NodeJS.Timer;
+    documents.onDidSave(() => {
+      clearTimeout(onDidSaveDebounce);
+      onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 100);
+    });
+
+    connection.onDocumentSymbol((p) =>
+      homeAsisstantLanguageService.onDocumentSymbol(
+        documents.get(p.textDocument.uri),
+      ),
+    );
+    connection.onDocumentFormatting((p) =>
+      homeAsisstantLanguageService.onDocumentFormatting(
+        documents.get(p.textDocument.uri),
+        p.options,
+      ),
+    );
+    connection.onCompletion((p) =>
+      homeAsisstantLanguageService.onCompletion(
+        documents.get(p.textDocument.uri),
+        p.position,
+      ),
+    );
+    connection.onCompletionResolve((p) =>
+      homeAsisstantLanguageService.onCompletionResolve(p),
+    );
+    connection.onHover((p) =>
+      homeAsisstantLanguageService.onHover(
+        documents.get(p.textDocument.uri),
+        p.position,
+      ),
+    );
+    connection.onDefinition((p) =>
+      homeAsisstantLanguageService.onDefinition(
+        documents.get(p.textDocument.uri),
+        p.position,
+      ),
+    );
+
     await haConnection.notifyConfigUpdate();
 
     if (!configurationService.isConfigured) {
       connection.sendNotification("no-config");
     }
+
+    // fire and forget
+    setTimeout(discoverFilesAndUpdateSchemas, 0);
   });
 
   connection.onRequest(
@@ -178,9 +197,6 @@ connection.onInitialize((params) => {
 
     connection.sendNotification("render_template_completed", outputString);
   });
-
-  // fire and forget
-  setTimeout(discoverFilesAndUpdateSchemas, 0);
 
   return {
     capabilities: <ServerCapabilities>{
