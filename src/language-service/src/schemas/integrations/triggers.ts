@@ -63,7 +63,7 @@ type EventType =
   | "zha_event";
 
 type AllowedMethods = "POST" | "PUT" | "GET" | "HEAD";
-type PersistentNotificationUpdateType = "added" | "removed";
+type PersistentNotificationUpdateType = "added" | "updated" | "removed";
 
 interface CalendarTrigger {
   /**
@@ -552,6 +552,13 @@ interface PersistentNotificationTrigger {
    * https://www.home-assistant.io/docs/automation/trigger/#disabling-a-trigger
    */
   enabled?: boolean;
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/docs/automation/trigger/#persistent-notification-trigger
+   */
+  id?: string;
 
   /**
    * Define the type of persistent notification to trigger on.
