@@ -32,37 +32,37 @@ export interface Item {
    * List of binary sensors
    * https://www.home-assistant.io/integrations/template#binary_sensor
    */
-  binary_sensor?: BinarySensorItem[] | IncludeList;
+  binary_sensor?: BinarySensorItem | BinarySensorItem[] | IncludeList;
 
   /**
    * List of buttons
    * https://www.home-assistant.io/integrations/template#button
    */
-  button?: ButtonItem[] | IncludeList;
+  button?: ButtonItem | ButtonItem[] | IncludeList;
 
   /**
    * List of numbers
    * https://www.home-assistant.io/integrations/template#number
    */
-  number?: NumberItem[] | IncludeList;
+  number?: NumberItem | NumberItem[] | IncludeList;
 
   /**
    * List of images
    * https://www.home-assistant.io/integrations/template/#image
    */
-  image?: ImageItem[] | IncludeList;
+  image?: ImageItem | ImageItem[] | IncludeList;
 
   /**
    * List of selects
    * https://www.home-assistant.io/integrations/template#select
    */
-  select?: SelectItem[] | IncludeList;
+  select?: SelectItem | SelectItem[] | IncludeList;
 
   /**
    * List of sensors
    * https://www.home-assistant.io/integrations/template#sensor
    */
-  sensor?: SensorItem[] | IncludeList;
+  sensor?: SensorItem | SensorItem[] | IncludeList;
 
   /**
    * Define actions to be executed when the trigger fires. Optional. Variables set by the action script are available when evaluating entity templates.
