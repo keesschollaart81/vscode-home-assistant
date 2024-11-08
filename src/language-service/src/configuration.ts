@@ -54,6 +54,10 @@ export class ConfigurationService implements IConfigurationService {
     if (!this.token && process.env.HASS_TOKEN) {
       this.token = process.env.HASS_TOKEN;
     }
+    if (!this.url && !this.token && process.env.SUPERVISOR_TOKEN) {
+      this.url = this.getUri("http://supervisor/core");
+      this.token = process.env.SUPERVISOR_TOKEN;
+    }
   }
 
   private getUri = (value: string): string => {
