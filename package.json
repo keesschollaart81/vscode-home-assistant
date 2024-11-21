@@ -426,7 +426,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@types/mocha": "10.0.8",
+    "@types/mocha": "10.0.10",
     "@types/node": "20.4.8",
     "@types/request": "2.48.12",
     "@types/vscode": "1.45.1",
