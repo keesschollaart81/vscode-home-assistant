@@ -1017,6 +1017,12 @@ export interface FanItem extends BaseItem {
   command_topic: string;
 
   /**
+   * The template used for the command payload. Available variables: action and code.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#command_template
+   */
+  command_template?: Template;
+  
+  /**
    * The name of the MQTT fan.
    * https://www.home-assistant.io/integrations/fan.mqtt#name
    */
