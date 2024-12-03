@@ -43,7 +43,7 @@
     "@types/vscode": "1.48.0",
     "@types/ws": "8.5.13",
     "@types/yaml": "1.9.7",
-    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^4.16.1",
     "eslint": "^7.4.0",
     "eslint-config-prettier": "^9.0.0",
