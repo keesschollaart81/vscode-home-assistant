@@ -195,7 +195,7 @@ interface CoreCustomizeItem {
 
   /**
    * Defines the units of measurement, if any. This will also influence the graphical presentation in the history visualization as continuous value. Sensors with missing unit_of_measurement are showing as discrete values.
-   * https://wwww.home-assistant.io/docs/configuration/customizing-devices/#unit_of_measurement
+   * https://www.home-assistant.io/docs/configuration/customizing-devices/#unit_of_measurement
    */
   unit_of_measurement?: string;
 }
