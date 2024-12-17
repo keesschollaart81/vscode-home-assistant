@@ -432,7 +432,7 @@
     "@types/vscode": "1.45.1",
     "@types/ws": "8.5.10",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
+    "@typescript-eslint/parser": "^8.18.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.1.6",
