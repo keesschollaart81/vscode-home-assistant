@@ -27,30 +27,30 @@ export class SchemaServiceForIncludes {
 
     for (const [sourceFile, sourceFileMapping] of haFiles.entries()) {
       let sourceFileMappingPath = sourceFileMapping.path.replace(
-        "homeassistant/packages/",
+        path.join("homeassistant", "packages") + path.sep,
         "",
       );
       sourceFileMappingPath = sourceFileMappingPath.replace(
-        /cards\/cards/g,
+        /cards(\/|\\)cards/g,
         "cards",
       );
 
-      if (sourceFileMappingPath.startsWith("blueprints/automation/")) {
+      if (sourceFileMappingPath.startsWith(path.join("blueprints", "automation") + path.sep)) {
         sourceFileMappingPath = "blueprints/automation";
       }
 
-      if (sourceFileMappingPath.startsWith("blueprints/script/")) {
+      if (sourceFileMappingPath.startsWith(path.join("blueprints", "script") + path.sep)) {
         sourceFileMappingPath = "blueprints/script";
       }
 
       if (
-        sourceFileMappingPath.startsWith("automations/") ||
+        sourceFileMappingPath.startsWith("automations" + path.sep) ||
         sourceFileMappingPath === "automations.yaml"
       ) {
         sourceFileMappingPath = "configuration.yaml/automation";
       }
 
-      if (sourceFileMappingPath.startsWith("custom_sentences/")) {
+      if (sourceFileMappingPath.startsWith("custom_sentences" + path.sep)) {
         sourceFileMappingPath = "custom_sentences.yaml";
       }
 

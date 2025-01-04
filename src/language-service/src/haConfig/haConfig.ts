@@ -106,10 +106,10 @@ export class HomeAssistantConfiguration {
       "automations.yaml",
     ];
     const ourFolders = [
-      "blueprints/automation/",
-      "blueprints/script/",
-      "automations/",
-      "custom_sentences/",
+      path.join("blueprints", "automation") + path.sep,
+      path.join("blueprints", "script") + path.sep,
+      "automations" + path.sep,
+      "custom_sentences" + path.sep,
     ];
 
     const rootFiles = ourFiles.filter((f) => filesInRoot.some((y) => y === f));
@@ -125,7 +125,7 @@ export class HomeAssistantConfiguration {
       if (areOurFilesSomehwere.length > 0) {
         this.subFolder = areOurFilesSomehwere[0].substr(
           0,
-          areOurFilesSomehwere[0].lastIndexOf("/"),
+          areOurFilesSomehwere[0].lastIndexOf(path.sep),
         );
         return areOurFilesSomehwere;
       }
@@ -157,22 +157,22 @@ export class HomeAssistantConfiguration {
   private discoverCore = async (
     filename: string,
     // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
-    path: string,
+    dirPath: string,
     files: FilesCollection,
   ): Promise<FilesCollection> => {
-    if (path.startsWith("/")) {
-      path = path.substring(1);
+    if (dirPath.startsWith(path.sep)) {
+      dirPath = dirPath.substring(1);
     }
 
     const homeAssistantYamlFile = new HomeAssistantYamlFile(
       this.fileAccessor,
       filename,
-      path,
+      dirPath,
     );
     files[filename] = homeAssistantYamlFile;
 
     let error = false;
-    let errorMessage = `File '${filename}' could not be parsed, it was referenced from path '${path}'.This file will be ignored.`;
+    let errorMessage = `File '${filename}' could not be parsed, it was referenced from path '${dirPath}'.This file will be ignored.`;
     let includes: IncludeReferences = {};
     try {
       includes = await homeAssistantYamlFile.getIncludes();
@@ -194,7 +194,7 @@ export class HomeAssistantConfiguration {
     }
 
     if (error) {
-      if (filename === path) {
+      if (filename === dirPath) {
         // root file has more impact
         console.warn(errorMessage);
       } else {
