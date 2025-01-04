@@ -60,7 +60,7 @@ export class SchemaServiceForIncludes {
       if (relatedPathToSchemaMapping) {
         const id = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
         let absolutePath = fs.realpathSync.native(haFiles[sourceFile].filename);
-        absolutePath = absolutePath.replace(new RegExp("\\", "g"), "/");
+        absolutePath = absolutePath.replace(/\\/g, "/");
         const fileass = encodeURI(absolutePath);
         let resultEntry = results.find((x) => x.uri === id);
 
