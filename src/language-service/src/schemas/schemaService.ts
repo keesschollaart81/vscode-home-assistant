@@ -35,11 +35,19 @@ export class SchemaServiceForIncludes {
         "cards",
       );
 
-      if (sourceFileMappingPath.startsWith(path.join("blueprints", "automation") + path.sep)) {
+      if (
+        sourceFileMappingPath.startsWith(
+          path.join("blueprints", "automation") + path.sep,
+        )
+      ) {
         sourceFileMappingPath = "blueprints/automation";
       }
 
-      if (sourceFileMappingPath.startsWith(path.join("blueprints", "script") + path.sep)) {
+      if (
+        sourceFileMappingPath.startsWith(
+          path.join("blueprints", "script") + path.sep,
+        )
+      ) {
         sourceFileMappingPath = "blueprints/script";
       }
 
