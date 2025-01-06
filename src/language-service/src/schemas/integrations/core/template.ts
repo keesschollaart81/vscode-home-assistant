@@ -1198,7 +1198,7 @@ interface VacuumPlatformItem {
    * Defines templates for attributes of the sensor.
    * https://www.home-assistant.io/integrations/vacuum.template#attribute_templates
    */
-  attributes_template?: { [key: string]: Template };
+  attribute_templates?: { [key: string]: Template };
 
   /**
    * Defines a template to get the available state of the component. If the template returns true, the device is available.
