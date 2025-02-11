@@ -54,7 +54,7 @@ export interface Schema {
 
   /**
    * Customize entities matching a pattern.
-   * https://wwww.home-assistant.io/docs/configuration/customizing-devices/
+   * https://www.home-assistant.io/docs/configuration/customizing-devices/
    */
   customize_glob?: CoreCustomize | IncludeNamed;
 
