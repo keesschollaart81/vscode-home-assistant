@@ -161,7 +161,7 @@ export type Domain = string;
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)$
  * @items.pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)$
  */
-export type Domains = string[];
+export type Domains = Domain[];
 
 /**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
@@ -172,7 +172,7 @@ export type Entity = string;
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
  */
-export type Entities = string | string[];
+export type Entities = Entity | Entity[];
 
 /**
  * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
@@ -183,7 +183,9 @@ export type AlarmControlPanelEntity = string;
  * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?alarm_control_panel\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
  */
-export type AlarmControlPanelEntities = string | string[];
+export type AlarmControlPanelEntities =
+  | AlarmControlPanelEntity
+  | AlarmControlPanelEntity[];
 
 /**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
@@ -194,7 +196,7 @@ export type DeviceTrackerEntity = string;
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?device_tracker\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
-export type DeviceTrackerEntities = string | string[];
+export type DeviceTrackerEntities = DeviceTrackerEntity | DeviceTrackerEntity[];
 
 /**
  * @TJS-pattern ^calendar\.(?!_)[\da-z_]+(?<!_)$
@@ -205,7 +207,7 @@ export type CalendarEntity = string;
  * @TJS-pattern ^calendar\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?calendar\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^calendar\.(?!_)[\da-z_]+(?<!_)$
  */
-export type CalendaraEntities = string | string[];
+export type CalendarEntities = CalendarEntity | CalendarEntity[];
 
 /**
  * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)$
@@ -216,7 +218,7 @@ export type CameraEntity = string;
  * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?camera\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^camera\.(?!_)[\da-z_]+(?<!_)$
  */
-export type CameraEntities = string | string[];
+export type CameraEntities = CameraEntity | CameraEntity[];
 
 /**
  * @TJS-pattern ^climate\.(?!_)[\da-z_]+(?<!_)$
@@ -227,7 +229,7 @@ export type ClimateEntity = string;
  * @TJS-pattern ^climate\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?climate\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^climate\.(?!_)[\da-z_]+(?<!_)$
  */
-export type ClimateEntities = string | string[];
+export type ClimateEntities = ClimateEntity | ClimateEntity[];
 
 export type Floor = string;
 
@@ -240,7 +242,7 @@ export type GeoLocationEntity = string;
  * @TJS-pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?geo_location\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)$
  */
-export type GeoLocationEntities = string | string[];
+export type GeoLocationEntities = GeoLocationEntity | GeoLocationEntity[];
 
 /**
  * @TJS-pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)$
@@ -251,7 +253,7 @@ export type HumidifierEntity = string;
  * @TJS-pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?humidifier\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)$
  */
-export type HumidifierEntities = string | string[];
+export type HumidifierEntities = HumidifierEntity | HumidifierEntity[];
 
 /**
  * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$"
@@ -262,7 +264,7 @@ export type InputEntity = string;
  * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputEntities = string | string[];
+export type InputEntities = InputEntity | InputEntity[];
 
 /**
  * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
@@ -273,7 +275,7 @@ export type InputDatetimeEntity = string;
  * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_datetime\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputDatetimeEntities = string | string[];
+export type InputDatetimeEntities = InputDatetimeEntity | InputDatetimeEntity[];
 
 /**
  * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
@@ -284,7 +286,7 @@ export type InputNumberEntity = string;
  * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_number\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputNumberEntities = string | string[];
+export type InputNumberEntities = InputNumberEntity | InputNumberEntity[];
 
 export type Label = string;
 
@@ -297,7 +299,7 @@ export type LightEntity = string;
  * @TJS-pattern ^light\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?light\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^light\.(?!_)[\da-z_]+(?<!_)$
  */
-export type LightEntities = string | string[];
+export type LightEntities = LightEntity | LightEntity[];
 
 /**
  * @TJS-pattern ^media_player\.(?!_)[\da-z_]+(?<!_)$
@@ -308,7 +310,7 @@ export type MediaPlayerEntity = string;
  * @TJS-pattern ^media_player\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?media_player\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^media_player\.(?!_)[\da-z_]+(?<!_)$
  */
-export type MediaPlayerEntities = string | string[];
+export type MediaPlayerEntities = MediaPlayerEntity | MediaPlayerEntity[];
 
 /**
  * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)$
@@ -319,7 +321,7 @@ export type NumberEntity = string;
  * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?number\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^number\.(?!_)[\da-z_]+(?<!_)$
  */
-export type NumberEntities = string | string[];
+export type NumberEntities = NumberEntity | NumberEntity[];
 
 /**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
@@ -330,7 +332,7 @@ export type PersonEntity = string;
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?person\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
-export type PersonEntities = string | string[];
+export type PersonEntities = PersonEntity | PersonEntity[];
 
 /**
  * @TJS-pattern ^plant\.(?!_)[\da-z_]+(?<!_)$
@@ -341,7 +343,7 @@ export type PlantEntity = string;
  * @TJS-pattern ^plant\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?plant\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^plant\.(?!_)[\da-z_]+(?<!_)$
  */
-export type PlantEntities = string | string[];
+export type PlantEntities = PlantEntity | PlantEntity[];
 
 /**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
@@ -352,7 +354,7 @@ export type SceneEntity = string;
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?scene\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
  */
-export type SceneEntities = string | string[];
+export type SceneEntities = SceneEntity | SceneEntity[];
 
 /**
  * @TJS-pattern ^sensor\.(?!_)[\da-z_]+(?<!_)$
@@ -363,7 +365,7 @@ export type SensorEntity = string;
  * @TJS-pattern ^sensor\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?sensor\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^sensor\.(?!_)[\da-z_]+(?<!_)$
  */
-export type SensorEntities = string | string[];
+export type SensorEntities = SensorEntity | SensorEntity[];
 
 /**
  * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)$
@@ -374,7 +376,7 @@ export type WeatherEntity = string;
  * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?weather\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^weather\.(?!_)[\da-z_]+(?<!_)$
  */
-export type WeatherEntities = string | string[];
+export type WeatherEntities = WeatherEntity | WeatherEntity[];
 
 /**
  * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)$
@@ -385,7 +387,7 @@ export type ZoneEntity = string;
  * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?zone\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^zone\.(?!_)[\da-z_]+(?<!_)$
  */
-export type ZoneEntities = string | string[];
+export type ZoneEntities = ZoneEntity | ZoneEntity[];
 
 /**
  * @TJS-pattern ^\!include\s.+\.y?aml$
@@ -439,7 +441,7 @@ export type Time = string;
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?$
  * @items.pattern ^(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?$
  */
-export type Times = string | string[];
+export type Times = Time | Time[];
 
 export type TimePeriod = string | TimePeriodSeconds | TimePeriodMap;
 
