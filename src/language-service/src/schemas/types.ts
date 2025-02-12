@@ -1,6 +1,10 @@
 export type Area = string;
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/light/const.py
+ */
 export type ColorMode =
+  | "unknown"
   | "onoff"
   | "brightness"
   | "color_temp"
@@ -8,7 +12,8 @@ export type ColorMode =
   | "xy"
   | "rgb"
   | "rgbw"
-  | "rgbww";
+  | "rgbww"
+  | "white";
 
 export type Data = {
   [key: string]: any | Template;
@@ -87,15 +92,18 @@ export type DeviceClassesCover =
 export type DeviceClassesMediaPlayer = "tv" | "speaker" | "receiver";
 
 /**
- * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/const.py
  */
 export type DeviceClassesSensor =
   | "apparent_power"
   | "aqi"
+  | "area"
   | "atmospheric_pressure"
   | "battery"
+  | "blood_glucose_concentration"
   | "carbon_dioxide"
   | "carbon_monoxide"
+  | "conductivity"
   | "current"
   | "data_rate"
   | "data_size"
@@ -103,6 +111,7 @@ export type DeviceClassesSensor =
   | "distance"
   | "duration"
   | "energy"
+  | "energy_distance"
   | "energy_storage"
   | "enum"
   | "frequency"
@@ -116,6 +125,7 @@ export type DeviceClassesSensor =
   | "nitrogen_monoxide"
   | "nitrous_oxide"
   | "ozone"
+  | "ph"
   | "pm1"
   | "pm10"
   | "pm25"
@@ -127,6 +137,7 @@ export type DeviceClassesSensor =
   | "reactive_power"
   | "signal_strength"
   | "sound_pressure"
+  | "speed"
   | "sulphur_dioxide"
   | "temperature"
   | "timestamp"
@@ -140,10 +151,13 @@ export type DeviceClassesSensor =
   | "weight"
   | "wind_speed";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/const.py
+ */
 export type EntityCategory = "config" | "diagnostic";
 
 /**
- * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/const.py
  */
 export type StateClassesSensor = "measurement" | "total" | "total_increasing";
 
@@ -1540,7 +1554,15 @@ export type TimeZone =
   | "Zulu";
 
 export type UnitSystem = "metric" | "imperial";
+
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/const.py
+ */
 export type TemperatureUnit = "°C" | "°F" | "K";
+
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/const.py
+ */
 export type PressureUnit =
   | "Pa"
   | "hPa"
@@ -1583,6 +1605,9 @@ export type SupportedFeature =
   | SupportedFeatureVacuum
   | SupportedFeatureWeather;
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/alarm_control_panel/const.py
+ */
 export type SupportedFeatureAlarmControlPanel =
   | "camera.AlarmControlPanelEntityFeature.ARM_HOME"
   | "camera.AlarmControlPanelEntityFeature.ARM_AWAY"
@@ -1591,10 +1616,16 @@ export type SupportedFeatureAlarmControlPanel =
   | "camera.AlarmControlPanelEntityFeature.ARM_CUSTOM_BYPASS"
   | "camera.AlarmControlPanelEntityFeature.ARM_VACATION";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/camera/__init__.py
+ */
 export type SupportedFeatureCamera =
   | "camera.CameraEntityFeature.ON_OFF"
   | "camera.CameraEntityFeature.STREAM";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/climate/const.py
+ */
 export type SupportedFeatureClimate =
   | "climate.ClimateEntityFeature.TARGET_TEMPERATURE"
   | "climate.ClimateEntityFeature.TARGET_TEMPERATURE_RANGE"
@@ -1602,8 +1633,14 @@ export type SupportedFeatureClimate =
   | "climate.ClimateEntityFeature.FAN_MODE"
   | "climate.ClimateEntityFeature.PRESET_MODE"
   | "climate.ClimateEntityFeature.SWING_MODE"
-  | "climate.ClimateEntityFeature.AUX_HEAT";
+  | "climate.ClimateEntityFeature.AUX_HEAT"
+  | "climate.ClimateEntityFeature.TURN_OFF"
+  | "climate.ClimateEntityFeature.TURN_ON"
+  | "climate.ClimateEntityFeature.SWING_HORIZONTAL_MODE";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/cover/__init__.py
+ */
 export type SupportedFeatureCover =
   | "cover.CoverEntityFeature.OPEN"
   | "cover.CoverEntityFeature.CLOSE"
@@ -1614,19 +1651,33 @@ export type SupportedFeatureCover =
   | "cover.CoverEntityFeature.STOP_TILT"
   | "cover.CoverEntityFeature.SET_TILT_POSITION";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/fan/__init__.py
+ */
 export type SupportedFeatureFan =
   | "fan.FanEntityFeature.SET_SPEED"
   | "fan.FanEntityFeature.OSCILLATE"
   | "fan.FanEntityFeature.DIRECTION"
-  | "fan.FanEntityFeature.PRESET_MODE";
+  | "fan.FanEntityFeature.PRESET_MODE"
+  | "fan.FanEntityFeature.TURN_OFF"
+  | "fan.FanEntityFeature.TURN_ON";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/light/const.py
+ */
 export type SupportedFeatureLight =
   | "light.LightEntityFeature.EFFECT"
   | "light.LightEntityFeature.FLASH"
   | "light.LightEntityFeature.TRANSITION";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/lock/__init__.py
+ */
 export type SupportedFeatureLock = "lock.LockEntityFeature.OPEN";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/update/const.py
+ */
 export type SupportedFeatureUpdate =
   | "update.UpdateEntityFeature.INSTALL"
   | "update.UpdateEntityFeature.SPECIFIC_VERSION"
@@ -1634,15 +1685,18 @@ export type SupportedFeatureUpdate =
   | "update.UpdateEntityFeature.BACKUP"
   | "update.UpdateEntityFeature.RELEASE_NOTES";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/vacuum/__init__.py
+ */
 export type SupportedFeatureVacuum =
-  | "vacuum.VacuumEntityFeature.TURN_ON"
-  | "vacuum.VacuumEntityFeature.TURN_OFF"
+  | "vacuum.VacuumEntityFeature.TURN_ON" /**@deprecated not supported by StateVacuumEntity */
+  | "vacuum.VacuumEntityFeature.TURN_OFF" /**@deprecated not supported by StateVacuumEntity */
   | "vacuum.VacuumEntityFeature.PAUSE"
   | "vacuum.VacuumEntityFeature.STOP"
   | "vacuum.VacuumEntityFeature.RETURN_HOME"
   | "vacuum.VacuumEntityFeature.FAN_SPEED"
   | "vacuum.VacuumEntityFeature.BATTERY"
-  | "vacuum.VacuumEntityFeature.STATUS"
+  | "vacuum.VacuumEntityFeature.STATUS" /**@deprecated not supported by StateVacuumEntity */
   | "vacuum.VacuumEntityFeature.SEND_COMMAND"
   | "vacuum.VacuumEntityFeature.LOCATE"
   | "vacuum.VacuumEntityFeature.CLEAN_SPOT"
@@ -1650,6 +1704,9 @@ export type SupportedFeatureVacuum =
   | "vacuum.VacuumEntityFeature.STATE"
   | "vacuum.VacuumEntityFeature.START";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/weather/const.py
+ */
 export type SupportedFeatureWeather =
   | "weather.WeatherEntityFeature.FORECAST_DAILY"
   | "weather.WeatherEntityFeature.FORECAST_HOURLY"
