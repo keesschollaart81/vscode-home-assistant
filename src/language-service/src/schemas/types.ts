@@ -403,20 +403,27 @@ export type ZoneEntity = string;
  */
 export type ZoneEntities = ZoneEntity | ZoneEntity[];
 
+type WhitespaceCharacter = " " | "\r" | "\n" | "\t" | "\f" | "\v";
+type YamlFileExtension = ".yaml" | ".yml";
+
 /**
  * @TJS-pattern ^\!include\s.+\.y?aml$
  */
-export type Include = string;
+export type Include =
+  `!include${WhitespaceCharacter}${string}${YamlFileExtension}`;
+
+type IncludeDir = "include_dir" | "include_dir_merge";
 
 /**
  * @TJS-pattern ^\!(include_dir(_merge)?_list\s.+(?<!\.yaml|\.yml)|include\s.+\.y?aml)$
  */
-export type IncludeList = string;
+export type IncludeList = `!${IncludeDir}_list${WhitespaceCharacter}${string}`;
 
 /**
  * @TJS-pattern ^\!(include_dir(_merge)?_named\s.+(?<!\.yaml|\.yml)|include\s.+\.y?aml)$
  */
-export type IncludeNamed = string;
+export type IncludeNamed =
+  `!${IncludeDir}_named${WhitespaceCharacter}${string}`;
 
 /**
  * @TJS-type integer
@@ -444,12 +451,12 @@ export type Template = string;
  *
  * @TJS-pattern \{(?:[%\{#])
  */
-export type DynamicTemplate = string;
+export type DynamicTemplate = `{${"{" | "%" | "#"}${string}`;
 
 /**
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
  */
-export type Time = string;
+export type Time = `${number}:${number}:${number}`;
 
 /**
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?$
