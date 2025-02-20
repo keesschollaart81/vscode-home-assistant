@@ -6,6 +6,7 @@ import {
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   DeviceClassesSensor,
+  DynamicTemplate,
   IncludeList,
   IncludeNamed,
   PositiveInteger,
@@ -18,6 +19,7 @@ import {
   WindSpeedUnit,
 } from "../../types";
 import { Action } from "../actions";
+import { Condition } from "../conditions";
 import { PlatformSchema } from "../platform";
 import { Trigger } from "../triggers";
 
@@ -70,6 +72,12 @@ export interface Item {
    * https://www.home-assistant.io/integrations/template/#action
    */
   action?: Action | Action[];
+
+  /**
+   * Define conditions that have to be met after a trigger fires and before any actions are executed or sensor updates are performed (for trigger-based entities only). Optional. See condition documentation.
+   * https://www.home-assistant.io/integrations/template/#condition
+   */
+  condition?: Condition | Condition[] | DynamicTemplate | IncludeList;
 
   /**
    * Define an automation trigger to update the entities. Optional. If omitted will update based on referenced entities. See trigger documentation.
