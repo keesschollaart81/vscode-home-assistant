@@ -178,9 +178,14 @@ export type Domain = string;
 export type Domains = Domain[];
 
 /**
+ * @TJS-pattern ^(?!_)[\da-z_]+(?<!_)$
+ */
+type EntitySuffix = string;
+
+/**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
  */
-export type Entity = string;
+export type Entity = `${Domain}.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_))*$
@@ -191,7 +196,7 @@ export type Entities = Entity | Entity[];
 /**
  * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
  */
-export type AlarmControlPanelEntity = string;
+export type AlarmControlPanelEntity = `alarm_control_panel.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?alarm_control_panel\.(?!_)[\da-z_]+(?<!_))*$
@@ -204,7 +209,7 @@ export type AlarmControlPanelEntities =
 /**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
-export type DeviceTrackerEntity = string;
+export type DeviceTrackerEntity = `device_tracker.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?device_tracker\.(?!_)[\da-z_]+(?<!_))*$
@@ -215,7 +220,7 @@ export type DeviceTrackerEntities = DeviceTrackerEntity | DeviceTrackerEntity[];
 /**
  * @TJS-pattern ^calendar\.(?!_)[\da-z_]+(?<!_)$
  */
-export type CalendarEntity = string;
+export type CalendarEntity = `calendar.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^calendar\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?calendar\.(?!_)[\da-z_]+(?<!_))*$
@@ -226,7 +231,7 @@ export type CalendarEntities = CalendarEntity | CalendarEntity[];
 /**
  * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)$
  */
-export type CameraEntity = string;
+export type CameraEntity = `camera.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?camera\.(?!_)[\da-z_]+(?<!_))*$
@@ -237,7 +242,7 @@ export type CameraEntities = CameraEntity | CameraEntity[];
 /**
  * @TJS-pattern ^climate\.(?!_)[\da-z_]+(?<!_)$
  */
-export type ClimateEntity = string;
+export type ClimateEntity = `climate.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^climate\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?climate\.(?!_)[\da-z_]+(?<!_))*$
@@ -250,7 +255,7 @@ export type Floor = string;
 /**
  * @TJS-pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)$
  */
-export type GeoLocationEntity = string;
+export type GeoLocationEntity = `geo_location.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?geo_location\.(?!_)[\da-z_]+(?<!_))*$
@@ -261,7 +266,7 @@ export type GeoLocationEntities = GeoLocationEntity | GeoLocationEntity[];
 /**
  * @TJS-pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)$
  */
-export type HumidifierEntity = string;
+export type HumidifierEntity = `humidifier.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?humidifier\.(?!_)[\da-z_]+(?<!_))*$
@@ -269,10 +274,17 @@ export type HumidifierEntity = string;
  */
 export type HumidifierEntities = HumidifierEntity | HumidifierEntity[];
 
+type InputDomains =
+  | "input_select"
+  | "input_text"
+  | "input_number"
+  | "input_boolean"
+  | "input_datetime";
+
 /**
  * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$"
  */
-export type InputEntity = string;
+export type InputEntity = `${InputDomains}.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_))*$
@@ -283,7 +295,7 @@ export type InputEntities = InputEntity | InputEntity[];
 /**
  * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputDatetimeEntity = string;
+export type InputDatetimeEntity = `input_datetime.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_datetime\.(?!_)[\da-z_]+(?<!_))*$
@@ -294,7 +306,7 @@ export type InputDatetimeEntities = InputDatetimeEntity | InputDatetimeEntity[];
 /**
  * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputNumberEntity = string;
+export type InputNumberEntity = `input_number.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_number\.(?!_)[\da-z_]+(?<!_))*$
@@ -307,7 +319,7 @@ export type Label = string;
 /**
  * @TJS-pattern ^light\.(?!_)[\da-z_]+(?<!_)$
  */
-export type LightEntity = string;
+export type LightEntity = `light.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^light\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?light\.(?!_)[\da-z_]+(?<!_))*$
@@ -318,7 +330,7 @@ export type LightEntities = LightEntity | LightEntity[];
 /**
  * @TJS-pattern ^media_player\.(?!_)[\da-z_]+(?<!_)$
  */
-export type MediaPlayerEntity = string;
+export type MediaPlayerEntity = `media_player.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^media_player\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?media_player\.(?!_)[\da-z_]+(?<!_))*$
@@ -329,7 +341,7 @@ export type MediaPlayerEntities = MediaPlayerEntity | MediaPlayerEntity[];
 /**
  * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)$
  */
-export type NumberEntity = string;
+export type NumberEntity = `number.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?number\.(?!_)[\da-z_]+(?<!_))*$
@@ -340,7 +352,7 @@ export type NumberEntities = NumberEntity | NumberEntity[];
 /**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
-export type PersonEntity = string;
+export type PersonEntity = `person.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?person\.(?!_)[\da-z_]+(?<!_))*$
@@ -351,7 +363,7 @@ export type PersonEntities = PersonEntity | PersonEntity[];
 /**
  * @TJS-pattern ^plant\.(?!_)[\da-z_]+(?<!_)$
  */
-export type PlantEntity = string;
+export type PlantEntity = `plant.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^plant\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?plant\.(?!_)[\da-z_]+(?<!_))*$
@@ -362,7 +374,7 @@ export type PlantEntities = PlantEntity | PlantEntity[];
 /**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
  */
-export type SceneEntity = string;
+export type SceneEntity = `scene.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?scene\.(?!_)[\da-z_]+(?<!_))*$
@@ -373,7 +385,7 @@ export type SceneEntities = SceneEntity | SceneEntity[];
 /**
  * @TJS-pattern ^sensor\.(?!_)[\da-z_]+(?<!_)$
  */
-export type SensorEntity = string;
+export type SensorEntity = `sensor.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^sensor\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?sensor\.(?!_)[\da-z_]+(?<!_))*$
@@ -384,7 +396,7 @@ export type SensorEntities = SensorEntity | SensorEntity[];
 /**
  * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)$
  */
-export type WeatherEntity = string;
+export type WeatherEntity = `weather.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?weather\.(?!_)[\da-z_]+(?<!_))*$
@@ -395,7 +407,7 @@ export type WeatherEntities = WeatherEntity | WeatherEntity[];
 /**
  * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)$
  */
-export type ZoneEntity = string;
+export type ZoneEntity = `zone.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?zone\.(?!_)[\da-z_]+(?<!_))*$
