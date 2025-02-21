@@ -60,7 +60,7 @@
     "home-assistant-js-websocket": "^9.1.0",
     "vscode-json-languageservice": "3.9.1",
     "vscode-languageserver-protocol": "3.15.3",
-    "vscode-uri": "3.0.8",
+    "vscode-uri": "3.1.0",
     "ws": "8.18.0",
     "yaml": "1.10.2",
     "yaml-language-server": "0.12.0"
