@@ -38,7 +38,7 @@ jobs:
           VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}
 
       - name: 🚀 Open VSX Publish
-        uses: HaaLeo/publish-vscode-extension@v1
+        uses: HaaLeo/publish-vscode-extension@v2
         if: success() && github.ref == 'refs/heads/master'
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
