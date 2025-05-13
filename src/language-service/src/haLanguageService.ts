@@ -88,7 +88,7 @@ export class HomeAssistantLanguageService {
     return validTags;
   }
 
-  private onDocumentChangeDebounce: NodeJS.Timer | undefined;
+  private onDocumentChangeDebounce: NodeJS.Timeout | undefined;
 
   public onDocumentChange = (
     textDocumentChangeEvent: TextDocumentChangeEvent,
