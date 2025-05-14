@@ -41,7 +41,12 @@ export class FloorCompletionContribution implements JSONWorkerContribution {
       return;
     }
     const floorCompletions = await this.haConnection.getFloorCompletions();
-    floorCompletions.forEach((c) => result.add(c));
+    floorCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public collectValueCompletions = async (
@@ -57,7 +62,12 @@ export class FloorCompletionContribution implements JSONWorkerContribution {
     }
 
     const floorCompletions = await this.haConnection.getFloorCompletions();
-    floorCompletions.forEach((c) => result.add(c));
+    floorCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public getInfoContribution(

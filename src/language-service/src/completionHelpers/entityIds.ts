@@ -58,7 +58,12 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
       return;
     }
     const entityIdCompletions = await this.haConnection.getEntityCompletions();
-    entityIdCompletions.forEach((c) => result.add(c));
+    entityIdCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public collectValueCompletions = async (
@@ -76,7 +81,12 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
     }
 
     const entityIdCompletions = await this.haConnection.getEntityCompletions();
-    entityIdCompletions.forEach((c) => result.add(c));
+    entityIdCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public getInfoContribution(

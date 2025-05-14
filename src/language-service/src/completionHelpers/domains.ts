@@ -47,7 +47,12 @@ export class DomainCompletionContribution implements JSONWorkerContribution {
       return;
     }
     const domainCompletions = await this.haConnection.getDomainCompletions();
-    domainCompletions.forEach((c) => result.add(c));
+    domainCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public collectValueCompletions = async (
@@ -65,7 +70,12 @@ export class DomainCompletionContribution implements JSONWorkerContribution {
     }
 
     const domainCompletions = await this.haConnection.getEntityCompletions();
-    domainCompletions.forEach((c) => result.add(c));
+    domainCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public getInfoContribution(

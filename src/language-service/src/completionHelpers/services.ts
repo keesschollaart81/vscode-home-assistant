@@ -40,7 +40,12 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
       return;
     }
     const servicesCompletions = await this.haConnection.getServiceCompletions();
-    servicesCompletions.forEach((c) => result.add(c));
+    servicesCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public collectValueCompletions = async (
@@ -57,7 +62,12 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
       return;
     }
     const servicesCompletions = await this.haConnection.getServiceCompletions();
-    servicesCompletions.forEach((c) => result.add(c));
+    servicesCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public getInfoContribution(
