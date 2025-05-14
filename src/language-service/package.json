@@ -41,7 +41,7 @@
     "@types/mocha": "10.0.10",
     "@types/node": "22.15.17",
     "@types/vscode": "1.48.0",
-    "@types/ws": "8.5.14",
+    "@types/ws": "8.18.1",
     "@types/yaml": "1.9.7",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
@@ -61,7 +61,7 @@
     "vscode-json-languageservice": "3.9.1",
     "vscode-languageserver-protocol": "3.15.3",
     "vscode-uri": "3.1.0",
-    "ws": "8.18.1",
+    "ws": "8.18.2",
     "yaml": "1.10.2",
     "yaml-language-server": "0.12.0"
   },
