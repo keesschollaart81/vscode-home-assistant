@@ -9,6 +9,10 @@ import {
   type HassEntities,
   type HassServices,
   type AuthData,
+  createConnection as haCreateConnection,
+  Auth as HaAuth,
+  subscribeEntities,
+  subscribeServices,
 } from "home-assistant-js-websocket";
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
@@ -52,9 +56,9 @@ export type HassLabels = {
 };
 
 // Normal require(), and cast to the static type
-const ha =
-  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-  require("home-assistant-js-websocket/dist/haws.cjs") as typeof import("home-assistant-js-websocket");
+// const ha =
+// eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+// require("home-assistant-js-websocket/dist/haws.cjs") as typeof import("home-assistant-js-websocket");
 
 export interface IHaConnection {
   tryConnect(): Promise<void>;
@@ -95,7 +99,7 @@ export class HaConnection implements IHaConnection {
       return;
     }
 
-    const auth = new ha.Auth(<AuthData>{
+    const auth = new HaAuth(<AuthData>{
       access_token: `${this.configurationService.token}`,
       expires: +new Date(new Date().getTime() + 1e11),
       hassUrl: `${this.configurationService.url}`,
@@ -106,7 +110,7 @@ export class HaConnection implements IHaConnection {
 
     try {
       console.log("Connecting to Home Assistant...");
-      this.connection = await ha.createConnection({
+      this.connection = await haCreateConnection({
         auth,
         createSocket: async () =>
           createSocket(auth, this.configurationService.ignoreCertificates),
@@ -297,7 +301,7 @@ export class HaConnection implements IHaConnection {
         if (!this.connection) {
           return reject();
         }
-        ha.subscribeEntities(this.connection, (entities) => {
+        subscribeEntities(this.connection, (entities: HassEntities) => {
           console.log(
             `Got ${Object.keys(entities).length} entities from Home Assistant`,
           );
@@ -427,26 +431,25 @@ export class HaConnection implements IHaConnection {
   }
 
   private getHassServices = async (): Promise<HassServices> => {
+    if (this.hassServices !== undefined) {
+      return this.hassServices;
+    }
     await this.createConnection();
 
-    if (!this.hassServices) {
-      this.hassServices = new Promise<HassServices>(
-        // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
-        async (resolve, reject) => {
-          if (!this.connection) {
-            return reject();
-          }
-          ha.subscribeServices(this.connection, (services) => {
-            console.log(
-              `Got ${
-                Object.keys(services).length
-              } services from Home Assistant`,
-            );
-            return resolve(services);
-          });
-        },
-      );
-    }
+    this.hassServices = new Promise<HassServices>(
+      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      async (resolve, reject) => {
+        if (!this.connection) {
+          return reject();
+        }
+        subscribeServices(this.connection, (services: HassServices) => {
+          console.log(
+            `Got ${Object.keys(services).length} services from Home Assistant`,
+          );
+          return resolve(services);
+        });
+      },
+    );
     return this.hassServices;
   };
 

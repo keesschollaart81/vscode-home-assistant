@@ -7,7 +7,7 @@ https://github.com/home-assistant/home-assistant-js-websocket/blob/master/lib/so
 
 import type { Auth } from "home-assistant-js-websocket/dist/auth";
 
-import WebSocket = require("ws");
+import WebSocket from "ws";
 
 const MSG_TYPE_AUTH_REQUIRED = "auth_required";
 const MSG_TYPE_AUTH_INVALID = "auth_invalid";
