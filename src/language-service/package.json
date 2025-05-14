@@ -45,7 +45,7 @@
     "@types/yaml": "1.9.7",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.5",
     "prettier": "^3.0.0",
     "rimraf": "6.0.1",
