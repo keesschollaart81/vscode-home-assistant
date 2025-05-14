@@ -96,7 +96,7 @@ connection.onInitialize((params) => {
   );
   documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e));
 
-  let onDidSaveDebounce: NodeJS.Timer;
+  let onDidSaveDebounce: NodeJS.Timeout;
   documents.onDidSave(() => {
     clearTimeout(onDidSaveDebounce);
     onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 100);
