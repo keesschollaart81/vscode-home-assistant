@@ -41,7 +41,12 @@ export class AreaCompletionContribution implements JSONWorkerContribution {
       return;
     }
     const areaCompletions = await this.haConnection.getAreaCompletions();
-    areaCompletions.forEach((c) => result.add(c));
+    areaCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public collectValueCompletions = async (
@@ -57,7 +62,12 @@ export class AreaCompletionContribution implements JSONWorkerContribution {
     }
 
     const areaCompletions = await this.haConnection.getAreaCompletions();
-    areaCompletions.forEach((c) => result.add(c));
+    areaCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public getInfoContribution(

@@ -41,7 +41,12 @@ export class LabelCompletionContribution implements JSONWorkerContribution {
       return;
     }
     const labelCompletions = await this.haConnection.getLabelCompletions();
-    labelCompletions.forEach((c) => result.add(c));
+    labelCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public collectValueCompletions = async (
@@ -57,7 +62,12 @@ export class LabelCompletionContribution implements JSONWorkerContribution {
     }
 
     const labelCompletions = await this.haConnection.getLabelCompletions();
-    labelCompletions.forEach((c) => result.add(c));
+    labelCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public getInfoContribution(
