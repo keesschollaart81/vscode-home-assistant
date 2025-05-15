@@ -225,6 +225,11 @@ interface BaseItem {
     name?: string;
 
     /**
+     * 	The hardware version of the device.
+     */
+    hw_version?: string;
+    
+    /**
      * The firmware version of the device.
      */
     sw_version?: string;
