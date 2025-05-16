@@ -437,7 +437,7 @@
     "eslint-config-prettier": "^10.1.5",
     "husky": "^9.1.7",
     "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3",
+    "prettier": "^3.5.3",
     "rimraf": "5.0.5",
     "ts-loader": "^9.5.1",
     "ts-node": "10.9.2",
