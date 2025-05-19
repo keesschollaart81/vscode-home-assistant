@@ -1,12 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as vscode from "vscode";
+import { LanguageClientOptions } from "vscode-languageclient";
 import {
   LanguageClient,
-  LanguageClientOptions,
-  TransportKind,
   ServerOptions,
-} from "vscode-languageclient";
+  TransportKind,
+} from "vscode-languageclient/node";
 import TelemetryReporter from "vscode-extension-telemetry";
 
 const extensionId = "vscode-home-assistant";

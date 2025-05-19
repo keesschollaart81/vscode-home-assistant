@@ -10,7 +10,6 @@ import {
   Range,
   SymbolInformation,
   TextDocument,
-  TextDocumentChangeEvent,
   TextEdit,
 } from "vscode-languageserver-protocol";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
@@ -90,41 +89,31 @@ export class HomeAssistantLanguageService {
 
   private onDocumentChangeDebounce: NodeJS.Timeout | undefined;
 
-  public onDocumentChange = (
-    textDocumentChangeEvent: TextDocumentChangeEvent,
-  ): void => {
+  public onDocumentChange = (document: TextDocument): void => {
     if (this.onDocumentChangeDebounce !== undefined) {
       clearTimeout(this.onDocumentChangeDebounce);
     }
 
     this.onDocumentChangeDebounce = setTimeout(async (): Promise<void> => {
-      const singleFileUpdate = await this.haConfig.updateFile(
-        textDocumentChangeEvent.document.uri,
-      );
+      const singleFileUpdate = await this.haConfig.updateFile(document.uri);
       if (singleFileUpdate.isValidYaml && singleFileUpdate.newFilesFound) {
         console.log(
-          `Discover all configuration files because ${textDocumentChangeEvent.document.uri} got updated and new files were found...`,
+          `Discover all configuration files because ${document.uri} got updated and new files were found...`,
         );
         await this.haConfig.discoverFiles();
         this.findAndApplySchemas();
       }
 
-      const diagnostics = await this.getDiagnostics(
-        textDocumentChangeEvent.document,
-      );
+      const diagnostics = await this.getDiagnostics(document);
 
-      this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
+      this.sendDiagnostics(document.uri, diagnostics);
     }, 600);
   };
 
-  public onDocumentOpen = async (
-    textDocumentChangeEvent: TextDocumentChangeEvent,
-  ): Promise<void> => {
-    const diagnostics = await this.getDiagnostics(
-      textDocumentChangeEvent.document,
-    );
+  public onDocumentOpen = async (document: TextDocument): Promise<void> => {
+    const diagnostics = await this.getDiagnostics(document);
 
-    this.sendDiagnostics(textDocumentChangeEvent.document.uri, diagnostics);
+    this.sendDiagnostics(document.uri, diagnostics);
   };
 
   public getDiagnostics = async (
@@ -194,7 +183,7 @@ export class HomeAssistantLanguageService {
       return [];
     }
 
-    return this.yamlLanguageService.findDocumentSymbols(document);
+    return this.yamlLanguageService.findDocumentSymbols(document, {});
   };
 
   public onDocumentFormatting = (
@@ -249,8 +238,7 @@ export class HomeAssistantLanguageService {
 
   public onCompletionResolve = async (
     completionItem: CompletionItem,
-  ): Promise<CompletionItem> =>
-    this.yamlLanguageService.doResolve(completionItem);
+  ): Promise<CompletionItem> => completionItem;
 
   public onHover = async (
     document: TextDocument,
