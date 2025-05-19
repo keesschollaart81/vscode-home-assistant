@@ -10,7 +10,6 @@ import {
   Range,
   SymbolInformation,
   TextDocument,
-  TextDocumentContentChangeEvent as TextDocumentChangeEvent,
   TextEdit,
 } from "vscode-languageserver-protocol";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
