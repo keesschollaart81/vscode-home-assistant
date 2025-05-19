@@ -430,7 +430,7 @@
     "@types/node": "22.15.18",
     "@types/request": "2.48.12",
     "@types/vscode": "1.45.1",
-    "@types/ws": "8.5.10",
+    "@types/ws": "8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "eslint": "^8.57.0",
@@ -456,7 +456,7 @@
     "vscode-languageserver-protocol": "3.16.0",
     "vscode-languageserver-textdocument": "^1.0.12",
     "vscode-uri": "3.0.8",
-    "ws": "8.17.1",
+    "ws": "8.18.2",
     "yaml": "1.10.2",
     "yaml-language-server": "0.21.1"
   }
