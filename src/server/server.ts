@@ -5,7 +5,7 @@ import {
   ServerCapabilities,
   TextDocumentSyncKind,
   Diagnostic,
-} from "vscode-languageserver";
+} from "vscode-languageserver/node";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import { getLanguageService } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
 import { HaConnection } from "../language-service/src/home-assistant/haConnection";
@@ -19,7 +19,7 @@ import { EntityIdCompletionContribution } from "../language-service/src/completi
 import { ServicesCompletionContribution } from "../language-service/src/completionHelpers/services";
 import { VsCodeFileAccessor } from "./fileAccessor";
 
-const connection = createConnection(ProposedFeatures.all);
+const connection = createConnection(ProposedFeatures.all, undefined, undefined);
 
 console.log = connection.console.log.bind(connection.console);
 console.warn = connection.window.showWarningMessage.bind(connection.window);
@@ -54,7 +54,8 @@ connection.onInitialize((params) => {
     // eslint-disable-next-line @typescript-eslint/require-await
     async () => "",
     null,
-    jsonWorkerContributions,
+    connection,
+    undefined,
   );
 
   const sendDiagnostics = (uri: string, diagnostics: Diagnostic[]) => {
@@ -92,9 +93,11 @@ connection.onInitialize((params) => {
   );
 
   documents.onDidChangeContent((e) =>
-    homeAsisstantLanguageService.onDocumentChange(e),
+    homeAsisstantLanguageService.onDocumentChange(e.document),
   );
-  documents.onDidOpen((e) => homeAsisstantLanguageService.onDocumentOpen(e));
+  documents.onDidOpen((e) =>
+    homeAsisstantLanguageService.onDocumentOpen(e.document),
+  );
 
   let onDidSaveDebounce: NodeJS.Timeout;
   documents.onDidSave(() => {
