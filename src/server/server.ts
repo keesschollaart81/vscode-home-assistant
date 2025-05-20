@@ -51,7 +51,7 @@ connection.onInitialize((params) => {
   const schemaServiceForIncludes = new SchemaServiceForIncludes();
 
   const yamlLanguageService = getLanguageService(
-    // eslint-disable-next-line @typescript-eslint/require-await
+     
     async () => "",
     null,
     connection,

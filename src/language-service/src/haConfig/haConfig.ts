@@ -156,7 +156,7 @@ export class HomeAssistantConfiguration {
 
   private discoverCore = async (
     filename: string,
-    // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
+     
     dirPath: string,
     files: FilesCollection,
   ): Promise<FilesCollection> => {
@@ -185,7 +185,7 @@ export class HomeAssistantConfiguration {
       error = true;
       if (validationResult.errors && validationResult.errors.length > 0) {
         errorMessage += " Error(s): ";
-        // eslint-disable-next-line no-return-assign
+         
         validationResult.errors.forEach((e) => (errorMessage += `\r\n - ${e}`));
       }
     }

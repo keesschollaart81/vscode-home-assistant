@@ -57,7 +57,7 @@ export type HassLabels = {
 
 // Normal require(), and cast to the static type
 // const ha =
-// eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+ 
 // require("home-assistant-js-websocket/dist/haws.cjs") as typeof import("home-assistant-js-websocket");
 
 export interface IHaConnection {
@@ -176,7 +176,7 @@ export class HaConnection implements IHaConnection {
     await this.createConnection();
 
     this.hassAreas = new Promise<HassAreas>(
-      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
         if (!this.connection) {
           return reject();
@@ -240,7 +240,7 @@ export class HaConnection implements IHaConnection {
     await this.createConnection();
 
     this.hassFloors = new Promise<HassFloors>(
-      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
         if (!this.connection) {
           return reject();
@@ -296,7 +296,7 @@ export class HaConnection implements IHaConnection {
 
     await this.createConnection();
     this.hassEntities = new Promise<HassEntities>(
-      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
         if (!this.connection) {
           return reject();
@@ -320,7 +320,7 @@ export class HaConnection implements IHaConnection {
     await this.createConnection();
 
     this.hassLabels = new Promise<HassLabels>(
-      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
         if (!this.connection) {
           return reject();
@@ -437,7 +437,7 @@ export class HaConnection implements IHaConnection {
     await this.createConnection();
 
     this.hassServices = new Promise<HassServices>(
-      // eslint-disable-next-line @typescript-eslint/require-await, no-async-promise-executor, consistent-return
+      // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
         if (!this.connection) {
           return reject();
@@ -507,7 +507,7 @@ export class HaConnection implements IHaConnection {
   public callApi = async (
     method: Method,
     api: string,
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+     
     requestBody?: any,
   ): Promise<any> => {
     try {
@@ -519,7 +519,7 @@ export class HaConnection implements IHaConnection {
         },
         data: requestBody,
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+       
       return resp.data;
     } catch (error) {
       console.error(error);
@@ -530,7 +530,7 @@ export class HaConnection implements IHaConnection {
   public callService = async (
     domain: string,
     service: string,
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+     
     serviceData: any,
   ): Promise<any> => {
     try {
@@ -542,7 +542,7 @@ export class HaConnection implements IHaConnection {
         },
         data: serviceData,
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+       
       console.log(
         `Service Call ${domain}.${service} made succesfully, response:`,
       );

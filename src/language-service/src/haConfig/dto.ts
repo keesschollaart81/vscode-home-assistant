@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-shadow
+ 
 export enum Includetype {
   include,
   include_dir_list,

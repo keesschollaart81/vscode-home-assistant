@@ -9,7 +9,7 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
   public onDefinition = async (
     line: string,
     uri: string,
-    // eslint-disable-next-line @typescript-eslint/require-await
+     
   ): Promise<Definition[]> => {
     const matches = /(.*)(!include\S*)\s+(["'])?(.+)\3/.exec(line);
     if (!matches || matches.length !== 5) {

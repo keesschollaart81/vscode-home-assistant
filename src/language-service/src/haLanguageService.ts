@@ -272,11 +272,11 @@ export class HomeAssistantLanguageService {
     let definitions: any = [];
     for (const result of results) {
       if (result) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+         
         definitions = definitions.concat(result);
       }
     }
-    // eslint-disable-next-line consistent-return, @typescript-eslint/no-unsafe-return
+     
     return definitions;
   };
 
@@ -307,39 +307,39 @@ export class HomeAssistantLanguageService {
     let additionalCompletion: CompletionItem[] = [];
     switch (additionalCompletionProvider) {
       case "areas":
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+         
         if (!currentCompletions.items.some((x) => x.data && x.data.isArea)) {
           additionalCompletion = await this.haConnection.getAreaCompletions();
         }
         break;
       case "entities":
         // sometimes the entities are already added, do not add them twice
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+         
         if (!currentCompletions.items.some((x) => x.data && x.data.isEntity)) {
           additionalCompletion = await this.haConnection.getEntityCompletions();
         }
         break;
       case "domains":
         // sometimes the domains are already added, do not add them twice
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+         
         if (!currentCompletions.items.some((x) => x.data && x.data.isDomain)) {
           additionalCompletion = await this.haConnection.getDomainCompletions();
         }
         break;
       case "floors":
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+         
         if (!currentCompletions.items.some((x) => x.data && x.data.isFloor)) {
           additionalCompletion = await this.haConnection.getFloorCompletions();
         }
         break;
       case "labels":
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+         
         if (!currentCompletions.items.some((x) => x.data && x.data.isLabel)) {
           additionalCompletion = await this.haConnection.getLabelCompletions();
         }
         break;
       case "services":
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+         
         if (!currentCompletions.items.some((x) => x.data && x.data.isService)) {
           additionalCompletion =
             await this.haConnection.getServiceCompletions();
@@ -366,7 +366,7 @@ export class HomeAssistantLanguageService {
       }
       const thisLine = document.getText().substring(start, end);
 
-      // eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
+       
       const isOtherItemInList = thisLine.match(
         /-\s*([-"\w]+)?(\.)?([-"\w]+?)?\s*$/,
       );
