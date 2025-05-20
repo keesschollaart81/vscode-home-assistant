@@ -481,7 +481,7 @@ export interface ClimateItem extends BaseItem {
    * The MQTT topic to subscribe for changes of the current action. If this is set, the climate graph uses the value received as data source. Valid values: off, heating, cooling, drying, idle, fan.
    * https://www.home-assistant.io/integrations/climate.mqtt/#action_topic
    */
-  action_topic?: "off" | "heating" | "cooling" | "drying" | "idle" | "fan";
+  action_topic?: string;
 
   /**
    * The MQTT topic to publish commands to switch auxiliary heat.
