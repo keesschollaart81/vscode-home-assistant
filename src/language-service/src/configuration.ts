@@ -32,7 +32,6 @@ export class ConfigurationService implements IConfigurationService {
 
   public updateConfiguration = (config: DidChangeConfigurationParams): void => {
     const incoming = <HomeAssistantConfiguration>(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       config.settings["vscode-home-assistant"]
     );
 

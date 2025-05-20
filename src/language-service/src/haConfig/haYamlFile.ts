@@ -19,7 +19,7 @@ export class HomeAssistantYamlFile {
   constructor(
     private fileAccessor: FileAccessor,
     private filename: string,
-    // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
+
     public path: string,
   ) {}
 
@@ -183,10 +183,9 @@ export class HomeAssistantYamlFile {
 
   private getKeyName = (node: Scalar): string => {
     if (node.tag && node.type === Type.PLAIN) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
       return node.value.toString().slice(7, -1);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
     return node.toJSON();
   };
 
@@ -222,7 +221,6 @@ export class HomeAssistantYamlFile {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     value = x.value.toString().slice(7, -1).replace(/\\/g, "/"); // \ to / on windows
 
     let files: string[] = [];
@@ -267,7 +265,6 @@ export class HomeAssistantYamlFile {
       const filepath = vscodeUri.URI.file(path.resolve(this.filename)).fsPath;
       const filename = path.parse(filepath).base.replace(".yaml", "");
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const key = isNamed ? item.key.toJSON() : filename;
 
       if (item.type === "PAIR") {
@@ -358,7 +355,6 @@ export class HomeAssistantYamlFile {
       return null;
     }
 
-    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < lineStarts.length; ++i) {
       const start = lineStarts[i];
       if (offset < start) {

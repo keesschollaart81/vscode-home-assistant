@@ -4,6 +4,7 @@
   "description": " Completion for entity-id's in Home Assistant Configurations",
   "version": "1.43.0",
   "preview": false,
+  "type": "module",
   "engines": {
     "vscode": "^1.45.1"
   },
@@ -413,10 +414,10 @@
   },
   "scripts": {
     "compile": "ts-node src/language-service/src/schemas/generateSchemas.ts --quick && tsc -p ./ ",
-    "format:eslint": "eslint \"**/src/**/*.ts\" --fix --ignore-path .gitignore",
+    "format:eslint": "eslint \"**/src/**/*.ts\" --fix",
     "format:prettier": "prettier \"**/src/**/*.{ts,json}\" --write",
     "format": "npm run format:eslint && npm run format:prettier",
-    "lint:eslint": "eslint \"**/src/**/*.ts\" --ignore-path .gitignore",
+    "lint:eslint": "eslint \"**/src/**/*.ts\"",
     "lint:prettier": "prettier \"**/src/**/*.{ts,json}\" --check",
     "lint:types": "tsc",
     "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:types",
@@ -426,6 +427,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@eslint/js": "^9.27.0",
     "@types/mocha": "10.0.10",
     "@types/node": "22.15.19",
     "@types/request": "2.48.12",
@@ -433,8 +435,9 @@
     "@types/ws": "8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
-    "eslint": "^8.57.0",
+    "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
+    "glob": "^11.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
@@ -442,6 +445,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "10.9.2",
     "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
     "typescript-json-schema": "0.65.1"
   },
   "dependencies": {
