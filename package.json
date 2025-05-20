@@ -412,7 +412,7 @@
     ]
   },
   "scripts": {
-    "compile": "ts-node src/language-service/src/schemas/generateSchemas.ts --quick && tsc -p ./ ",
+    "compile": "tsc -p src/language-service/tsconfig.json && node src/language-service/dist/schemas/generateSchemas.js --quick && tsc -p ./ ",
     "format:eslint": "eslint \"**/src/**/*.ts\" --fix",
     "format:prettier": "prettier \"**/src/**/*.json\" --write",
     "format": "npm run format:eslint && npm run format:prettier",
