@@ -15,9 +15,9 @@ export type ColorMode =
   | "rgbww"
   | "white";
 
-export type Data = {
+export interface Data {
   [key: string]: any | Template;
-};
+}
 
 /**
  * @TJS-pattern DEPRECATED^

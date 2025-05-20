@@ -6,7 +6,9 @@ import { Data, Entity, CameraEntity } from "../types";
 import { Condition } from "./types";
 import { Action } from "./actions";
 
-type Style = { [key: string]: any };
+interface Style {
+  [key: string]: any;
+}
 
 export type Element =
   | ConditionalElement

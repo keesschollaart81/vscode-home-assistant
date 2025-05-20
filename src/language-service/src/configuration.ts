@@ -31,9 +31,9 @@ export class ConfigurationService implements IConfigurationService {
   }
 
   public updateConfiguration = (config: DidChangeConfigurationParams): void => {
-    const incoming = <HomeAssistantConfiguration>(
-      config.settings["vscode-home-assistant"]
-    );
+    const incoming = config.settings[
+      "vscode-home-assistant"
+    ] as HomeAssistantConfiguration;
 
     this.token = incoming.longLivedAccessToken;
     if (incoming.hostUrl !== undefined) {

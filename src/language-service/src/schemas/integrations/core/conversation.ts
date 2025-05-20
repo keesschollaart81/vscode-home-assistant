@@ -59,25 +59,25 @@ export interface CustomSentence {
   lists?: {
     [key: string]:
       | {
-          values: Array<
+        values: (
             | string
             | {
-                in: string;
-                out: string;
-                context?: { [key: string]: string };
-              }
-          >;
-        }
+              in: string;
+              out: string;
+              context?: { [key: string]: string };
+            }
+        )[];
+      }
       | {
-          range: {
-            type?: "number" | "percentage" | "temperature";
-            from: number;
-            to: number;
-          };
-        }
-      | {
-          wildcard: boolean;
+        range: {
+          type?: "number" | "percentage" | "temperature";
+          from: number;
+          to: number;
         };
+      }
+      | {
+        wildcard: boolean;
+      };
   };
 
   /**

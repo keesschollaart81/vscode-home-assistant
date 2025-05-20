@@ -6,8 +6,8 @@ import { IncludeList, IncludeNamed } from "./types";
  */
 export interface ConfigurationRoot
   extends InternalIntegrations,
-    CoreIntegrations,
-    CustomIntegrations {
+  CoreIntegrations,
+  CustomIntegrations {
   /**
    * Home Assistant Core configuration
    * https://www.home-assistant.io/docs/configuration/basic

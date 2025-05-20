@@ -15,8 +15,8 @@ interface Item {
    */
   entities:
     | {
-        [entity: string]: ItemEntity | State;
-      }
+      [entity: string]: ItemEntity | State;
+    }
     | IncludeNamed;
 
   /**

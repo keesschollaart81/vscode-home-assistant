@@ -71,7 +71,7 @@ export class VsCodeFileAccessor implements FileAccessor {
             ? this.getFilesInFolder(path.join(subFolder, file), filelist)
             : filelist.concat(path.join(subFolder, file));
       });
-    } catch (err) {
+    } catch {
       console.log(`Cannot find the files in folder ${subFolder}`);
     }
     return filelist;

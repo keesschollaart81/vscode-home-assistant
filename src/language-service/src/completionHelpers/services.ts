@@ -13,8 +13,8 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
   constructor(private haConnection: IHaConnection) {}
 
   public collectDefaultCompletions(
-    resource: string,
-    result: CompletionsCollector,
+    _resource: string,
+    _result: CompletionsCollector,
   ): Thenable<any> {
     return Promise.reject();
   }
@@ -71,8 +71,8 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
   };
 
   public getInfoContribution(
-    resource: string,
-    location: JSONPath,
+    _resource: string,
+    _location: JSONPath,
   ): Thenable<MarkedString[]> {
     return Promise.resolve([]);
   }

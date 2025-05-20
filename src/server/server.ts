@@ -43,7 +43,8 @@ connection.onInitialize((params) => {
     new ScriptDefinitionProvider(haConfig),
   ];
 
-  const jsonWorkerContributions = [
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _jsonWorkerContributions = [
     new EntityIdCompletionContribution(haConnection),
     new ServicesCompletionContribution(haConnection),
   ];
@@ -185,14 +186,14 @@ connection.onInitialize((params) => {
   setTimeout(discoverFilesAndUpdateSchemas, 0);
 
   return {
-    capabilities: <ServerCapabilities>{
+    capabilities: {
       textDocumentSync: TextDocumentSyncKind.Full,
       completionProvider: { triggerCharacters: [" "], resolveProvider: true },
       hoverProvider: true,
       documentSymbolProvider: true,
       documentFormattingProvider: true,
       definitionProvider: true,
-    },
+    } as ServerCapabilities,
   };
 });
 

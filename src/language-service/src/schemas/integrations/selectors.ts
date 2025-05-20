@@ -609,18 +609,18 @@ export interface SelectSelector {
     options:
       | string[]
       | {
-          /**
+        /**
            * The description to show in the UI for this item.
            * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
            */
-          label: string;
+        label: string;
 
-          /**
+        /**
            * The value to return when this label is selected.
            * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
            */
-          value: string;
-        }[];
+        value: string;
+      }[];
   };
 }
 
