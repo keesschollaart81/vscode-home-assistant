@@ -462,6 +462,6 @@
     "vscode-uri": "3.1.0",
     "ws": "8.18.2",
     "yaml": "1.10.2",
-    "yaml-language-server": "0.21.1"
+    "yaml-language-server": "1.18.0"
   }
 }
