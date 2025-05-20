@@ -4,7 +4,7 @@ import { JSONSchema } from "yaml-language-server/out/server/src/languageservice/
 import { HaFileInfo } from "../haConfig/dto";
 
 export class SchemaServiceForIncludes {
-  private mappings: Array<PathToSchemaMapping & { schema: JSONSchema }>;
+  private mappings: (PathToSchemaMapping & { schema: JSONSchema })[];
 
   constructor() {
     const jsonPathMappings = path.join(__dirname, "mappings.json");
@@ -13,17 +13,17 @@ export class SchemaServiceForIncludes {
     this.mappings.forEach((mapping) => {
       const jsonPath = path.join(__dirname, "json", mapping.file);
       const filecontents = fs.readFileSync(jsonPath, "utf-8");
-      const schema = <JSONSchema>JSON.parse(filecontents);
+      const schema = JSON.parse(filecontents) as JSONSchema;
       mapping.schema = schema;
     });
   }
 
   public getSchemaContributions(haFiles: HaFileInfo[]): any {
-    const results: Array<{
+    const results: {
       uri: string;
       fileMatch?: string[];
       schema?: JSONSchema;
-    }> = [];
+    }[] = [];
 
     for (const [sourceFile, sourceFileMapping] of haFiles.entries()) {
       let sourceFileMappingPath = sourceFileMapping.path.replace(

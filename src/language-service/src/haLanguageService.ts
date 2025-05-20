@@ -52,7 +52,7 @@ export class HomeAssistantLanguageService {
         );
       }
 
-      this.yamlLanguageService.configure(<LanguageSettings>{
+      this.yamlLanguageService.configure({
         validate: true,
         customTags: this.getValidYamlTags(),
         completion: true,
@@ -60,7 +60,7 @@ export class HomeAssistantLanguageService {
         hover: true,
         isKubernetes: false,
         schemas: this.schemaServiceForIncludes.getSchemaContributions(haFiles),
-      });
+      } as LanguageSettings);
 
       this.diagnoseAllFiles();
     } catch (error) {
@@ -70,7 +70,7 @@ export class HomeAssistantLanguageService {
         error,
       );
     }
-    console.log(`Schemas updated!`);
+    console.log("Schemas updated!");
   };
 
   private getValidYamlTags(): string[] {
@@ -144,7 +144,9 @@ export class HomeAssistantLanguageService {
       );
 
       // Skip errors about secrets, we simply have no idea what is in them
-      if (possibleSecret === "!secret") continue;
+      if (possibleSecret === "!secret") {
+        continue;
+      }
 
       // Fetch the text before the error, this might be "!input"
       const possibleInput = document.getText(
@@ -157,7 +159,9 @@ export class HomeAssistantLanguageService {
       );
 
       // Skip errors about input, that is up to the Blueprint creator
-      if (possibleInput === "!input") continue;
+      if (possibleInput === "!input") {
+        continue;
+      }
 
       // Fetch the text before the error, this might be "!include"
       const possibleInclude = document.getText(
@@ -170,7 +174,9 @@ export class HomeAssistantLanguageService {
       );
 
       // Skip errors about include, everything can be included
-      if (possibleInclude === "!include") continue;
+      if (possibleInclude === "!include") {
+        continue;
+      }
 
       diagnosticItem.severity = 1; // Convert all warnings to errors
       diagnostics.push(diagnosticItem);

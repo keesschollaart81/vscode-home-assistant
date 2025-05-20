@@ -17,7 +17,7 @@ import {
 import { IConfigurationService } from "../configuration";
 import { createSocket } from "./socket";
 
-export type HassArea = {
+export interface HassArea {
   area_id: string;
   floor_id: string | null;
   name: string;
@@ -25,35 +25,35 @@ export type HassArea = {
   icon: string | null;
   labels: string[];
   aliases: string[];
-};
+}
 
-export type HassAreas = {
+export interface HassAreas {
   [area_id: string]: HassArea;
-};
+}
 
-export type HassFloor = {
+export interface HassFloor {
   floor_id: string;
   name: string;
   level: number | null;
   icon: string | null;
   aliases: string[];
-};
+}
 
-export type HassFloors = {
+export interface HassFloors {
   [floor_id: string]: HassFloor;
-};
+}
 
-export type HassLabel = {
+export interface HassLabel {
   label_id: string;
   name: string;
   icon: string | null;
   color: string | null;
   description: string | null;
-};
+}
 
-export type HassLabels = {
+export interface HassLabels {
   [label_id: string]: HassLabel;
-};
+}
 
 // Normal require(), and cast to the static type
 // const ha =
@@ -99,14 +99,14 @@ export class HaConnection implements IHaConnection {
       return;
     }
 
-    const auth = new HaAuth(<AuthData>{
+    const auth = new HaAuth({
       access_token: `${this.configurationService.token}`,
       expires: +new Date(new Date().getTime() + 1e11),
       hassUrl: `${this.configurationService.url}`,
       clientId: "",
       expires_in: +new Date(new Date().getTime() + 1e11),
       refresh_token: "",
-    });
+    } as AuthData);
 
     try {
       console.log("Connecting to Home Assistant...");
@@ -163,7 +163,7 @@ export class HaConnection implements IHaConnection {
     this.disconnect();
     try {
       await this.tryConnect();
-    } catch (err) {
+    } catch {
       // so be it, error is now displayed in logs
     }
   };
@@ -216,10 +216,10 @@ export class HaConnection implements IHaConnection {
       completionItem.data = {};
       completionItem.data.isArea = true;
 
-      completionItem.documentation = <MarkupContent>{
+      completionItem.documentation = {
         kind: "markdown",
         value: `**${value.area_id}** \r\n \r\n`,
-      };
+      } as MarkupContent;
 
       let floor = value.floor_id;
       if (!floor) {
@@ -280,10 +280,10 @@ export class HaConnection implements IHaConnection {
       completionItem.data = {};
       completionItem.data.isFloor = true;
 
-      completionItem.documentation = <MarkupContent>{
+      completionItem.documentation = {
         kind: "markdown",
         value: `**${value.floor_id}** \r\n`,
-      };
+      } as MarkupContent;
       completions.push(completionItem);
     }
     return completions;
@@ -360,10 +360,10 @@ export class HaConnection implements IHaConnection {
       completionItem.data = {};
       completionItem.data.isLabel = true;
 
-      completionItem.documentation = <MarkupContent>{
+      completionItem.documentation = {
         kind: "markdown",
         value: `**${value.label_id}** \r\n`,
-      };
+      } as MarkupContent;
       completions.push(completionItem);
     }
     return completions;
@@ -387,16 +387,16 @@ export class HaConnection implements IHaConnection {
       completionItem.data = {};
       completionItem.data.isEntity = true;
 
-      completionItem.documentation = <MarkupContent>{
+      completionItem.documentation = {
         kind: "markdown",
         value: `**${value.entity_id}** \r\n \r\n`,
-      };
+      } as MarkupContent;
 
       if (value.state) {
         completionItem.documentation.value += `State: ${value.state} \r\n \r\n`;
       }
-      completionItem.documentation.value += `| Attribute | Value | \r\n`;
-      completionItem.documentation.value += `| :---- | :---- | \r\n`;
+      completionItem.documentation.value += "| Attribute | Value | \r\n";
+      completionItem.documentation.value += "| :---- | :---- | \r\n";
 
       for (const [attrKey, attrValue] of Object.entries(value.attributes)) {
         completionItem.documentation.value += `| ${attrKey} | ${attrValue} | \r\n`;
@@ -476,13 +476,15 @@ export class HaConnection implements IHaConnection {
         const fields = Object.entries(serviceValue.fields);
 
         if (fields.length > 0) {
-          completionItem.documentation = <MarkupContent>{
+          completionItem.documentation = {
             kind: "markdown",
             value: `**${domainKey}.${serviceKey}:** \r\n \r\n`,
-          };
+          } as MarkupContent;
 
-          completionItem.documentation.value += `| Field | Description | Example | \r\n`;
-          completionItem.documentation.value += `| :---- | :---- | :---- | \r\n`;
+          completionItem.documentation.value +=
+            "| Field | Description | Example | \r\n";
+          completionItem.documentation.value +=
+            "| :---- | :---- | :---- | \r\n";
 
           for (const [fieldKey, fieldValue] of fields) {
             completionItem.documentation.value += `| ${fieldKey} | ${fieldValue.description} |  ${fieldValue.example} | \r\n`;
@@ -499,7 +501,7 @@ export class HaConnection implements IHaConnection {
     if (!this.connection) {
       return;
     }
-    console.log(`Disconnecting from Home Assistant`);
+    console.log("Disconnecting from Home Assistant");
     this.connection.close();
     this.connection = undefined;
   }

@@ -4,7 +4,6 @@
   "description": " Completion for entity-id's in Home Assistant Configurations",
   "version": "1.43.0",
   "preview": false,
-  "type": "module",
   "engines": {
     "vscode": "^1.45.1"
   },
@@ -415,10 +414,10 @@
   "scripts": {
     "compile": "ts-node src/language-service/src/schemas/generateSchemas.ts --quick && tsc -p ./ ",
     "format:eslint": "eslint \"**/src/**/*.ts\" --fix",
-    "format:prettier": "prettier \"**/src/**/*.{ts,json}\" --write",
+    "format:prettier": "prettier \"**/src/**/*.json\" --write",
     "format": "npm run format:eslint && npm run format:prettier",
     "lint:eslint": "eslint \"**/src/**/*.ts\"",
-    "lint:prettier": "prettier \"**/src/**/*.{ts,json}\" --check",
+    "lint:prettier": "prettier \"**/src/**/*.json\" --check",
     "lint:types": "tsc",
     "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:types",
     "schema": "ts-node src/language-service/src/schemas/generateSchemas.ts",
@@ -428,6 +427,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
+    "@stylistic/eslint-plugin": "^4.2.0",
     "@types/mocha": "10.0.10",
     "@types/node": "22.15.19",
     "@types/request": "2.48.12",

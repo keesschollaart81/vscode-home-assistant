@@ -420,7 +420,7 @@ export interface TimeCondition {
    * Days of the week this condition can be valid.
    * https://www.home-assistant.io/docs/scripts/conditions/#time-condition
    */
-  weekday?: Weekday | Array<Weekday>;
+  weekday?: Weekday | Weekday[];
 }
 
 export interface TriggerCondition {

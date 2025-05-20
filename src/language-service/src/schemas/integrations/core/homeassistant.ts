@@ -13,7 +13,7 @@ import {
 
 export type Domain = "group";
 export interface Schema {
-  auth_mfa_modules?: Array<any> | IncludeNamed; // TODO: Extract similar as in integrations
+  auth_mfa_modules?: any[] | IncludeNamed; // TODO: Extract similar as in integrations
   auth_providers?: AuthProviders[] | IncludeNamed; // TODO: Extract similar as in integrations
 
   /**
@@ -217,7 +217,7 @@ interface TrustedNetworksAuthProvider {
   type: "trusted_networks";
   trusted_networks: string | string[] | any[];
   trusted_users?: {
-    [key: string]: string | Array<string | { [key: string]: string }>;
+    [key: string]: string | (string | { [key: string]: string })[];
   };
   allow_bypass_login?: boolean;
 }

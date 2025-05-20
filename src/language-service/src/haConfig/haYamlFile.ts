@@ -95,9 +95,9 @@ export class HomeAssistantYamlFile {
 
   private getCustomTags(): Schema.Tag[] {
     return [
-      `env_Var`,
-      `input`,
-      `secret`,
+      "env_Var",
+      "input",
+      "secret",
       `${Includetype[Includetype.include]}`,
       `${Includetype[Includetype.include_dir_list]}`,
       `${Includetype[Includetype.include_dir_merge_list]}`,
@@ -105,10 +105,10 @@ export class HomeAssistantYamlFile {
       `${Includetype[Includetype.include_dir_named]}`,
     ].map(
       (x) =>
-        <Schema.Tag>{
+        ({
           tag: `!${x}`,
           resolve: (_doc: any, cst: any) => Symbol.for(cst.strValue),
-        },
+        }) as Schema.Tag,
     );
   }
 
@@ -360,7 +360,9 @@ export class HomeAssistantYamlFile {
       if (offset < start) {
         return { line: i, col: offset - lineStarts[i - 1] + 1 };
       }
-      if (offset === start) return { line: i + 1, col: 1 };
+      if (offset === start) {
+        return { line: i + 1, col: 1 };
+      }
     }
     const line = lineStarts.length;
     return { line, col: offset - lineStarts[line - 1] + 1 };

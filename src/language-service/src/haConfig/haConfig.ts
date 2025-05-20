@@ -16,10 +16,10 @@ export class HomeAssistantConfiguration {
     const allFiles: HaFileInfo[] = [];
 
     for (const [filename, yamlFile] of Object.entries(this.files)) {
-      allFiles.push(<HaFileInfo>{
+      allFiles.push({
         filename,
         path: yamlFile.path,
-      });
+      } as HaFileInfo);
     }
     return allFiles;
   };

@@ -18,7 +18,7 @@ import {
 export type Domain = "mqtt";
 type QOS = 0 | 1 | 2;
 type AvailabilityMode = "all" | "any" | "latest";
-type Availability = {
+interface Availability {
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    */
@@ -38,7 +38,7 @@ type Availability = {
    * Defines a template to extract the value for payload_available and payload_not_available.
    */
   value_template?: Template;
-};
+}
 
 export type Schema = Item | Item[];
 
