@@ -25,11 +25,11 @@ export class DomainCompletionContribution implements JSONWorkerContribution {
   }
 
   public collectPropertyCompletions = async (
-    resource: string,
+    _resource: string,
     location: JSONPath,
-    currentWord: string,
-    addValue: boolean,
-    isLast: boolean,
+    _currentWord: string,
+    _addValue: boolean,
+    _isLast: boolean,
     result: CompletionsCollector,
   ): Promise<any> => {
     if (location.length < 2) {
@@ -56,8 +56,8 @@ export class DomainCompletionContribution implements JSONWorkerContribution {
   };
 
   public collectValueCompletions = async (
-    resource: string,
-    location: JSONPath,
+    _resource: string,
+    _location: JSONPath,
     currentKey: string,
     result: CompletionsCollector,
   ): Promise<any> => {

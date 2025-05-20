@@ -15,9 +15,10 @@ import { HomeAssistantLanguageService } from "../language-service/src/haLanguage
 import { SchemaServiceForIncludes } from "../language-service/src/schemas/schemaService";
 import { IncludeDefinitionProvider } from "../language-service/src/definition/includes";
 import { ScriptDefinitionProvider } from "../language-service/src/definition/scripts";
-import { EntityIdCompletionContribution } from "../language-service/src/completionHelpers/entityIds";
-import { ServicesCompletionContribution } from "../language-service/src/completionHelpers/services";
+// import { EntityIdCompletionContribution } from "../language-service/src/completionHelpers/entityIds"; // Marked as unused
+// import { ServicesCompletionContribution } from "../language-service/src/completionHelpers/services"; // Marked as unused
 import { VsCodeFileAccessor } from "./fileAccessor";
+// import { getLanguageService as getJSONLanguageService, JSONWorkerContribution } from "vscode-json-languageservice"; // Commented out as unused
 
 const connection = createConnection(ProposedFeatures.all, undefined, undefined);
 
@@ -43,13 +44,9 @@ connection.onInitialize((params) => {
     new ScriptDefinitionProvider(haConfig),
   ];
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _jsonWorkerContributions = [
-    new EntityIdCompletionContribution(haConnection),
-    new ServicesCompletionContribution(haConnection),
-  ];
-
-  const schemaServiceForIncludes = new SchemaServiceForIncludes();
+  // const _jsonWorkerContributions: JSONWorkerContribution[] = [ // Commented out as unused
+  //   // We can add more contributions here if needed for specific JSON handling
+  // ];
 
   const yamlLanguageService = getLanguageService(
     async () => "",
@@ -81,7 +78,7 @@ connection.onInitialize((params) => {
     haConfig,
     haConnection,
     definitionProviders,
-    schemaServiceForIncludes,
+    new SchemaServiceForIncludes(),
     sendDiagnostics,
     () => {
       documents.all().forEach(async (d) => {

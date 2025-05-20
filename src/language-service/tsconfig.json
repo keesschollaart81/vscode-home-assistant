@@ -11,7 +11,6 @@
     "esModuleInterop": true,
     "declaration": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true
