@@ -27,13 +27,11 @@
   "scripts": {
     "clean": "rimraf lib",
     "compile": "ts-node src/schemas/generateSchemas.ts --quick && tsc -p .",
-    "format:eslint": "eslint \"**/src/**/*.ts\" --fix",
     "format:prettier": "prettier \"**/src/**/*.{ts,json}\" --write",
-    "format": "npm run format:eslint && npm run format:prettier",
-    "lint:eslint": "eslint \"**/src/**/*.ts\"",
+    "format": "npm run format:prettier",
     "lint:prettier": "prettier \"**/src/**/*.{ts,json}\" --check",
     "lint:types": "tsc",
-    "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:types",
+    "lint": "npm run lint:prettier && npm run lint:types",
     "prepublishOnly": "npm run clean && npm run compile",
     "schema": "ts-node src/schemas/generateSchemas.ts"
   },
