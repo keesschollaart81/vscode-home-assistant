@@ -15,7 +15,7 @@ export type File = Item | Item[];
 /**
  * @TJS-additionalProperties true
  */
- 
+
 interface OtherPlatform extends PlatformSchema {
   /**
    * @TJS-pattern ^(?!(group|template|tod|mqtt)$)\w+$

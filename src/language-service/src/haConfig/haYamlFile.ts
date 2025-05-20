@@ -19,7 +19,7 @@ export class HomeAssistantYamlFile {
   constructor(
     private fileAccessor: FileAccessor,
     private filename: string,
-     
+
     public path: string,
   ) {}
 
@@ -183,10 +183,9 @@ export class HomeAssistantYamlFile {
 
   private getKeyName = (node: Scalar): string => {
     if (node.tag && node.type === Type.PLAIN) {
-       
       return node.value.toString().slice(7, -1);
     }
-     
+
     return node.toJSON();
   };
 
@@ -222,7 +221,6 @@ export class HomeAssistantYamlFile {
       return;
     }
 
-     
     value = x.value.toString().slice(7, -1).replace(/\\/g, "/"); // \ to / on windows
 
     let files: string[] = [];
@@ -267,7 +265,6 @@ export class HomeAssistantYamlFile {
       const filepath = vscodeUri.URI.file(path.resolve(this.filename)).fsPath;
       const filename = path.parse(filepath).base.replace(".yaml", "");
 
-       
       const key = isNamed ? item.key.toJSON() : filename;
 
       if (item.type === "PAIR") {
@@ -358,7 +355,6 @@ export class HomeAssistantYamlFile {
       return null;
     }
 
-     
     for (let i = 0; i < lineStarts.length; ++i) {
       const start = lineStarts[i];
       if (offset < start) {

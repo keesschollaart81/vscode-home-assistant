@@ -51,7 +51,6 @@ connection.onInitialize((params) => {
   const schemaServiceForIncludes = new SchemaServiceForIncludes();
 
   const yamlLanguageService = getLanguageService(
-     
     async () => "",
     null,
     connection,

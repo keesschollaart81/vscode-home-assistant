@@ -1,4 +1,3 @@
- 
 export enum Includetype {
   include,
   include_dir_list,

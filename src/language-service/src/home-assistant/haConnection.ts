@@ -57,7 +57,7 @@ export type HassLabels = {
 
 // Normal require(), and cast to the static type
 // const ha =
- 
+
 // require("home-assistant-js-websocket/dist/haws.cjs") as typeof import("home-assistant-js-websocket");
 
 export interface IHaConnection {
@@ -507,7 +507,7 @@ export class HaConnection implements IHaConnection {
   public callApi = async (
     method: Method,
     api: string,
-     
+
     requestBody?: any,
   ): Promise<any> => {
     try {
@@ -519,7 +519,7 @@ export class HaConnection implements IHaConnection {
         },
         data: requestBody,
       });
-       
+
       return resp.data;
     } catch (error) {
       console.error(error);
@@ -530,7 +530,7 @@ export class HaConnection implements IHaConnection {
   public callService = async (
     domain: string,
     service: string,
-     
+
     serviceData: any,
   ): Promise<any> => {
     try {
@@ -542,7 +542,7 @@ export class HaConnection implements IHaConnection {
         },
         data: serviceData,
       });
-       
+
       console.log(
         `Service Call ${domain}.${service} made succesfully, response:`,
       );
