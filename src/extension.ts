@@ -14,6 +14,7 @@ import { manageAuth, testConnection } from "./auth/commands";
 import { debugAuthSettings } from "./auth/debug";
 import { repairAuthConfiguration } from "./auth/repair";
 import { HomeAssistantStatusBar } from "./status/statusBar";
+import { registerReloadCommands } from "./commands/reloadCommands";
 
 const extensionId = "vscode-home-assistant";
 const telemetryVersion = generateVersionString(
@@ -388,48 +389,8 @@ export async function activate(
     ),
   ];
 
-  commandMappings.forEach((mapping) => {
-    context.subscriptions.push(
-      vscode.commands.registerCommand(mapping.commandId, async (_) => {
-        await client.sendRequest("callService", {
-          domain: mapping.domain,
-          service: mapping.service,
-          serviceData: mapping.serviceData,
-        });
-        await vscode.window.showInformationMessage(
-          `Home Assistant service ${mapping.domain}.${mapping.service} called!`,
-        );
-      }),
-    );
-  });
-
-  const inputReloadDomains = [
-    "input_button",
-    "input_boolean",
-    "input_datetime",
-    "input_number",
-    "input_select",
-    "input_text",
-  ];
-
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "vscode-home-assistant.inputReload",
-      async (_) => {
-        await Promise.all(
-          inputReloadDomains.map(async (domain) => {
-            await client.sendRequest("callService", {
-              domain,
-              service: "reload",
-            });
-          }),
-        );
-        await vscode.window.showInformationMessage(
-          "Home Assistant inputs reload called!",
-        );
-      },
-    ),
-  );
+  // Register all reload commands from the reloadCommands module
+  registerReloadCommands(context, commandMappings, client);
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
