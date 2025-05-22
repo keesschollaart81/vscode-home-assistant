@@ -1017,6 +1017,12 @@ export interface FanItem extends BaseItem {
   command_topic: string;
 
   /**
+   * The template used for the command payload.
+   * https://www.home-assistant.io/integrations/fan.mqt/#command_template
+   */
+  command_template?: Template;
+  
+  /**
    * The name of the MQTT fan.
    * https://www.home-assistant.io/integrations/fan.mqtt#name
    */
@@ -1028,6 +1034,30 @@ export interface FanItem extends BaseItem {
    */
   optimistic?: boolean;
 
+  /**
+   * Defines a template to generate the payload to send to `direction_command_template`.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#direction_command_template
+   */
+  direction_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the fan direction state based on a value.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#direction_command_topic
+   */
+  direction_command_topic?: string;
+
+  /**
+   * The MQTT topic subscribed to receive fan direction.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#direction_state_topic
+   */
+  direction_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from fan direction.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#direction_value_template
+   */
+  direction_value_template?: Template;
+  
   /**
    * Defines a template to generate the payload to send to oscillation_command_topic.
    * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_value_template
