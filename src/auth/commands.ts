@@ -63,7 +63,7 @@ async function setToken(context: vscode.ExtensionContext): Promise<void> {
   instanceUrl = await vscode.window.showInputBox({
     prompt: "Enter your Home Assistant instance URL",
     placeHolder: "http://homeassistant.local:8123",
-    value: currentUrl,
+    value: currentUrl || "http://homeassistant.local:8123", // Pre-fill default if currentUrl is empty
     validateInput: (input) => {
       // Basic URL validation
       try {
@@ -285,7 +285,7 @@ async function setInstanceUrl(context: vscode.ExtensionContext): Promise<void> {
   const newUrl = await vscode.window.showInputBox({
     prompt: "Enter your Home Assistant instance URL",
     placeHolder: "http://homeassistant.local:8123",
-    value: currentUrl || "", // Provide current value or empty string
+    value: currentUrl || "http://homeassistant.local:8123", // Pre-fill default if currentUrl is empty
     validateInput: (input) => {
       // Basic URL validation
       try {
@@ -326,7 +326,7 @@ async function setInstanceUrl(context: vscode.ExtensionContext): Promise<void> {
 
 async function clearInstanceUrl(context: vscode.ExtensionContext): Promise<void> {
   const confirmation = await vscode.window.showWarningMessage(
-    "Are you sure you want to clear the stored Home Assistant server URL?",
+    "Are you sure you want to clear the stored Home Assistant instance URL?",
     { modal: true },
     "Yes"
   );
@@ -334,9 +334,9 @@ async function clearInstanceUrl(context: vscode.ExtensionContext): Promise<void>
   if (confirmation === "Yes") {
     try {
       await AuthManager.deleteUrl(context);
-      vscode.window.showInformationMessage("Home Assistant server URL has been cleared.");
+      vscode.window.showInformationMessage("Home Assistant instance URL has been cleared.");
     } catch (error) {
-      vscode.window.showErrorMessage(`Failed to clear server URL: ${error.message}`);
+      vscode.window.showErrorMessage(`Failed to clear Home Assistant instance URL: ${error.message}`);
     }
   }
 }
