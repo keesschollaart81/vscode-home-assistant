@@ -108,6 +108,17 @@ connection.onInitialize((params) => {
     },
   );
 
+  // Setup handlers to notify client about connection status
+  haConnection.onConnectionEstablished = (info) => {
+    console.log("Home Assistant connection established, notifying client");
+    connection.sendNotification("ha_connected", info);
+  };
+  
+  haConnection.onConnectionFailed = (error) => {
+    console.log("Home Assistant connection failed, notifying client");
+    connection.sendNotification("ha_connection_error", { error: error || "Unknown error" });
+  };
+
   documents.onDidChangeContent((e) =>
     homeAsisstantLanguageService.onDocumentChange(e.document),
   );

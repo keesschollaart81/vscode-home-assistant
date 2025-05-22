@@ -383,6 +383,11 @@
         "command": "vscode-home-assistant.testConnection",
         "title": "Test Home Assistant Connection",
         "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.openInBrowser",
+        "title": "Open Home Assistant in Browser",
+        "category": "Home Assistant"
       }
     ],
     "configurationDefaults": {

@@ -91,6 +91,10 @@ export class HaConnection implements IHaConnection {
     ignoreCertificates?: boolean;
   } = {};
 
+  // Event callbacks for connection status
+  public onConnectionEstablished: ((info: { name?: string; version?: string }) => void) | undefined;
+  public onConnectionFailed: ((error: string) => void) | undefined;
+
   constructor(private configurationService: IConfigurationService) {}
 
   public tryConnect = async (): Promise<void> => {
@@ -205,14 +209,59 @@ export class HaConnection implements IHaConnection {
         ignoreCertificates: this.configurationService.ignoreCertificates
       };
       console.log("Stored successful connection configuration for future reference");
+      
+      // Notify about successful connection
+      if (this.onConnectionEstablished) {
+        try {
+          // Get instance name if possible
+          let instanceName;
+          let version;
+          try {
+            const configResponse = await this.callApi("get", "config");
+            if (configResponse && typeof configResponse === "object") {
+              instanceName = configResponse.location_name;
+              version = configResponse.version;
+            }
+          } catch (error) {
+            console.log("Could not fetch Home Assistant instance name:", error);
+          }
+          
+          // Trigger connection established callback
+          this.onConnectionEstablished({
+            name: instanceName,
+            version: version
+          });
+        } catch (cbError) {
+          console.error("Error in connection established callback:", cbError);
+        }
+      }
     } catch (error) {
       console.error("Failed to connect to Home Assistant:", error);
+      
+      // Notify about connection failure
+      if (this.onConnectionFailed) {
+        let errorMessage = "Unknown error";
+        if (typeof error === "string") {
+          errorMessage = error;
+        } else if (error && typeof error === "object" && "message" in error) {
+          errorMessage = error.message as string;
+        }
+        try {
+          this.onConnectionFailed(errorMessage);
+        } catch (cbError) {
+          console.error("Error in connection failed callback:", cbError);
+        }
+      }
+      
       this.handleConnectionError(error);
       throw error;
     }
 
     this.connection.addEventListener("ready", () => {
       console.log("(re-)connected to Home Assistant");
+      if (this.onConnectionEstablished) {
+        this.onConnectionEstablished({ name: "Home Assistant", version: "1.0" });
+      }
     });
 
     this.connection.addEventListener("disconnected", () => {
@@ -221,6 +270,9 @@ export class HaConnection implements IHaConnection {
 
     this.connection.addEventListener("reconnect-error", (data) => {
       console.error("Reconnect error with Home Assistant", data);
+      if (this.onConnectionFailed) {
+        this.onConnectionFailed("Reconnect error");
+      }
     });
   }
 
@@ -330,8 +382,48 @@ export class HaConnection implements IHaConnection {
         url: this.configurationService.url,
         ignoreCertificates: this.configurationService.ignoreCertificates
       };
+      
+      // Notify about successful reconnection
+      if (this.onConnectionEstablished) {
+        try {
+          // Get instance name if possible
+          let instanceName;
+          let version;
+          try {
+            const configResponse = await this.callApi("get", "config");
+            if (configResponse && typeof configResponse === "object") {
+              instanceName = configResponse.location_name;
+              version = configResponse.version;
+            }
+          } catch (error) {
+            console.log("Could not fetch Home Assistant instance name after reconnection:", error);
+          }
+          
+          this.onConnectionEstablished({
+            name: instanceName,
+            version: version
+          });
+        } catch (cbError) {
+          console.error("Error in connection established callback after config update:", cbError);
+        }
+      }
     } catch (error) {
       console.error("Failed to reconnect after configuration update:", error);
+      
+      // Notify about connection failure
+      if (this.onConnectionFailed) {
+        let errorMessage = "Unknown error";
+        if (typeof error === "string") {
+          errorMessage = error;
+        } else if (error && typeof error === "object" && "message" in error) {
+          errorMessage = error.message as string;
+        }
+        try {
+          this.onConnectionFailed(errorMessage);
+        } catch (cbError) {
+          console.error("Error in connection failed callback after config update:", cbError);
+        }
+      }
       // Error is already displayed in logs via error handler
     }
   };
@@ -672,6 +764,15 @@ export class HaConnection implements IHaConnection {
     console.log("Disconnecting from Home Assistant");
     this.connection.close();
     this.connection = undefined;
+    
+    // Notify about disconnection if handler exists
+    if (this.onConnectionFailed) {
+      try {
+        this.onConnectionFailed("Disconnected");
+      } catch (error) {
+        console.error("Error in connection failed callback during disconnect:", error);
+      }
+    }
   }
 
   public callApi = async (
