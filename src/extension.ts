@@ -13,6 +13,7 @@ import { AuthMiddleware } from "./auth/middleware";
 import { manageAuth, testConnection } from "./auth/commands";
 import { debugAuthSettings } from "./auth/debug";
 import { repairAuthConfiguration } from "./auth/repair";
+import { HomeAssistantStatusBar } from "./status/statusBar";
 
 const extensionId = "vscode-home-assistant";
 const telemetryVersion = generateVersionString(
@@ -30,6 +31,10 @@ export async function activate(
   context: vscode.ExtensionContext,
 ): Promise<void> {
   console.log("Home Assistant Extension has been activated!");
+
+  // Initialize status bar
+  const statusBar = new HomeAssistantStatusBar(context);
+  context.subscriptions.push(statusBar);
 
   // Attempt to migrate token from settings to SecretStorage if needed
   try {
@@ -147,11 +152,17 @@ export async function activate(
           // Force update some setting to trigger a configuration refresh
           await config.update("triggerConfigRefresh", Date.now(), vscode.ConfigurationTarget.Global);
 
+          // Check the status bar connection
+          statusBar.checkConnectionStatus();
+
           // Wait a bit and force another refresh to ensure token and URL reach the server
           setTimeout(async () => {
             try {
               console.log("Sending follow-up configuration refresh");
               await config.update("triggerConfigRefresh", Date.now(), vscode.ConfigurationTarget.Global);
+              
+              // Check connection status again after refresh
+              statusBar.checkConnectionStatus();
             } catch (error) {
               console.error("Error sending follow-up configuration refresh:", error);
             }
@@ -181,6 +192,28 @@ export async function activate(
             "vscode-home-assistant.manageAuth",
           );
         }
+        
+        // Update status bar to show disconnected state
+        statusBar.checkConnectionStatus();
+      });
+      
+      // Add handler for connection established event
+      client.onNotification("ha_connected", async (data: { name?: string; version?: string }): Promise<void> => {
+        console.log("Home Assistant connection established notification received");
+        // Get instance information if available
+        const instanceInfo = {
+          name: data.name || "Home Assistant",
+          version: data.version
+        };
+        // Update status bar with connection information
+        statusBar.setConnectionStatus("connected", instanceInfo);
+      });
+      
+      // Add handler for connection error event
+      client.onNotification("ha_connection_error", async (data: { error?: string }): Promise<void> => {
+        console.log(`Home Assistant connection error notification received: ${data.error || "Unknown error"}`);
+        // Update status bar to show error state
+        statusBar.setConnectionStatus("error");
       });
       client.onNotification("configuration_check_completed", async (result) => {
         if (result && result.result === "valid") {
@@ -426,11 +459,25 @@ export async function activate(
     ),
   );
 
-  // Register the token management command
+  // Register command to open Home Assistant in browser
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.openInBrowser",
+      async () => {
+        await statusBar.openInBrowser();
+      }
+    )
+  );
+
+  // Register the token management command with status bar update
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "vscode-home-assistant.manageAuth",
-      () => manageAuth(context)
+      async () => {
+        await manageAuth(context);
+        // Update status bar after auth changes
+        statusBar.checkConnectionStatus();
+      }
     )
   );
 
@@ -442,19 +489,27 @@ export async function activate(
     )
   );
 
-  // Register the token repair command
+  // Register the token repair command with status bar update
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "vscode-home-assistant.repairAuth",
-      () => repairAuthConfiguration(context)
+      async () => {
+        await repairAuthConfiguration(context);
+        // Update status bar after repair
+        statusBar.checkConnectionStatus();
+      }
     )
   );
 
-  // Register the test connection command
+  // Register the test connection command with status bar update
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "vscode-home-assistant.testConnection",
-      () => testConnection(context)
+      async () => {
+        await testConnection(context);
+        // Update status bar after connection test
+        statusBar.checkConnectionStatus();
+      }
     )
   );
 
@@ -470,6 +525,18 @@ export async function activate(
       .update("files.associations", { "*.yaml": "home-assistant" }, false);
   }
 
+  // Listen for configuration changes that might affect the connection
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration(async (event) => {
+      const haConfigChanged = event.affectsConfiguration("vscode-home-assistant");
+      
+      if (haConfigChanged) {
+        console.log("Home Assistant configuration changed, updating status bar");
+        statusBar.checkConnectionStatus();
+      }
+    })
+  );
+
   // Initial check for credentials
   if (!(await AuthManager.hasCredentials(context))) {
     // Delay the message slightly to avoid race conditions with other startup messages
@@ -484,6 +551,9 @@ export async function activate(
         }
       });
     }, 1000);
+  } else {
+    // Check status bar connection if we have credentials
+    statusBar.checkConnectionStatus();
   }
 }
 
