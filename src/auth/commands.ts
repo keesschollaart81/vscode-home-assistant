@@ -1,0 +1,342 @@
+import * as vscode from "vscode";
+import { AuthManager } from "./manager";
+
+/**
+ * Command to manage the Home Assistant authentication (token and instance URL)
+ */
+export async function manageAuth(context: vscode.ExtensionContext): Promise<void> {
+  const actions = [
+    "Set Home Assistant Instance URL",
+    "Set Token",
+    "Clear Token",
+    "Clear Home Assistant Instance URL",
+    "View Auth Details (Obscured)",
+    "Test Connection",
+  ];
+  
+  const selectedAction = await vscode.window.showQuickPick(actions, {
+    placeHolder: "Select an authentication action"
+  });
+  
+  if (!selectedAction) {
+    return;
+  }
+  
+  switch (selectedAction) {
+    case "Set Home Assistant Instance URL":
+      await setInstanceUrl(context);
+      break;
+    case "Set Token":
+      await setToken(context);
+      break;
+    case "Clear Token":
+      await clearToken(context);
+      break;
+    case "Clear Home Assistant Instance URL":
+      await clearInstanceUrl(context);
+      break;
+    case "View Auth Details (Obscured)":
+      await viewAuthDetails(context);
+      break;
+    case "Test Connection": 
+      await testConnection(context);
+      break;
+  }
+}
+
+async function setToken(context: vscode.ExtensionContext): Promise<void> {
+  // First, check if we need to set the instance URL
+  // Try to get URL from SecretStorage first
+  let currentUrl = await AuthManager.getUrl(context);
+  
+  // If not in SecretStorage, check settings and environment
+  if (!currentUrl) {
+    const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+    currentUrl = config.get<string>("hostUrl") || process.env.HASS_SERVER || 
+      (process.env.SUPERVISOR_TOKEN ? "http://supervisor/core" : "");
+  }
+  
+  // Ask for instance URL if not already configured
+  let instanceUrl = currentUrl;
+  
+  // Always ask for the instance URL for verification
+  instanceUrl = await vscode.window.showInputBox({
+    prompt: "Enter your Home Assistant instance URL",
+    placeHolder: "http://homeassistant.local:8123",
+    value: currentUrl,
+    validateInput: (input) => {
+      // Basic URL validation
+      try {
+        if (!input) {
+          return "Home Assistant instance URL is required";
+        }
+        
+        const url = new URL(input);
+        if (!url.protocol.startsWith("http")) {
+          return "URL must start with http:// or https://";
+        }
+        
+        return null; // Valid input
+      } catch {
+        return "Please enter a valid URL (e.g., http://homeassistant.local:8123)";
+      }
+    }
+  });
+  
+  // User canceled the instance URL input
+  if (!instanceUrl) {
+    return;
+  }
+  
+  // Save the instance URL
+  if (instanceUrl !== currentUrl) {
+    try {
+      // Store in SecretStorage
+      await AuthManager.storeUrl(context, instanceUrl);
+      
+      // Remove from settings if it exists
+      const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+      if (config.get("hostUrl") !== undefined) {
+        await config.update("hostUrl", undefined, vscode.ConfigurationTarget.Global);
+      }
+      
+      vscode.window.showInformationMessage(`Home Assistant instance URL has been securely stored: ${instanceUrl}`);
+    } catch (error) {
+      vscode.window.showErrorMessage(`Failed to store Home Assistant instance URL: ${error.message}`);
+      return; // Don't proceed to token if URL failed
+    }
+  }
+
+  const token = await vscode.window.showInputBox({
+    prompt: "Enter your Home Assistant Long-Lived Access Token",
+    password: true,
+    placeHolder: "eyJhbGci..."
+  });
+  
+  if (token) {
+    try {
+      await AuthManager.storeToken(context, token);
+      // Remove from settings if it exists
+      const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+      if (config.get("longLivedAccessToken") !== undefined) {
+        await config.update("longLivedAccessToken", undefined, vscode.ConfigurationTarget.Global);
+      }
+      vscode.window.showInformationMessage("Home Assistant token has been securely stored.");
+    } catch (error) {
+      vscode.window.showErrorMessage(`Failed to store token: ${error.message}`);
+    }
+  } else {
+    vscode.window.showWarningMessage("No token was entered.");
+  }
+}
+
+async function clearToken(context: vscode.ExtensionContext): Promise<void> {
+  const confirmation = await vscode.window.showWarningMessage(
+    "Are you sure you want to clear the stored Home Assistant token?",
+    { modal: true },
+    "Yes"
+  );
+  
+  if (confirmation === "Yes") {
+    try {
+      await AuthManager.deleteToken(context);
+      vscode.window.showInformationMessage("Home Assistant token has been cleared.");
+    } catch (error) {
+      vscode.window.showErrorMessage(`Failed to clear token: ${error.message}`);
+    }
+  }
+}
+
+async function viewAuthDetails(context: vscode.ExtensionContext): Promise<void> {
+  const token = await AuthManager.getToken(context);
+  const url = await AuthManager.getUrl(context);
+  
+  if (token || url) {
+    let message = "Current Home Assistant Authentication Details:\n";
+    if (url) {
+      message += `\nHome Assistant Instance URL: ${url}`;
+    } else {
+      message += "\nHome Assistant Instance URL: Not set";
+    }
+    if (token) {
+      const obscuredToken = token.length <= 10 
+        ? "***" 
+        : `${token.substring(0, 5)}...${token.substring(token.length - 5)}`;
+      message += `\nToken: ${obscuredToken}`;
+    } else {
+      message += "\nToken: Not set";
+    }
+    vscode.window.showInformationMessage(message, { modal: true });
+  } else {
+    vscode.window.showInformationMessage("No Home Assistant token or instance URL is currently stored.");
+  }
+}
+
+export async function testConnection(context: vscode.ExtensionContext): Promise<void> {
+  const token = await AuthManager.getToken(context);
+  const hostUrl = await AuthManager.getUrl(context);
+  
+  if (!hostUrl) {
+    vscode.window.showErrorMessage(
+      "Home Assistant instance URL is not set. Please set it first."
+    );
+    // Optionally, prompt to set it now
+    const setNow = await vscode.window.showQuickPick(["Set Home Assistant Instance URL Now"], {
+      placeHolder: "Home Assistant instance URL is missing",
+    });
+    if (setNow === "Set Home Assistant Instance URL Now") {
+      await setInstanceUrl(context);
+      // Re-check after attempting to set
+      const newHostUrl = await AuthManager.getUrl(context);
+      if (!newHostUrl) {
+        return; // User cancelled or failed to set
+      }
+      // If token is also missing, prompt for that too or guide user
+      if (!token) {
+        vscode.window.showInformationMessage("Home Assistant instance URL set. Now please ensure your token is also set via the 'Set Token' command.");
+        return;
+      }
+      // If both are now set, continue with the test
+      await testConnection(context);
+    }
+    return;
+  }
+  
+  if (!token) {
+    vscode.window.showErrorMessage(
+      "Home Assistant token is not set. Please set it first."
+    );
+    // Optionally, prompt to set it now
+    const setNow = await vscode.window.showQuickPick(["Set Token Now"], {
+      placeHolder: "Token is missing",
+    });
+    if (setNow === "Set Token Now") {
+      await setToken(context); 
+      // Re-check after attempting to set
+      const newToken = await AuthManager.getToken(context);
+      if (!newToken) {
+        return; // User cancelled or failed to set
+      }
+      // If token is now set, continue with the test
+      await testConnection(context); 
+    }
+    return;
+  }
+  
+  vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Notification,
+      title: "Testing Home Assistant Connection",
+      cancellable: false,
+    },
+    async (progress) => {
+      progress.report({ increment: 0, message: "Connecting..." });
+      
+      try {
+        const response = await fetch(`${hostUrl}/api/`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        
+        progress.report({ increment: 50, message: "Validating response..." });
+        
+        if (response.ok) {
+          const data: any = await response.json(); // Add type assertion to any
+          if (data.message === "API running.") {
+            progress.report({ increment: 100, message: "Connection successful!" });
+            vscode.window.showInformationMessage(
+              `Successfully connected to Home Assistant at ${hostUrl}. API is running.`
+            );
+          } else {
+            progress.report({ increment: 100, message: "Connection failed." });
+            vscode.window.showErrorMessage(
+              `Connected to Home Assistant at ${hostUrl}, but API response was unexpected: ${data.message || "No message"}`
+            );
+          }
+        } else {
+          progress.report({ increment: 100, message: "Connection failed." });
+          let errorMessage = `Failed to connect to Home Assistant at ${hostUrl}. Status: ${response.status} ${response.statusText}`;
+          try {
+            const errorBody: any = await response.json(); // Add type assertion to any
+            if (errorBody && errorBody.message) {
+              errorMessage += ` - ${errorBody.message}`;
+            }
+          } catch {
+            // Ignore if error body is not JSON or doesn't have message
+          }
+          vscode.window.showErrorMessage(errorMessage);
+        }
+      } catch (error) {
+        progress.report({ increment: 100, message: "Connection error." });
+        vscode.window.showErrorMessage(
+          `Error connecting to Home Assistant at ${hostUrl}: ${error.message}`
+        );
+      }
+    }
+  );
+}
+
+async function setInstanceUrl(context: vscode.ExtensionContext): Promise<void> {
+  const currentUrl = await AuthManager.getUrl(context);
+  
+  const newUrl = await vscode.window.showInputBox({
+    prompt: "Enter your Home Assistant instance URL",
+    placeHolder: "http://homeassistant.local:8123",
+    value: currentUrl || "", // Provide current value or empty string
+    validateInput: (input) => {
+      // Basic URL validation
+      try {
+        if (!input) {
+          return "Home Assistant instance URL is required";
+        }
+        
+        const url = new URL(input);
+        if (!url.protocol.startsWith("http")) {
+          return "URL must start with http:// or https://";
+        }
+        
+        return null; // Valid input
+      } catch {
+        return "Please enter a valid URL (e.g., http://homeassistant.local:8123)";
+      }
+    }
+  });
+  
+  if (newUrl && newUrl !== currentUrl) {
+    try {
+      await AuthManager.storeUrl(context, newUrl);
+      // Remove from settings if it exists
+      const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+      if (config.get("hostUrl") !== undefined) {
+        await config.update("hostUrl", undefined, vscode.ConfigurationTarget.Global);
+      }
+      vscode.window.showInformationMessage(`Home Assistant instance URL has been securely stored: ${newUrl}`);
+    } catch (error) {
+      vscode.window.showErrorMessage(`Failed to store Home Assistant instance URL: ${error.message}`);
+    }
+  } else if (!newUrl) {
+    vscode.window.showWarningMessage("No Home Assistant instance URL was entered.");
+  } else {
+    vscode.window.showInformationMessage("Home Assistant instance URL is already up to date.");
+  }
+}
+
+async function clearInstanceUrl(context: vscode.ExtensionContext): Promise<void> {
+  const confirmation = await vscode.window.showWarningMessage(
+    "Are you sure you want to clear the stored Home Assistant server URL?",
+    { modal: true },
+    "Yes"
+  );
+
+  if (confirmation === "Yes") {
+    try {
+      await AuthManager.deleteUrl(context);
+      vscode.window.showInformationMessage("Home Assistant server URL has been cleared.");
+    } catch (error) {
+      vscode.window.showErrorMessage(`Failed to clear server URL: ${error.message}`);
+    }
+  }
+}
