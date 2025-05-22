@@ -1056,7 +1056,7 @@ export interface FanItem extends BaseItem {
    * Defines a template to extract a value from fan direction.
    * https://www.home-assistant.io/integrations/fan.mqtt/#direction_value_template
    */
-  direction_value_template?: Template;  
+  direction_value_template?: Template;
   
   /**
    * Defines a template to generate the payload to send to oscillation_command_topic.
