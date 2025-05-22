@@ -5,7 +5,7 @@
   "version": "1.43.0",
   "preview": false,
   "engines": {
-    "vscode": "^1.45.1"
+    "vscode": "^1.53.0"
   },
   "categories": [
     "Other",
@@ -44,14 +44,6 @@
       {
         "title": "Home Assistant Config Helper",
         "properties": {
-          "vscode-home-assistant.hostUrl": {
-            "type": "string",
-            "description": "The Host URL of your Home Assistant Host"
-          },
-          "vscode-home-assistant.longLivedAccessToken": {
-            "type": "string",
-            "description": "The Long Lived Access-Token for Home Assistant. Obtain a token via your user profile page in Home Assistant."
-          },
           "vscode-home-assistant.ignoreCertificates": {
             "type": "boolean",
             "description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
@@ -371,8 +363,40 @@
         "command": "vscode-home-assistant.renderTemplate",
         "title": "Render Template",
         "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.manageAuth",
+        "title": "Manage Home Assistant Authentication",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.debugAuth",
+        "title": "Debug Home Assistant Authentication",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.repairAuth",
+        "title": "Repair Home Assistant Authentication Configuration",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.testConnection",
+        "title": "Test Home Assistant Connection",
+        "category": "Home Assistant"
       }
     ],
+    "configurationDefaults": {
+      "[home-assistant]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.quickSuggestions": {
+          "other": true,
+          "comments": false,
+          "strings": true
+        },
+        "editor.autoIndent": "advanced"
+      }
+    },
     "menus": {
       "commandPalette": [
         {
@@ -387,18 +411,6 @@
           "when": "editorHasSelection"
         }
       ]
-    },
-    "configurationDefaults": {
-      "[home-assistant]": {
-        "editor.insertSpaces": true,
-        "editor.tabSize": 2,
-        "editor.quickSuggestions": {
-          "other": true,
-          "comments": false,
-          "strings": true
-        },
-        "editor.autoIndent": "advanced"
-      }
     }
   },
   "husky": {
@@ -431,7 +443,7 @@
     "@types/mocha": "10.0.10",
     "@types/node": "22.15.21",
     "@types/request": "2.48.12",
-    "@types/vscode": "1.45.1",
+    "@types/vscode": "^1.100.0",
     "@types/ws": "8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",

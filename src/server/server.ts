@@ -15,10 +15,7 @@ import { HomeAssistantLanguageService } from "../language-service/src/haLanguage
 import { SchemaServiceForIncludes } from "../language-service/src/schemas/schemaService";
 import { IncludeDefinitionProvider } from "../language-service/src/definition/includes";
 import { ScriptDefinitionProvider } from "../language-service/src/definition/scripts";
-// import { EntityIdCompletionContribution } from "../language-service/src/completionHelpers/entityIds"; // Marked as unused
-// import { ServicesCompletionContribution } from "../language-service/src/completionHelpers/services"; // Marked as unused
 import { VsCodeFileAccessor } from "./fileAccessor";
-// import { getLanguageService as getJSONLanguageService, JSONWorkerContribution } from "vscode-json-languageservice"; // Commented out as unused
 
 const connection = createConnection(ProposedFeatures.all, undefined, undefined);
 
@@ -34,19 +31,39 @@ connection.onInitialize((params) => {
     `[Home Assistant Language Server(${process.pid})] Started and initialize received`,
   );
 
+  // Check if initialization contains the token in custom data
+  const haConfig = params.initializationOptions && params.initializationOptions["vscode-home-assistant"];
+  
+  if (haConfig) {
+    // Extract token
+    if (haConfig.longLivedAccessToken) {
+      const token = haConfig.longLivedAccessToken;
+      console.log(`Token provided in initialization options (length: ${token.length}, first 5 chars: ${token.substring(0, 5)}...)`);
+      process.env.HASS_TOKEN = token; // Set as environment variable for backup
+    } else {
+      console.log("No token provided in initialization options");
+    }
+    
+    // Extract Home Assistant instance URL
+    if (haConfig.hostUrl) {
+      console.log(`Home Assistant instance URL provided in initialization options: ${haConfig.hostUrl}`);
+      process.env.HASS_SERVER = haConfig.hostUrl;
+    } else {
+      console.log("No Home Assistant instance URL provided in initialization options");
+    }
+  } else {
+    console.log("No Home Assistant configuration in initialization options");
+  }
+
   const configurationService = new ConfigurationService();
   const haConnection = new HaConnection(configurationService);
   const fileAccessor = new VsCodeFileAccessor(params.rootUri, documents);
-  const haConfig = new HomeAssistantConfiguration(fileAccessor);
+  const haConfigInstance = new HomeAssistantConfiguration(fileAccessor);
 
   const definitionProviders = [
     new IncludeDefinitionProvider(fileAccessor),
-    new ScriptDefinitionProvider(haConfig),
+    new ScriptDefinitionProvider(haConfigInstance),
   ];
-
-  // const _jsonWorkerContributions: JSONWorkerContribution[] = [ // Commented out as unused
-  //   // We can add more contributions here if needed for specific JSON handling
-  // ];
 
   const yamlLanguageService = getLanguageService(
     async () => "",
@@ -64,8 +81,10 @@ connection.onInitialize((params) => {
 
   const discoverFilesAndUpdateSchemas = async () => {
     try {
-      await haConfig.discoverFiles();
+      console.log("Discovering files and updating schemas...");
+      await haConfigInstance.discoverFiles();
       homeAsisstantLanguageService.findAndApplySchemas();
+      console.log("Files discovered and schemas updated successfully");
     } catch (e) {
       console.error(
         `Unexpected error during file discovery / schema configuration: ${e}`,
@@ -75,7 +94,7 @@ connection.onInitialize((params) => {
 
   const homeAsisstantLanguageService = new HomeAssistantLanguageService(
     yamlLanguageService,
-    haConfig,
+    haConfigInstance,
     haConnection,
     definitionProviders,
     new SchemaServiceForIncludes(),
@@ -136,11 +155,39 @@ connection.onInitialize((params) => {
   );
 
   connection.onDidChangeConfiguration(async (config) => {
+    console.log("Received configuration change from VS Code");
+    
+    // Check for token in incoming configuration before applying changes
+    const haConfig = config.settings && config.settings["vscode-home-assistant"];
+    if (haConfig) {
+      if (haConfig.longLivedAccessToken) {
+        const token = haConfig.longLivedAccessToken;
+        console.log(`Token received in configuration update (length: ${token.length}, first 5 chars: ${token.substring(0, 5)}...)`);
+      } else {
+        console.log("No token in configuration update");
+      }
+      
+      if (haConfig.hostUrl) {
+        console.log(`Home Assistant instance URL in configuration update: ${haConfig.hostUrl}`);
+      } else {
+        console.log("No Home Assistant instance URL in configuration update");
+      }
+    } else {
+      console.log("No Home Assistant configuration in update");
+    }
+    
+    // Update the configuration service with the new settings
     configurationService.updateConfiguration(config);
+    
+    // Notify connection handler to update connection if needed
     await haConnection.notifyConfigUpdate();
 
+    // Check configuration status after update
     if (!configurationService.isConfigured) {
+      console.log("Configuration incomplete after update, sending no-config notification");
       connection.sendNotification("no-config");
+    } else {
+      console.log("Configuration is valid after update");
     }
   });
 

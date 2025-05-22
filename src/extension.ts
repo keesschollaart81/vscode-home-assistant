@@ -8,6 +8,11 @@ import {
   TransportKind,
 } from "vscode-languageclient/node";
 import TelemetryReporter from "vscode-extension-telemetry";
+import { AuthManager } from "./auth/manager";
+import { AuthMiddleware } from "./auth/middleware";
+import { manageAuth, testConnection } from "./auth/commands";
+import { debugAuthSettings } from "./auth/debug";
+import { repairAuthConfiguration } from "./auth/repair";
 
 const extensionId = "vscode-home-assistant";
 const telemetryVersion = generateVersionString(
@@ -25,6 +30,22 @@ export async function activate(
   context: vscode.ExtensionContext,
 ): Promise<void> {
   console.log("Home Assistant Extension has been activated!");
+
+  // Attempt to migrate token from settings to SecretStorage if needed
+  try {
+    const migratedToken = await AuthManager.migrateTokenFromSettings(context);
+    if (migratedToken) {
+      console.log("Successfully migrated token from settings to SecretStorage");
+    }
+
+    // Attempt to migrate Home Assistant instance URL from settings to SecretStorage if needed
+    const migratedUrl = await AuthManager.migrateUrlFromSettings(context);
+    if (migratedUrl) {
+      console.log("Successfully migrated Home Assistant instance URL from settings to SecretStorage");
+    }
+  } catch (error) {
+    console.error("Failed to migrate credentials:", error);
+  }
 
   reporter = new TelemetryReporter(
     extensionId,
@@ -63,6 +84,30 @@ export async function activate(
       configurationSection: "vscode-home-assistant",
       fileEvents: vscode.workspace.createFileSystemWatcher("**/*.?(e)y?(a)ml"),
     },
+    initializationOptions: async () => {
+      // Pass token and URL directly in initialization options
+      try {
+        const token = await AuthManager.getToken(context);
+        const url = await AuthManager.getUrl(context);
+        const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+
+        console.log("Setting up initialization options for Home Assistant language server");
+        console.log(`Token available: ${token ? "Yes" : "No"}`);
+        console.log(`Home Assistant instance URL available: ${url ? "Yes" : "No"}`);
+
+        // Use SecretStorage values first, then fallback to settings
+        return {
+          "vscode-home-assistant": {
+            longLivedAccessToken: token || "",
+            hostUrl: url || config.get<string>("hostUrl") || "",
+            ignoreCertificates: !!config.get<boolean>("ignoreCertificates")
+          }
+        };
+      } catch (error) {
+        console.error("Failed to set initialization options:", error);
+        return {};
+      }
+    },
   };
 
   const client = new LanguageClient(
@@ -82,16 +127,58 @@ export async function activate(
 
   client
     .onReady()
-    .then(() => {
+    .then(async () => {
+      // Install our auth middleware to inject the token and URL from SecretStorage
+      try {
+        // @ts-expect-error - We need to access the connection which is private
+        const connection = client._connection || client;
+        await AuthMiddleware.install(context, connection);
+        console.log("Auth middleware successfully installed");
+
+        // Force an initial configuration refresh to ensure token and URL are set
+        const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+
+        // Get the token and URL directly and explicitly trigger a configuration update
+        const token = await AuthManager.getToken(context);
+        const url = await AuthManager.getUrl(context); // Also check URL
+
+        if (token && url) { // Ensure both token and URL are present
+          console.log("Token and Home Assistant instance URL found, explicitly sending configuration update");
+          // Force update some setting to trigger a configuration refresh
+          await config.update("triggerConfigRefresh", Date.now(), vscode.ConfigurationTarget.Global);
+
+          // Wait a bit and force another refresh to ensure token and URL reach the server
+          setTimeout(async () => {
+            try {
+              console.log("Sending follow-up configuration refresh");
+              await config.update("triggerConfigRefresh", Date.now(), vscode.ConfigurationTarget.Global);
+            } catch (error) {
+              console.error("Error sending follow-up configuration refresh:", error);
+            }
+          }, 3000);
+        } else if (!token) {
+          console.log("No token found in SecretStorage, connection may fail");
+          vscode.window.showWarningMessage("No Home Assistant authentication token found. Please set authentication via the 'Home Assistant: Manage Authentication' command.");
+        } else if (!url) {
+          console.log("No Home Assistant instance URL found in SecretStorage, connection may fail");
+          vscode.window.showWarningMessage("No Home Assistant instance URL found. Please set the URL via the 'Home Assistant: Manage Authentication' command.");
+        }
+      } catch (error) {
+        console.error("Failed to install auth middleware:", error);
+      }
       client.onNotification("no-config", async (): Promise<void> => {
-        const goToSettings = "Go to Settings (UI)";
+        if (await AuthManager.hasCredentials(context)) {
+          console.log("'no-config' notification received from server, but credentials (token and/or Home Assistant instance URL) found in SecretStorage. Ignoring pop-up.");
+          return;
+        }
+        const manageAuthCommand = "Manage Authentication";
         const optionClicked = await vscode.window.showInformationMessage(
-          "Please configure Home Assistant (search for 'Home Assistant' in settings).",
-          goToSettings,
+          "No Home Assistant authentication (token and/or Home Assistant instance URL) found. Please set authentication.",
+          manageAuthCommand,
         );
-        if (optionClicked === goToSettings) {
+        if (optionClicked === manageAuthCommand) {
           await vscode.commands.executeCommand(
-            "workbench.action.openSettings2",
+            "vscode-home-assistant.manageAuth",
           );
         }
       });
@@ -339,6 +426,38 @@ export async function activate(
     ),
   );
 
+  // Register the token management command
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.manageAuth",
+      () => manageAuth(context)
+    )
+  );
+
+  // Register the debug token command
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.debugAuth",
+      () => debugAuthSettings(context)
+    )
+  );
+
+  // Register the token repair command
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.repairAuth",
+      () => repairAuthConfiguration(context)
+    )
+  );
+
+  // Register the test connection command
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-home-assistant.testConnection",
+      () => testConnection(context)
+    )
+  );
+
   const fileAssociations = vscode.workspace
     .getConfiguration()
     .get("files.associations") as { [key: string]: string };
@@ -349,6 +468,22 @@ export async function activate(
     await vscode.workspace
       .getConfiguration()
       .update("files.associations", { "*.yaml": "home-assistant" }, false);
+  }
+
+  // Initial check for credentials
+  if (!(await AuthManager.hasCredentials(context))) {
+    // Delay the message slightly to avoid race conditions with other startup messages
+    setTimeout(() => {
+      const manageAuthCommandText = "Manage Authentication";
+      vscode.window.showInformationMessage(
+        "Welcome to the Home Assistant VS Code Extension! To get started, please set your Home Assistant token and instance URL.",
+        manageAuthCommandText
+      ).then(selection => {
+        if (selection === manageAuthCommandText) {
+          vscode.commands.executeCommand("vscode-home-assistant.manageAuth");
+        }
+      });
+    }, 1000);
   }
 }
 

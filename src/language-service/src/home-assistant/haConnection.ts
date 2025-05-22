@@ -84,39 +84,129 @@ export class HaConnection implements IHaConnection {
 
   private hassServices!: Promise<HassServices>;
 
+  // Track the last successful configuration to avoid unnecessary reconnections
+  private lastSuccessfulConfig: {
+    token?: string;
+    url?: string;
+    ignoreCertificates?: boolean;
+  } = {};
+
   constructor(private configurationService: IConfigurationService) {}
 
   public tryConnect = async (): Promise<void> => {
-    await this.createConnection();
+    try {
+      await this.createConnection();
+    } catch (error) {
+      console.error("Failed to create initial connection:", error);
+      // Don't rethrow - we want to allow partial functionality even if connection fails
+    }
   };
 
   private async createConnection(): Promise<void> {
+    // Enhanced connection debugging
+    console.log("Creating Home Assistant connection...");
+    console.log(`Configuration status: ${this.configurationService.isConfigured ? "Configured" : "Not Configured"}`);
+    console.log(`URL configured: ${this.configurationService.url ? "Yes" : "No"}`);
+    console.log(`Token available: ${this.configurationService.token ? "Yes" : "No"}`);
+    
     if (!this.configurationService.isConfigured) {
+      console.log("Home Assistant is not configured, aborting connection attempt");
       return;
     }
 
     if (this.connection !== undefined) {
+      console.log("Connection already exists, reusing existing connection");
       return;
     }
 
+    // Log connection details before creating auth
+    console.log(`Creating Home Assistant connection to URL: ${this.configurationService.url}`);
+    
+    if (!this.configurationService.url) {
+      console.error("No URL configured for Home Assistant - connection will fail");
+    }
+    
+    if (!this.configurationService.token) {
+      console.error("No token configured for Home Assistant - authentication will fail");
+      console.error("Debug: ConfigurationService state:", {
+        isConfigured: this.configurationService.isConfigured,
+        hasURL: !!this.configurationService.url,
+        hasToken: !!this.configurationService.token,
+        ignoreCerts: this.configurationService.ignoreCertificates
+      });
+    } else {
+      console.log(`Using token with length: ${this.configurationService.token.length}, first chars: ${this.configurationService.token.substring(0, 5)}...`);
+    }
+    
+    // Create proper WebSocket URL from HTTP URL
+    const hassUrl = this.configurationService.url || "";
+    let wsUrl = "";
+    
+    if (hassUrl) {
+      try {
+        const url = new URL(hassUrl);
+        const wsProtocol = url.protocol === "https:" ? "wss:" : "ws:";
+        wsUrl = `${wsProtocol}//${url.host}/api/websocket`;
+        console.log(`Generated WebSocket URL: ${wsUrl}`);
+      } catch (error) {
+        console.error(`Failed to generate WebSocket URL from ${hassUrl}:`, error);
+      }
+    }
+    
+    // Log token status before connection
+    console.log(`Creating Home Assistant connection to URL: ${hassUrl}`);
+    const hasToken = !!this.configurationService.token;
+    console.log(`Token available for connection: ${hasToken ? "Yes" : "No"}`);
+    if (hasToken) {
+      console.log(`Token appears valid (length: ${this.configurationService.token!.length})`);
+    } else {
+      console.error("No token available! Authentication will fail.");
+    }
+    
+    // Create auth object with both HTTP and WebSocket URLs
     const auth = new HaAuth({
-      access_token: `${this.configurationService.token}`,
+      access_token: this.configurationService.token || "",
       expires: +new Date(new Date().getTime() + 1e11),
-      hassUrl: `${this.configurationService.url}`,
+      wsUrl: wsUrl,
       clientId: "",
       expires_in: +new Date(new Date().getTime() + 1e11),
       refresh_token: "",
+      // Custom property for HTTP URL that may be used in custom components
+      hassUrl: hassUrl,
     } as AuthData);
 
     try {
+      // Validate required connection params before attempting connection
+      if (!auth.wsUrl) {
+        console.error("Missing WebSocket URL - unable to connect to Home Assistant");
+        this.handleConnectionError("ERR_MISSING_WS_URL");
+        throw new Error("Missing WebSocket URL for Home Assistant connection");
+      }
+      
+      if (!auth.accessToken) {
+        console.error("Missing access token - Home Assistant authentication will fail");
+        // Continue trying - the connection might work for non-secured endpoints
+      }
+      
       console.log("Connecting to Home Assistant...");
+      console.log(`Using WebSocket URL: ${auth.wsUrl}`);
+      
       this.connection = await haCreateConnection({
         auth,
         createSocket: async () =>
           createSocket(auth, this.configurationService.ignoreCertificates),
       });
       console.log("Connected to Home Assistant");
+      
+      // Store successful connection configuration
+      this.lastSuccessfulConfig = {
+        token: this.configurationService.token,
+        url: this.configurationService.url,
+        ignoreCertificates: this.configurationService.ignoreCertificates
+      };
+      console.log("Stored successful connection configuration for future reference");
     } catch (error) {
+      console.error("Failed to connect to Home Assistant:", error);
       this.handleConnectionError(error);
       throw error;
     }
@@ -136,35 +226,113 @@ export class HaConnection implements IHaConnection {
 
   private handleConnectionError = (error: any) => {
     this.connection = undefined;
-    const tokenIndication = `${this.configurationService.token}`.substring(
-      0,
-      5,
-    );
+    
+    // Ensure we have some token to use for debugging
+    let tokenIndication = "(no token)";
+    if (this.configurationService.token) {
+      tokenIndication = `${this.configurationService.token}`.substring(0, 5) + "...";
+    }
+    
+    // Get a more descriptive error message
     let errorText = error;
+    let detailedError = "";
+    
     switch (error) {
       case 1:
         errorText = "ERR_CANNOT_CONNECT";
+        detailedError = "Cannot connect to the server. Check your network connection and server URL.";
         break;
       case 2:
         errorText = "ERR_INVALID_AUTH";
+        detailedError = "Authentication failed. Your token may be invalid or expired.";
         break;
       case 3:
         errorText = "ERR_CONNECTION_LOST";
+        detailedError = "Connection was established but then lost. The server might be restarting.";
         break;
       case 4:
         errorText = "ERR_HASS_HOST_REQUIRED";
+        detailedError = "No Home Assistant host URL configured. Please set a valid host URL.";
         break;
+      case "ERR_MISSING_WS_URL":
+        errorText = "ERR_MISSING_WS_URL";
+        detailedError = "Failed to generate WebSocket URL. Check your Host URL configuration.";
+        break;
+      default:
+        // If it's an object with a message property, use that
+        if (error && typeof error === "object" && "message" in error) {
+          detailedError = error.message;
+        } else if (error && typeof error === "object" && "code" in error) {
+          // Node.js networking errors
+          errorText = `Network Error: ${error.code}`;
+          if (error.code === "ENOTFOUND") {
+            detailedError = "Host not found. Check your server URL and network connection.";
+          } else if (error.code === "ECONNREFUSED") {
+            detailedError = "Connection refused. Verify the server is running and accessible.";
+          } else {
+            detailedError = `Error connecting to server: ${error.code}`;
+          }
+        }
     }
-    const message = `Error connecting to your Home Assistant Server at ${this.configurationService.url} and token '${tokenIndication}...', check your network or update your VS Code Settings, make sure to (also) check your workspace settings! Error: ${errorText}`;
+    
+    // Log detailed diagnostics
+    console.error(`Error connecting to Home Assistant Server at ${this.configurationService.url || "(no URL)"}`);
+    console.error(`Token: ${tokenIndication}`);
+    console.error(`Error code: ${errorText}`);
+    console.error(`Details: ${detailedError || "No additional details"}`);
+    
+    // Also log the full message for backwards compatibility
+    const message = `Error connecting to your Home Assistant Server at ${this.configurationService.url || "(no URL)"} and token '${tokenIndication}', check your network or update your VS Code Settings, make sure to (also) check your workspace settings! Error: ${errorText} - ${detailedError}`;
     console.error(message);
   };
 
   public notifyConfigUpdate = async (): Promise<void> => {
+    console.log("Configuration update detected, checking if reconnection is needed...");
+    
+    // Check if the token or URL has changed since last successful connection
+    const tokenChanged = this.lastSuccessfulConfig.token !== this.configurationService.token;
+    const urlChanged = this.lastSuccessfulConfig.url !== this.configurationService.url;
+    const certSettingChanged = this.lastSuccessfulConfig.ignoreCertificates !== this.configurationService.ignoreCertificates;
+    
+    if (!tokenChanged && !urlChanged && !certSettingChanged) {
+      console.log("No relevant configuration changes detected, skipping reconnection");
+      return;
+    }
+    
+    console.log("Configuration changes detected, reconnecting to Home Assistant...");
+    if (tokenChanged) {
+      console.log("Token has changed, reconnection required");
+    }
+    if (urlChanged) {
+      console.log("Server URL has changed, reconnection required");
+    }
+    if (certSettingChanged) {
+      console.log("Certificate settings changed, reconnection required");
+    }
+    
     this.disconnect();
+    
+    // Reset connection state to force full reconnection
+    this.connection = undefined;
+    this.hassAreas = undefined as any;
+    this.hassEntities = undefined as any;
+    this.hassFloors = undefined as any;
+    this.hassLabels = undefined as any;
+    this.hassServices = undefined as any;
+    
     try {
       await this.tryConnect();
-    } catch {
-      // so be it, error is now displayed in logs
+      console.log("Successfully reconnected to Home Assistant after configuration update");
+      
+      // Update last successful configuration
+      this.lastSuccessfulConfig = {
+        token: this.configurationService.token,
+        url: this.configurationService.url,
+        ignoreCertificates: this.configurationService.ignoreCertificates
+      };
+    } catch (error) {
+      console.error("Failed to reconnect after configuration update:", error);
+      // Error is already displayed in logs via error handler
     }
   };
 
