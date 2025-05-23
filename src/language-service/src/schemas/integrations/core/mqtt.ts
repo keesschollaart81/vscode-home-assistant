@@ -213,7 +213,7 @@ interface BaseItem {
     /**
      * A list of connections of the device to the outside world as a list of tuples.
      */
-    connections?: { [key: string]: string };
+    connections?: [connection_type: string, connection_identifier: string][];
 
     /**
      * The hardware version of the device.
@@ -1021,7 +1021,7 @@ export interface FanItem extends BaseItem {
    * https://www.home-assistant.io/integrations/fan.mqt/#command_template
    */
   command_template?: Template;
-  
+
   /**
    * The name of the MQTT fan.
    * https://www.home-assistant.io/integrations/fan.mqtt#name
@@ -1057,7 +1057,7 @@ export interface FanItem extends BaseItem {
    * https://www.home-assistant.io/integrations/fan.mqtt/#direction_value_template
    */
   direction_value_template?: Template;
-  
+
   /**
    * Defines a template to generate the payload to send to oscillation_command_topic.
    * https://www.home-assistant.io/integrations/fan.mqtt/#oscillation_value_template
