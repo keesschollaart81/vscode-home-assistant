@@ -603,6 +603,12 @@ export interface SelectSelector {
     multiple?: boolean;
 
     /**
+     * Display options in alphabetical order.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    sort?: boolean;
+
+    /**
      * List of options that the user can choose from.
      * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
      */
