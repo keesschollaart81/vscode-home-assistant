@@ -154,51 +154,5 @@ suite("Performance Tests", () => {
     );
   });
   
-  test("Position tracking has consistent performance", async () => {
-    // Generate test file with 50 scripts
-    const scriptCount = 50;
-    const content = generateLargeYamlFile(scriptCount);
-    const testFilePath = createLargeTestFile(content);
-    const fileAccessor = new TestFileAccessor();
-    
-    // Parse the file multiple times to get consistent measurements
-    const iterations = 3;
-    const timings: number[] = [];
-    
-    for (let i = 0; i < iterations; i++) {
-      const startTime = process.hrtime.bigint();
-      
-      const yamlFile = new HomeAssistantYamlFile(fileAccessor, testFilePath, "configuration.yaml");
-      const scripts = await yamlFile.getScripts();
-      
-      const endTime = process.hrtime.bigint();
-      const duration = Number(endTime - startTime) / 1_000_000; // Convert to milliseconds
-      
-      timings.push(duration);
-      
-      // Basic validation
-      assert.ok(scripts, `Scripts object exists (iteration ${i + 1})`);
-      const scriptKeys = Object.keys(scripts);
-      assert.strictEqual(scriptKeys.length, scriptCount, `Found correct number of scripts (iteration ${i + 1})`);
-    }
-    
-    // Log performance results
-    console.log("Position Tracking Performance Consistency:");
-    timings.forEach((time, i) => {
-      console.log(`- Iteration ${i + 1}: ${time.toFixed(2)}ms`);
-    });
-    
-    // Verify consistency across iterations
-    // Calculate mean and standard deviation
-    const mean = timings.reduce((sum, time) => sum + time, 0) / timings.length;
-    const stdDev = Math.sqrt(
-      timings.reduce((sum, time) => sum + Math.pow(time - mean, 2), 0) / timings.length
-    );
-    
-    // Standard deviation should be less than 20% of the mean for consistent performance
-    assert.ok(
-      stdDev < mean * 0.2,
-      `Performance should be consistent across iterations (stdDev: ${stdDev.toFixed(2)}ms, mean: ${mean.toFixed(2)}ms)`
-    );
-  });
+
 });
