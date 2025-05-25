@@ -98,7 +98,7 @@ interface Item {
    * The mqtt humidifier platform lets you control your MQTT enabled humidifiers.
    * https://www.home-assistant.io/integrations/humidifier.mqtt
    */
-  humidifier?: any;
+  humidifier?: HumidifierItem | HumidifierItem[] | IncludeList;
 
   /**
    * The mqtt image platform allows you to integrate the content of an image file sent through MQTT into Home Assistant as an image.
@@ -1207,6 +1207,196 @@ export interface FanItem extends BaseItem {
    * https://www.home-assistant.io/integrations/fan.mqtt/#state_value_template
    */
   state_value_template?: Template;
+}
+
+export interface HumidifierItem extends BaseItem {
+  /**
+   * The MQTT topic to subscribe for changes of the current action.
+   * Valid values: `off`, `humidifying`, `drying`, `idle`
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  action_topic?: string;
+
+  /**
+   * A template to render the value received on the `action_topic` with.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  action_template?: Template;
+
+  /**
+   * Defines a template to generate the payload to send to `command_topic`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the humidifier state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  command_topic: string;
+
+  /**
+   * A template with which the value received on `current_humidity_topic` will be rendered.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  current_humidity_template?: Template;
+
+  /**
+   * The MQTT topic on which to listen for the current humidity.
+   * A `"None"` value received will reset the current humidity. Empty values (`'''`) will be ignored.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  current_humidity_topic?: string;
+
+  /**
+   * The device class of the MQTT device.
+   * Must be either `humidifier`, `dehumidifier` or `null`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  device_class?: "humidifier" | "dehumidifier" | null;
+
+  /**
+   * The encoding of the payloads received and published messages.
+   * Set to `""` to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  encoding?: string;
+
+  /**
+   * Picture URL for the entity.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  entity_picture?: string;
+
+  /**
+   * The maximum target humidity percentage that can be set.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  max_humidity?: number;
+
+  /**
+   * The minimum target humidity percentage that can be set.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  min_humidity?: number;
+
+  /**
+   * Defines a template to generate the payload to send to `mode_command_topic`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  mode_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the `mode` on the humidifier.
+   * This attribute must be configured together with the `modes` attribute.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  mode_command_topic?: string;
+
+  /**
+   * The MQTT topic subscribed to receive the humidifier `mode`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  mode_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value for the humidifier `mode` state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  mode_state_template?: Template;
+
+  /**
+   * List of available modes this humidifier is capable of running at.
+   * Common examples include `normal`, `eco`, `away`, `boost`, `comfort`, `home`, `sleep`, `auto` and `baby`.
+   * This attribute must be configured together with the `mode_command_topic` attribute.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  modes?: string[];
+
+  /**
+   * The name of the humidifier.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  name?: string;
+
+  /**
+   * Flag that defines if humidifier works in optimistic mode.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  optimistic?: boolean;
+
+  /**
+   * The payload that represents the stop state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  payload_off?: string;
+
+  /**
+   * The payload that represents the running state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  payload_on?: string;
+
+  /**
+   * A special payload that resets the `target_humidity` state attribute to an `unknown` state when received at the `target_humidity_state_topic`.
+   * When received at `current_humidity_topic` it will reset the current humidity state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  payload_reset_humidity?: string;
+
+  /**
+   * A special payload that resets the `mode` state attribute to an `unknown` state when received at the `mode_state_topic`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  payload_reset_mode?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  retain?: boolean;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from the state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  state_value_template?: Template;
+
+  /**
+   * Defines a template to generate the payload to send to `target_humidity_command_topic`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  target_humidity_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the humidifier target humidity state based on a percentage.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  target_humidity_command_topic: string;
+
+  /**
+   * The MQTT topic subscribed to receive humidifier target humidity.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  target_humidity_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value for the humidifier `target_humidity` state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  target_humidity_state_template?: Template;
 }
 
 export interface ImageItem extends BaseItem {
