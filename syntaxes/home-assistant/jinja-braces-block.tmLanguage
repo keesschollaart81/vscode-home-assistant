@@ -24,7 +24,7 @@
                 <key>name</key>
                 <string>keyword.operator.homeassistant</string>
                 <key>begin</key>
-                <string>\{%</string>
+                <string>\{%\s</string>
                 <key>end</key>
                 <string>%\}</string>
                 <key>beginCaptures</key>
