@@ -65,12 +65,11 @@ connection.onInitialize((params) => {
     new ScriptDefinitionProvider(haConfigInstance),
   ];
 
-  const yamlLanguageService = getLanguageService(
-    async () => "",
-    null,
-    connection,
-    undefined,
-  );
+  const yamlLanguageService = getLanguageService({
+    schemaRequestService: async () => "",
+    workspaceContext: null,
+    telemetry: undefined,
+  });
 
   const sendDiagnostics = (uri: string, diagnostics: Diagnostic[]) => {
     connection.sendDiagnostics({

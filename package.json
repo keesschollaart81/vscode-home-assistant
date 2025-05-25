@@ -705,25 +705,29 @@
     "lint:types": "tsc",
     "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:types",
     "schema": "ts-node src/language-service/src/schemas/generateSchemas.ts",
-    "test": "npm run compile",
+    "test": "npm run compile && vscode-test",
+    "test:old": "npm run compile && node ./out/test/runTest.js",
     "watch": "tsc -watch -p ./",
     "prepare": "husky"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
     "@stylistic/eslint-plugin": "^4.2.0",
-    "@types/mocha": "10.0.10",
+    "@types/mocha": "^10.0.10",
     "@types/node": "22.15.21",
     "@types/request": "2.48.12",
     "@types/vscode": "^1.100.0",
     "@types/ws": "8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "glob": "^11.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
+    "mocha": "^11.5.0",
     "prettier": "^3.5.3",
     "rimraf": "6.0.1",
     "ts-loader": "^9.5.2",
@@ -745,7 +749,7 @@
     "vscode-languageserver-textdocument": "^1.0.12",
     "vscode-uri": "3.1.0",
     "ws": "8.18.2",
-    "yaml": "1.10.2",
-    "yaml-language-server": "0.21.1"
+    "yaml": "2.8.0",
+    "yaml-language-server": "1.18.0"
   }
 }

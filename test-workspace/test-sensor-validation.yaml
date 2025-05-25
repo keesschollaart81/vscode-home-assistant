@@ -1,0 +1,15 @@
+
+# Sensor schema validation test
+sensor:
+  - platform: template
+    sensors:
+      valid_sensor:
+        friendly_name: Valid Sensor
+        value_template: "{{ states('sensor.temperature') }}"
+      
+      invalid_sensor:
+        friendly_name: Invalid Sensor
+        # Missing required value_template property
+        # value_template: "{{ states('sensor.temperature') }}"
+        # Invalid property
+        invalid_property: something

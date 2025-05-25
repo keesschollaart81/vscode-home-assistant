@@ -1,0 +1,1802 @@
+# Large test file with many scripts
+script:
+  test_script_0:
+    alias: "Test Script 0"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_1:
+    alias: "Test Script 1"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_2:
+    alias: "Test Script 2"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_3:
+    alias: "Test Script 3"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_4:
+    alias: "Test Script 4"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_5:
+    alias: "Test Script 5"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_6:
+    alias: "Test Script 6"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_7:
+    alias: "Test Script 7"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_8:
+    alias: "Test Script 8"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_9:
+    alias: "Test Script 9"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_10:
+    alias: "Test Script 10"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_11:
+    alias: "Test Script 11"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_12:
+    alias: "Test Script 12"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_13:
+    alias: "Test Script 13"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_14:
+    alias: "Test Script 14"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_15:
+    alias: "Test Script 15"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_16:
+    alias: "Test Script 16"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_17:
+    alias: "Test Script 17"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_18:
+    alias: "Test Script 18"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_19:
+    alias: "Test Script 19"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_20:
+    alias: "Test Script 20"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_21:
+    alias: "Test Script 21"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_22:
+    alias: "Test Script 22"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_23:
+    alias: "Test Script 23"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_24:
+    alias: "Test Script 24"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_25:
+    alias: "Test Script 25"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_26:
+    alias: "Test Script 26"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_27:
+    alias: "Test Script 27"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_28:
+    alias: "Test Script 28"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_29:
+    alias: "Test Script 29"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_30:
+    alias: "Test Script 30"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_31:
+    alias: "Test Script 31"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_32:
+    alias: "Test Script 32"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_33:
+    alias: "Test Script 33"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_34:
+    alias: "Test Script 34"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_35:
+    alias: "Test Script 35"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_36:
+    alias: "Test Script 36"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_37:
+    alias: "Test Script 37"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_38:
+    alias: "Test Script 38"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_39:
+    alias: "Test Script 39"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_40:
+    alias: "Test Script 40"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_41:
+    alias: "Test Script 41"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_42:
+    alias: "Test Script 42"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_43:
+    alias: "Test Script 43"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_44:
+    alias: "Test Script 44"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_45:
+    alias: "Test Script 45"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_46:
+    alias: "Test Script 46"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_47:
+    alias: "Test Script 47"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_48:
+    alias: "Test Script 48"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
+  test_script_49:
+    alias: "Test Script 49"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_0
+        data:
+          brightness: 0
+          transition: 1
+      - delay:
+          seconds: 1
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_1
+      - delay:
+          seconds: 2
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_2
+        data:
+          brightness: 100
+          transition: 3
+      - delay:
+          seconds: 3
+      - service: light.turn_off
+        target:
+          entity_id: light.test_light_3
+      - delay:
+          seconds: 4
+      - service: light.turn_on
+        target:
+          entity_id: light.test_light_4
+        data:
+          brightness: 200
+          transition: 5
+
