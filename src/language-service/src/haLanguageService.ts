@@ -186,6 +186,10 @@ export class HomeAssistantLanguageService {
     const entityValidationDiagnostics = await this.validateEntityIds(document);
     diagnostics.push(...entityValidationDiagnostics);
 
+    // Add area validation diagnostics
+    const areaValidationDiagnostics = await this.validateAreaIds(document);
+    diagnostics.push(...areaValidationDiagnostics);
+
     return diagnostics;
   };
 
@@ -372,6 +376,229 @@ export class HomeAssistantLanguageService {
     } catch (error) {
       // If validation fails (e.g., HA not connected), silently skip
       console.log("Entity validation skipped:", error);
+    }
+    
+    return diagnostics;
+  };
+
+  private validateAreaIds = async (
+    document: TextDocument,
+  ): Promise<Diagnostic[]> => {
+    const diagnostics: Diagnostic[] = [];
+    
+    try {
+      // Get all areas from Home Assistant
+      const areaCompletions = await this.haConnection.getAreaCompletions();
+      if (!areaCompletions || areaCompletions.length === 0) {
+        // If we can't get areas (e.g., not connected), don't validate
+        console.log("Area validation skipped: No areas available from Home Assistant");
+        return diagnostics;
+      }
+
+      const areaIds = areaCompletions.map(area => area.label as string);
+      console.log(`Area validation: Found ${areaIds.length} areas from Home Assistant`);
+      
+      const text = document.getText();
+      const lines = text.split("\n");
+      
+      // Track positions where we've already added diagnostics to avoid duplicates
+      const processedPositions = new Set<string>();
+
+      // Iterate through each line to find area references
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        
+        // Find area ID properties that need validation
+        for (const propertyName of AreaCompletionContribution.propertyMatches) {
+          // Check for single area values first: area_id: area_name
+          const propertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*([^\\s\\n#\\[]+)`, "g");
+          let match;
+          
+          while ((match = propertyRegex.exec(line)) !== null) {
+            const areaValue = match[1].trim();
+            
+            // Remove quotes if present
+            const cleanAreaValue = areaValue.replace(/^["']|["']$/g, "");
+            
+            // Skip template areas (containing {{ }})
+            if (cleanAreaValue.includes("{{") || cleanAreaValue.includes("}}")) {
+              continue;
+            }
+            
+            // Skip areas that are variables or templates
+            if (cleanAreaValue.startsWith("!")) {
+              continue;
+            }
+            
+            // Skip special values like "none" or "all"
+            if (cleanAreaValue === "none" || cleanAreaValue === "all") {
+              continue;
+            }
+            
+            // Check if area exists in Home Assistant
+            if (!areaIds.includes(cleanAreaValue)) {
+              const startColumn = match.index! + match[0].indexOf(areaValue);
+              const endColumn = startColumn + areaValue.length;
+              
+              // Create a unique key for this position
+              const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+              
+              // Skip if we've already processed this position
+              if (processedPositions.has(positionKey)) {
+                continue;
+              }
+              
+              processedPositions.add(positionKey);
+              
+              console.log(`Area validation: Found unknown area '${cleanAreaValue}' at line ${lineIndex + 1}`);
+              
+              const diagnostic: Diagnostic = {
+                severity: 2, // Warning
+                range: Range.create(
+                  lineIndex,
+                  startColumn,
+                  lineIndex,
+                  endColumn,
+                ),
+                message: `Area '${cleanAreaValue}' does not exist in your Home Assistant instance`,
+                source: "home-assistant",
+                code: "unknown-area",
+              };
+              
+              diagnostics.push(diagnostic);
+            }
+          }
+          
+          // Also check for area arrays (area_id: [area1, area2])
+          const arrayPropertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*\\[([^\\]]+)\\]`, "g");
+          let arrayMatch;
+          
+          while ((arrayMatch = arrayPropertyRegex.exec(line)) !== null) {
+            const areasInArray = arrayMatch[1];
+            const areaArray = areasInArray.split(",").map(e => e.trim().replace(/^["']|["']$/g, ""));
+            
+            for (const areaInArray of areaArray) {
+              const cleanAreaValue = areaInArray.trim();
+              
+              // Skip template areas and variables
+              if (cleanAreaValue.includes("{{") || cleanAreaValue.includes("}}") || cleanAreaValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Skip special values like "none" or "all"
+              if (cleanAreaValue === "none" || cleanAreaValue === "all") {
+                continue;
+              }
+              
+              // Check if area exists
+              if (!areaIds.includes(cleanAreaValue)) {
+                const areaStartInArray = areasInArray.indexOf(areaInArray);
+                const startColumn = arrayMatch.index! + arrayMatch[0].indexOf("[") + 1 + areaStartInArray;
+                const endColumn = startColumn + areaInArray.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Area '${cleanAreaValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-area",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+        
+        // Handle multi-line area arrays
+        if (line.trim().startsWith("- ")) {
+          // Check if we're in an area list context by looking at previous lines
+          let currentLineIndex = lineIndex - 1;
+          let foundAreaProperty = false;
+          
+          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
+            const prevLine = lines[currentLineIndex];
+            
+            for (const propertyName of AreaCompletionContribution.propertyMatches) {
+              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
+                foundAreaProperty = true;
+                break;
+              }
+            }
+            
+            if (foundAreaProperty) {
+              break;
+            }
+            currentLineIndex--;
+          }
+          
+          if (foundAreaProperty) {
+            const areaMatch = line.match(/^\s*-\s*([^#\n]+)/);
+            if (areaMatch) {
+              const areaValue = areaMatch[1].trim().replace(/^["']|["']$/g, "");
+              
+              // Skip template areas and variables
+              if (areaValue.includes("{{") || areaValue.includes("}}") || areaValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Skip special values like "none" or "all"
+              if (areaValue === "none" || areaValue === "all") {
+                continue;
+              }
+              
+              // Check if area exists
+              if (!areaIds.includes(areaValue)) {
+                const startColumn = areaMatch.index! + areaMatch[0].indexOf(areaValue);
+                const endColumn = startColumn + areaValue.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Area '${areaValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-area",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // If validation fails (e.g., HA not connected), silently skip
+      console.log("Area validation skipped:", error);
     }
     
     return diagnostics;

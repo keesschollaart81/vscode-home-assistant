@@ -1,0 +1,50 @@
+# Test file for area validation
+
+automation:
+  - alias: Test Area Validation
+    trigger:
+      - platform: state
+        entity_id: light.kitchen
+    condition:
+      - condition: state
+        entity_id: binary_sensor.motion
+    action:
+      - service: light.turn_on
+        target:
+          area_id: living_room  # Valid area (assuming it exists)
+      - service: light.turn_off
+        target:
+          area_id: non_existing_area  # Invalid area
+          
+# Test with array syntax
+script:
+  test_script:
+    sequence:
+      - service: homeassistant.turn_off
+        target:
+          area_id: 
+            - kitchen  # Valid area (assuming it exists)
+            - fake_area  # Invalid area
+            
+# Test with inline array
+group:
+  test_group:
+    target:
+      area_id: [living_room, non_existing_area]  # One valid, one invalid
+
+# Test with template and special values
+automation:
+  - alias: Template Test
+    action:
+      - service: light.turn_on
+        target:
+          area_id: "{{ area_registry.living_room }}"  # Template, should be skipped
+      - service: light.turn_on
+        target:
+          area_id: !secret my_area  # Secret, should be skipped
+      - service: light.turn_on
+        target:
+          area_id: all  # Special value, should be skipped
+      - service: light.turn_on
+        target:
+          area_id: none  # Special value, should be skipped
