@@ -741,7 +741,7 @@
     "bufferutil": "^4.0.9",
     "home-assistant-js-websocket": "^9.5.0",
     "utf-8-validate": "^6.0.5",
-    "vscode-extension-telemetry": "0.4.5",
+    "@vscode/extension-telemetry": "^1.0.0",
     "vscode-json-languageservice": "4.1.0",
     "vscode-languageclient": "^7.0.0",
     "vscode-languageserver": "^9.0.1",

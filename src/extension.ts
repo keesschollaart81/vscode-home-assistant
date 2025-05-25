@@ -1,4 +1,4 @@
-import * as fs from "fs";
+
 import * as path from "path";
 import * as vscode from "vscode";
 import { LanguageClientOptions } from "vscode-languageclient";
@@ -7,7 +7,7 @@ import {
   ServerOptions,
   TransportKind,
 } from "vscode-languageclient/node";
-import TelemetryReporter from "vscode-extension-telemetry";
+import { TelemetryReporter } from "@vscode/extension-telemetry";
 import { AuthManager } from "./auth/manager";
 import { AuthMiddleware } from "./auth/middleware";
 import { manageAuth, testConnection } from "./auth/commands";
@@ -15,11 +15,6 @@ import { debugAuthSettings } from "./auth/debug";
 import { repairAuthConfiguration } from "./auth/repair";
 import { HomeAssistantStatusBar } from "./status/statusBar";
 import { registerReloadCommands } from "./commands/reloadCommands";
-
-const extensionId = "vscode-home-assistant";
-const telemetryVersion = generateVersionString(
-  vscode.extensions.getExtension(`keesschollaart.${extensionId}`),
-);
 
 let reporter: TelemetryReporter;
 
@@ -53,11 +48,7 @@ export async function activate(
     console.error("Failed to migrate credentials:", error);
   }
 
-  reporter = new TelemetryReporter(
-    extensionId,
-    telemetryVersion,
-    "ff172110-5bb2-4041-9f31-e157f1efda56",
-  );
+  reporter = new TelemetryReporter("InstrumentationKey=ff172110-5bb2-4041-9f31-e157f1efda56");
 
   try {
     reporter.sendTelemetryEvent("extension.activate");
@@ -522,17 +513,6 @@ export async function deactivate(): Promise<void> {
   await reporter.dispose();
 }
 
-function generateVersionString(extension: vscode.Extension<any>): string {
-  // if the extensionPath is a Git repo, this is probably an extension developer
-  const isDevMode: boolean = extension
-    ? fs.existsSync(`${extension.extensionPath}/.git`)
-    : false;
-  const baseVersion: string = extension
-    ? extension.packageJSON.version
-    : "0.0.0";
-
-  return isDevMode ? `${baseVersion}-dev` : baseVersion;
-}
 
 export class CommandMappings {
   constructor(
