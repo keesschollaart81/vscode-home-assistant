@@ -145,7 +145,7 @@ interface Item {
    * The mqtt siren platform lets you control your MQTT enabled sirens and text based notification devices.
    * https://www.home-assistant.io/integrations/siren.mqtt
    */
-  siren?: any;
+  siren?: SirenItem | SirenItem[] | IncludeList;
 
   /**
    * This mqtt sensor platform uses the MQTT message payload as the sensor value.
@@ -2585,4 +2585,102 @@ export interface VacuumLegacyItem extends BaseItem {
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#supported_features
    */
   supported_features?: string[];
+}
+
+export interface SirenItem extends BaseItem {
+  /**
+   * The list of available tones the siren supports.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#available_tones
+   */
+  available_tones?: string[];
+
+  /**
+   * Defines a template to generate a custom payload to send to command_topic.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#command_template
+   */
+  command_template?: Template;
+
+  /**
+   * Defines a template to generate a custom payload to send to command_topic when the siren turn off action is called.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#command_off_template
+   */
+  command_off_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the siren state.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * Defines if the siren supports the duration option.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#support_duration
+   */
+  support_duration?: boolean;
+
+  /**
+   * Defines if the siren supports setting the volume.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#support_volume_set
+   */
+  support_volume_set?: boolean;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#state_topic
+   */
+  state_topic?: string;
+
+  /**
+   * Defines a template to extract device's state from the state_topic.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#state_value_template
+   */
+  state_value_template?: Template;
+
+  /**
+   * The payload that represents off state. If specified, will be used for both comparing to the value in the state_topic and sending as off command to the command_topic.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#payload_off
+   */
+  payload_off?: string;
+
+  /**
+   * The payload that represents on state. If specified, will be used for both comparing to the value in the state_topic and sending as on command to the command_topic.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#payload_on
+   */
+  payload_on?: string;
+
+  /**
+   * The payload that represents the off state.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#state_off
+   */
+  state_off?: string;
+
+  /**
+   * The payload that represents the on state.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#state_on
+   */
+  state_on?: string;
+
+  /**
+   * Flag that defines if siren works in optimistic mode.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#retain
+   */
+  retain?: boolean;
+
+  /**
+   * The name of the siren.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#name
+   */
+  name?: string;
 }
