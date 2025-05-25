@@ -157,7 +157,7 @@ interface Item {
    * The mqtt switch platform lets you control your MQTT enabled switches.
    * https://www.home-assistant.io/integrations/switch.mqtt
    */
-  switch?: any;
+  switch?: SwitchItem | SwitchItem[] | IncludeList;
 
   /**
    * The mqtt vacuum integration allows you to control your MQTT-enabled vacuum.
@@ -1977,6 +1977,86 @@ export interface SensorItem extends BaseItem {
   /**
    * Defines a template to extract the value.
    * https://www.home-assistant.io/integrations/sensor.mqtt#value_template
+   */
+  value_template?: Template;
+}
+
+export interface SwitchItem extends BaseItem {
+  /**
+   * The MQTT topic to publish commands to change the switch state.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * Defines a template to generate the payload to send to command_topic.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#command_template
+   */
+  command_template?: Template;
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#device_class
+   */
+  device_class?: string;
+
+  /**
+   * The name of the MQTT switch.
+   * https://www.home-assistant.io/integrations/switch.mqtt#name
+   */
+  name?: string;
+
+  /**
+   * Flag that defines if switch works in optimistic mode.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * The payload that represents the off state.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#payload_off
+   */
+  payload_off?: string;
+
+  /**
+   * The payload that represents the on state.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#payload_on
+   */
+  payload_on?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#retain
+   */
+  retain?: boolean;
+
+  /**
+   * The payload that represents the off state. Used when value that represents off state in the state_topic is different from value that should be sent to the command_topic to turn the device off.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#state_off
+   */
+  state_off?: string;
+
+  /**
+   * The payload that represents the on state. Used when value that represents on state in the state_topic is different from value that should be sent to the command_topic to turn the device on.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#state_on
+   */
+  state_on?: string;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#state_topic
+   */
+  state_topic?: string;
+
+  /**
+   * Defines a template to extract device's state from the state_topic.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#value_template
    */
   value_template?: Template;
 }
