@@ -1,0 +1,14 @@
+
+# Invalid automation
+automation:
+  - id: invalid_test_automation
+    alias: Invalid Test Automation
+    # Missing required trigger property
+    # trigger:
+    #   - platform: state
+    #     entity_id: binary_sensor.motion
+    action:
+      # Invalid service name
+      - service: invalid_service
+        # Unknown property
+        unknown_property: something

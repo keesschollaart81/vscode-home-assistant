@@ -192,10 +192,10 @@ export class HomeAssistantLanguageService {
     return this.yamlLanguageService.findDocumentSymbols(document, {});
   };
 
-  public onDocumentFormatting = (
+  public onDocumentFormatting = async (
     document: TextDocument,
     options: FormattingOptions,
-  ): TextEdit[] => {
+  ): Promise<TextEdit[]> => {
     if (!document) {
       return [];
     }
@@ -210,7 +210,7 @@ export class HomeAssistantLanguageService {
       enable: true,
     };
 
-    return this.yamlLanguageService.doFormat(document, settings);
+    return await this.yamlLanguageService.doFormat(document, settings);
   };
 
   public onCompletion = async (

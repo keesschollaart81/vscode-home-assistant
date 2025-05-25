@@ -1,0 +1,21 @@
+
+# Valid automation
+automation:
+  - id: valid_test_automation
+    alias: Valid Test Automation
+    description: "This is a valid automation for testing schema validation"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion
+        to: "on"
+    condition:
+      - condition: state
+        entity_id: input_boolean.test_enabled
+        state: "on"
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.living_room
+        data:
+          brightness: 255
+          transition: 2

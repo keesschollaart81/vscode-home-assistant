@@ -1,0 +1,67 @@
+# Home Assistant test file for position tracking
+# This file contains various script definitions to test position tracking
+
+# Basic script with simple actions
+script:
+  test_script_1:
+    alias: "Test Script 1"
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.living_room
+      - delay:
+          seconds: 5
+      - service: light.turn_off
+        target:
+          entity_id: light.living_room
+
+  # Script with more complex structure to test nested position tracking
+  test_script_2:
+    alias: "Test Script 2 with Conditions"
+    sequence:
+      - condition: state
+        entity_id: binary_sensor.motion
+        state: "on"
+      - choose:
+          - conditions:
+              - condition: numeric_state
+                entity_id: sensor.temperature
+                above: 25
+            sequence:
+              - service: climate.set_temperature
+                data:
+                  entity_id: climate.living_room
+                  temperature: 23
+          - conditions:
+              - condition: numeric_state
+                entity_id: sensor.temperature
+                below: 15
+            sequence:
+              - service: climate.set_temperature
+                data:
+                  entity_id: climate.living_room
+                  temperature: 21
+        default:
+          - service: persistent_notification.create
+            data:
+              title: "Temperature is comfortable"
+              message: "No climate adjustment needed"
+
+# Include a different type of configuration to ensure it doesn't interfere
+automation:
+  - id: test_automation
+    alias: "Test Automation"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion
+        to: "on"
+    action:
+      - service: script.test_script_1
+
+# Add another script at the end to test multiple script collections
+script another_script:
+  alias: "Another Script Format"
+  sequence:
+    - service: light.toggle
+      target:
+        entity_id: light.kitchen

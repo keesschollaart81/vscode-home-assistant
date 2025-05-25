@@ -3,8 +3,46 @@ name: VS Code Extension
 on: [push, pull_request]
 
 jobs:
-  vscode-extension:
-    name: VS Code Extension
+  ci:
+    name: Build & Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - name: ⤵️ Check out code from GitHub
+        uses: actions/checkout@v4
+      
+      - name: 🏗 Set up NodeJS
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "18"
+        
+      - name: 🏗 Install NodeJS packages
+        run: npm ci
+
+      - name: 🚀 Run Linter
+        run: npm run lint
+      
+      - name: 🚀 Build Schema
+        run: npm run schema
+
+      - name: 🚀 Run Compile
+        run: npm run compile
+      
+      - name: 🧪 Run tests (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a npm test
+        
+      - name: 🧪 Run tests (Windows & macOS)
+        if: runner.os != 'Linux'
+        run: npm test
+
+  publish:
+    name: Publish Extension
+    needs: ci
+    if: success() && startsWith(github.ref, 'refs/tags/v') && github.event_name == 'release'
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +67,6 @@ jobs:
         run: npm run compile
 
       - name: 🚀 VSCode Marketplace Publish
-        if: success() && github.ref == 'refs/heads/master'
         run: |
           npm install -g @vscode/vsce
           vsce publish -p $VSCE_TOKEN
@@ -39,7 +76,6 @@ jobs:
 
       - name: 🚀 Open VSX Publish
         uses: HaaLeo/publish-vscode-extension@v2
-        if: success() && github.ref == 'refs/heads/master'
         with:
           pat: ${{ secrets.OPEN_VSX_TOKEN }}
           extensionFile: vscode-home-assistant.vsix
