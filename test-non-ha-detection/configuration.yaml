@@ -1,0 +1,16 @@
+# Non-Home Assistant configuration.yaml
+# This is just a generic configuration file that happens to be named configuration.yaml
+# but has nothing to do with Home Assistant
+
+database:
+  host: localhost
+  port: 5432
+  name: myapp
+  
+server:
+  port: 8080
+  host: 0.0.0.0
+  
+logging:
+  level: info
+  file: /var/log/myapp.log

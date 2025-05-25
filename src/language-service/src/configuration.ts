@@ -6,6 +6,7 @@ export interface IConfigurationService {
   token?: string;
   url?: string;
   ignoreCertificates: boolean;
+  disableAutomaticFileAssociation: boolean;
   updateConfiguration(config: DidChangeConfigurationParams): void;
 }
 
@@ -13,6 +14,7 @@ export interface HomeAssistantConfiguration {
   longLivedAccessToken?: string;
   hostUrl?: string;
   ignoreCertificates: boolean;
+  disableAutomaticFileAssociation: boolean;
 }
 
 export class ConfigurationService implements IConfigurationService {
@@ -23,6 +25,8 @@ export class ConfigurationService implements IConfigurationService {
   public url?: string;
 
   public ignoreCertificates = false;
+
+  public disableAutomaticFileAssociation = false;
 
   constructor() {
     this.setConfigViaEnvironmentVariables();
@@ -37,6 +41,7 @@ export class ConfigurationService implements IConfigurationService {
     const prevToken = this.token;
     const prevUrl = this.url;
     const prevIgnoreCertificates = this.ignoreCertificates;
+    const prevDisableAutomaticFileAssociation = this.disableAutomaticFileAssociation;
 
     // Get the Home Assistant configuration section
     const incoming = config.settings[
@@ -61,6 +66,7 @@ export class ConfigurationService implements IConfigurationService {
       }
       
       this.ignoreCertificates = !!incoming.ignoreCertificates;
+      this.disableAutomaticFileAssociation = !!incoming.disableAutomaticFileAssociation;
     } else {
       console.warn("Received invalid or empty configuration object");
     }
@@ -86,6 +92,10 @@ export class ConfigurationService implements IConfigurationService {
     
     if (this.ignoreCertificates !== prevIgnoreCertificates) {
       console.log(`Ignore certificates setting changed: ${prevIgnoreCertificates} -> ${this.ignoreCertificates}`);
+    }
+    
+    if (this.disableAutomaticFileAssociation !== prevDisableAutomaticFileAssociation) {
+      console.log(`Disable automatic file association setting changed: ${prevDisableAutomaticFileAssociation} -> ${this.disableAutomaticFileAssociation}`);
     }
 
     console.log(`Configuration status after update: ${this.isConfigured ? "Configured" : "Not Configured"}`);
