@@ -181,6 +181,199 @@ export class HomeAssistantLanguageService {
       diagnosticItem.severity = 1; // Convert all warnings to errors
       diagnostics.push(diagnosticItem);
     }
+
+    // Add entity validation diagnostics
+    const entityValidationDiagnostics = await this.validateEntityIds(document);
+    diagnostics.push(...entityValidationDiagnostics);
+
+    return diagnostics;
+  };
+
+  private validateEntityIds = async (
+    document: TextDocument,
+  ): Promise<Diagnostic[]> => {
+    const diagnostics: Diagnostic[] = [];
+    
+    try {
+      // Get all entities from Home Assistant
+      const entities = await this.haConnection.getHassEntities();
+      if (!entities) {
+        // If we can't get entities (e.g., not connected), don't validate
+        console.log("Entity validation skipped: No entities available from Home Assistant");
+        return diagnostics;
+      }
+
+      const entityIds = Object.keys(entities);
+      console.log(`Entity validation: Found ${entityIds.length} entities from Home Assistant`);
+      
+      const text = document.getText();
+      const lines = text.split("\n");
+
+      // Iterate through each line to find entity references
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        
+        // Find entity ID properties that need validation
+        for (const propertyName of EntityIdCompletionContribution.propertyMatches) {
+          const propertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*([^\\s\\n#]+)`, "g");
+          let match;
+          
+          while ((match = propertyRegex.exec(line)) !== null) {
+            const entityValue = match[1].trim();
+            
+            // Remove quotes if present
+            const cleanEntityValue = entityValue.replace(/^["']|["']$/g, "");
+            
+            // Skip template entities (containing {{ }})
+            if (cleanEntityValue.includes("{{") || cleanEntityValue.includes("}}")) {
+              continue;
+            }
+            
+            // Skip entities that are variables or templates
+            if (cleanEntityValue.startsWith("!")) {
+              continue;
+            }
+            
+            // Check if this looks like an entity ID (domain.entity format)
+            if (!/^[a-z_]+\.[a-z0-9_]+$/.test(cleanEntityValue)) {
+              continue;
+            }
+            
+            // Check if entity exists in Home Assistant
+            if (!entityIds.includes(cleanEntityValue)) {
+              console.log(`Entity validation: Found unknown entity '${cleanEntityValue}' at line ${lineIndex + 1}`);
+              const startColumn = match.index! + match[0].indexOf(entityValue);
+              const endColumn = startColumn + entityValue.length;
+              
+              const diagnostic: Diagnostic = {
+                severity: 2, // Warning
+                range: Range.create(
+                  lineIndex,
+                  startColumn,
+                  lineIndex,
+                  endColumn,
+                ),
+                message: `Entity '${cleanEntityValue}' does not exist in your Home Assistant instance`,
+                source: "home-assistant",
+                code: "unknown-entity",
+              };
+              
+              diagnostics.push(diagnostic);
+            }
+          }
+          
+          // Also check for entity arrays (entity_id: [entity1, entity2])
+          const arrayPropertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*\\[([^\\]]+)\\]`, "g");
+          let arrayMatch;
+          
+          while ((arrayMatch = arrayPropertyRegex.exec(line)) !== null) {
+            const entitiesInArray = arrayMatch[1];
+            const entityArray = entitiesInArray.split(",").map(e => e.trim().replace(/^["']|["']$/g, ""));
+            
+            for (const entityInArray of entityArray) {
+              const cleanEntityValue = entityInArray.trim();
+              
+              // Skip template entities and variables
+              if (cleanEntityValue.includes("{{") || cleanEntityValue.includes("}}") || cleanEntityValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Check if this looks like an entity ID
+              if (!/^[a-z_]+\.[a-z0-9_]+$/.test(cleanEntityValue)) {
+                continue;
+              }
+              
+              // Check if entity exists
+              if (!entityIds.includes(cleanEntityValue)) {
+                const entityStartInArray = entitiesInArray.indexOf(entityInArray);
+                const startColumn = arrayMatch.index! + arrayMatch[0].indexOf("[") + 1 + entityStartInArray;
+                const endColumn = startColumn + entityInArray.length;
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Entity '${cleanEntityValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-entity",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+        
+        // Handle multi-line entity arrays
+        if (line.trim().startsWith("- ")) {
+          // Check if we're in an entity list context by looking at previous lines
+          let currentLineIndex = lineIndex - 1;
+          let foundEntityProperty = false;
+          
+          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
+            const prevLine = lines[currentLineIndex];
+            
+            for (const propertyName of EntityIdCompletionContribution.propertyMatches) {
+              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
+                foundEntityProperty = true;
+                break;
+              }
+            }
+            
+            if (foundEntityProperty) {
+              break;
+            }
+            currentLineIndex--;
+          }
+          
+          if (foundEntityProperty) {
+            const entityMatch = line.match(/^\s*-\s*([^#\n]+)/);
+            if (entityMatch) {
+              const entityValue = entityMatch[1].trim().replace(/^["']|["']$/g, "");
+              
+              // Skip template entities and variables
+              if (entityValue.includes("{{") || entityValue.includes("}}") || entityValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Check if this looks like an entity ID
+              if (!/^[a-z_]+\.[a-z0-9_]+$/.test(entityValue)) {
+                continue;
+              }
+              
+              // Check if entity exists
+              if (!entityIds.includes(entityValue)) {
+                const startColumn = entityMatch.index! + entityMatch[0].indexOf(entityValue);
+                const endColumn = startColumn + entityValue.length;
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Entity '${entityValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-entity",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // If validation fails (e.g., HA not connected), silently skip
+      console.log("Entity validation skipped:", error);
+    }
+    
     return diagnostics;
   };
 

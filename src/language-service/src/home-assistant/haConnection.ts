@@ -69,6 +69,7 @@ export interface IHaConnection {
   getFloorCompletions(): Promise<CompletionItem[]>;
   getLabelCompletions(): Promise<CompletionItem[]>;
   getServiceCompletions(): Promise<CompletionItem[]>;
+  getHassEntities(): Promise<HassEntities>;
 }
 
 export class HaConnection implements IHaConnection {
@@ -549,7 +550,7 @@ export class HaConnection implements IHaConnection {
     return completions;
   }
 
-  private getHassEntities = async (): Promise<HassEntities> => {
+  public async getHassEntities(): Promise<HassEntities> {
     if (this.hassEntities !== undefined) {
       return this.hassEntities;
     }
@@ -570,7 +571,7 @@ export class HaConnection implements IHaConnection {
       },
     );
     return this.hassEntities;
-  };
+  }
 
   private getHassLabels = async (): Promise<HassLabels> => {
     if (this.hassLabels !== undefined) {
