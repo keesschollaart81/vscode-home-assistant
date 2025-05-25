@@ -62,7 +62,7 @@ interface Item {
    * The mqtt button platform lets you send an MQTT message when the button is pressed in the frontend or the button press service is called.
    * https://www.home-assistant.io/integrations/button.mqtt
    */
-  button?: any;
+  button?: ButtonItem | ButtonItem[] | IncludeList;
 
   /**
    * The mqtt camera platform allows you to integrate the content of an image file sent through MQTT into Home Assistant as a camera.
@@ -454,6 +454,50 @@ export interface BinarySensorItem extends BaseItem {
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#value_template
    */
   value_template?: Template;
+}
+
+export interface ButtonItem extends BaseItem {
+  /**
+   * The MQTT topic to publish commands to trigger the button.
+   * https://www.home-assistant.io/integrations/button.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * Defines a template to generate the payload to send to command_topic.
+   * https://www.home-assistant.io/integrations/button.mqtt/#command_template
+   */
+  command_template?: Template;
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed in the frontend.
+   * https://www.home-assistant.io/integrations/button.mqtt/#device_class
+   */
+  device_class?: string;
+
+  /**
+   * The name of the MQTT button.
+   * https://www.home-assistant.io/integrations/button.mqtt/#name
+   */
+  name?: string;
+
+  /**
+   * The payload to send to trigger the button.
+   * https://www.home-assistant.io/integrations/button.mqtt/#payload_press
+   */
+  payload_press?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/button.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/button.mqtt/#retain
+   */
+  retain?: boolean;
 }
 
 export interface CameraItem extends BaseItem {
