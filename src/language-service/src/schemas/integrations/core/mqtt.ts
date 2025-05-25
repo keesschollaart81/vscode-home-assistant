@@ -133,7 +133,7 @@ interface Item {
    * The mqtt scene platform lets you control your MQTT enabled scenes.
    * https://www.home-assistant.io/integrations/scene.mqtt/
    */
-  scene?: any;
+  scene?: SceneItem | SceneItem[] | IncludeList;
 
   /**
    * This mqtt select platform uses the MQTT message payload as the select value.
@@ -2095,6 +2095,57 @@ export interface NumberItem extends BaseItem {
    * https://www.home-assistant.io/integrations/number.mqtt#value_template
    */
   value_template?: Template;
+}
+
+export interface SceneItem extends BaseItem {
+  /**
+   * The MQTT topic to publish commands to change the scene state.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * The name of the MQTT scene.
+   * https://www.home-assistant.io/integrations/scene.mqtt#name
+   */
+  name?: string;
+
+  /**
+   * Flag that defines if the scene works in optimistic mode.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * The payload that represents the scene.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#payload
+   */
+  payload?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#retain
+   */
+  retain?: boolean;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#state_topic
+   */
+  state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from the state payload.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#value_template
+   */
+  
+   value_template?: Template;
 }
 
 export interface SelectItem extends BaseItem {
