@@ -1,4 +1,3 @@
-
 import * as path from "path";
 import * as vscode from "vscode";
 import { LanguageClientOptions } from "vscode-languageclient";
@@ -120,133 +119,115 @@ export async function activate(
   });
 
   context.subscriptions.push(reporter);
-  context.subscriptions.push(client.start());
 
-  client
-    .onReady()
-    .then(async () => {
-      // Install our auth middleware to inject the token and URL from SecretStorage
-      try {
-        // @ts-expect-error - We need to access the connection which is private
-        const connection = client._connection || client;
-        await AuthMiddleware.install(context, connection);
-        console.log("Auth middleware successfully installed");
+  try {
+    // Start the client
+    await client.start();
+    context.subscriptions.push({ dispose: () => client.stop() });
 
-        // Force an initial configuration refresh to ensure token and URL are set
-        const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+    // Install our auth middleware to inject the token and URL from SecretStorage
+    try {
+      // @ts-expect-error - We need to access the connection which is private
+      const connection = client._connection || client;
+      await AuthMiddleware.install(context, connection);
+      console.log("Auth middleware successfully installed");
 
-        // Get the token and URL directly and explicitly trigger a configuration update
-        const token = await AuthManager.getToken(context);
-        const url = await AuthManager.getUrl(context); // Also check URL
+      // Force an initial configuration refresh to ensure token and URL are set
+      const config = vscode.workspace.getConfiguration("vscode-home-assistant");
 
-        if (token && url) { // Ensure both token and URL are present
-          console.log("Token and Home Assistant instance URL found, explicitly sending configuration update");
-          // Force update some setting to trigger a configuration refresh
-          await config.update("triggerConfigRefresh", Date.now(), vscode.ConfigurationTarget.Global);
+      // Get the token and URL directly and explicitly trigger a configuration update
+      const token = await AuthManager.getToken(context);
+      const url = await AuthManager.getUrl(context); // Also check URL
 
-          // Check the status bar connection
-          statusBar.checkConnectionStatus();
+      if (token && url) { // Ensure both token and URL are present
+        console.log("Token and Home Assistant instance URL found, explicitly sending configuration update");
+        // Force update some setting to trigger a configuration refresh
+        await config.update("triggerConfigRefresh", Date.now(), vscode.ConfigurationTarget.Global);
 
-          // Wait a bit and force another refresh to ensure token and URL reach the server
-          setTimeout(async () => {
-            try {
-              console.log("Sending follow-up configuration refresh");
-              await config.update("triggerConfigRefresh", Date.now(), vscode.ConfigurationTarget.Global);
-              
-              // Check connection status again after refresh
-              statusBar.checkConnectionStatus();
-            } catch (error) {
-              console.error("Error sending follow-up configuration refresh:", error);
-            }
-          }, 3000);
-        } else if (!token) {
-          console.log("No token found in SecretStorage, connection may fail");
-          vscode.window.showWarningMessage("No Home Assistant authentication token found. Please set authentication via the 'Home Assistant: Manage Authentication' command.");
-        } else if (!url) {
-          console.log("No Home Assistant instance URL found in SecretStorage, connection may fail");
-          vscode.window.showWarningMessage("No Home Assistant instance URL found. Please set the URL via the 'Home Assistant: Manage Authentication' command.");
-        }
-      } catch (error) {
-        console.error("Failed to install auth middleware:", error);
-      }
-      client.onNotification("no-config", async (): Promise<void> => {
-        if (await AuthManager.hasCredentials(context)) {
-          console.log("'no-config' notification received from server, but credentials (token and/or Home Assistant instance URL) found in SecretStorage. Ignoring pop-up.");
-          return;
-        }
-        const manageAuthCommand = "Manage Authentication";
-        const optionClicked = await vscode.window.showInformationMessage(
-          "No Home Assistant authentication (token and/or Home Assistant instance URL) found. Please set authentication.",
-          manageAuthCommand,
-        );
-        if (optionClicked === manageAuthCommand) {
-          await vscode.commands.executeCommand(
-            "vscode-home-assistant.manageAuth",
-          );
-        }
-        
-        // Update status bar to show disconnected state
+        // Check the status bar connection
         statusBar.checkConnectionStatus();
-      });
-      
-      // Add handler for connection established event
-      client.onNotification("ha_connected", async (data: { name?: string; version?: string }): Promise<void> => {
-        console.log("Home Assistant connection established notification received");
-        // Get instance information if available
-        const instanceInfo = {
-          name: data.name || "Home Assistant",
-          version: data.version
-        };
-        // Update status bar with connection information
-        statusBar.setConnectionStatus("connected", instanceInfo);
-      });
-      
-      // Add handler for connection error event
-      client.onNotification("ha_connection_error", async (data: { error?: string }): Promise<void> => {
-        console.log(`Home Assistant connection error notification received: ${data.error || "Unknown error"}`);
-        // Update status bar to show error state
-        statusBar.setConnectionStatus("error");
-      });
-      client.onNotification("configuration_check_completed", async (result) => {
-        if (result && result.result === "valid") {
-          await vscode.window.showInformationMessage(
-            "Home Assistant Configuration Checked, result: 'Valid'!",
-          );
-        } else {
-          await vscode.window.showErrorMessage(
-            `Home Assistant Configuration check resulted in an error: ${result.error}`,
-          );
-        }
-      });
-      let haOutputChannel: vscode.OutputChannel;
-      client.onNotification("get_eror_log_completed", (result) => {
-        if (!haOutputChannel) {
-          haOutputChannel = vscode.window.createOutputChannel(
-            "Home Assistant Error Log",
-          );
-        }
-        haOutputChannel.appendLine(result);
-        haOutputChannel.show();
-      });
+      }
+    } catch (error) {
+      console.error("Error setting up auth middleware:", error);
+    }
+  } catch (error: unknown) {
+    console.error("Failed to start the client:", error);
+    if (error instanceof Error) {
+      void vscode.window.showErrorMessage(`Failed to start Home Assistant Language Server: ${error.message}`);
+    }
+  }
 
-      let haTemplateRendererChannel: vscode.OutputChannel;
-      client.onNotification("render_template_completed", (result) => {
-        if (!haTemplateRendererChannel) {
-          haTemplateRendererChannel = vscode.window.createOutputChannel(
-            "Home Assistant Template Renderer",
-          );
-        }
-        haTemplateRendererChannel.clear();
-        haTemplateRendererChannel.appendLine(result);
-        haTemplateRendererChannel.show();
-      });
-    })
-    .catch((reason) => {
-      console.error(JSON.stringify(reason));
-      reporter.sendTelemetryEvent("extension.languageserver.onReadyError", {
-        reason: JSON.stringify(reason),
-      });
-    });
+  client.onNotification("no-config", async (): Promise<void> => {
+    if (await AuthManager.hasCredentials(context)) {
+      console.log("'no-config' notification received from server, but credentials (token and/or Home Assistant instance URL) found in SecretStorage. Ignoring pop-up.");
+      return;
+    }
+    const manageAuthCommand = "Manage Authentication";
+    const optionClicked = await vscode.window.showInformationMessage(
+      "No Home Assistant authentication (token and/or Home Assistant instance URL) found. Please set authentication.",
+      manageAuthCommand,
+    );
+    if (optionClicked === manageAuthCommand) {
+      await vscode.commands.executeCommand(
+        "vscode-home-assistant.manageAuth",
+      );
+    }
+    
+    // Update status bar to show disconnected state
+    statusBar.checkConnectionStatus();
+  });
+  
+  // Add handler for connection established event
+  client.onNotification("ha_connected", async (data: { name?: string; version?: string }): Promise<void> => {
+    console.log("Home Assistant connection established notification received");
+    // Get instance information if available
+    const instanceInfo = {
+      name: data.name || "Home Assistant",
+      version: data.version
+    };
+    // Update status bar with connection information
+    statusBar.setConnectionStatus("connected", instanceInfo);
+  });
+  
+  // Add handler for connection error event
+  client.onNotification("ha_connection_error", async (data: { error?: string }): Promise<void> => {
+    console.log(`Home Assistant connection error notification received: ${data.error || "Unknown error"}`);
+    // Update status bar to show error state
+    statusBar.setConnectionStatus("error");
+  });
+  client.onNotification("configuration_check_completed", async (result) => {
+    if (result && result.result === "valid") {
+      await vscode.window.showInformationMessage(
+        "Home Assistant Configuration Checked, result: 'Valid'!",
+      );
+    } else {
+      await vscode.window.showErrorMessage(
+        `Home Assistant Configuration check resulted in an error: ${result.error}`,
+      );
+    }
+  });
+  let haOutputChannel: vscode.OutputChannel;
+  client.onNotification("get_eror_log_completed", (result) => {
+    if (!haOutputChannel) {
+      haOutputChannel = vscode.window.createOutputChannel(
+        "Home Assistant Error Log",
+      );
+    }
+    haOutputChannel.appendLine(result);
+    haOutputChannel.show();
+  });
+
+  let haTemplateRendererChannel: vscode.OutputChannel;
+  client.onNotification("render_template_completed", (result) => {
+    if (!haTemplateRendererChannel) {
+      haTemplateRendererChannel = vscode.window.createOutputChannel(
+        "Home Assistant Template Renderer",
+      );
+    }
+    haTemplateRendererChannel.clear();
+    haTemplateRendererChannel.appendLine(result);
+    haTemplateRendererChannel.show();
+  });
 
   const commandMappings = [
     new CommandMappings(
