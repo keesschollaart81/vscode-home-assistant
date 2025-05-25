@@ -19,8 +19,21 @@ jobs:
         with:
           node-version: "18"
         
+      - name: 🏗 Setup Windows build tools
+        if: runner.os == 'Windows'
+        run: |
+          npm config set msvs_version 2019
+          npm config set python "C:\hostedtoolcache\windows\Python\3.11.7\x64\python.exe"
+        shell: cmd
+
       - name: 🏗 Install NodeJS packages
-        run: npm ci
+        run: |
+          npm cache clean --force
+          npm ci --no-optional
+        env:
+          # Skip native builds on Windows
+          SKIP_OPTIONAL_DEPENDENCIES: ${{ runner.os == 'Windows' }}
+          npm_config_build_from_source: false
 
       - name: 🚀 Run Linter
         run: npm run lint
@@ -34,9 +47,20 @@ jobs:
       - name: 🧪 Run tests (Linux)
         if: runner.os == 'Linux'
         run: xvfb-run -a npm test
-        
-      - name: 🧪 Run tests (Windows & macOS)
-        if: runner.os != 'Linux'
+
+      - name: 🧪 Run tests (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          node --max-old-space-size=4096 ./node_modules/vscode/bin/test
+        env:
+          TEMP: ${{ runner.temp }}
+          NODE_OPTIONS: "--max-heap-size=4096"
+          # Skip optional native modules
+          SKIP_OPTIONAL_DEPENDENCIES: true
+          npm_config_build_from_source: false
+
+      - name: 🧪 Run tests (macOS)
+        if: runner.os == 'macOS'
         run: npm test
 
   publish:
