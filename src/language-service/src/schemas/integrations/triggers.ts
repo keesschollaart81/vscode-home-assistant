@@ -21,6 +21,8 @@ import {
   LegacySyntax,
 } from "../types";
 
+import { WebOSTvTrigger } from "./core/webostv";
+
 export type Trigger =
   | CalendarTrigger
   | ConversationTrigger
@@ -38,6 +40,7 @@ export type Trigger =
   | TimeTrigger
   | TimePatternTrigger
   | WebhookTrigger
+  | WebOSTvTrigger
   | ZoneTrigger;
 
 type EventType =
