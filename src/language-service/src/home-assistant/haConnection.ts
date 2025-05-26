@@ -111,6 +111,7 @@ export interface IHaConnection {
   tryConnect(): Promise<void>;
   notifyConfigUpdate(conf: any): Promise<void>;
   getAreaCompletions(): Promise<CompletionItem[]>;
+  getDeviceCompletions(): Promise<CompletionItem[]>;
   getDomainCompletions(): Promise<CompletionItem[]>;
   getEntityCompletions(): Promise<CompletionItem[]>;
   getFloorCompletions(): Promise<CompletionItem[]>;
@@ -637,6 +638,52 @@ export class HaConnection implements IHaConnection {
 
   public async getHassDevices(): Promise<HassDevices> {
     return this.getHassDevicesInternal();
+  }
+
+  public async getDeviceCompletions(): Promise<CompletionItem[]> {
+    const devices = await this.getHassDevices();
+
+    if (!devices) {
+      return [];
+    }
+
+    const completions: CompletionItem[] = [];
+
+    for (const [, value] of Object.entries(devices)) {
+      const completionItem = CompletionItem.create(`${value.id}`);
+      completionItem.detail = value.name || value.id;
+      completionItem.kind = CompletionItemKind.Variable;
+      completionItem.filterText = `${value.id} ${value.name || ""}`;
+      completionItem.insertText = value.id;
+      completionItem.data = {};
+      completionItem.data.isDevice = true;
+
+      completionItem.documentation = {
+        kind: "markdown",
+        value: `**${value.id}** \r\n \r\n`,
+      } as MarkupContent;
+
+      if (value.name) {
+        completionItem.documentation.value += `Name: ${value.name} \r\n \r\n`;
+      }
+
+      if (value.manufacturer) {
+        completionItem.documentation.value += `Manufacturer: ${value.manufacturer} \r\n \r\n`;
+      }
+
+      if (value.model) {
+        completionItem.documentation.value += `Model: ${value.model} \r\n \r\n`;
+      }
+
+      let area = value.area_id;
+      if (!area) {
+        area = "No area assigned";
+      }
+      completionItem.documentation.value += `Area: ${area} \r\n \r\n`;
+
+      completions.push(completionItem);
+    }
+    return completions;
   }
 
   public async getHassEntities(): Promise<HassEntities> {

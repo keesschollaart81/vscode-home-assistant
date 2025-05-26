@@ -20,6 +20,7 @@ import {
 } from "yaml-language-server/out/server/src/languageservice/yamlLanguageService";
 import { SchemaServiceForIncludes } from "./schemas/schemaService";
 import { AreaCompletionContribution } from "./completionHelpers/areas";
+import { DeviceCompletionContribution } from "./completionHelpers/deviceIds";
 import { EntityIdCompletionContribution } from "./completionHelpers/entityIds";
 import { FloorCompletionContribution } from "./completionHelpers/floors";
 import { LabelCompletionContribution } from "./completionHelpers/labels";
@@ -212,6 +213,10 @@ export class HomeAssistantLanguageService {
     // Add area validation diagnostics
     const areaValidationDiagnostics = await this.validateAreaIds(document);
     diagnostics.push(...areaValidationDiagnostics);
+
+    // Add device validation diagnostics
+    const deviceValidationDiagnostics = await this.validateDeviceIds(document);
+    diagnostics.push(...deviceValidationDiagnostics);
 
     // Add secrets validation diagnostics
     const secretsValidationDiagnostics = await this.validateSecrets(document);
@@ -626,6 +631,229 @@ export class HomeAssistantLanguageService {
     } catch (error) {
       // If validation fails (e.g., HA not connected), silently skip
       console.log("Area validation skipped:", error);
+    }
+    
+    return diagnostics;
+  };
+
+  private validateDeviceIds = async (
+    document: TextDocument,
+  ): Promise<Diagnostic[]> => {
+    const diagnostics: Diagnostic[] = [];
+    
+    try {
+      // Get all devices from Home Assistant
+      const deviceCompletions = await this.haConnection.getDeviceCompletions();
+      if (!deviceCompletions || deviceCompletions.length === 0) {
+        // If we can't get devices (e.g., not connected), don't validate
+        console.log("Device validation skipped: No devices available from Home Assistant");
+        return diagnostics;
+      }
+
+      const deviceIds = deviceCompletions.map(device => device.label as string);
+      console.log(`Device validation: Found ${deviceIds.length} devices from Home Assistant`);
+      
+      const text = document.getText();
+      const lines = text.split("\n");
+      
+      // Track positions where we've already added diagnostics to avoid duplicates
+      const processedPositions = new Set<string>();
+
+      // Iterate through each line to find device references
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        
+        // Find device ID properties that need validation
+        for (const propertyName of DeviceCompletionContribution.propertyMatches) {
+          // Check for single device values first: device_id: device_name
+          const propertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*([^\\s\\n#\\[]+)`, "g");
+          let match;
+          
+          while ((match = propertyRegex.exec(line)) !== null) {
+            const deviceValue = match[1].trim();
+            
+            // Remove quotes if present
+            const cleanDeviceValue = deviceValue.replace(/^["']|["']$/g, "");
+            
+            // Skip template devices (containing {{ }})
+            if (cleanDeviceValue.includes("{{") || cleanDeviceValue.includes("}}")) {
+              continue;
+            }
+            
+            // Skip devices that are variables or templates
+            if (cleanDeviceValue.startsWith("!")) {
+              continue;
+            }
+            
+            // Skip special values like "none" or "all"
+            if (cleanDeviceValue === "none" || cleanDeviceValue === "all") {
+              continue;
+            }
+            
+            // Check if device exists in Home Assistant
+            if (!deviceIds.includes(cleanDeviceValue)) {
+              const startColumn = match.index! + match[0].indexOf(deviceValue);
+              const endColumn = startColumn + deviceValue.length;
+              
+              // Create a unique key for this position
+              const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+              
+              // Skip if we've already processed this position
+              if (processedPositions.has(positionKey)) {
+                continue;
+              }
+              
+              processedPositions.add(positionKey);
+              
+              console.log(`Device validation: Found unknown device '${cleanDeviceValue}' at line ${lineIndex + 1}`);
+              
+              const diagnostic: Diagnostic = {
+                severity: 2, // Warning
+                range: Range.create(
+                  lineIndex,
+                  startColumn,
+                  lineIndex,
+                  endColumn,
+                ),
+                message: `Device '${cleanDeviceValue}' does not exist in your Home Assistant instance`,
+                source: "home-assistant",
+                code: "unknown-device",
+              };
+              
+              diagnostics.push(diagnostic);
+            }
+          }
+          
+          // Also check for device arrays (device_id: [device1, device2])
+          const arrayPropertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*\\[([^\\]]+)\\]`, "g");
+          let arrayMatch;
+          
+          while ((arrayMatch = arrayPropertyRegex.exec(line)) !== null) {
+            const devicesInArray = arrayMatch[1];
+            const deviceArray = devicesInArray.split(",").map(e => e.trim().replace(/^["']|["']$/g, ""));
+            
+            for (const deviceInArray of deviceArray) {
+              const cleanDeviceValue = deviceInArray.trim();
+              
+              // Skip template devices and variables
+              if (cleanDeviceValue.includes("{{") || cleanDeviceValue.includes("}}") || cleanDeviceValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Skip special values like "none" or "all"
+              if (cleanDeviceValue === "none" || cleanDeviceValue === "all") {
+                continue;
+              }
+              
+              // Check if device exists
+              if (!deviceIds.includes(cleanDeviceValue)) {
+                const deviceStartInArray = devicesInArray.indexOf(deviceInArray);
+                const startColumn = arrayMatch.index! + arrayMatch[0].indexOf("[") + 1 + deviceStartInArray;
+                const endColumn = startColumn + deviceInArray.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Device '${cleanDeviceValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-device",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+        
+        // Handle multi-line device arrays
+        if (line.trim().startsWith("- ")) {
+          // Check if we're in a device list context by looking at previous lines
+          let currentLineIndex = lineIndex - 1;
+          let foundDeviceProperty = false;
+          
+          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
+            const prevLine = lines[currentLineIndex];
+            
+            for (const propertyName of DeviceCompletionContribution.propertyMatches) {
+              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
+                foundDeviceProperty = true;
+                break;
+              }
+            }
+            
+            if (foundDeviceProperty) {
+              break;
+            }
+            currentLineIndex--;
+          }
+          
+          if (foundDeviceProperty) {
+            const deviceMatch = line.match(/^\s*-\s*([^#\n]+)/);
+            if (deviceMatch) {
+              const deviceValue = deviceMatch[1].trim().replace(/^["']|["']$/g, "");
+              
+              // Skip template devices and variables
+              if (deviceValue.includes("{{") || deviceValue.includes("}}") || deviceValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Skip special values like "none" or "all"
+              if (deviceValue === "none" || deviceValue === "all") {
+                continue;
+              }
+              
+              // Check if device exists
+              if (!deviceIds.includes(deviceValue)) {
+                const startColumn = deviceMatch.index! + deviceMatch[0].indexOf(deviceValue);
+                const endColumn = startColumn + deviceValue.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Device '${deviceValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-device",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // If validation fails (e.g., HA not connected), silently skip
+      console.log("Device validation skipped:", error);
     }
     
     return diagnostics;

@@ -72,6 +72,10 @@ class MockHaConnection implements IHaConnection {
     return this.mockAreaCompletions; 
   }
   
+  async getDeviceCompletions(): Promise<CompletionItem[]> { 
+    return []; 
+  }
+  
   async getDomainCompletions(): Promise<CompletionItem[]> { 
     return []; 
   }

@@ -1,0 +1,42 @@
+automation:
+  - alias: "Device Test Automation"
+    trigger:
+      platform: device
+      device_id: device_1234  # This should be valid
+    action:
+      service: light.turn_on
+      target:
+        device_id: unknown_device  # This should show a warning
+
+  - alias: "Multiple Device Test"
+    trigger:
+      platform: device
+      device_id: [device_1234, device_5678, invalid_device]  # invalid_device should show warning
+    action:
+      service: notify.notify
+      data:
+        message: "Test"
+
+  - alias: "Multi-line Device Test"
+    trigger:
+      platform: device
+      device_id:
+        - device_1234  # valid
+        - another_invalid_device  # should show warning
+        - device_9999  # valid
+    action:
+      service: light.turn_off
+
+  - alias: "Template Device Test"
+    trigger:
+      platform: device
+      device_id: "{{ states('input_select.device_selector') }}"  # should be ignored
+    action:
+      service: switch.turn_on
+
+  - alias: "Special Value Test"
+    trigger:
+      platform: device
+      device_id: none  # should be ignored
+    action:
+      service: climate.set_temperature
