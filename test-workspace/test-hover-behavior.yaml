@@ -1,0 +1,26 @@
+# Test file for hover behavior
+# Schema descriptions should only appear when hovering over keys, not values
+
+homeassistant:
+  name: "My Home Assistant"
+  time_zone: "America/New_York"
+  elevation: 123
+
+automation:
+  - alias: "Test Automation"
+    trigger:
+      platform: state
+      entity_id: sensor.temperature
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.living_room
+        data:
+          brightness: 255
+
+sensor:
+  - platform: template
+    sensors:
+      test_sensor:
+        friendly_name: "Test Sensor"
+        value_template: "{{ states('sensor.original') }}"
