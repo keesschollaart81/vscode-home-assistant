@@ -12,6 +12,10 @@ export class HomeAssistantConfiguration {
     this.files = {};
   }
 
+  public getFileAccessor(): FileAccessor {
+    return this.fileAccessor;
+  }
+
   public getAllFiles = (): HaFileInfo[] => {
     const allFiles: HaFileInfo[] = [];
 
