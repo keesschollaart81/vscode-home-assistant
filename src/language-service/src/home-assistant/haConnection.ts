@@ -120,6 +120,7 @@ export interface IHaConnection {
   getHassEntities(): Promise<HassEntities>;
   getHassDevices(): Promise<HassDevices>;
   getHassEntityRegistry(): Promise<HassEntityRegistry>;
+  getHassServices(): Promise<HassServices>;
 }
 
 export class HaConnection implements IHaConnection {
@@ -1013,7 +1014,7 @@ export class HaConnection implements IHaConnection {
     return completions;
   }
 
-  private getHassServices = async (): Promise<HassServices> => {
+  public async getHassServices(): Promise<HassServices> {
     if (this.hassServices !== undefined) {
       return this.hassServices;
     }
