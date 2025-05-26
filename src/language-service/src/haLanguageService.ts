@@ -771,9 +771,101 @@ export class HomeAssistantLanguageService {
       return entityHover;
     }
 
-    // Fall back to YAML language service
-    return this.yamlLanguageService.doHover(document, position);
+    // Check if we're hovering over a YAML key or value
+    const isOnKey = this.isHoveringOverYamlKey(document, position);
+    
+    // Only show schema hover info when hovering over keys
+    if (isOnKey) {
+      return this.yamlLanguageService.doHover(document, position);
+    }
+
+    // Don't show schema hover for values
+    return null;
   };
+
+  private isHoveringOverYamlKey(
+    document: TextDocument,
+    position: Position,
+  ): boolean {
+    try {
+      const text = document.getText();
+      const { line: lineNumber, character } = position;
+      const line = text.split("\n")[lineNumber];
+      
+      // Skip if the line doesn't contain a colon (not a key-value pair)
+      const colonIndex = line.indexOf(":");
+      if (colonIndex === -1) {
+        return false;
+      }
+      
+      // Handle array items (lines starting with "- ")
+      let effectiveLine = line;
+      let characterOffset = 0;
+      const arrayMatch = line.match(/^(\s*)- (.*)$/);
+      if (arrayMatch) {
+        // For array items, consider the part after "- " as the effective line
+        effectiveLine = arrayMatch[2];
+        characterOffset = arrayMatch[1].length + 2; // indent + "- "
+        
+        // Adjust character position relative to the effective line
+        const adjustedCharacter = character - characterOffset;
+        if (adjustedCharacter < 0) {
+          return false; // cursor is before the actual content
+        }
+        
+        const effectiveColonIndex = effectiveLine.indexOf(":");
+        if (effectiveColonIndex === -1) {
+          return false;
+        }
+        
+        // Check if we're on the key part of the array item
+        if (adjustedCharacter <= effectiveColonIndex) {
+          const keyPart = effectiveLine.substring(0, effectiveColonIndex).trim();
+          if (keyPart.length === 0) {
+            return false;
+          }
+          
+          const keyStart = effectiveLine.indexOf(keyPart);
+          const keyEnd = keyStart + keyPart.length;
+          return adjustedCharacter >= keyStart && adjustedCharacter <= keyEnd;
+        }
+        
+        return false;
+      }
+      
+      // Handle regular key-value pairs
+      const beforeColon = character <= colonIndex;
+      if (!beforeColon) {
+        return false; // cursor is after the colon (on value side)
+      }
+      
+      // Find the actual key text (trim whitespace and handle indentation)
+      const lineBeforeColon = line.substring(0, colonIndex);
+      const keyMatch = lineBeforeColon.match(/^(\s*)(.+?)(\s*)$/);
+      
+      if (!keyMatch) {
+        return false;
+      }
+      
+      const indentation = keyMatch[1];
+      const keyText = keyMatch[2];
+      
+      if (keyText.length === 0) {
+        return false;
+      }
+      
+      // Calculate the actual key boundaries
+      const keyStart = indentation.length;
+      const keyEnd = keyStart + keyText.length;
+      
+      // Check if cursor is within the key text boundaries
+      return character >= keyStart && character <= keyEnd;
+      
+    } catch (error) {
+      console.log("Error determining YAML key position:", error);
+      return false;
+    }
+  }
 
   private async getEntityHoverInfo(
     document: TextDocument,
