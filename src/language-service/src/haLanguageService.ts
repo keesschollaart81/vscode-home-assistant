@@ -999,6 +999,12 @@ export class HomeAssistantLanguageService {
       return entityHover;
     }
 
+    // Check for service hover information
+    const serviceHover = await this.getServiceHoverInfo(document, position);
+    if (serviceHover) {
+      return serviceHover;
+    }
+
     // Check if we're hovering over a YAML key or value
     const isOnKey = this.isHoveringOverYamlKey(document, position);
     
@@ -1150,6 +1156,65 @@ export class HomeAssistantLanguageService {
       return null;
     } catch (error) {
       console.log("Error getting entity hover info:", error);
+      return null;
+    }
+  }
+
+  private async getServiceHoverInfo(
+    document: TextDocument,
+    position: Position,
+  ): Promise<Hover | null> {
+    try {
+      // Get the word at the position
+      const text = document.getText();
+      const offset = document.offsetAt(position);
+      
+      // Find the word boundaries
+      let start = offset;
+      let end = offset;
+      
+      // Move start backward to find start of word
+      while (start > 0 && /[a-z0-9_.]/i.test(text[start - 1])) {
+        start--;
+      }
+      
+      // Move end forward to find end of word
+      while (end < text.length && /[a-z0-9_.]/i.test(text[end])) {
+        end++;
+      }
+      
+      const word = text.substring(start, end);
+      
+      // Check if it looks like a service ID (domain.service_name pattern)
+      if (!/^[a-z_]+\.[a-z0-9_]+$/.test(word)) {
+        return null;
+      }
+      
+      // Create a simple JSON path for the service ID
+      const location = [word];
+      
+      // Use ServicesCompletionContribution to get hover info
+      const servicesContribution = new ServicesCompletionContribution(this.haConnection);
+      const markedStrings = await servicesContribution.getInfoContribution(
+        document.uri,
+        location
+      );
+      
+      if (markedStrings && markedStrings.length > 0) {
+        const range = Range.create(
+          document.positionAt(start),
+          document.positionAt(end)
+        );
+        
+        return {
+          contents: markedStrings,
+          range: range
+        };
+      }
+      
+      return null;
+    } catch (error) {
+      console.log("Error getting service hover info:", error);
       return null;
     }
   }
