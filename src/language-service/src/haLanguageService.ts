@@ -218,6 +218,10 @@ export class HomeAssistantLanguageService {
     const deviceValidationDiagnostics = await this.validateDeviceIds(document);
     diagnostics.push(...deviceValidationDiagnostics);
 
+    // Add floor validation diagnostics
+    const floorValidationDiagnostics = await this.validateFloorIds(document);
+    diagnostics.push(...floorValidationDiagnostics);
+
     // Add secrets validation diagnostics
     const secretsValidationDiagnostics = await this.validateSecrets(document);
     diagnostics.push(...secretsValidationDiagnostics);
@@ -858,6 +862,229 @@ export class HomeAssistantLanguageService {
     } catch (error) {
       // If validation fails (e.g., HA not connected), silently skip
       console.log("Device validation skipped:", error);
+    }
+    
+    return diagnostics;
+  };
+
+  private validateFloorIds = async (
+    document: TextDocument,
+  ): Promise<Diagnostic[]> => {
+    const diagnostics: Diagnostic[] = [];
+    
+    try {
+      // Get all floors from Home Assistant
+      const floorCompletions = await this.haConnection.getFloorCompletions();
+      if (!floorCompletions || floorCompletions.length === 0) {
+        // If we can't get floors (e.g., not connected), don't validate
+        console.log("Floor validation skipped: No floors available from Home Assistant");
+        return diagnostics;
+      }
+
+      const floorIds = floorCompletions.map(floor => floor.label as string);
+      console.log(`Floor validation: Found ${floorIds.length} floors from Home Assistant`);
+      
+      const text = document.getText();
+      const lines = text.split("\n");
+      
+      // Track positions where we've already added diagnostics to avoid duplicates
+      const processedPositions = new Set<string>();
+
+      // Iterate through each line to find floor references
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        
+        // Find floor ID properties that need validation
+        for (const propertyName of FloorCompletionContribution.propertyMatches) {
+          // Check for single floor values first: floor_id: floor_name
+          const propertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*([^\\s\\n#\\[]+)`, "g");
+          let match;
+          
+          while ((match = propertyRegex.exec(line)) !== null) {
+            const floorValue = match[1].trim();
+            
+            // Remove quotes if present
+            const cleanFloorValue = floorValue.replace(/^["']|["']$/g, "");
+            
+            // Skip template floors (containing {{ }})
+            if (cleanFloorValue.includes("{{") || cleanFloorValue.includes("}}")) {
+              continue;
+            }
+            
+            // Skip floors that are variables or templates
+            if (cleanFloorValue.startsWith("!")) {
+              continue;
+            }
+            
+            // Skip special values like "none" or "all"
+            if (cleanFloorValue === "none" || cleanFloorValue === "all") {
+              continue;
+            }
+            
+            // Check if floor exists in Home Assistant
+            if (!floorIds.includes(cleanFloorValue)) {
+              const startColumn = match.index! + match[0].indexOf(floorValue);
+              const endColumn = startColumn + floorValue.length;
+              
+              // Create a unique key for this position
+              const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+              
+              // Skip if we've already processed this position
+              if (processedPositions.has(positionKey)) {
+                continue;
+              }
+              
+              processedPositions.add(positionKey);
+              
+              console.log(`Floor validation: Found unknown floor '${cleanFloorValue}' at line ${lineIndex + 1}`);
+              
+              const diagnostic: Diagnostic = {
+                severity: 2, // Warning
+                range: Range.create(
+                  lineIndex,
+                  startColumn,
+                  lineIndex,
+                  endColumn,
+                ),
+                message: `Floor '${cleanFloorValue}' does not exist in your Home Assistant instance`,
+                source: "home-assistant",
+                code: "unknown-floor",
+              };
+              
+              diagnostics.push(diagnostic);
+            }
+          }
+          
+          // Also check for floor arrays (floor_id: [floor1, floor2])
+          const arrayPropertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*\\[([^\\]]+)\\]`, "g");
+          let arrayMatch;
+          
+          while ((arrayMatch = arrayPropertyRegex.exec(line)) !== null) {
+            const floorsInArray = arrayMatch[1];
+            const floorArray = floorsInArray.split(",").map(e => e.trim().replace(/^["']|["']$/g, ""));
+            
+            for (const floorInArray of floorArray) {
+              const cleanFloorValue = floorInArray.trim();
+              
+              // Skip template floors and variables
+              if (cleanFloorValue.includes("{{") || cleanFloorValue.includes("}}") || cleanFloorValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Skip special values like "none" or "all"
+              if (cleanFloorValue === "none" || cleanFloorValue === "all") {
+                continue;
+              }
+              
+              // Check if floor exists
+              if (!floorIds.includes(cleanFloorValue)) {
+                const floorStartInArray = floorsInArray.indexOf(floorInArray);
+                const startColumn = arrayMatch.index! + arrayMatch[0].indexOf("[") + 1 + floorStartInArray;
+                const endColumn = startColumn + floorInArray.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Floor '${cleanFloorValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-floor",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+        
+        // Handle multi-line floor arrays
+        if (line.trim().startsWith("- ")) {
+          // Check if we're in a floor list context by looking at previous lines
+          let currentLineIndex = lineIndex - 1;
+          let foundFloorProperty = false;
+          
+          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
+            const prevLine = lines[currentLineIndex];
+            
+            for (const propertyName of FloorCompletionContribution.propertyMatches) {
+              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
+                foundFloorProperty = true;
+                break;
+              }
+            }
+            
+            if (foundFloorProperty) {
+              break;
+            }
+            currentLineIndex--;
+          }
+          
+          if (foundFloorProperty) {
+            const floorMatch = line.match(/^\s*-\s*([^#\n]+)/);
+            if (floorMatch) {
+              const floorValue = floorMatch[1].trim().replace(/^["']|["']$/g, "");
+              
+              // Skip template floors and variables
+              if (floorValue.includes("{{") || floorValue.includes("}}") || floorValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Skip special values like "none" or "all"
+              if (floorValue === "none" || floorValue === "all") {
+                continue;
+              }
+              
+              // Check if floor exists
+              if (!floorIds.includes(floorValue)) {
+                const startColumn = floorMatch.index! + floorMatch[0].indexOf(floorValue);
+                const endColumn = startColumn + floorValue.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Floor '${floorValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-floor",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // If validation fails (e.g., HA not connected), silently skip
+      console.log("Floor validation skipped:", error);
     }
     
     return diagnostics;
