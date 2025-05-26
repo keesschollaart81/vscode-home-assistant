@@ -33,13 +33,17 @@ type ValueType =
   | "4byte_float"
   | "4byte_signed"
   | "4byte_unsigned"
+  | "8byte_signed"
+  | "absolute_humidity"
   | "absolute_temperature"
   | "acceleration_angular"
   | "acceleration"
   | "activation_energy"
+  | "active_energy_8byte"
   | "active_energy_kwh"
   | "active_energy"
   | "activity"
+  | "air_flow"
   | "amplitude"
   | "angle_deg"
   | "angle_rad"
@@ -47,8 +51,10 @@ type ValueType =
   | "angular_frequency"
   | "angular_momentum"
   | "angular_velocity"
+  | "apparant_energy_8byte"
   | "apparant_energy_kvah"
   | "apparant_energy"
+  | "apparent_power"
   | "area"
   | "brightness"
   | "capacitance"
@@ -57,6 +63,7 @@ type ValueType =
   | "color_temperature"
   | "common_temperature"
   | "compressibility"
+  | "concentration_ugm3"
   | "conductance"
   | "counter_pulses"
   | "curr"
@@ -96,8 +103,12 @@ type ValueType =
   | "impedance"
   | "kelvin_per_percent"
   | "latin_1"
+  | "length_m"
   | "length_mm"
   | "length"
+  | "long_time_period_hrs"
+  | "long_time_period_min"
+  | "long_time_period_sec"
   | "light_quantity"
   | "long_delta_timesec"
   | "luminance"
@@ -129,10 +140,12 @@ type ValueType =
   | "pressure"
   | "pulse_2byte_signed"
   | "pulse_2byte"
+  | "pulse_4_ucount"
   | "pulse_4byte"
   | "pulse"
   | "rain_amount"
   | "reactance"
+  | "reactive_energy_8byte"
   | "reactive_energy_kvarh"
   | "reactive_energy"
   | "resistance"
@@ -203,6 +216,18 @@ export interface Schema {
   cover?: Cover[];
 
   /**
+   * The KNX date platform allows to send date values to the KNX bus and update its state from received telegrams.
+   * https://www.home-assistant.io/integrations/knx#date
+   */
+  date?: DateEntity[];
+
+  /**
+   * The KNX datetime platform allows to send datetime values to the KNX bus and update its state from received telegrams.
+   * https://www.home-assistant.io/integrations/knx#datetime
+   */
+  datetime?: DateTimeEntity[];
+
+  /**
    * Defines lists of patterns for filtering KNX group addresses. Telegrams with destination addresses matching this pattern are sent to the Home Assistant event bus as knx_event.
    * https://www.home-assistant.io/integrations/knx/#events
    */
@@ -267,6 +292,12 @@ export interface Schema {
    * https://www.home-assistant.io/integrations/knx#text
    */
   text?: TextEntity[];
+
+  /**
+   * The KNX time platform allows to send time values to the KNX bus and update its state from received telegrams.
+   * https://www.home-assistant.io/integrations/knx#time
+   */
+  time?: TimeEntity[];
 
   /**
    * The KNX weather platform is used as an interface to KNX weather stations.
@@ -1408,4 +1439,118 @@ interface Weather {
    * https://www.home-assistant.io/integrations/knx#temperature_address
    */
   address_temperature: GroupAddresses;
+}
+
+interface DateEntity {
+  /**
+   * The group address to which new values will be sent. DPT 11.001
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus. DPT 11.001
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * Actively read the value from the bus. The maximum time interval (`<minutes>`) is 1440.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: boolean | number | string;
+}
+
+interface DateTimeEntity {
+  /**
+   * The group address to which new values will be sent. DPT 19.001
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus. DPT 19.001
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * Actively read the value from the bus. The maximum time interval (`<minutes>`) is 1440.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: boolean | number | string;
+}
+
+interface TimeEntity {
+  /**
+   * The group address to which new values will be sent. DPT 10.001
+   * https://www.home-assistant.io/integrations/knx#address
+   */
+  address: GroupAddresses;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
+
+  /**
+   * A name for this device used within Home Assistant.
+   * https://www.home-assistant.io/integrations/knx#name
+   */
+  name?: string;
+
+  /**
+   * Respond to GroupValueRead telegrams received to the configured `address`.
+   * https://www.home-assistant.io/integrations/knx#respond_to_read
+   */
+  respond_to_read?: boolean;
+
+  /**
+   * Group address for retrieving the state from the KNX bus. DPT 10.001
+   * https://www.home-assistant.io/integrations/knx#state_address
+   */
+  state_address?: GroupAddresses;
+
+  /**
+   * Actively read the value from the bus. The maximum time interval (`<minutes>`) is 1440.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: boolean | number | string;
 }
