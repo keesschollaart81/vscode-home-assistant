@@ -213,6 +213,10 @@ export class HomeAssistantLanguageService {
     const areaValidationDiagnostics = await this.validateAreaIds(document);
     diagnostics.push(...areaValidationDiagnostics);
 
+    // Add secrets validation diagnostics
+    const secretsValidationDiagnostics = await this.validateSecrets(document);
+    diagnostics.push(...secretsValidationDiagnostics);
+
     return diagnostics;
   };
 
@@ -622,6 +626,70 @@ export class HomeAssistantLanguageService {
     } catch (error) {
       // If validation fails (e.g., HA not connected), silently skip
       console.log("Area validation skipped:", error);
+    }
+    
+    return diagnostics;
+  };
+
+  private validateSecrets = async (
+    document: TextDocument,
+  ): Promise<Diagnostic[]> => {
+    const diagnostics: Diagnostic[] = [];
+    
+    try {
+      // Get all available secrets from secrets.yaml file
+      const fileAccessor = this.haConfig.getFileAccessor();
+      const secretsHelper = new SecretsCompletionContribution(fileAccessor);
+      const availableSecrets = await secretsHelper.getAvailableSecrets();
+      
+      if (!availableSecrets || availableSecrets.length === 0) {
+        // If we can't get secrets (e.g., no secrets.yaml file), don't validate
+        console.log("Secrets validation skipped: No secrets available from secrets.yaml");
+        return diagnostics;
+      }
+
+      console.log(`Secrets validation: Found ${availableSecrets.length} secrets from secrets.yaml`);
+      
+      const text = document.getText();
+      const lines = text.split("\n");
+
+      // Iterate through each line to find !secret references
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        
+        // Find !secret tag usage: !secret secret_name
+        const secretRegex = /!secret\s+([a-zA-Z0-9_]+)/g;
+        let match;
+        
+        while ((match = secretRegex.exec(line)) !== null) {
+          const secretName = match[1].trim();
+          
+          // Check if secret exists in secrets.yaml
+          if (!availableSecrets.includes(secretName)) {
+            console.log(`Secrets validation: Found unknown secret '${secretName}' at line ${lineIndex + 1}`);
+            const startColumn = match.index! + match[0].indexOf(secretName);
+            const endColumn = startColumn + secretName.length;
+            
+            const diagnostic: Diagnostic = {
+              severity: 2, // Warning
+              range: Range.create(
+                lineIndex,
+                startColumn,
+                lineIndex,
+                endColumn,
+              ),
+              message: `Secret '${secretName}' does not exist in your secrets.yaml file`,
+              source: "home-assistant",
+              code: "unknown-secret",
+            };
+            
+            diagnostics.push(diagnostic);
+          }
+        }
+      }
+    } catch (error) {
+      // If validation fails (e.g., HA not connected), silently skip
+      console.log("Secrets validation skipped:", error);
     }
     
     return diagnostics;
