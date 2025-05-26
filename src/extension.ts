@@ -446,16 +446,27 @@ export async function activate(
     )
   );
 
-  const fileAssociations = vscode.workspace
-    .getConfiguration()
-    .get("files.associations") as { [key: string]: string };
-  if (
-    !fileAssociations["*.yaml"] &&
-    Object.values(fileAssociations).indexOf("home-assistant") === -1
-  ) {
-    await vscode.workspace
+  // Check configuration setting to see if automatic file association is disabled
+  const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+  const disableAutomaticFileAssociation = config.get<boolean>("disableAutomaticFileAssociation", false);
+  
+  if (disableAutomaticFileAssociation) {
+    console.log("Automatic file association is disabled by user setting - skipping file associations");
+  } else if (await isHomeAssistantWorkspace()) {
+    const fileAssociations = vscode.workspace
       .getConfiguration()
-      .update("files.associations", { "*.yaml": "home-assistant" }, false);
+      .get("files.associations") as { [key: string]: string };
+    if (
+      !fileAssociations["*.yaml"] &&
+      Object.values(fileAssociations).indexOf("home-assistant") === -1
+    ) {
+      console.log("Home Assistant workspace detected, setting YAML file associations");
+      await vscode.workspace
+        .getConfiguration()
+        .update("files.associations", { "*.yaml": "home-assistant" }, false);
+    }
+  } else {
+    console.log("Configuration.yaml found but this doesn't appear to be a Home Assistant workspace - skipping file associations");
   }
 
   // Listen for configuration changes that might affect the connection
@@ -504,4 +515,80 @@ export class CommandMappings {
       [key: string]: any;
     },
   ) {}
+}
+
+/**
+ * Determines if the current workspace is actually a Home Assistant configuration directory
+ * by checking for Home Assistant-specific indicators beyond just configuration.yaml
+ */
+async function isHomeAssistantWorkspace(): Promise<boolean> {
+  const { workspaceFolders } = vscode.workspace;
+  if (!workspaceFolders || workspaceFolders.length === 0) {
+    return false;
+  }
+
+  for (const folder of workspaceFolders) {
+    const workspacePath = folder.uri.fsPath;
+    
+    try {
+      // Check for configuration.yaml first
+      const configPath = path.join(workspacePath, "configuration.yaml");
+      const configExists = await vscode.workspace.fs.stat(vscode.Uri.file(configPath))
+        .then(() => true, () => false);
+      
+      if (configExists) {
+        // Look for .storage folder next to configuration.yaml
+        const storagePath = path.join(workspacePath, ".storage");
+        const storageExists = await vscode.workspace.fs.stat(vscode.Uri.file(storagePath))
+          .then(() => true, () => false);
+        
+        if (storageExists) {
+          console.log(`Home Assistant workspace detected: found .storage folder at ${storagePath}`);
+          return true;
+        }
+        
+        // Additional checks for other Home Assistant-specific indicators
+        const haIndicators = [
+          "home-assistant_v2.db",      // Home Assistant database
+          "home-assistant.log",        // Log file
+          ".HA_VERSION",               // Version file
+          "automations.yaml",          // Common HA file
+          "scripts.yaml",              // Common HA file
+          "scenes.yaml",               // Common HA file
+          "ui-lovelace.yaml"           // Dashboard configuration
+        ];
+        
+        for (const indicator of haIndicators) {
+          const indicatorPath = path.join(workspacePath, indicator);
+          const indicatorExists = await vscode.workspace.fs.stat(vscode.Uri.file(indicatorPath))
+            .then(() => true, () => false);
+          
+          if (indicatorExists) {
+            console.log(`Home Assistant workspace detected: found ${indicator} at ${indicatorPath}`);
+            return true;
+          }
+        }
+        
+        // Check for configuration.yaml content - look for 'homeassistant:' key
+        try {
+          const configContent = await vscode.workspace.fs.readFile(vscode.Uri.file(configPath));
+          const configText = Buffer.from(configContent).toString("utf8");
+          
+          // Simple regex to check for homeassistant key (with various spacing/formatting)
+          if (/^\s*homeassistant\s*:/m.test(configText)) {
+            console.log("Home Assistant workspace detected: found \"homeassistant:\" key in configuration.yaml");
+            return true;
+          }
+        } catch (error) {
+          console.log(`Could not read configuration.yaml content: ${error}`);
+        }
+        
+        console.log(`Found configuration.yaml at ${configPath} but no Home Assistant indicators - skipping file associations`);
+      }
+    } catch (error) {
+      console.log(`Error checking workspace ${workspacePath}: ${error}`);
+    }
+  }
+  
+  return false;
 }

@@ -1,0 +1,30 @@
+homeassistant:
+  name: Test Home Assistant
+  latitude: 32.87336
+  longitude: 117.22743
+  elevation: 430
+  unit_system: metric
+  time_zone: America/Los_Angeles
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# Example switches
+switch:
+  - platform: template
+    switches:
+      test_switch:
+        friendly_name: "Test Switch"
+        turn_on:
+          service: light.turn_on
+          target:
+            entity_id: light.test_light
+        turn_off:
+          service: light.turn_off
+          target:
+            entity_id: light.test_light
