@@ -765,8 +765,74 @@ export class HomeAssistantLanguageService {
       return null;
     }
 
+    // First check for entity hover information
+    const entityHover = await this.getEntityHoverInfo(document, position);
+    if (entityHover) {
+      return entityHover;
+    }
+
+    // Fall back to YAML language service
     return this.yamlLanguageService.doHover(document, position);
   };
+
+  private async getEntityHoverInfo(
+    document: TextDocument,
+    position: Position,
+  ): Promise<Hover | null> {
+    try {
+      // Get the word at the position
+      const text = document.getText();
+      const offset = document.offsetAt(position);
+      
+      // Find the word boundaries
+      let start = offset;
+      let end = offset;
+      
+      // Move start backward to find start of word
+      while (start > 0 && /[a-z0-9_.]/i.test(text[start - 1])) {
+        start--;
+      }
+      
+      // Move end forward to find end of word
+      while (end < text.length && /[a-z0-9_.]/i.test(text[end])) {
+        end++;
+      }
+      
+      const word = text.substring(start, end);
+      
+      // Check if it looks like an entity ID (domain.entity_name pattern)
+      if (!/^[a-z_]+\.[a-z0-9_]+$/.test(word)) {
+        return null;
+      }
+      
+      // Create a simple JSON path for the entity ID
+      const location = [word];
+      
+      // Use EntityIdCompletionContribution to get hover info
+      const entityContribution = new EntityIdCompletionContribution(this.haConnection);
+      const markedStrings = await entityContribution.getInfoContribution(
+        document.uri,
+        location
+      );
+      
+      if (markedStrings && markedStrings.length > 0) {
+        const range = Range.create(
+          document.positionAt(start),
+          document.positionAt(end)
+        );
+        
+        return {
+          contents: markedStrings,
+          range: range
+        };
+      }
+      
+      return null;
+    } catch (error) {
+      console.log("Error getting entity hover info:", error);
+      return null;
+    }
+  }
 
   public onDefinition = async (
     textDocument: TextDocument,

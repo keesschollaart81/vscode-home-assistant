@@ -1,0 +1,18 @@
+automation:
+  - alias: "Test Device/Area Hover"
+    trigger:
+      - platform: state
+        entity_id: sensor.living_room_temperature
+    condition:
+      - condition: state
+        entity_id: light.kitchen_main
+        state: "on"
+    action:
+      - service: notify.persistent_notification
+        data:
+          message: "Temperature changed in living room"
+      - service: light.turn_on
+        target:
+          entity_id: light.bedroom_ceiling
+        data:
+          brightness: 255
