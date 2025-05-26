@@ -107,4 +107,42 @@ export class SecretsCompletionContribution implements JSONWorkerContribution {
       return [];
     }
   }
+
+  /**
+   * Get all available secret keys from the secrets.yaml file
+   */
+  public async getAvailableSecrets(): Promise<string[]> {
+    try {
+      // secrets.yaml is always in the root of the project
+      const secretsPath = "secrets.yaml";
+      const secretsContent = await this.fileAccessor.getFileContents(secretsPath);
+
+      if (!secretsContent) {
+        return [];
+      }
+
+      // Parse the YAML content
+      const secretsDocument = YAML.parseDocument(secretsContent);
+      if (!secretsDocument.contents || typeof secretsDocument.contents !== "object") {
+        return [];
+      }
+
+      const secretKeys: string[] = [];
+      
+      // Extract all top-level keys from the secrets file
+      if (secretsDocument.contents && "items" in secretsDocument.contents) {
+        const contents = secretsDocument.contents as any;
+        for (const item of contents.items) {
+          if (item && item.key && typeof item.key.value === "string") {
+            secretKeys.push(item.key.value);
+          }
+        }
+      }
+
+      return secretKeys;
+    } catch (error) {
+      console.log("Error reading secrets file:", error);
+      return [];
+    }
+  }
 }
