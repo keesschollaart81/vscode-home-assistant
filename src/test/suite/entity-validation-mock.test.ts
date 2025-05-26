@@ -96,6 +96,14 @@ class MockHaConnection implements IHaConnection {
   async getHassEntities(): Promise<HassEntities> {
     return this.mockEntities;
   }
+
+  async getHassDevices(): Promise<any> {
+    return {};
+  }
+
+  async getHassEntityRegistry(): Promise<any> {
+    return {};
+  }
 }
 
 suite("Entity Validation with Mock Data", () => {

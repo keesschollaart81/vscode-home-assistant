@@ -2145,7 +2145,7 @@ export interface SceneItem extends BaseItem {
    * https://www.home-assistant.io/integrations/scene.mqtt/#value_template
    */
   
-   value_template?: Template;
+  value_template?: Template;
 }
 
 export interface SelectItem extends BaseItem {

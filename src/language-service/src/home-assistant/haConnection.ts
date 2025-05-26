@@ -51,8 +51,55 @@ export interface HassLabel {
   description: string | null;
 }
 
+export interface HassDevice {
+  area_id: string | null;
+  configuration_url: string | null;
+  config_entries: string[];
+  connections: [string, string][];
+  disabled_by: string | null;
+  entry_type: string | null;
+  hw_version: string | null;
+  id: string;
+  identifiers: [string, string][];
+  manufacturer: string | null;
+  model: string | null;
+  name_by_user: string | null;
+  name: string | null;
+  sw_version: string | null;
+  via_device_id: string | null;
+  labels: string[];
+}
+
+export interface HassDevices {
+  [device_id: string]: HassDevice;
+}
+
 export interface HassLabels {
   [label_id: string]: HassLabel;
+}
+
+export interface HassEntityRegistryEntry {
+  area_id: string | null;
+  config_entry_id: string | null;
+  device_id: string | null;
+  disabled_by: string | null;
+  entity_category: string | null;
+  entity_id: string;
+  has_entity_name: boolean;
+  hidden_by: string | null;
+  icon: string | null;
+  id: string;
+  name: string | null;
+  options: Record<string, any>;
+  original_name: string | null;
+  platform: string;
+  translation_key: string | null;
+  unique_id: string | null;
+  labels: string[];
+}
+
+export interface HassEntityRegistry {
+  [entity_id: string]: HassEntityRegistryEntry;
 }
 
 // Normal require(), and cast to the static type
@@ -70,6 +117,8 @@ export interface IHaConnection {
   getLabelCompletions(): Promise<CompletionItem[]>;
   getServiceCompletions(): Promise<CompletionItem[]>;
   getHassEntities(): Promise<HassEntities>;
+  getHassDevices(): Promise<HassDevices>;
+  getHassEntityRegistry(): Promise<HassEntityRegistry>;
 }
 
 export class HaConnection implements IHaConnection {
@@ -77,7 +126,11 @@ export class HaConnection implements IHaConnection {
 
   private hassAreas!: Promise<HassAreas>;
 
+  private hassDevices!: Promise<HassDevices>;
+
   private hassEntities!: Promise<HassEntities>;
+
+  private hassEntityRegistry!: Promise<HassEntityRegistry>;
 
   private hassFloors!: Promise<HassFloors>;
 
@@ -368,7 +421,9 @@ export class HaConnection implements IHaConnection {
     // Reset connection state to force full reconnection
     this.connection = undefined;
     this.hassAreas = undefined as any;
+    this.hassDevices = undefined as any;
     this.hassEntities = undefined as any;
+    this.hassEntityRegistry = undefined as any;
     this.hassFloors = undefined as any;
     this.hassLabels = undefined as any;
     this.hassServices = undefined as any;
@@ -550,27 +605,96 @@ export class HaConnection implements IHaConnection {
     return completions;
   }
 
+  private getHassDevicesInternal = async (): Promise<HassDevices> => {
+    if (this.hassDevices !== undefined) {
+      return this.hassDevices;
+    }
+
+    await this.createConnection();
+
+    this.hassDevices = new Promise<HassDevices>(
+      // eslint-disable-next-line no-async-promise-executor
+      async (resolve, reject) => {
+        if (!this.connection) {
+          return reject();
+        }
+        this.connection
+          ?.sendMessagePromise<HassDevice[]>({
+            type: "config/device_registry/list",
+          })
+          .then((devices) => {
+            console.log(`Got ${devices.length} devices from Home Assistant`);
+            const repacked_devices: HassDevices = {};
+            devices.forEach((device) => {
+              repacked_devices[device.id] = device;
+            });
+            return resolve(repacked_devices);
+          });
+      },
+    );
+    return this.hassDevices;
+  };
+
+  public async getHassDevices(): Promise<HassDevices> {
+    return this.getHassDevicesInternal();
+  }
+
   public async getHassEntities(): Promise<HassEntities> {
     if (this.hassEntities !== undefined) {
       return this.hassEntities;
     }
 
     await this.createConnection();
+
     this.hassEntities = new Promise<HassEntities>(
       // eslint-disable-next-line no-async-promise-executor
       async (resolve, reject) => {
         if (!this.connection) {
           return reject();
         }
-        subscribeEntities(this.connection, (entities: HassEntities) => {
-          console.log(
-            `Got ${Object.keys(entities).length} entities from Home Assistant`,
-          );
-          return resolve(entities);
+        
+        // Subscribe to entities and resolve with the initial state
+        subscribeEntities(this.connection, (entities) => {
+          console.log(`Got ${Object.keys(entities).length} entities from Home Assistant`);
+          resolve(entities);
         });
       },
     );
     return this.hassEntities;
+  }
+
+  private getHassEntityRegistryInternal = async (): Promise<HassEntityRegistry> => {
+    if (this.hassEntityRegistry !== undefined) {
+      return this.hassEntityRegistry;
+    }
+
+    await this.createConnection();
+
+    this.hassEntityRegistry = new Promise<HassEntityRegistry>(
+      // eslint-disable-next-line no-async-promise-executor
+      async (resolve, reject) => {
+        if (!this.connection) {
+          return reject();
+        }
+        this.connection
+          ?.sendMessagePromise<HassEntityRegistryEntry[]>({
+            type: "config/entity_registry/list",
+          })
+          .then((entityEntries) => {
+            console.log(`Got ${entityEntries.length} entity registry entries from Home Assistant`);
+            const repacked_entities: HassEntityRegistry = {};
+            entityEntries.forEach((entry) => {
+              repacked_entities[entry.entity_id] = entry;
+            });
+            return resolve(repacked_entities);
+          });
+      },
+    );
+    return this.hassEntityRegistry;
+  };
+
+  public async getHassEntityRegistry(): Promise<HassEntityRegistry> {
+    return this.getHassEntityRegistryInternal();
   }
 
   private getHassLabels = async (): Promise<HassLabels> => {
@@ -630,6 +754,89 @@ export class HaConnection implements IHaConnection {
     return completions;
   }
 
+  private async getAreaName(areaId: string | undefined): Promise<string | null> {
+    if (!areaId) {
+      return null;
+    }
+
+    try {
+      const areaCompletions = await this.getAreaCompletions();
+      const area = areaCompletions.find(a => a.label === areaId);
+      return area?.detail || areaId;
+    } catch (error) {
+      console.log("Error getting area name:", error);
+      return areaId;
+    }
+  }
+
+  private async getFloorName(areaId: string | undefined): Promise<string | null> {
+    if (!areaId) {
+      return null;
+    }
+
+    try {
+      // First get the floor_id from the area
+      const areaCompletions = await this.getAreaCompletions();
+      const area = areaCompletions.find(a => a.label === areaId);
+      
+      if (!area?.documentation) {
+        return null;
+      }
+
+      // Extract floor info from area documentation
+      const docValue = typeof area.documentation === "string" 
+        ? area.documentation 
+        : area.documentation.value;
+        
+      const floorMatch = docValue.match(/Floor:\s*([^\r\n]+)/);
+      if (!floorMatch || floorMatch[1].trim() === "No floor assigned") {
+        return null;
+      }
+
+      const floorId = floorMatch[1].trim();
+      
+      // Get human-readable floor name
+      const floorCompletions = await this.getFloorCompletions();
+      const floor = floorCompletions.find(f => f.label === floorId);
+      return floor?.detail || floorId;
+    } catch (error) {
+      console.log("Error getting floor name:", error);
+      return null;
+    }
+  }
+
+  private async getDeviceForEntity(entityId: string): Promise<{ area_id: string | null; id: string } | null> {
+    if (!entityId) {
+      return null;
+    }
+
+    try {
+      // Get the entity registry entry to find device_id
+      const entityRegistry = await this.getHassEntityRegistry();
+      const entityEntry = entityRegistry[entityId];
+      
+      if (!entityEntry || !entityEntry.device_id) {
+        return null;
+      }
+
+      // Get the device information
+      const devices = await this.getHassDevices();
+      const device = devices[entityEntry.device_id];
+      
+      if (!device) {
+        return null;
+      }
+
+      return {
+        area_id: device.area_id,
+        id: device.id
+      };
+    } catch (error) {
+      console.log("Error getting device for entity:", error);
+      return null;
+    }
+  }
+
   public async getEntityCompletions(): Promise<CompletionItem[]> {
     const entities = await this.getHassEntities();
 
@@ -648,23 +855,91 @@ export class HaConnection implements IHaConnection {
       completionItem.data = {};
       completionItem.data.isEntity = true;
 
+      // Create documentation using the same format as hover cards
       completionItem.documentation = {
         kind: "markdown",
-        value: `**${value.entity_id}** \r\n \r\n`,
+        value: await this.createEntityCompletionMarkdown(value),
       } as MarkupContent;
 
-      if (value.state) {
-        completionItem.documentation.value += `State: ${value.state} \r\n \r\n`;
-      }
-      completionItem.documentation.value += "| Attribute | Value | \r\n";
-      completionItem.documentation.value += "| :---- | :---- | \r\n";
-
-      for (const [attrKey, attrValue] of Object.entries(value.attributes)) {
-        completionItem.documentation.value += `| ${attrKey} | ${attrValue} | \r\n`;
-      }
       completions.push(completionItem);
     }
     return completions;
+  }
+
+  private async createEntityCompletionMarkdown(entity: any): Promise<string> {
+    // Show friendly name on top, fallback to entity_id if missing
+    let markdown = "";
+
+    // Get device and area information for contextual display
+    const deviceInfo = await this.getDeviceForEntity(entity.entity_id);
+    const areaName = deviceInfo ? await this.getAreaName(deviceInfo.area_id) : null;
+    const floorName = deviceInfo ? await this.getFloorName(deviceInfo.area_id) : null;
+
+    // Add contextual information (device, area, floor) right after entity name
+    if (areaName || floorName) {
+      if (areaName) {
+        markdown += `📍 ${areaName}\n`;
+      }
+      if (floorName) {
+        markdown += `🏠 ${floorName}\n`;
+      }
+      markdown += "\n";
+    }
+
+    // Current state
+    if (entity.state !== undefined) {
+      let stateDisplay = `**Current State:** \`${entity.state}\``;
+      
+      // Add unit of measurement if available
+      if (entity.attributes?.unit_of_measurement) {
+        stateDisplay += ` ${entity.attributes.unit_of_measurement}`;
+      }
+      markdown += stateDisplay + "\n\n";
+    }
+
+    // Last changed/updated information
+    if (entity.last_changed) {
+      try {
+        const lastChanged = new Date(entity.last_changed);
+        markdown += `**Last Changed:** ${lastChanged.toLocaleString()}\n\n`;
+      } catch {
+        // If date parsing fails, show raw value
+        markdown += `**Last Changed:** ${entity.last_changed}\n\n`;
+      }
+    }
+
+    // All attributes table (excluding useless ones)
+    const attributeEntries: [string, string][] = [];
+
+    // Add all attributes except filtered ones
+    if (entity.attributes) {
+      for (const [attr, value] of Object.entries(entity.attributes)) {
+        // Filter out useless or redundant attributes
+        if (attr === "supported_features" || attr === "friendly_name") {
+          continue;
+        }
+        
+        if (value !== undefined && value !== null) {
+          const displayValue = Array.isArray(value) ? value.join(", ") : String(value);
+          attributeEntries.push([attr, displayValue]);
+        }
+      }
+    }
+
+    if (attributeEntries.length > 0) {
+      // Sort attributes alphabetically
+      attributeEntries.sort((a, b) => a[0].localeCompare(b[0]));
+      
+      markdown += "| Attribute | Value |\n";
+      markdown += "|:----------|:------|\n";
+      
+      for (const [attr, displayValue] of attributeEntries) {
+        markdown += `| ${attr} | ${displayValue} |\n`;
+      }
+      markdown += "\n";
+    }
+
+    return markdown;
   }
 
   public async getDomainCompletions(): Promise<CompletionItem[]> {
