@@ -27,6 +27,7 @@ import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DomainCompletionContribution } from "./completionHelpers/domains";
 import { UuidCompletionContribution } from "./completionHelpers/uuids";
+import { SecretsCompletionContribution } from "./completionHelpers/secrets";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 import { Includetype } from "./haConfig/dto";
@@ -727,6 +728,32 @@ export class HomeAssistantLanguageService {
     return definitions;
   };
 
+  private getSecretsCompletion = async (
+    document: TextDocument,
+    textDocumentPosition: Position,
+  ): Promise<CompletionItem[]> => {
+    const lineOffsets: number[] = getLineOffsets(document.getText());
+    const start: number = lineOffsets[textDocumentPosition.line];
+    const currentLineText = document.getText().substring(start, start + textDocumentPosition.character);
+    
+    // Check if the current line contains !secret followed by a space
+    const secretMatch = currentLineText.match(/.*!secret\s+(\w*)$/);
+    if (!secretMatch) {
+      return [];
+    }
+
+    // We're positioned after !secret, provide secret completions
+    const fileAccessor = this.haConfig.getFileAccessor();
+    const secretsHelper = new SecretsCompletionContribution(fileAccessor);
+    
+    try {
+      return await secretsHelper.getSecretsCompletions();
+    } catch (error) {
+      console.log("Error getting secrets completions:", error);
+      return [];
+    }
+  };
+
   private getServiceAndEntityCompletions = async (
     document: TextDocument,
     textDocumentPosition: Position,
@@ -737,6 +764,12 @@ export class HomeAssistantLanguageService {
     // updating the type to only one of the 2 types will break the yaml-validation.
     // so we tap in here, iterate over the lines of the text file to see if this if
     // we need to add entity_id's to the completion list
+
+    // First check if we're after a !secret tag
+    const secretsCompletion = await this.getSecretsCompletion(document, textDocumentPosition);
+    if (secretsCompletion.length > 0) {
+      return secretsCompletion;
+    }
 
     const properties: { [provider: string]: string[] } = {};
     properties.areas = AreaCompletionContribution.propertyMatches;
