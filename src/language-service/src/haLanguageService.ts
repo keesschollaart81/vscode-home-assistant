@@ -11,6 +11,7 @@ import {
   SymbolInformation,
   TextDocument,
   TextEdit,
+  CompletionItemKind,
 } from "vscode-languageserver-protocol";
 import { getLineOffsets } from "yaml-language-server/out/server/src/languageservice/utils/arrUtils";
 import {
@@ -25,6 +26,7 @@ import { LabelCompletionContribution } from "./completionHelpers/labels";
 import { HaConnection } from "./home-assistant/haConnection";
 import { ServicesCompletionContribution } from "./completionHelpers/services";
 import { DomainCompletionContribution } from "./completionHelpers/domains";
+import { UuidCompletionContribution } from "./completionHelpers/uuids";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 import { Includetype } from "./haConfig/dto";
@@ -133,49 +135,69 @@ export class HomeAssistantLanguageService {
     }
     const diagnostics: Diagnostic[] = [];
     for (const diagnosticItem of diagnosticResults) {
+      const startChar = diagnosticItem.range.start.character;
+      const startLine = diagnosticItem.range.start.line;
+      const endLine = diagnosticItem.range.end.line;
+      
       // Fetch the text before the error, this might be "!secret"
-      const possibleSecret = document.getText(
-        Range.create(
-          diagnosticItem.range.start.line,
-          diagnosticItem.range.start.character - 8,
-          diagnosticItem.range.end.line,
-          diagnosticItem.range.start.character - 1,
-        ),
-      );
+      // Ensure we don't go negative with character positions
+      const secretStartChar = Math.max(0, startChar - 8);
+      const secretEndChar = Math.max(0, startChar - 1);
+      
+      if (secretStartChar < secretEndChar) {
+        const possibleSecret = document.getText(
+          Range.create(
+            startLine,
+            secretStartChar,
+            endLine,
+            secretEndChar,
+          ),
+        );
 
-      // Skip errors about secrets, we simply have no idea what is in them
-      if (possibleSecret === "!secret") {
-        continue;
+        // Skip errors about secrets, we simply have no idea what is in them
+        if (possibleSecret === "!secret") {
+          continue;
+        }
       }
 
       // Fetch the text before the error, this might be "!input"
-      const possibleInput = document.getText(
-        Range.create(
-          diagnosticItem.range.start.line,
-          diagnosticItem.range.start.character - 7,
-          diagnosticItem.range.end.line,
-          diagnosticItem.range.start.character - 1,
-        ),
-      );
+      const inputStartChar = Math.max(0, startChar - 7);
+      const inputEndChar = Math.max(0, startChar - 1);
+      
+      if (inputStartChar < inputEndChar) {
+        const possibleInput = document.getText(
+          Range.create(
+            startLine,
+            inputStartChar,
+            endLine,
+            inputEndChar,
+          ),
+        );
 
-      // Skip errors about input, that is up to the Blueprint creator
-      if (possibleInput === "!input") {
-        continue;
+        // Skip errors about input, that is up to the Blueprint creator
+        if (possibleInput === "!input") {
+          continue;
+        }
       }
 
       // Fetch the text before the error, this might be "!include"
-      const possibleInclude = document.getText(
-        Range.create(
-          diagnosticItem.range.start.line,
-          diagnosticItem.range.start.character - 9,
-          diagnosticItem.range.end.line,
-          diagnosticItem.range.start.character - 1,
-        ),
-      );
+      const includeStartChar = Math.max(0, startChar - 9);
+      const includeEndChar = Math.max(0, startChar - 1);
+      
+      if (includeStartChar < includeEndChar) {
+        const possibleInclude = document.getText(
+          Range.create(
+            startLine,
+            includeStartChar,
+            endLine,
+            includeEndChar,
+          ),
+        );
 
-      // Skip errors about include, everything can be included
-      if (possibleInclude === "!include") {
-        continue;
+        // Skip errors about include, everything can be included
+        if (possibleInclude === "!include") {
+          continue;
+        }
       }
 
       diagnosticItem.severity = 1; // Convert all warnings to errors
@@ -723,6 +745,8 @@ export class HomeAssistantLanguageService {
     properties.labels = LabelCompletionContribution.propertyMatches;
     properties.services = ServicesCompletionContribution.propertyMatches;
     properties.domains = DomainCompletionContribution.propertyMatches;
+    properties.uuids = UuidCompletionContribution.propertyMatches;
+    properties.uuids = UuidCompletionContribution.propertyMatches;
 
     const additionalCompletionProvider = this.findAutoCompletionProperty(
       document,
@@ -766,8 +790,32 @@ export class HomeAssistantLanguageService {
             await this.haConnection.getServiceCompletions();
         }
         break;
+      case "uuids":
+        // Generate UUID completions for id and unique_id properties
+        additionalCompletion = this.getUuidCompletions();
+        break;
     }
     return additionalCompletion;
+  };
+
+  private getUuidCompletions = (): CompletionItem[] => {
+    const uuidCompletion = new UuidCompletionContribution();
+    
+    // Generate a single UUID completion item that works for both id and unique_id
+    const generatedUuid = uuidCompletion.generateUuid("id"); // Use "id" as default, but works for both
+    const completion = CompletionItem.create(generatedUuid);
+    completion.detail = "Generate UUID";
+    completion.kind = CompletionItemKind.Function;
+    completion.insertText = generatedUuid;
+    completion.documentation = {
+      kind: "markdown",
+      value: `Generates a proper UUID: \`${generatedUuid}\``
+    };
+    completion.sortText = "0000"; // High priority to appear at top
+    completion.data = {};
+    completion.data.isUuid = true;
+    
+    return [completion];
   };
 
   private findAutoCompletionProperty = (
