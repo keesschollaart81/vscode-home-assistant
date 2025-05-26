@@ -322,6 +322,12 @@ export interface AlarmControlPanelItem extends BaseItem {
   code_disarm_required?: boolean;
 
   /**
+   * If true the code is required to trigger the alarm. If false the code is not validated.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#code_trigger_required
+   */
+  code_trigger_required?: boolean;
+
+  /**
    * The template used for the command payload. Available variables: action and code.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#command_template
    */
@@ -332,6 +338,18 @@ export interface AlarmControlPanelItem extends BaseItem {
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#command_topic
    */
   command_topic: string;
+
+  /**
+   * The encoding of the payloads received and published messages. Set to "" to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#encoding
+   */
+  encoding?: string;
+
+  /**
+   * Picture URL for the entity.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#entity_picture
+   */
+  entity_picture?: string;
 
   /**
    * The name of the MQTT alarm.
@@ -358,6 +376,12 @@ export interface AlarmControlPanelItem extends BaseItem {
   payload_arm_night?: string;
 
   /**
+   * The payload to set armed-vacation mode on your Alarm Panel.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_arm_vacation
+   */
+  payload_arm_vacation?: string;
+
+  /**
    * The payload to set armed-custom-bypass mode on your Alarm Panel.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_arm_custom_bypass
    */
@@ -368,6 +392,12 @@ export interface AlarmControlPanelItem extends BaseItem {
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_disarm
    */
   payload_disarm?: string;
+
+  /**
+   * The payload to trigger the alarm on your Alarm Panel.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_trigger
+   */
+  payload_trigger?: string;
 
   /**
    * The maximum QoS level of the state topic.
@@ -386,6 +416,12 @@ export interface AlarmControlPanelItem extends BaseItem {
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#state_topic
    */
   state_topic: string;
+
+  /**
+   * A list of features that the alarm control panel supports.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#supported_features
+   */
+  supported_features?: ("arm_home" | "arm_away" | "arm_night" | "arm_vacation" | "arm_custom_bypass" | "trigger")[];
 
   /**
    * Defines a template to extract the value.
