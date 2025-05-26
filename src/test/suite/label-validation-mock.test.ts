@@ -107,6 +107,10 @@ class MockHaConnection implements IHaConnection {
   async getHassEntityRegistry(): Promise<any> {
     return {};
   }
+
+  async getHassServices(): Promise<any> {
+    return {};
+  }
 }
 
 suite("Label Validation Tests", () => {

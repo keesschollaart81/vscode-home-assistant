@@ -1,0 +1,59 @@
+automation:
+  - alias: "Floor Test Automation"
+    trigger:
+      platform: state
+      entity_id: binary_sensor.motion
+    action:
+      service: light.turn_on
+      target:
+        floor_id: ground_floor  # This should be valid
+
+  - alias: "Multiple Floor Test"
+    trigger:
+      platform: state
+      entity_id: binary_sensor.door
+    action:
+      service: notify.notify
+      data:
+        message: "Test"
+      target:
+        floor_id: [ground_floor, first_floor, invalid_floor]  # invalid_floor should show warning
+
+  - alias: "Multi-line Floor Test"
+    trigger:
+      platform: state
+      entity_id: binary_sensor.window
+    action:
+      service: light.turn_off
+      target:
+        floor_id:
+          - ground_floor  # valid
+          - another_invalid_floor  # should show warning
+          - basement  # valid
+
+  - alias: "Template Floor Test"
+    trigger:
+      platform: state
+      entity_id: input_select.floor_selector
+    action:
+      service: switch.turn_on
+      target:
+        floor_id: "{{ states('input_select.floor_selector') }}"  # should be ignored
+
+  - alias: "Special Value Test"
+    trigger:
+      platform: state
+      entity_id: light.all_lights
+    action:
+      service: climate.set_temperature
+      target:
+        floor_id: none  # should be ignored
+
+  - alias: "Floor Property Test"
+    trigger:
+      platform: state
+      entity_id: sensor.temperature
+    action:
+      service: light.turn_on
+      target:
+        floor: unknown_floor_property  # should show warning for 'floor' property too
