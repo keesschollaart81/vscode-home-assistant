@@ -15,6 +15,7 @@ import { HomeAssistantLanguageService } from "../language-service/src/haLanguage
 import { SchemaServiceForIncludes } from "../language-service/src/schemas/schemaService";
 import { IncludeDefinitionProvider } from "../language-service/src/definition/includes";
 import { ScriptDefinitionProvider } from "../language-service/src/definition/scripts";
+import { SecretsDefinitionProvider } from "../language-service/src/definition/secrets";
 import { VsCodeFileAccessor } from "./fileAccessor";
 
 const connection = createConnection(ProposedFeatures.all, undefined, undefined);
@@ -63,6 +64,7 @@ connection.onInitialize((params) => {
   const definitionProviders = [
     new IncludeDefinitionProvider(fileAccessor),
     new ScriptDefinitionProvider(haConfigInstance),
+    new SecretsDefinitionProvider(fileAccessor),
   ];
 
   const yamlLanguageService = getLanguageService({
