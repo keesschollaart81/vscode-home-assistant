@@ -222,6 +222,10 @@ export class HomeAssistantLanguageService {
     const secretsValidationDiagnostics = await this.validateSecrets(document);
     diagnostics.push(...secretsValidationDiagnostics);
 
+    // Add label validation diagnostics
+    const labelValidationDiagnostics = await this.validateLabelIds(document);
+    diagnostics.push(...labelValidationDiagnostics);
+
     return diagnostics;
   };
 
@@ -918,6 +922,244 @@ export class HomeAssistantLanguageService {
     } catch (error) {
       // If validation fails (e.g., HA not connected), silently skip
       console.log("Secrets validation skipped:", error);
+    }
+    
+    return diagnostics;
+  };
+
+  private validateLabelIds = async (
+    document: TextDocument,
+  ): Promise<Diagnostic[]> => {
+    const diagnostics: Diagnostic[] = [];
+    
+    try {
+      // Get all labels from Home Assistant
+      const labelCompletions = await this.haConnection.getLabelCompletions();
+      if (!labelCompletions || labelCompletions.length === 0) {
+        // If we can't get labels (e.g., not connected), don't validate
+        console.log("Label validation skipped: No labels available from Home Assistant");
+        return diagnostics;
+      }
+
+      const labelIds = labelCompletions.map(label => label.label as string);
+      console.log(`Label validation: Found ${labelIds.length} labels from Home Assistant`);
+      
+      const text = document.getText();
+      const lines = text.split("\n");
+      
+      // Track positions where we've already added diagnostics to avoid duplicates
+      const processedPositions = new Set<string>();
+
+      // Iterate through each line to find label references
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        
+        // Find label ID properties that need validation
+        for (const propertyName of LabelCompletionContribution.propertyMatches) {
+          // Check for single label values first: label_id: label_name
+          const propertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*([^\\s\\n#\\[]+)`, "g");
+          let match;
+          
+          while ((match = propertyRegex.exec(line)) !== null) {
+            const labelValue = match[1].trim();
+            
+            // Remove quotes if present
+            const cleanLabelValue = labelValue.replace(/^["']|["']$/g, "");
+            
+            // Skip template labels (containing {{ }})
+            if (cleanLabelValue.includes("{{") || cleanLabelValue.includes("}}")) {
+              continue;
+            }
+            
+            // Skip labels that are variables or templates
+            if (cleanLabelValue.startsWith("!")) {
+              continue;
+            }
+            
+            // Skip special values like "none" or "all"
+            if (cleanLabelValue === "none" || cleanLabelValue === "all") {
+              continue;
+            }
+            
+            // Skip empty strings and null values
+            if (cleanLabelValue === "" || cleanLabelValue === "null" || cleanLabelValue === "~") {
+              continue;
+            }
+            
+            // Check if label exists in Home Assistant
+            if (!labelIds.includes(cleanLabelValue)) {
+              const startColumn = match.index! + match[0].indexOf(labelValue);
+              const endColumn = startColumn + labelValue.length;
+              
+              // Create a unique key for this position
+              const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+              
+              // Skip if we've already processed this position
+              if (processedPositions.has(positionKey)) {
+                continue;
+              }
+              
+              processedPositions.add(positionKey);
+              
+              console.log(`Label validation: Found unknown label '${cleanLabelValue}' at line ${lineIndex + 1}`);
+              
+              const diagnostic: Diagnostic = {
+                severity: 2, // Warning
+                range: Range.create(
+                  lineIndex,
+                  startColumn,
+                  lineIndex,
+                  endColumn,
+                ),
+                message: `Label '${cleanLabelValue}' does not exist in your Home Assistant instance`,
+                source: "home-assistant",
+                code: "unknown-label",
+              };
+              
+              diagnostics.push(diagnostic);
+            }
+          }
+          
+          // Also check for label arrays (label_id: [label1, label2])
+          const arrayPropertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*\\[([^\\]]+)\\]`, "g");
+          let arrayMatch;
+          
+          while ((arrayMatch = arrayPropertyRegex.exec(line)) !== null) {
+            const labelsInArray = arrayMatch[1];
+            const labelArray = labelsInArray.split(",").map(e => e.trim().replace(/^["']|["']$/g, ""));
+            
+            for (const labelInArray of labelArray) {
+              const cleanLabelValue = labelInArray.trim();
+              
+              // Skip template labels and variables
+              if (cleanLabelValue.includes("{{") || cleanLabelValue.includes("}}") || cleanLabelValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Skip special values like "none" or "all"
+              if (cleanLabelValue === "none" || cleanLabelValue === "all") {
+                continue;
+              }
+              
+              // Skip empty strings and null values
+              if (cleanLabelValue === "" || cleanLabelValue === "null" || cleanLabelValue === "~") {
+                continue;
+              }
+              
+              // Check if label exists
+              if (!labelIds.includes(cleanLabelValue)) {
+                const labelStartInArray = labelsInArray.indexOf(labelInArray);
+                const startColumn = arrayMatch.index! + arrayMatch[0].indexOf("[") + 1 + labelStartInArray;
+                const endColumn = startColumn + labelInArray.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Label '${cleanLabelValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-label",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+        
+        // Handle multi-line label arrays
+        if (line.trim().startsWith("- ")) {
+          // Check if we're in a label list context by looking at previous lines
+          let currentLineIndex = lineIndex - 1;
+          let foundLabelProperty = false;
+          
+          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
+            const prevLine = lines[currentLineIndex];
+            
+            for (const propertyName of LabelCompletionContribution.propertyMatches) {
+              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
+                foundLabelProperty = true;
+                break;
+              }
+            }
+            
+            if (foundLabelProperty) {
+              break;
+            }
+            currentLineIndex--;
+          }
+          
+          if (foundLabelProperty) {
+            const labelMatch = line.match(/^\s*-\s*([^#\n]+)/);
+            if (labelMatch) {
+              const labelValue = labelMatch[1].trim().replace(/^["']|["']$/g, "");
+              
+              // Skip template labels and variables
+              if (labelValue.includes("{{") || labelValue.includes("}}") || labelValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Skip special values like "none" or "all"
+              if (labelValue === "none" || labelValue === "all") {
+                continue;
+              }
+              
+              // Skip empty strings and null values
+              if (labelValue === "" || labelValue === "null" || labelValue === "~") {
+                continue;
+              }
+              
+              // Check if label exists
+              if (!labelIds.includes(labelValue)) {
+                const startColumn = labelMatch.index! + labelMatch[0].indexOf(labelValue);
+                const endColumn = startColumn + labelValue.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Label '${labelValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-label",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // If validation fails (e.g., HA not connected), silently skip
+      console.log("Label validation skipped:", error);
     }
     
     return diagnostics;

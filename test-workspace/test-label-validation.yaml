@@ -1,0 +1,95 @@
+# Test file for label validation functionality
+automation:
+  - alias: "Test Known Labels"
+    trigger:
+      - platform: state
+        entity_id: light.kitchen
+    action:
+      - service: light.turn_on
+        target:
+          label_id: security              # Should be valid
+      - service: light.turn_off
+        target:
+          label_id: automation            # Should be valid
+          
+  - alias: "Test Unknown Labels"  
+    trigger:
+      - platform: state
+        entity_id: light.living_room
+    action:
+      - service: light.turn_on
+        target:
+          label_id: unknown_label         # Should trigger warning
+      - service: light.turn_off
+        target:
+          label_id: missing_label         # Should trigger warning
+
+# Test with array syntax
+script:
+  test_label_arrays:
+    sequence:
+      - service: homeassistant.turn_off
+        target:
+          label_id: 
+            - lighting                    # Should be valid
+            - security                    # Should be valid
+            - fake_label                  # Should trigger warning
+          
+# Test with inline array
+group:
+  test_group:
+    target:
+      label_id: [automation, non_existing] # One valid, one should trigger warning
+
+# Test with "label" property instead of "label_id"
+automation:
+  - alias: "Test Label Property"
+    trigger:
+      - platform: state
+        entity_id: sensor.test
+    action:
+      - service: notify.mobile_app
+        target:
+          label: lighting                 # Should be valid
+      - service: light.turn_off
+        target:
+          label: invalid_label            # Should trigger warning
+
+# Test templates (should be ignored)
+automation:
+  - alias: "Test Templates"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.door
+    action:
+      - service: light.turn_on
+        target:
+          label_id: "{{ states.input_select.room_label.state }}"  # Should be ignored
+      - service: light.turn_off
+        target:
+          label: "{{ label_variable }}"   # Should be ignored
+
+# Test special values (should be ignored)
+automation:
+  - alias: "Test Special Values"
+    trigger:
+      - platform: state
+        entity_id: switch.test
+    action:
+      - service: homeassistant.turn_on
+        target:
+          label_id: all                   # Should be ignored
+      - service: homeassistant.turn_off
+        target:
+          label_id: none                  # Should be ignored
+
+# Test secrets (should be ignored)  
+automation:
+  - alias: "Test Secrets"
+    trigger:
+      - platform: state
+        entity_id: light.secret_test
+    action:
+      - service: light.turn_on
+        target:
+          label_id: !secret my_label      # Should be ignored
