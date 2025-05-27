@@ -178,6 +178,29 @@ export function createSocket(
           if (auth.accessToken) {
             console.error(`[Auth phase] Token starts with: ${auth.accessToken.substring(0, 5)}... (length: ${auth.accessToken.length})`);
             console.error(`[Auth phase] WebSocket URL: ${auth.wsUrl || "unknown"}`);
+            // Check if token looks like a JWT
+            if (auth.accessToken.split(".").length === 3) {
+              try {
+                // Decode JWT to get expiration info (don't verify signature)
+                const [, payload] = auth.accessToken.split(".");
+                const decodedPayload = JSON.parse(atob(payload));
+                
+                // Check expiration
+                if (decodedPayload.exp) {
+                  const expiryDate = new Date(decodedPayload.exp * 1000);
+                  const now = new Date();
+                  
+                  if (expiryDate < now) {
+                    console.error(`[Auth phase] Token is expired! Expired on: ${expiryDate.toISOString()}`);
+                    console.error("[Auth phase] Please generate a new token in Home Assistant");
+                  } else {
+                    console.error(`[Auth phase] Token is not expired (expires: ${expiryDate.toISOString()}). Server rejected it for another reason.`);
+                  }
+                }
+              } catch (error) {
+                console.error("[Auth phase] Failed to decode token:", error);
+              }
+            }
           } else {
             console.error("[Auth phase] No token was provided to authenticate with");
           }
