@@ -49,6 +49,42 @@ interface Item {
   };
 
   /**
+   * Description of the intent.
+   * https://www.home-assistant.io/integrations/intent_script/#description
+   */
+  description?: string;
+
+  /**
+   * The script mode in which to run the intent script.
+   * https://www.home-assistant.io/integrations/intent_script/#mode
+   */
+  mode?: "single" | "restart" | "queued" | "parallel";
+
+  /**
+   * List of domains that the entity supports.
+   * https://www.home-assistant.io/integrations/intent_script/#platforms
+   */
+  platforms?: string[];
+
+  /**
+   * Text or template to return if the user does not respond.
+   * https://www.home-assistant.io/integrations/intent_script/#reprompt
+   */
+  reprompt?: {
+    /**
+     * Type of speech. Defaults to "plain".
+     * https://www.home-assistant.io/integrations/intent_script/#type
+     */
+    type?: string;
+
+    /**
+     * Text to speech for reprompt.
+     * https://www.home-assistant.io/integrations/intent_script/#text
+     */
+    text: Template;
+  };
+
+  /**
    * Text or template to return.
    * https://www.home-assistant.io/integrations/intent_script/#speech
    */
