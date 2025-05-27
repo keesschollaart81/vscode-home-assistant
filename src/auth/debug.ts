@@ -105,7 +105,7 @@ export async function debugAuthSettings(context: vscode.ExtensionContext): Promi
         debugPanel.appendLine(`Error decoding JWT token: ${error.message}`);
       }
     } else {
-      debugPanel.appendLine("Token does not appear to be in JWT format. Cannot check expiration.");
+      debugPanel.appendLine("Token appears to be a long-lived access token (not JWT format).");
     }
   } else {
     debugPanel.appendLine("No active token found. Please configure the Home Assistant access token.");

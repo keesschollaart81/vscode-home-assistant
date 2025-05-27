@@ -137,13 +137,6 @@ export function createSocket(
           const tokenFirstFive = token.substring(0, 5);
           const tokenLength = token.length;
           console.log(`[Auth phase] Sending auth message with token (first 5 chars: ${tokenFirstFive}..., length: ${tokenLength})`);
-          
-          // Check if token looks like a JWT
-          if (token.split(".").length === 3) {
-            console.log("[Auth phase] Token appears to be a valid JWT format");
-          } else {
-            console.warn("[Auth phase] Token does not appear to be in JWT format, may not be valid");
-          }
         }
         
         // Send authentication even if invalid to get proper error message from server
@@ -185,29 +178,6 @@ export function createSocket(
           if (auth.accessToken) {
             console.error(`[Auth phase] Token starts with: ${auth.accessToken.substring(0, 5)}... (length: ${auth.accessToken.length})`);
             console.error(`[Auth phase] WebSocket URL: ${auth.wsUrl || "unknown"}`);
-            // Check if token looks like a JWT
-            if (auth.accessToken.split(".").length === 3) {
-              try {
-                // Decode JWT to get expiration info (don't verify signature)
-                const [, payload] = auth.accessToken.split(".");
-                const decodedPayload = JSON.parse(atob(payload));
-                
-                // Check expiration
-                if (decodedPayload.exp) {
-                  const expiryDate = new Date(decodedPayload.exp * 1000);
-                  const now = new Date();
-                  
-                  if (expiryDate < now) {
-                    console.error(`[Auth phase] Token is expired! Expired on: ${expiryDate.toISOString()}`);
-                    console.error("[Auth phase] Please generate a new token in Home Assistant");
-                  } else {
-                    console.error(`[Auth phase] Token is not expired (expires: ${expiryDate.toISOString()}). Server rejected it for another reason.`);
-                  }
-                }
-              } catch (error) {
-                console.error("[Auth phase] Failed to decode token:", error);
-              }
-            }
           } else {
             console.error("[Auth phase] No token was provided to authenticate with");
           }
