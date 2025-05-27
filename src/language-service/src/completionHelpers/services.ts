@@ -9,7 +9,7 @@ import { IHaConnection } from "../home-assistant/haConnection";
 import { HassService } from "home-assistant-js-websocket";
 
 export class ServicesCompletionContribution implements JSONWorkerContribution {
-  public static propertyMatches: string[] = ["service"];
+  public static propertyMatches: string[] = ["service", "action"];
 
   constructor(private haConnection: IHaConnection) {}
 
