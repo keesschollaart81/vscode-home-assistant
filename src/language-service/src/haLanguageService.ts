@@ -230,6 +230,10 @@ export class HomeAssistantLanguageService {
     const labelValidationDiagnostics = await this.validateLabelIds(document);
     diagnostics.push(...labelValidationDiagnostics);
 
+    // Add service validation diagnostics
+    const actionValidationDiagnostics = await this.validateActionIds(document);
+    diagnostics.push(...actionValidationDiagnostics);
+
     return diagnostics;
   };
 
@@ -1387,6 +1391,239 @@ export class HomeAssistantLanguageService {
     } catch (error) {
       // If validation fails (e.g., HA not connected), silently skip
       console.log("Label validation skipped:", error);
+    }
+    
+    return diagnostics;
+  };
+
+  private validateActionIds = async (
+    document: TextDocument,
+  ): Promise<Diagnostic[]> => {
+    const diagnostics: Diagnostic[] = [];
+    
+    try {
+      // Get all services from Home Assistant
+      const services = await this.haConnection.getHassServices();
+      if (!services) {
+        // If we can't get actions (e.g., not connected), don't validate
+        console.log("Action validation skipped: No actions available from Home Assistant");
+        return diagnostics;
+      }
+
+      // Build a set of all available action IDs for quick lookup
+      const actionIds = new Set<string>();
+      for (const domain in services) {
+        for (const serviceName in services[domain]) {
+          actionIds.add(`${domain}.${serviceName}`);
+        }
+      }
+      
+      console.log(`Action validation: Found ${actionIds.size} actions from Home Assistant`);
+      
+      const text = document.getText();
+      const lines = text.split("\n");
+      
+      // Track positions where we've already added diagnostics to avoid duplicates
+      const processedPositions = new Set<string>();
+
+      // Iterate through each line to find action references
+      for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+        const line = lines[lineIndex];
+        
+        // Find action properties that need validation (both "service" and "action")
+        for (const propertyName of ServicesCompletionContribution.propertyMatches) {
+          // Check for single action values first: action: domain.action_name
+          const propertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*([^\\s\\n#\\[]+)`, "g");
+          let match;
+          
+          while ((match = propertyRegex.exec(line)) !== null) {
+            const actionValue = match[1].trim();
+            
+            // Remove quotes if present
+            const cleanActionValue = actionValue.replace(/^["']|["']$/g, "");
+            
+            // Skip template actions (containing {{ }})
+            if (cleanActionValue.includes("{{") || cleanActionValue.includes("}}")) {
+              continue;
+            }
+            
+            // Skip secrets (!secret)
+            if (cleanActionValue.startsWith("!")) {
+              continue;
+            }
+            
+            // Skip empty strings and null values
+            if (cleanActionValue === "" || cleanActionValue === "null" || cleanActionValue === "~") {
+              continue;
+            }
+            
+            // Check if this looks like an action ID (domain.action_name format)
+            if (!/^[a-z_]+\.[a-z0-9_]+$/.test(cleanActionValue)) {
+              continue;
+            }
+            
+            // Check if action exists
+            if (!actionIds.has(cleanActionValue)) {
+              const startColumn = match.index! + match[0].indexOf(actionValue);
+              const endColumn = startColumn + actionValue.length;
+              
+              // Create a unique key for this position
+              const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+              
+              // Skip if we've already processed this position
+              if (processedPositions.has(positionKey)) {
+                continue;
+              }
+              
+              processedPositions.add(positionKey);
+              
+              const diagnostic: Diagnostic = {
+                severity: 2, // Warning
+                range: Range.create(
+                  lineIndex,
+                  startColumn,
+                  lineIndex,
+                  endColumn,
+                ),
+                message: `Action '${cleanActionValue}' does not exist in your Home Assistant instance`,
+                source: "home-assistant",
+                code: "unknown-action",
+              };
+              
+              diagnostics.push(diagnostic);
+            }
+          }
+          
+          // Check for array values: action: [domain.action1, domain.action2]
+          const arrayRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*\\[([^\\]]+)\\]`, "g");
+          let arrayMatch;
+          
+          while ((arrayMatch = arrayRegex.exec(line)) !== null) {
+            const actionsInArray = arrayMatch[1];
+            const actionArray = actionsInArray.split(",").map(s => s.trim().replace(/^["']|["']$/g, ""));
+            
+            for (const actionInArray of actionArray) {
+              const cleanActionValue = actionInArray.trim();
+              
+              // Skip template actions and variables
+              if (cleanActionValue.includes("{{") || cleanActionValue.includes("}}") || cleanActionValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Check if this looks like an action ID
+              if (!/^[a-z_]+\.[a-z0-9_]+$/.test(cleanActionValue)) {
+                continue;
+              }
+              
+              // Check if action exists
+              if (!actionIds.has(cleanActionValue)) {
+                const actionStartInArray = actionsInArray.indexOf(actionInArray);
+                const startColumn = arrayMatch.index! + arrayMatch[0].indexOf("[") + 1 + actionStartInArray;
+                const endColumn = startColumn + actionInArray.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Action '${cleanActionValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-action",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+        
+        // Handle multi-line action arrays
+        if (line.trim().startsWith("- ")) {
+          // Check if we're in an action list context by looking at previous lines
+          let currentLineIndex = lineIndex - 1;
+          let foundActionProperty = false;
+          
+          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
+            const prevLine = lines[currentLineIndex];
+            
+            for (const propertyName of ServicesCompletionContribution.propertyMatches) {
+              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
+                foundActionProperty = true;
+                break;
+              }
+            }
+            
+            if (foundActionProperty) {
+              break;
+            }
+            currentLineIndex--;
+          }
+          
+          if (foundActionProperty) {
+            const actionMatch = line.match(/^\s*-\s*([^#\n]+)/);
+            if (actionMatch) {
+              const actionValue = actionMatch[1].trim().replace(/^["']|["']$/g, "");
+              
+              // Skip template actions and variables
+              if (actionValue.includes("{{") || actionValue.includes("}}") || actionValue.startsWith("!")) {
+                continue;
+              }
+              
+              // Check if this looks like an action ID
+              if (!/^[a-z_]+\.[a-z0-9_]+$/.test(actionValue)) {
+                continue;
+              }
+              
+              // Check if action exists
+              if (!actionIds.has(actionValue)) {
+                const startColumn = actionMatch.index! + actionMatch[0].indexOf(actionValue);
+                const endColumn = startColumn + actionValue.length;
+                
+                // Create a unique key for this position
+                const positionKey = `${lineIndex}:${startColumn}:${endColumn}`;
+                
+                // Skip if we've already processed this position
+                if (processedPositions.has(positionKey)) {
+                  continue;
+                }
+                
+                processedPositions.add(positionKey);
+                
+                const diagnostic: Diagnostic = {
+                  severity: 2, // Warning
+                  range: Range.create(
+                    lineIndex,
+                    startColumn,
+                    lineIndex,
+                    endColumn,
+                  ),
+                  message: `Action '${actionValue}' does not exist in your Home Assistant instance`,
+                  source: "home-assistant",
+                  code: "unknown-action",
+                };
+                
+                diagnostics.push(diagnostic);
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      // If validation fails (e.g., HA not connected), silently skip
+      console.log("Action validation skipped:", error);
     }
     
     return diagnostics;

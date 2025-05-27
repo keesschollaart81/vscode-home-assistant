@@ -40,8 +40,8 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
     ) {
       return;
     }
-    const servicesCompletions = await this.haConnection.getServiceCompletions();
-    servicesCompletions.forEach((c) => {
+    const actionsCompletions = await this.haConnection.getServiceCompletions();
+    actionsCompletions.forEach((c) => {
       if (c.insertText === undefined) {
         c.insertText = c.label;
       }
@@ -62,8 +62,8 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
     ) {
       return;
     }
-    const servicesCompletions = await this.haConnection.getServiceCompletions();
-    servicesCompletions.forEach((c) => {
+    const actionsCompletions = await this.haConnection.getServiceCompletions();
+    actionsCompletions.forEach((c) => {
       if (c.insertText === undefined) {
         c.insertText = c.label;
       }
@@ -75,32 +75,32 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
     _resource: string,
     location: JSONPath,
   ): Thenable<MarkedString[]> {
-    return this.getServiceHoverInfo(location);
+    return this.getActionHoverInfo(location);
   }
 
-  private async getServiceHoverInfo(
+  private async getActionHoverInfo(
     location: JSONPath,
   ): Promise<MarkedString[]> {
     try {
       // Get the current word/value at the location
-      const serviceId = this.extractServiceIdFromLocation(location);
-      if (!serviceId) {
+      const actionId = this.extractActionIdFromLocation(location);
+      if (!actionId) {
         return [];
       }
 
-      // Get all services from Home Assistant
+      // Get all actions from Home Assistant
       const services = await this.haConnection.getHassServices();
       if (!services) {
         return [];
       }
 
-      // Parse domain and service name from the service ID (e.g., "light.turn_on")
-      const [domain, serviceName] = serviceId.split(".");
+      // Parse domain and action name from the action ID (e.g., "light.turn_on")
+      const [domain, serviceName] = actionId.split(".");
       if (!domain || !serviceName) {
         return [];
       }
 
-      // Find the specific service
+      // Find the specific action
       const domainServices = services[domain];
       if (!domainServices) {
         return [];
@@ -111,43 +111,43 @@ export class ServicesCompletionContribution implements JSONWorkerContribution {
         return [];
       }
 
-      // Create hover information with service details
-      const markdown = await this.createServiceHoverMarkdown(domain, serviceName, service);
+      // Create hover information with action details
+      const markdown = await this.createActionHoverMarkdown(domain, serviceName, service);
       return [markdown];
     } catch (error) {
-      console.log("Error getting service hover info:", error);
+      console.log("Error getting action hover info:", error);
       return [];
     }
   }
 
-  private extractServiceIdFromLocation(location: JSONPath): string | null {
+  private extractActionIdFromLocation(location: JSONPath): string | null {
     if (location.length === 0) {
       return null;
     }
 
     // Get the current value from the JSON path
-    // The last element in the path should be the service ID value
+    // The last element in the path should be the action ID value
     const currentValue = location[location.length - 1];
     
-    if (typeof currentValue === "string" && this.isValidServiceId(currentValue)) {
+    if (typeof currentValue === "string" && this.isValidActionId(currentValue)) {
       return currentValue;
     }
 
     return null;
   }
 
-  private isValidServiceId(value: string): boolean {
-    // Check if the value matches service ID pattern (domain.service_name)
+  private isValidActionId(value: string): boolean {
+    // Check if the value matches action ID pattern (domain.action_name)
     return /^[a-z_]+\.[a-z0-9_]+$/.test(value);
   }
 
-  private async createServiceHoverMarkdown(domain: string, serviceName: string, service: HassService): Promise<string> {
-    const serviceId = `${domain}.${serviceName}`;
-    // Use service.name if available, otherwise use the serviceId
-    const title = service.name || serviceId;
+  private async createActionHoverMarkdown(domain: string, serviceName: string, service: HassService): Promise<string> {
+    const actionId = `${domain}.${serviceName}`;
+    // Use service.name if available, otherwise use the actionId
+    const title = service.name || actionId;
     let markdown = `**${title}**\n\n`;
 
-    // Add service description if available
+    // Add action description if available
     if (service.description) {
       markdown += `${service.description}\n\n`;
     }
