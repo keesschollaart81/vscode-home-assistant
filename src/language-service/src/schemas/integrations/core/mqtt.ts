@@ -1059,10 +1059,16 @@ export interface CoverItem extends BaseItem {
 
 export interface DeviceTrackerItem extends BaseItem {
   /**
-   * List of devices with their topic.
-   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#devices
+   * The MQTT topic subscribed to receive device tracker state changes.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#state_topic
    */
-  devices: { [key: string]: string };
+  state_topic?: string;
+
+  /**
+   * Defines a template that returns a device tracker state.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#value_template
+   */
+  value_template?: Template;
 
   /**
    * The payload value that represents the ‘home’ state for the device.
@@ -1077,7 +1083,13 @@ export interface DeviceTrackerItem extends BaseItem {
   payload_not_home?: string;
 
   /**
-   * The maximum QoS level to be used when receiving messages.
+   * The payload value that will have the device’s location automatically derived from Home Assistant’s zones.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#payload_reset
+   */
+  payload_reset?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#qos
    */
   qos?: QOS;
@@ -1087,6 +1099,36 @@ export interface DeviceTrackerItem extends BaseItem {
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#source_type
    */
   source_type?: "bluetooth" | "bluetooth_le" | "gps" | "router";
+
+  /**
+   * The name of the MQTT device_tracker.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#name
+   */
+  name?: string;
+
+  /**
+   * Used instead of `name` for automatic generation of `entity_id`.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#object_id
+   */
+  object_id?: string;
+
+  /**
+   * An ID that uniquely identifies this device_tracker. If two device_trackers have the same unique ID, Home Assistant will raise an exception.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Must be `device_tracker`. Only allowed and required in MQTT auto discovery device messages.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#platform
+   */
+  platform?: string;
+
+  /**
+   * List of devices with their topic (legacy YAML configuration).
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#devices
+   */
+  devices?: { [key: string]: string };
 }
 
 export interface FanItem extends BaseItem {
