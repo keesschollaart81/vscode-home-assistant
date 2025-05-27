@@ -272,7 +272,7 @@ interface BaseItem {
   enabled_by_default?: boolean;
 
   /**
-   *
+   * The category of the entity. When set, the entity category must be "diagnostic" for sensors.
    */
   entity_category?: "diagnostic" | "config";
 
@@ -438,6 +438,18 @@ export interface BinarySensorItem extends BaseItem {
   device_class?: DeviceClassesBinarySensor;
 
   /**
+   * The encoding of the payloads received. Set to "" to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt#encoding
+   */
+  encoding?: string;
+
+  /**
+   * Picture URL for the entity.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt#entity_picture
+   */
+  entity_picture?: string;
+
+  /**
    * Defines the number of seconds after the sensor’s state expires, if it’s not updated. After expiry, the sensor’s state becomes unavailable.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#expire_after
    */
@@ -450,10 +462,10 @@ export interface BinarySensorItem extends BaseItem {
   force_update?: boolean;
 
   /**
-   * The name of the MQTT binary sensor.
+   * The name of the MQTT binary sensor. Can be set to null if only the device name is relevant.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#name
    */
-  name?: string;
+  name?: string | null;
 
   /**
    * For sensors that only send on state updates (like PIRs), this variable sets a delay in seconds after which the sensor’s state will be updated back to off.
@@ -472,6 +484,12 @@ export interface BinarySensorItem extends BaseItem {
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt/#payload_on
    */
   payload_on?: string;
+
+  /**
+   * Must be binary_sensor. Only allowed and required in MQTT auto discovery device messages.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt#platform
+   */
+  platform?: "binary_sensor";
 
   /**
    * The maximum QoS level of the state topic.
@@ -2284,6 +2302,18 @@ export interface SensorItem extends BaseItem {
   device_class?: DeviceClassesSensor;
 
   /**
+   * The encoding of the payloads received. Set to "" to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#encoding
+   */
+  encoding?: string;
+
+  /**
+   * Picture URL for the entity.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#entity_picture
+   */
+  entity_picture?: string;
+
+  /**
    * Defines the number of seconds after the sensor’s state expires, if it’s not updated. After expiry, the sensor’s state becomes unavailable.
    * https://www.home-assistant.io/integrations/sensor.mqtt#expire_after
    */
@@ -2305,13 +2335,25 @@ export interface SensorItem extends BaseItem {
    * Defines a template to extract the last_reset. Available variables: entity_id. The entity_id can be used to reference the entity’s attributes.
    * https://www.home-assistant.io/integrations/sensor.mqtt#last_reset_value_template
    */
-  last_reset_value_template?: string;
+  last_reset_value_template?: Template;
 
   /**
-   * The name of the MQTT sensor.
+   * The name of the MQTT sensor. Can be set to null if only the device name is relevant.
    * https://www.home-assistant.io/integrations/sensor.mqtt#name
    */
-  name?: string;
+  name?: string | null;
+
+  /**
+   * List of allowed sensor state value. An empty list is not allowed. The sensor's device_class must be set to enum.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#options
+   */
+  options?: string[];
+
+  /**
+   * Must be sensor. Only allowed and required in MQTT auto discovery device messages.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#platform
+   */
+  platform?: "sensor";
 
   /**
    * The maximum QoS level of the state topic.
@@ -2330,6 +2372,12 @@ export interface SensorItem extends BaseItem {
    * https://www.home-assistant.io/integrations/sensor.mqtt#state_topic
    */
   state_topic: string;
+
+  /**
+   * The number of decimals which should be used in the sensor's state after rounding.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#suggested_display_precision
+   */
+  suggested_display_precision?: Integer;
 
   /**
    * Defines the units of measurement of the sensor, if any.
