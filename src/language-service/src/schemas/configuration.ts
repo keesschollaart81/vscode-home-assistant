@@ -167,6 +167,12 @@ export interface InternalIntegrations {
   lovelace?: integrations.Core.Lovelace.Schema | null;
 
   /**
+   * Modbus is a communication protocol to control PLCs (Programmable Logic Controller) and RTUs (Remote Terminal Unit).
+   * https://www.home-assistant.io/integrations/modbus/
+   */
+  modbus?: integrations.Core.Modbus.Schema | IncludeList;
+
+  /**
    * Keeps track on number entities in your environment, their state, and allows you to control them.
    * https://www.home-assistant.io/integrations/number
    */
