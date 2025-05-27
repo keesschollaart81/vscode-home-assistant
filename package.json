@@ -2,10 +2,10 @@
   "name": "vscode-home-assistant",
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
-  "version": "1.43.0",
+  "version": "2.0.0",
   "preview": false,
   "engines": {
-    "vscode": "^1.45.1"
+    "vscode": "^1.53.0"
   },
   "categories": [
     "Other",
@@ -44,19 +44,22 @@
       {
         "title": "Home Assistant Config Helper",
         "properties": {
-          "vscode-home-assistant.hostUrl": {
-            "type": "string",
-            "description": "The Host URL of your Home Assistant Host"
-          },
-          "vscode-home-assistant.longLivedAccessToken": {
-            "type": "string",
-            "description": "The Long Lived Access-Token for Home Assistant. Obtain a token via your user profile page in Home Assistant."
-          },
           "vscode-home-assistant.ignoreCertificates": {
             "type": "boolean",
             "description": "Enable insecure transport. Check this if you want to connect over an insecure HTTPS transport with a invalid certificate!"
+          },
+          "vscode-home-assistant.disableAutomaticFileAssociation": {
+            "type": "boolean",
+            "default": false,
+            "description": "Disable automatic association of YAML files with the Home Assistant language. When enabled, the extension will not automatically set file associations for YAML files, even in detected Home Assistant workspaces."
           }
         }
+      }
+    ],
+    "submenus": [
+      {
+        "id": "home-assistant.reload",
+        "label": "Home Assistant: Reload specific integration"
       }
     ],
     "snippets": [
@@ -194,7 +197,7 @@
     "commands": [
       {
         "command": "vscode-home-assistant.reloadAll",
-        "title": "Reload All",
+        "title": "Reload all integrations",
         "category": "Home Assistant"
       },
       {
@@ -371,23 +374,38 @@
         "command": "vscode-home-assistant.renderTemplate",
         "title": "Render Template",
         "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.manageAuth",
+        "title": "Manage Home Assistant Authentication",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.debugAuth",
+        "title": "Debug Home Assistant Authentication",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.repairAuth",
+        "title": "Repair Home Assistant Authentication Configuration",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.testConnection",
+        "title": "Test Home Assistant Connection",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.openInBrowser",
+        "title": "Open Home Assistant in Browser",
+        "category": "Home Assistant"
+      },
+      {
+        "command": "vscode-home-assistant.showReloadIntegrations",
+        "title": "Reload specific integration",
+        "category": "Home Assistant"
       }
     ],
-    "menus": {
-      "commandPalette": [
-        {
-          "command": "vscode-home-assistant.renderTemplate",
-          "when": "editorHasSelection"
-        }
-      ],
-      "editor/context": [
-        {
-          "command": "vscode-home-assistant.renderTemplate",
-          "group": "home-assistant",
-          "when": "editorHasSelection"
-        }
-      ]
-    },
     "configurationDefaults": {
       "[home-assistant]": {
         "editor.insertSpaces": true,
@@ -399,6 +417,277 @@
         },
         "editor.autoIndent": "advanced"
       }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "vscode-home-assistant.renderTemplate",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "vscode-home-assistant.showReloadIntegrations"
+        },
+        {
+          "command": "vscode-home-assistant.reloadAll"
+        },
+        {
+          "command": "vscode-home-assistant.homeassistantReloadCoreConfig",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.homeassistantRestart",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.scriptReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.groupReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.automationReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.conversationReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.sceneReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.themeReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.inputReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.homekitReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.filesizeReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.minMaxReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.genericThermostatReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.genericCameraReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.pingReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.trendReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.historyStatsReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.universalReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.statisticsReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.filterReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.restReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.commandLineReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.bayesianReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.telegramReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.smtpReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.mqttReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.rpioGpioReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.knxReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.templateReload",
+          "when": "false"
+        },
+        {
+          "command": "vscode-home-assistant.customTemplatesReload",
+          "when": "false"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "vscode-home-assistant.renderTemplate",
+          "group": "home-assistant",
+          "when": "editorHasSelection"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "vscode-home-assistant.reloadAll",
+          "title": "Home Assistant: Quick reload all",
+          "group": "navigation@1"
+        },
+        {
+          "command": "vscode-home-assistant.showReloadIntegrations",
+          "title": "Home Assistant: Reload specific integration",
+          "group": "navigation@2"
+        }
+      ],
+      "home-assistant.reload": [
+        {
+          "command": "vscode-home-assistant.automationReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.bayesianReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.commandLineReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.conversationReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.customTemplatesReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.filesizeReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.filterReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.genericCameraReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.genericThermostatReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.groupReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.historyStatsReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.homekitReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.homeassistantReloadCoreConfig",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.inputReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.knxReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.minMaxReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.mqttReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.pingReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.restReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.rpioGpioReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.sceneReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.scriptReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.smtpReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.statisticsReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.telegramReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.templateReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.themeReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.trendReload",
+          "group": "2_components"
+        },
+        {
+          "command": "vscode-home-assistant.universalReload",
+          "group": "2_components"
+        }
+      ]
     }
   },
   "husky": {
@@ -412,52 +701,62 @@
     ]
   },
   "scripts": {
-    "compile": "ts-node src/language-service/src/schemas/generateSchemas.ts --quick && tsc -p ./ ",
-    "format:eslint": "eslint \"**/src/**/*.ts\" --fix --ignore-path .gitignore",
-    "format:prettier": "prettier \"**/src/**/*.{ts,json}\" --write",
+    "compile": "tsc -p src/language-service/tsconfig.json && node src/language-service/dist/schemas/generateSchemas.js --quick && tsc -p ./ ",
+    "format:eslint": "eslint \"**/src/**/*.ts\" --fix",
+    "format:prettier": "prettier \"**/src/**/*.json\" --write",
     "format": "npm run format:eslint && npm run format:prettier",
-    "lint:eslint": "eslint \"**/src/**/*.ts\" --ignore-path .gitignore",
-    "lint:prettier": "prettier \"**/src/**/*.{ts,json}\" --check",
+    "lint:eslint": "eslint \"**/src/**/*.ts\"",
+    "lint:prettier": "prettier \"**/src/**/*.json\" --check",
     "lint:types": "tsc",
     "lint": "npm run lint:eslint && npm run lint:prettier && npm run lint:types",
     "schema": "ts-node src/language-service/src/schemas/generateSchemas.ts",
-    "test": "npm run compile",
+    "test": "npm run compile && vscode-test",
+    "test:old": "npm run compile && node ./out/test/runTest.js",
     "watch": "tsc -watch -p ./",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@types/mocha": "10.0.8",
-    "@types/node": "20.4.8",
+    "@eslint/js": "^9.27.0",
+    "@stylistic/eslint-plugin": "^4.4.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.15.21",
     "@types/request": "2.48.12",
-    "@types/vscode": "1.45.1",
-    "@types/ws": "8.5.10",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^9.1.0",
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.1.1",
-    "rimraf": "5.0.5",
-    "ts-loader": "^9.5.1",
+    "@types/vscode": "^1.100.0",
+    "@types/uuid": "^10.0.0",
+    "@types/ws": "8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "glob": "^11.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
+    "mocha": "^11.5.0",
+    "prettier": "^3.5.3",
+    "rimraf": "6.0.1",
+    "ts-loader": "^9.5.2",
     "ts-node": "10.9.2",
-    "typescript": "^5.1.6",
-    "typescript-json-schema": "0.62.0"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "typescript-json-schema": "0.65.1"
   },
   "dependencies": {
-    "axios": "^1.7.7",
-    "bufferutil": "^4.0.8",
-    "home-assistant-js-websocket": "^9.1.0",
-    "utf-8-validate": "^6.0.3",
-    "vscode-extension-telemetry": "0.4.5",
-    "vscode-json-languageservice": "3.9.1",
-    "vscode-languageclient": "6.1.3",
-    "vscode-languageserver": "6.1.1",
-    "vscode-languageserver-protocol": "3.15.3",
-    "vscode-languageserver-textdocument": "^1.0.8",
-    "vscode-uri": "3.0.8",
-    "ws": "8.17.1",
-    "yaml": "1.10.2",
-    "yaml-language-server": "0.12.0"
+    "@vscode/extension-telemetry": "^1.0.0",
+    "axios": "^1.9.0",
+    "bufferutil": "^4.0.9",
+    "home-assistant-js-websocket": "^9.5.0",
+    "utf-8-validate": "^6.0.5",
+    "vscode-json-languageservice": "^5.5.0",
+    "vscode-languageclient": "^9.0.1",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-protocol": "3.17.5",
+    "vscode-languageserver-textdocument": "^1.0.12",
+    "vscode-uri": "3.1.0",
+    "ws": "8.18.2",
+    "uuid": "^11.1.0",
+    "yaml": "2.8.0",
+    "yaml-language-server": "1.18.0"
   }
 }

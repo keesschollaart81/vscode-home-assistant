@@ -8,7 +8,6 @@
           "request": "launch",
           "runtimeExecutable": "${execPath}",
           "args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
-          "stopOnEntry": false,
           "sourceMaps": true,
           "outFiles": [ "${workspaceRoot}/out/**/*.js" ],
           "preLaunchTask": "npm: watch"
@@ -18,11 +17,15 @@
           "type": "extensionHost",
           "request": "launch",
           "runtimeExecutable": "${execPath}",
-          "args": ["--extensionDevelopmentPath=${workspaceRoot}", "--extensionTestsPath=${workspaceRoot}/out/test" ],
-          "stopOnEntry": false,
+          "args": [
+            "--extensionDevelopmentPath=${workspaceRoot}",
+            "--extensionTestsPath=${workspaceRoot}/out/test/suite/index",
+            "${workspaceRoot}/test-workspace",
+            "--disable-extensions"
+          ],
           "sourceMaps": true,
           "outFiles": [ "${workspaceRoot}/out/test/**/*.js" ],
-          "preLaunchTask": "npm: watch"
+          "preLaunchTask": "npm: compile"
       },
       {
         "type": "node",

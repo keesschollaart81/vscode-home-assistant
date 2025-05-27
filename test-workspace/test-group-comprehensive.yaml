@@ -1,0 +1,163 @@
+# Test file for comprehensive group integration schema validation
+# This tests both old-style and new-style groups
+
+# Old-style groups (configured under group: domain)
+group:
+  # Basic old-style group
+  kitchen:
+    name: "Kitchen Group"
+    entities:
+      - switch.kitchen_pin_3
+      - light.kitchen_ceiling
+    icon: mdi:kitchen-set
+    all: false
+
+  # Old-style group with all entities option
+  climate:
+    name: "Climate Group"
+    entities:
+      - sensor.bedroom_temp
+      - sensor.porch_temp
+    all: true
+
+  # Old-style group with various entity types
+  awesome_people:
+    name: "Awesome People"
+    entities:
+      - device_tracker.dad_smith
+      - device_tracker.mom_smith
+      - person.john_doe
+
+# New-style platform-based groups
+
+# Binary sensor group
+binary_sensor:
+  - platform: group
+    name: "Patio Doors"
+    device_class: opening
+    entities:
+      - binary_sensor.door_left_contact
+      - binary_sensor.door_right_contact
+    all: false
+    unique_id: patio_doors_group
+
+# Button group
+button:
+  - platform: group
+    name: "Restart all ESPHome devices"
+    device_class: restart
+    entities:
+      - button.device_1_restart
+      - button.device_2_restart
+    unique_id: esphome_restart_group
+
+# Cover group
+cover:
+  - platform: group
+    name: "Window Covers"
+    device_class: window
+    entities:
+      - cover.hall_window
+      - cover.living_room_window
+    unique_id: window_covers_group
+
+# Event group
+event:
+  - platform: group
+    name: "Remote events"
+    entities:
+      - event.remote_button_1
+      - event.remote_button_2
+      - event.remote_button_3
+      - event.remote_button_4
+    unique_id: remote_events_group
+
+# Fan group
+fan:
+  - platform: group
+    name: "Downstairs Fans"
+    entities:
+      - fan.lanai_west
+      - fan.lanai_south
+      - fan.lanai_east
+    unique_id: downstairs_fans_group
+
+# Light group
+light:
+  - platform: group
+    name: "Kitchen Lights"
+    entities:
+      - light.kitchen_ceiling_lights
+      - light.kitchen_under_cabinet_lights
+      - light.kitchen_spot_lights
+      - light.pendant_lights
+    all: true
+    unique_id: kitchen_lights_group
+
+# Lock group
+lock:
+  - platform: group
+    name: "House Locks"
+    entities:
+      - lock.front_door
+      - lock.back_door
+    unique_id: house_locks_group
+
+# Media player group
+media_player:
+  - platform: group
+    name: "Living Room Entertainment"
+    device_class: tv
+    entities:
+      - media_player.kitchen_tv
+      - media_player.living_room_tv
+    unique_id: entertainment_group
+
+# Sensor group with all options
+sensor:
+  - platform: group
+    name: "Average Temperature"
+    type: mean
+    entities:
+      - sensor.temperature_kitchen
+      - sensor.temperature_hallway
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    ignore_non_numeric: false
+    unique_id: avg_temperature_group
+
+  - platform: group
+    name: "Maximum Temperature"
+    type: max
+    entities:
+      - sensor.temperature_kitchen
+      - sensor.temperature_hallway
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    ignore_non_numeric: true
+    unique_id: max_temperature_group
+
+# Switch group
+switch:
+  - platform: group
+    name: "Entertainment System"
+    entities:
+      - switch.tv
+      - switch.soundbar
+    all: false
+    unique_id: entertainment_switch_group
+
+# Notify group
+notify:
+  - platform: group
+    name: "My notification group"
+    services:
+      - action: html5
+        data:
+          target: "macbook"
+      - action: mobile_app_pauluus
+        data:
+          title: "Custom Title"
+          message: "Custom message"

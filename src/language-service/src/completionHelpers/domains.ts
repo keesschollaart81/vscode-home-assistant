@@ -18,18 +18,18 @@ export class DomainCompletionContribution implements JSONWorkerContribution {
   constructor(private haConnection: IHaConnection) {}
 
   public collectDefaultCompletions(
-    resource: string,
-    result: CompletionsCollector,
+    _resource: string,
+    _result: CompletionsCollector,
   ): Thenable<any> {
     return Promise.resolve(null);
   }
 
   public collectPropertyCompletions = async (
-    resource: string,
+    _resource: string,
     location: JSONPath,
-    currentWord: string,
-    addValue: boolean,
-    isLast: boolean,
+    _currentWord: string,
+    _addValue: boolean,
+    _isLast: boolean,
     result: CompletionsCollector,
   ): Promise<any> => {
     if (location.length < 2) {
@@ -47,12 +47,17 @@ export class DomainCompletionContribution implements JSONWorkerContribution {
       return;
     }
     const domainCompletions = await this.haConnection.getDomainCompletions();
-    domainCompletions.forEach((c) => result.add(c));
+    domainCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public collectValueCompletions = async (
-    resource: string,
-    location: JSONPath,
+    _resource: string,
+    _location: JSONPath,
     currentKey: string,
     result: CompletionsCollector,
   ): Promise<any> => {
@@ -65,12 +70,17 @@ export class DomainCompletionContribution implements JSONWorkerContribution {
     }
 
     const domainCompletions = await this.haConnection.getEntityCompletions();
-    domainCompletions.forEach((c) => result.add(c));
+    domainCompletions.forEach((c) => {
+      if (c.insertText === undefined) {
+        c.insertText = c.label;
+      }
+      result.add(c as any);
+    });
   };
 
   public getInfoContribution(
-    resource: string,
-    location: JSONPath,
+    _resource: string,
+    _location: JSONPath,
   ): Thenable<MarkedString[]> {
     return Promise.resolve([]);
   }

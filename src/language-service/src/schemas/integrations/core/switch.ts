@@ -4,6 +4,7 @@
  */
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
+import { SwitchPlatformSchema as GroupPlatformSchema } from "./group";
 import { SwitchPlatformSchema as TemplatePlatformSchema } from "./template";
 
 export type Domain = "switch";
@@ -15,9 +16,9 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(template|mqtt)$)\w+$
+   * @TJS-pattern ^(?!(group|template|mqtt)$)\w+$
    */
   platform: string;
 }
 
-type Item = TemplatePlatformSchema | OtherPlatform;
+type Item = GroupPlatformSchema | TemplatePlatformSchema | OtherPlatform;

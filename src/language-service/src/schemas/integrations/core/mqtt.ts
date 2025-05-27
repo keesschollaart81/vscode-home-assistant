@@ -18,7 +18,7 @@ import {
 export type Domain = "mqtt";
 type QOS = 0 | 1 | 2;
 type AvailabilityMode = "all" | "any" | "latest";
-type Availability = {
+interface Availability {
   /**
    * The MQTT topic subscribed to receive availability (online/offline) updates.
    */
@@ -38,7 +38,7 @@ type Availability = {
    * Defines a template to extract the value for payload_available and payload_not_available.
    */
   value_template?: Template;
-};
+}
 
 export type Schema = Item | Item[];
 
@@ -62,7 +62,7 @@ interface Item {
    * The mqtt button platform lets you send an MQTT message when the button is pressed in the frontend or the button press service is called.
    * https://www.home-assistant.io/integrations/button.mqtt
    */
-  button?: any;
+  button?: ButtonItem | ButtonItem[] | IncludeList;
 
   /**
    * The mqtt camera platform allows you to integrate the content of an image file sent through MQTT into Home Assistant as a camera.
@@ -98,7 +98,13 @@ interface Item {
    * The mqtt humidifier platform lets you control your MQTT enabled humidifiers.
    * https://www.home-assistant.io/integrations/humidifier.mqtt
    */
-  humidifier?: any;
+  humidifier?: HumidifierItem | HumidifierItem[] | IncludeList;
+
+  /**
+   * The mqtt image platform allows you to integrate the content of an image file sent through MQTT into Home Assistant as an image.
+   * https://www.home-assistant.io/integrations/image.mqtt
+   */
+  image?: ImageItem | ImageItem[] | IncludeList;
 
   /**
    * The mqtt light platform lets you control your MQTT enabled lights through one of the supported message schemas, default, json or template.
@@ -127,7 +133,7 @@ interface Item {
    * The mqtt scene platform lets you control your MQTT enabled scenes.
    * https://www.home-assistant.io/integrations/scene.mqtt/
    */
-  scene?: any;
+  scene?: SceneItem | SceneItem[] | IncludeList;
 
   /**
    * This mqtt select platform uses the MQTT message payload as the select value.
@@ -139,7 +145,7 @@ interface Item {
    * The mqtt siren platform lets you control your MQTT enabled sirens and text based notification devices.
    * https://www.home-assistant.io/integrations/siren.mqtt
    */
-  siren?: any;
+  siren?: SirenItem | SirenItem[] | IncludeList;
 
   /**
    * This mqtt sensor platform uses the MQTT message payload as the sensor value.
@@ -151,7 +157,7 @@ interface Item {
    * The mqtt switch platform lets you control your MQTT enabled switches.
    * https://www.home-assistant.io/integrations/switch.mqtt
    */
-  switch?: any;
+  switch?: SwitchItem | SwitchItem[] | IncludeList;
 
   /**
    * The mqtt vacuum integration allows you to control your MQTT-enabled vacuum.
@@ -200,9 +206,19 @@ interface BaseItem {
    */
   device?: {
     /**
+     * A link to the webpage that can manage the configuration of this device. Can be either an http://, https:// or an internal homeassistant:// URL
+     */
+    configuration_url?: string;
+
+    /**
      * A list of connections of the device to the outside world as a list of tuples.
      */
-    connections?: { [key: string]: string };
+    connections?: [connection_type: string, connection_identifier: string][];
+
+    /**
+     * The hardware version of the device.
+     */
+    hw_version?: string;
 
     /**
      * A list of IDs that uniquely identify the device. For example a serial number.
@@ -220,9 +236,24 @@ interface BaseItem {
     model?: string;
 
     /**
+     * The model identifier of the device.
+     */
+    model_id?: string;
+
+    /**
      * The name of the device.
      */
     name?: string;
+
+    /**
+     * The serial number of the device.
+     */
+    serial_number?: string;
+
+    /**
+     * Suggest an area if the device isn’t in one yet.
+     */
+    suggested_area?: string;
 
     /**
      * The firmware version of the device.
@@ -241,7 +272,7 @@ interface BaseItem {
   enabled_by_default?: boolean;
 
   /**
-   *
+   * The category of the entity. When set, the entity category must be "diagnostic" for sensors.
    */
   entity_category?: "diagnostic" | "config";
 
@@ -291,6 +322,12 @@ export interface AlarmControlPanelItem extends BaseItem {
   code_disarm_required?: boolean;
 
   /**
+   * If true the code is required to trigger the alarm. If false the code is not validated.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#code_trigger_required
+   */
+  code_trigger_required?: boolean;
+
+  /**
    * The template used for the command payload. Available variables: action and code.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#command_template
    */
@@ -301,6 +338,18 @@ export interface AlarmControlPanelItem extends BaseItem {
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#command_topic
    */
   command_topic: string;
+
+  /**
+   * The encoding of the payloads received and published messages. Set to "" to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#encoding
+   */
+  encoding?: string;
+
+  /**
+   * Picture URL for the entity.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#entity_picture
+   */
+  entity_picture?: string;
 
   /**
    * The name of the MQTT alarm.
@@ -327,6 +376,12 @@ export interface AlarmControlPanelItem extends BaseItem {
   payload_arm_night?: string;
 
   /**
+   * The payload to set armed-vacation mode on your Alarm Panel.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_arm_vacation
+   */
+  payload_arm_vacation?: string;
+
+  /**
    * The payload to set armed-custom-bypass mode on your Alarm Panel.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_arm_custom_bypass
    */
@@ -337,6 +392,12 @@ export interface AlarmControlPanelItem extends BaseItem {
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_disarm
    */
   payload_disarm?: string;
+
+  /**
+   * The payload to trigger the alarm on your Alarm Panel.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#payload_trigger
+   */
+  payload_trigger?: string;
 
   /**
    * The maximum QoS level of the state topic.
@@ -357,6 +418,12 @@ export interface AlarmControlPanelItem extends BaseItem {
   state_topic: string;
 
   /**
+   * A list of features that the alarm control panel supports.
+   * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#supported_features
+   */
+  supported_features?: ("arm_home" | "arm_away" | "arm_night" | "arm_vacation" | "arm_custom_bypass" | "trigger")[];
+
+  /**
    * Defines a template to extract the value.
    * https://www.home-assistant.io/integrations/alarm_control_panel.mqtt/#value_template
    */
@@ -371,6 +438,18 @@ export interface BinarySensorItem extends BaseItem {
   device_class?: DeviceClassesBinarySensor;
 
   /**
+   * The encoding of the payloads received. Set to "" to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt#encoding
+   */
+  encoding?: string;
+
+  /**
+   * Picture URL for the entity.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt#entity_picture
+   */
+  entity_picture?: string;
+
+  /**
    * Defines the number of seconds after the sensor’s state expires, if it’s not updated. After expiry, the sensor’s state becomes unavailable.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#expire_after
    */
@@ -383,10 +462,10 @@ export interface BinarySensorItem extends BaseItem {
   force_update?: boolean;
 
   /**
-   * The name of the MQTT binary sensor.
+   * The name of the MQTT binary sensor. Can be set to null if only the device name is relevant.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#name
    */
-  name?: string;
+  name?: string | null;
 
   /**
    * For sensors that only send on state updates (like PIRs), this variable sets a delay in seconds after which the sensor’s state will be updated back to off.
@@ -407,6 +486,12 @@ export interface BinarySensorItem extends BaseItem {
   payload_on?: string;
 
   /**
+   * Must be binary_sensor. Only allowed and required in MQTT auto discovery device messages.
+   * https://www.home-assistant.io/integrations/binary_sensor.mqtt#platform
+   */
+  platform?: "binary_sensor";
+
+  /**
    * The maximum QoS level of the state topic.
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#qos
    */
@@ -423,6 +508,50 @@ export interface BinarySensorItem extends BaseItem {
    * https://www.home-assistant.io/integrations/binary_sensor.mqtt#value_template
    */
   value_template?: Template;
+}
+
+export interface ButtonItem extends BaseItem {
+  /**
+   * The MQTT topic to publish commands to trigger the button.
+   * https://www.home-assistant.io/integrations/button.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * Defines a template to generate the payload to send to command_topic.
+   * https://www.home-assistant.io/integrations/button.mqtt/#command_template
+   */
+  command_template?: Template;
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed in the frontend.
+   * https://www.home-assistant.io/integrations/button.mqtt/#device_class
+   */
+  device_class?: string;
+
+  /**
+   * The name of the MQTT button.
+   * https://www.home-assistant.io/integrations/button.mqtt/#name
+   */
+  name?: string;
+
+  /**
+   * The payload to send to trigger the button.
+   * https://www.home-assistant.io/integrations/button.mqtt/#payload_press
+   */
+  payload_press?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/button.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/button.mqtt/#retain
+   */
+  retain?: boolean;
 }
 
 export interface CameraItem extends BaseItem {
@@ -450,7 +579,7 @@ export interface ClimateItem extends BaseItem {
    * The MQTT topic to subscribe for changes of the current action. If this is set, the climate graph uses the value received as data source. Valid values: off, heating, cooling, drying, idle, fan.
    * https://www.home-assistant.io/integrations/climate.mqtt/#action_topic
    */
-  action_topic?: "off" | "heating" | "cooling" | "drying" | "idle" | "fan";
+  action_topic?: string;
 
   /**
    * The MQTT topic to publish commands to switch auxiliary heat.
@@ -948,10 +1077,16 @@ export interface CoverItem extends BaseItem {
 
 export interface DeviceTrackerItem extends BaseItem {
   /**
-   * List of devices with their topic.
-   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#devices
+   * The MQTT topic subscribed to receive device tracker state changes.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#state_topic
    */
-  devices: { [key: string]: string };
+  state_topic?: string;
+
+  /**
+   * Defines a template that returns a device tracker state.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#value_template
+   */
+  value_template?: Template;
 
   /**
    * The payload value that represents the ‘home’ state for the device.
@@ -966,7 +1101,13 @@ export interface DeviceTrackerItem extends BaseItem {
   payload_not_home?: string;
 
   /**
-   * The maximum QoS level to be used when receiving messages.
+   * The payload value that will have the device’s location automatically derived from Home Assistant’s zones.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#payload_reset
+   */
+  payload_reset?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#qos
    */
   qos?: QOS;
@@ -976,6 +1117,36 @@ export interface DeviceTrackerItem extends BaseItem {
    * https://www.home-assistant.io/integrations/device_tracker.mqtt/#source_type
    */
   source_type?: "bluetooth" | "bluetooth_le" | "gps" | "router";
+
+  /**
+   * The name of the MQTT device_tracker.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#name
+   */
+  name?: string;
+
+  /**
+   * Used instead of `name` for automatic generation of `entity_id`.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#object_id
+   */
+  object_id?: string;
+
+  /**
+   * An ID that uniquely identifies this device_tracker. If two device_trackers have the same unique ID, Home Assistant will raise an exception.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Must be `device_tracker`. Only allowed and required in MQTT auto discovery device messages.
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#platform
+   */
+  platform?: string;
+
+  /**
+   * List of devices with their topic (legacy YAML configuration).
+   * https://www.home-assistant.io/integrations/device_tracker.mqtt/#devices
+   */
+  devices?: { [key: string]: string };
 }
 
 export interface FanItem extends BaseItem {
@@ -984,6 +1155,12 @@ export interface FanItem extends BaseItem {
    * https://www.home-assistant.io/integrations/fan.mqtt/#command_topic
    */
   command_topic: string;
+
+  /**
+   * The template used for the command payload.
+   * https://www.home-assistant.io/integrations/fan.mqt/#command_template
+   */
+  command_template?: Template;
 
   /**
    * The name of the MQTT fan.
@@ -996,6 +1173,30 @@ export interface FanItem extends BaseItem {
    * https://www.home-assistant.io/integrations/fan.mqtt/#optimistic
    */
   optimistic?: boolean;
+
+  /**
+   * Defines a template to generate the payload to send to `direction_command_template`.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#direction_command_template
+   */
+  direction_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the fan direction state based on a value.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#direction_command_topic
+   */
+  direction_command_topic?: string;
+
+  /**
+   * The MQTT topic subscribed to receive fan direction.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#direction_state_topic
+   */
+  direction_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from fan direction.
+   * https://www.home-assistant.io/integrations/fan.mqtt/#direction_value_template
+   */
+  direction_value_template?: Template;
 
   /**
    * Defines a template to generate the payload to send to oscillation_command_topic.
@@ -1146,6 +1347,234 @@ export interface FanItem extends BaseItem {
    * https://www.home-assistant.io/integrations/fan.mqtt/#state_value_template
    */
   state_value_template?: Template;
+}
+
+export interface HumidifierItem extends BaseItem {
+  /**
+   * The MQTT topic to subscribe for changes of the current action.
+   * Valid values: `off`, `humidifying`, `drying`, `idle`
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  action_topic?: string;
+
+  /**
+   * A template to render the value received on the `action_topic` with.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  action_template?: Template;
+
+  /**
+   * Defines a template to generate the payload to send to `command_topic`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the humidifier state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  command_topic: string;
+
+  /**
+   * A template with which the value received on `current_humidity_topic` will be rendered.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  current_humidity_template?: Template;
+
+  /**
+   * The MQTT topic on which to listen for the current humidity.
+   * A `"None"` value received will reset the current humidity. Empty values (`'''`) will be ignored.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  current_humidity_topic?: string;
+
+  /**
+   * The device class of the MQTT device.
+   * Must be either `humidifier`, `dehumidifier` or `null`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  device_class?: "humidifier" | "dehumidifier" | null;
+
+  /**
+   * The encoding of the payloads received and published messages.
+   * Set to `""` to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  encoding?: string;
+
+  /**
+   * Picture URL for the entity.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  entity_picture?: string;
+
+  /**
+   * The maximum target humidity percentage that can be set.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  max_humidity?: number;
+
+  /**
+   * The minimum target humidity percentage that can be set.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  min_humidity?: number;
+
+  /**
+   * Defines a template to generate the payload to send to `mode_command_topic`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  mode_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the `mode` on the humidifier.
+   * This attribute must be configured together with the `modes` attribute.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  mode_command_topic?: string;
+
+  /**
+   * The MQTT topic subscribed to receive the humidifier `mode`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  mode_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value for the humidifier `mode` state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  mode_state_template?: Template;
+
+  /**
+   * List of available modes this humidifier is capable of running at.
+   * Common examples include `normal`, `eco`, `away`, `boost`, `comfort`, `home`, `sleep`, `auto` and `baby`.
+   * This attribute must be configured together with the `mode_command_topic` attribute.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  modes?: string[];
+
+  /**
+   * The name of the humidifier.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  name?: string;
+
+  /**
+   * Flag that defines if humidifier works in optimistic mode.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  optimistic?: boolean;
+
+  /**
+   * The payload that represents the stop state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  payload_off?: string;
+
+  /**
+   * The payload that represents the running state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  payload_on?: string;
+
+  /**
+   * A special payload that resets the `target_humidity` state attribute to an `unknown` state when received at the `target_humidity_state_topic`.
+   * When received at `current_humidity_topic` it will reset the current humidity state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  payload_reset_humidity?: string;
+
+  /**
+   * A special payload that resets the `mode` state attribute to an `unknown` state when received at the `mode_state_topic`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  payload_reset_mode?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  retain?: boolean;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from the state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  state_value_template?: Template;
+
+  /**
+   * Defines a template to generate the payload to send to `target_humidity_command_topic`.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  target_humidity_command_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the humidifier target humidity state based on a percentage.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  target_humidity_command_topic: string;
+
+  /**
+   * The MQTT topic subscribed to receive humidifier target humidity.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  target_humidity_state_topic?: string;
+
+  /**
+   * Defines a template to extract a value for the humidifier `target_humidity` state.
+   * https://www.home-assistant.io/integrations/humidifier.mqtt/
+   */
+  target_humidity_state_template?: Template;
+}
+
+export interface ImageItem extends BaseItem {
+  /**
+   * The name of the MQTT image.
+   * https://www.home-assistant.io/integrations/image.mqtt#name
+   */
+  name?: string;
+
+  /**
+   * The content type of an image data message received on image_topic.
+   * https://www.home-assistant.io/integrations/image.mqtt#content_type
+   */
+  content_type?: string;
+
+  /**
+   * The encoding of the image payloads received.
+   * https://www.home-assistant.io/integrations/image.mqtt#image_encoding
+   */
+  image_encoding?: string;
+
+  /**
+   * The MQTT topic to subscribe to receive the image payload of the image to be downloaded.
+   * https://www.home-assistant.io/integrations/image.mqtt#image_topic
+   */
+  image_topic?: string;
+
+  /**
+   * Defines a template to extract the image URL from a message received at url_topic.
+   * https://www.home-assistant.io/integrations/image.mqtt#url_template
+   */
+  url_template?: Template;
+
+  /**
+   * The MQTT topic to subscribe to receive an image URL.
+   * https://www.home-assistant.io/integrations/image.mqtt#url_topic
+   */
+  url_topic?: string;
 }
 
 export interface LightDefaultItem extends BaseItem {
@@ -1764,6 +2193,57 @@ export interface NumberItem extends BaseItem {
   value_template?: Template;
 }
 
+export interface SceneItem extends BaseItem {
+  /**
+   * The MQTT topic to publish commands to change the scene state.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * The name of the MQTT scene.
+   * https://www.home-assistant.io/integrations/scene.mqtt#name
+   */
+  name?: string;
+
+  /**
+   * Flag that defines if the scene works in optimistic mode.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * The payload that represents the scene.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#payload
+   */
+  payload?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#retain
+   */
+  retain?: boolean;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#state_topic
+   */
+  state_topic?: string;
+
+  /**
+   * Defines a template to extract a value from the state payload.
+   * https://www.home-assistant.io/integrations/scene.mqtt/#value_template
+   */
+  
+  value_template?: Template;
+}
+
 export interface SelectItem extends BaseItem {
   /**
    * The MQTT topic to publish commands to control the select.
@@ -1822,6 +2302,18 @@ export interface SensorItem extends BaseItem {
   device_class?: DeviceClassesSensor;
 
   /**
+   * The encoding of the payloads received. Set to "" to disable decoding of incoming payload.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#encoding
+   */
+  encoding?: string;
+
+  /**
+   * Picture URL for the entity.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#entity_picture
+   */
+  entity_picture?: string;
+
+  /**
    * Defines the number of seconds after the sensor’s state expires, if it’s not updated. After expiry, the sensor’s state becomes unavailable.
    * https://www.home-assistant.io/integrations/sensor.mqtt#expire_after
    */
@@ -1843,13 +2335,25 @@ export interface SensorItem extends BaseItem {
    * Defines a template to extract the last_reset. Available variables: entity_id. The entity_id can be used to reference the entity’s attributes.
    * https://www.home-assistant.io/integrations/sensor.mqtt#last_reset_value_template
    */
-  last_reset_value_template?: string;
+  last_reset_value_template?: Template;
 
   /**
-   * The name of the MQTT sensor.
+   * The name of the MQTT sensor. Can be set to null if only the device name is relevant.
    * https://www.home-assistant.io/integrations/sensor.mqtt#name
    */
-  name?: string;
+  name?: string | null;
+
+  /**
+   * List of allowed sensor state value. An empty list is not allowed. The sensor's device_class must be set to enum.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#options
+   */
+  options?: string[];
+
+  /**
+   * Must be sensor. Only allowed and required in MQTT auto discovery device messages.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#platform
+   */
+  platform?: "sensor";
 
   /**
    * The maximum QoS level of the state topic.
@@ -1870,6 +2374,12 @@ export interface SensorItem extends BaseItem {
   state_topic: string;
 
   /**
+   * The number of decimals which should be used in the sensor's state after rounding.
+   * https://www.home-assistant.io/integrations/sensor.mqtt#suggested_display_precision
+   */
+  suggested_display_precision?: Integer;
+
+  /**
    * Defines the units of measurement of the sensor, if any.
    * https://www.home-assistant.io/integrations/sensor.mqtt#unit_of_measurement
    */
@@ -1878,6 +2388,86 @@ export interface SensorItem extends BaseItem {
   /**
    * Defines a template to extract the value.
    * https://www.home-assistant.io/integrations/sensor.mqtt#value_template
+   */
+  value_template?: Template;
+}
+
+export interface SwitchItem extends BaseItem {
+  /**
+   * The MQTT topic to publish commands to change the switch state.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * Defines a template to generate the payload to send to command_topic.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#command_template
+   */
+  command_template?: Template;
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#device_class
+   */
+  device_class?: string;
+
+  /**
+   * The name of the MQTT switch.
+   * https://www.home-assistant.io/integrations/switch.mqtt#name
+   */
+  name?: string;
+
+  /**
+   * Flag that defines if switch works in optimistic mode.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * The payload that represents the off state.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#payload_off
+   */
+  payload_off?: string;
+
+  /**
+   * The payload that represents the on state.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#payload_on
+   */
+  payload_on?: string;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#retain
+   */
+  retain?: boolean;
+
+  /**
+   * The payload that represents the off state. Used when value that represents off state in the state_topic is different from value that should be sent to the command_topic to turn the device off.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#state_off
+   */
+  state_off?: string;
+
+  /**
+   * The payload that represents the on state. Used when value that represents on state in the state_topic is different from value that should be sent to the command_topic to turn the device on.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#state_on
+   */
+  state_on?: string;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#state_topic
+   */
+  state_topic?: string;
+
+  /**
+   * Defines a template to extract device's state from the state_topic.
+   * https://www.home-assistant.io/integrations/switch.mqtt/#value_template
    */
   value_template?: Template;
 }
@@ -2172,4 +2762,102 @@ export interface VacuumLegacyItem extends BaseItem {
    * https://www.home-assistant.io/integrations/vacuum.mqtt/#supported_features
    */
   supported_features?: string[];
+}
+
+export interface SirenItem extends BaseItem {
+  /**
+   * The list of available tones the siren supports.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#available_tones
+   */
+  available_tones?: string[];
+
+  /**
+   * Defines a template to generate a custom payload to send to command_topic.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#command_template
+   */
+  command_template?: Template;
+
+  /**
+   * Defines a template to generate a custom payload to send to command_topic when the siren turn off action is called.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#command_off_template
+   */
+  command_off_template?: Template;
+
+  /**
+   * The MQTT topic to publish commands to change the siren state.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#command_topic
+   */
+  command_topic: string;
+
+  /**
+   * Defines if the siren supports the duration option.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#support_duration
+   */
+  support_duration?: boolean;
+
+  /**
+   * Defines if the siren supports setting the volume.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#support_volume_set
+   */
+  support_volume_set?: boolean;
+
+  /**
+   * The MQTT topic subscribed to receive state updates.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#state_topic
+   */
+  state_topic?: string;
+
+  /**
+   * Defines a template to extract device's state from the state_topic.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#state_value_template
+   */
+  state_value_template?: Template;
+
+  /**
+   * The payload that represents off state. If specified, will be used for both comparing to the value in the state_topic and sending as off command to the command_topic.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#payload_off
+   */
+  payload_off?: string;
+
+  /**
+   * The payload that represents on state. If specified, will be used for both comparing to the value in the state_topic and sending as on command to the command_topic.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#payload_on
+   */
+  payload_on?: string;
+
+  /**
+   * The payload that represents the off state.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#state_off
+   */
+  state_off?: string;
+
+  /**
+   * The payload that represents the on state.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#state_on
+   */
+  state_on?: string;
+
+  /**
+   * Flag that defines if siren works in optimistic mode.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * The maximum QoS level to be used when receiving and publishing messages.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#qos
+   */
+  qos?: QOS;
+
+  /**
+   * If the published message should have the retain flag on or not.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#retain
+   */
+  retain?: boolean;
+
+  /**
+   * The name of the siren.
+   * https://www.home-assistant.io/integrations/siren.mqtt/#name
+   */
+  name?: string;
 }

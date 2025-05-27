@@ -9,9 +9,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "noUnusedParameters": false,
-    "noUnusedLocals": false,
-    "noImplicitAny": false
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
   "exclude": ["node_modules", ".vscode-test", "server"]

@@ -130,11 +130,21 @@
     "prefix": "action-service",
     "body": [
       "- alias: \"${1:action alias (name)}\"",
-      "  service: ${2:service name}",
+      "  service: ${2:action name}",
       "  target:",
       "    entity_id: ${3:entity ID}"
     ],
-    "description": "Add a Home Assistant service action for automation"
+    "description": "Add a Home Assistant service action for automation (legacy syntax)"
+  },
+  "action action": {
+    "prefix": "action-action",
+    "body": [
+      "- alias: \"${1:action alias (name)}\"",
+      "  action: ${2:action name}",
+      "  target:",
+      "    entity_id: ${3:entity ID}"
+    ],
+    "description": "Add a Home Assistant action for automation (modern syntax)"
   },
   "action choose": {
     "prefix": "action-choose",

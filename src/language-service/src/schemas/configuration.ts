@@ -6,8 +6,8 @@ import { IncludeList, IncludeNamed } from "./types";
  */
 export interface ConfigurationRoot
   extends InternalIntegrations,
-    CoreIntegrations,
-    CustomIntegrations {
+  CoreIntegrations,
+  CustomIntegrations {
   /**
    * Home Assistant Core configuration
    * https://www.home-assistant.io/docs/configuration/basic
@@ -28,6 +28,12 @@ export interface InternalIntegrations {
   alarm_control_panel?:
     | integrations.Core.AlarmControlPanel.Schema
     | IncludeList;
+
+  /**
+   * The alert integration is designed to notify you when problematic issues arise.
+   * https://www.home-assistant.io/integrations/alert
+   */
+  alert?: integrations.Core.Alert.Schema | IncludeNamed | null;
 
   /**
    * Automations offer the capability to call a service based on a simple or complex trigger. Automation allows a condition such as a sunset to cause an event, such as a light turning on.
@@ -167,6 +173,12 @@ export interface InternalIntegrations {
   lovelace?: integrations.Core.Lovelace.Schema | null;
 
   /**
+   * Modbus is a communication protocol to control PLCs (Programmable Logic Controller) and RTUs (Remote Terminal Unit).
+   * https://www.home-assistant.io/integrations/modbus/
+   */
+  modbus?: integrations.Core.Modbus.Schema | IncludeList;
+
+  /**
    * Keeps track on number entities in your environment, their state, and allows you to control them.
    * https://www.home-assistant.io/integrations/number
    */
@@ -215,6 +227,12 @@ export interface InternalIntegrations {
   template?: integrations.Core.Template.Schema | IncludeList;
 
   /**
+   * The timer integration aims to simplify automations based on (dynamic) durations.
+   * https://www.home-assistant.io/integrations/timer/
+   */
+  timer?: integrations.Core.Timer.Schema | IncludeNamed | null;
+
+  /**
    * The vacuum integration enables the ability to control home cleaning robots within Home Assistant.
    * https://www.home-assistant.io/integrations/vacuum
    */
@@ -237,6 +255,12 @@ export interface CoreIntegrations {
    * https://www.nabucasa.com/config/
    */
   cloud?: integrations.Core.Cloud.Schema | IncludeNamed | null;
+
+  /**
+   * The Compensation integration consumes the state from other sensors. It exports the compensated value as state in a separate entity.
+   * https://www.home-assistant.io/integrations/compensation/
+   */
+  compensation?: integrations.Core.Compensation.Schema | IncludeNamed;
 
   /**
    * The KNX integration for Home Assistant allows you to connect to KNX/IP devices.

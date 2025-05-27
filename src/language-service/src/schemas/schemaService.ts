@@ -4,7 +4,7 @@ import { JSONSchema } from "yaml-language-server/out/server/src/languageservice/
 import { HaFileInfo } from "../haConfig/dto";
 
 export class SchemaServiceForIncludes {
-  private mappings: Array<PathToSchemaMapping & { schema: JSONSchema }>;
+  private mappings: (PathToSchemaMapping & { schema: JSONSchema })[];
 
   constructor() {
     const jsonPathMappings = path.join(__dirname, "mappings.json");
@@ -13,44 +13,59 @@ export class SchemaServiceForIncludes {
     this.mappings.forEach((mapping) => {
       const jsonPath = path.join(__dirname, "json", mapping.file);
       const filecontents = fs.readFileSync(jsonPath, "utf-8");
-      const schema = <JSONSchema>JSON.parse(filecontents);
+      const schema = JSON.parse(filecontents) as JSONSchema;
       mapping.schema = schema;
     });
   }
 
   public getSchemaContributions(haFiles: HaFileInfo[]): any {
-    const results: Array<{
+    const results: {
       uri: string;
       fileMatch?: string[];
       schema?: JSONSchema;
-    }> = [];
+    }[] = [];
 
     for (const [sourceFile, sourceFileMapping] of haFiles.entries()) {
       let sourceFileMappingPath = sourceFileMapping.path.replace(
-        "homeassistant/packages/",
+        path.join("homeassistant", "packages") + path.sep,
         "",
       );
       sourceFileMappingPath = sourceFileMappingPath.replace(
-        /cards\/cards/g,
+        /cards(\/|\\)cards/g,
         "cards",
       );
 
-      if (sourceFileMappingPath.startsWith("blueprints/automation/")) {
+      if (
+        sourceFileMappingPath.startsWith(
+          path.join("blueprints", "automation") + path.sep,
+        )
+      ) {
         sourceFileMappingPath = "blueprints/automation";
       }
 
-      if (sourceFileMappingPath.startsWith("blueprints/script/")) {
+      if (
+        sourceFileMappingPath.startsWith(
+          path.join("blueprints", "script") + path.sep,
+        )
+      ) {
         sourceFileMappingPath = "blueprints/script";
       }
 
       if (
-        sourceFileMappingPath.startsWith("automations/") ||
+        sourceFileMappingPath.startsWith("automations" + path.sep) ||
         sourceFileMappingPath === "automations.yaml"
       ) {
         sourceFileMappingPath = "configuration.yaml/automation";
       }
 
-      if (sourceFileMappingPath.startsWith("custom_sentences/")) {
+      if (
+        sourceFileMappingPath.startsWith("groups" + path.sep) ||
+        sourceFileMappingPath === "groups.yaml"
+      ) {
+        sourceFileMappingPath = "configuration.yaml/group";
+      }
+
+      if (sourceFileMappingPath.startsWith("custom_sentences" + path.sep)) {
         sourceFileMappingPath = "custom_sentences.yaml";
       }
 
@@ -60,7 +75,7 @@ export class SchemaServiceForIncludes {
       if (relatedPathToSchemaMapping) {
         const id = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
         let absolutePath = fs.realpathSync.native(haFiles[sourceFile].filename);
-        absolutePath = absolutePath.replace("\\", "/");
+        absolutePath = absolutePath.replace(/\\/g, "/");
         const fileass = encodeURI(absolutePath);
         let resultEntry = results.find((x) => x.uri === id);
 

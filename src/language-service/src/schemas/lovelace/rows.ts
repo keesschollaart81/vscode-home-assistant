@@ -30,6 +30,12 @@ export interface AttributeRow extends EntityConfig {
   attribute: string;
 
   /**
+   * Icon to display for the row. Defaults to the icon of the entity.
+   * https://www.home-assistant.io/lovelace/entities/#icon
+   */
+  icon?: string;
+
+  /**
    * Text before entity state.
    * https://www.home-assistant.io/lovelace/entities/#prefix
    */

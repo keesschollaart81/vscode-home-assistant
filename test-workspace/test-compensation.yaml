@@ -1,0 +1,24 @@
+# Example configuration for testing the compensation integration
+compensation:
+  media_player_db_volume:
+    source: media_player.yamaha_receiver
+    attribute: volume_level
+    unit_of_measurement: dB
+    data_points:
+      - [0.2, -80.0]
+      - [1.0, 0.0]
+    lower_limit: true
+    upper_limit: true
+    precision: 2
+    degree: 1
+    unique_id: media_player_db_volume_sensor
+
+  sensor_compensation:
+    source: sensor.temperature
+    data_points:
+      - [20.0, 22.0]
+      - [25.0, 26.5]
+      - [30.0, 32.0]
+    degree: 2
+    precision: 1
+    unit_of_measurement: °C

@@ -1,0 +1,32 @@
+automation:
+  - alias: "Test Automation"
+    trigger:
+      - platform: state
+        entity_id: light.kitchen
+    action:
+      - service: light.turn_on
+        target:
+          entity_id: light.living_room
+        data:
+          brightness: 255
+
+script:
+  test_script:
+    sequence:
+      - service: switch.turn_off
+        target:
+          entity_id: switch.bedroom_fan
+
+group:
+  all_lights:
+    entities:
+      - light.kitchen
+      - light.living_room
+      - light.bedroom
+
+sensor:
+  - platform: template
+    sensors:
+      test_sensor:
+        friendly_name: "Test Sensor"
+        value_template: "{{ states('sensor.temperature') }}"

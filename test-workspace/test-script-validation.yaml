@@ -1,0 +1,17 @@
+
+# Script schema validation test
+script:
+  valid_script:
+    alias: Valid Script
+    sequence:
+      - service: light.turn_on
+        target:
+          entity_id: light.kitchen
+  
+  invalid_script:
+    alias: Invalid Script
+    # Misspelled property name
+    sequenze:
+      - service: light.turn_on
+        target:
+          entity_id: light.kitchen

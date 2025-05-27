@@ -1,0 +1,52 @@
+# Test file for entity validation
+# This file should show warnings for non-existing entities
+
+automation:
+  - alias: "Test Entity Validation"
+    trigger:
+      - platform: state
+        entity_id: sensor.non_existing_sensor  # This should show a warning
+    condition:
+      - condition: state
+        entity_id: switch.non_existing_switch  # This should show a warning
+    action:
+      - service: light.turn_on
+        entity_id: light.non_existing_light    # This should show a warning
+      - service: light.turn_off
+        target:
+          entity_id: 
+            - light.another_non_existing_light # This should show a warning
+            - switch.also_non_existing         # This should show a warning
+
+# Test with array syntax
+script:
+  test_script:
+    sequence:
+      - service: homeassistant.turn_off
+        entity_id: 
+          - sensor.fake_entity1  # This should show a warning
+          - sensor.fake_entity2  # This should show a warning
+
+# Test with inline array
+group:
+  test_group:
+    entities: [light.fake1, light.fake2, switch.fake3]  # These should show warnings
+
+# Test with template (should NOT show warnings)
+sensor:
+  - platform: template
+    sensors:
+      template_sensor:
+        entity_id: "{{ states.sensor.template_entity.entity_id }}"  # Template, no warning
+        value_template: "{{ states('sensor.another_template') }}"   # Template, no warning
+
+# Test with secrets (should NOT show warnings)
+notify:
+  - platform: pushbullet
+    api_key: !secret pushbullet_api_key    # Secret, no warning
+    
+# Test with valid format but non-existing entities
+camera:
+  - platform: generic
+    still_image_url: http://example.com/image.jpg
+    entity_id: camera.non_existing_camera  # This should show a warning

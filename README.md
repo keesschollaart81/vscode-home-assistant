@@ -25,9 +25,9 @@
 
 # Features
 
-## Completion for Entity IDs, Services, Scenes and Triggers
+## Completion for Entity IDs, Actions, Scenes and Triggers
 
-When connected with your Home Assistant server, entity id' and services will be auto-completed.
+When connected with your Home Assistant server, entity IDs and actions will be auto-completed.
 
 <img src="https://raw.githubusercontent.com/keesschollaart81/vscode-home-assistant/dev/assets/entity_service_completion.gif">
 
@@ -83,7 +83,6 @@ Create an [issue](https://github.com/keesschollaart81/vscode-home-assistant/issu
 # Things to do / up for grabs
 
 - [ ] Go to Definition for entities, scripts and automations
-- [ ] Autocomplete !secrets
 - [ ] Check local config with HA Server
 
 # Telemetry

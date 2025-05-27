@@ -13,7 +13,7 @@ import {
 
 export type Domain = "group";
 export interface Schema {
-  auth_mfa_modules?: Array<any> | IncludeNamed; // TODO: Extract similar as in integrations
+  auth_mfa_modules?: any[] | IncludeNamed; // TODO: Extract similar as in integrations
   auth_providers?: AuthProviders[] | IncludeNamed; // TODO: Extract similar as in integrations
 
   /**
@@ -54,7 +54,7 @@ export interface Schema {
 
   /**
    * Customize entities matching a pattern.
-   * https://wwww.home-assistant.io/docs/configuration/customizing-devices/
+   * https://www.home-assistant.io/docs/configuration/customizing-devices/
    */
   customize_glob?: CoreCustomize | IncludeNamed;
 
@@ -195,7 +195,7 @@ interface CoreCustomizeItem {
 
   /**
    * Defines the units of measurement, if any. This will also influence the graphical presentation in the history visualization as continuous value. Sensors with missing unit_of_measurement are showing as discrete values.
-   * https://wwww.home-assistant.io/docs/configuration/customizing-devices/#unit_of_measurement
+   * https://www.home-assistant.io/docs/configuration/customizing-devices/#unit_of_measurement
    */
   unit_of_measurement?: string;
 }
@@ -217,7 +217,7 @@ interface TrustedNetworksAuthProvider {
   type: "trusted_networks";
   trusted_networks: string | string[] | any[];
   trusted_users?: {
-    [key: string]: string | Array<string | { [key: string]: string }>;
+    [key: string]: string | (string | { [key: string]: string })[];
   };
   allow_bypass_login?: boolean;
 }

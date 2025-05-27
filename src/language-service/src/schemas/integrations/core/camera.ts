@@ -4,6 +4,7 @@
  */
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
+import { ProxyCameraPlatformSchema } from "./proxy";
 
 export type Domain = "camera";
 export type Schema = Item[] | IncludeList;
@@ -12,12 +13,12 @@ export type File = Item | Item[];
 /**
  * @TJS-additionalProperties true
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(mqtt)$)\w+$
+   * @TJS-pattern ^(?!(mqtt|proxy)$)\w+$
    */
   platform: string;
 }
 
-type Item = OtherPlatform;
+type Item = ProxyCameraPlatformSchema | OtherPlatform;

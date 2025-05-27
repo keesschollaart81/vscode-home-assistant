@@ -31,6 +31,7 @@ export type Selector =
   | DeviceSelector
   | DurationSelector
   | EntitySelector
+  | FileSelector
   | FloorSelector
   | IconSelector
   | LabelSelector
@@ -41,6 +42,7 @@ export type Selector =
   | ObjectSelector
   | QRCodeSelector
   | SelectSelector
+  | StateSelector
   | TargetSelector
   | TemplateSelector
   | TextSelector
@@ -100,7 +102,7 @@ export interface AssistPipelineSelector {
 
 export interface AttributeSelector {
   /**
-   * The attributes selector shows a list of state attribites from a provided entity of which one can be selected.
+   * The attributes selector shows a list of state attributes from a provided entity of which one can be selected.
    * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
    */
   attribute: {
@@ -109,6 +111,12 @@ export interface AttributeSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
      */
     entity_id: Entity;
+
+    /**
+     * List of attribute names to hide from the UI. Hidden attributes can still be provided manually.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#attribute-selector
+     */
+    hide_attributes?: string[];
   };
 }
 
@@ -130,26 +138,44 @@ export interface BooleanSelector {
 
 export interface ColorRGBSelector {
   /**
-   * The date selector shows a date input that allows the user to specify a date.
-   * https://www.home-assistant.io/docs/blueprint/selectors/#date-selector
+   * The RGB color selector allows the user to select a color from a color picker from the user interface, and returns the RGB color value.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#rgb-color-selector
    */
   color_rgb: null | Record<string, never>;
 }
 
 export interface ColorTempSelector {
   /**
-   *
+   * The color temperature selector allows you to select a color temperature from a gradient using a slider.
    * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
    */
   color_temp: {
     /**
-     * The minimum color temperature in mireds.
+     * The chosen unit for the color temperature. This can be either `kelvin` or `mired`. `mired` is the default for historical reasons.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+     */
+    unit?: "kelvin" | "mired";
+
+    /**
+     * The minimum color temperature in the chosen unit.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+     */
+    min?: number;
+
+    /**
+     * The maximum color temperature in the chosen unit.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
+     */
+    max?: number;
+
+    /**
+     * The minimum color temperature in mireds (legacy).
      * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
      */
     min_mireds?: PositiveInteger;
 
     /**
-     * The maximum color temperature in mireds.
+     * The maximum color temperature in mireds (legacy).
      * https://www.home-assistant.io/docs/blueprint/selectors/#color-temperature-selector
      */
     max_mireds?: PositiveInteger;
@@ -180,21 +206,27 @@ export interface ConfigEntrySelector {
 
 export interface ConstantSelector {
   /**
-   * The constant selector shows a toggle that allows the user to enable the selected option. This is similar to the boolean selector, the difference is that the constant selector has no value when it’s not enabled.
+   * The constant selector shows a toggle that allows the user to enable the selected option. This is similar to the boolean selector, the difference is that the constant selector has no value when it's not enabled.
    * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
    */
   constant: {
     /**
-     * The label that is show in the UI for this constant.
+     * The label that is shown in the UI for this constant.
      * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
      */
-    label: string;
+    label?: string;
+
+    /**
+     * Translation key for internationalization support.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
+     */
+    translation_key?: string;
 
     /**
      * Value that is returned when this constant is enabled by the user
      * https://www.home-assistant.io/docs/blueprint/selectors/#constant-selector
      */
-    value: string;
+    value: string | number | boolean;
   };
 }
 
@@ -266,6 +298,12 @@ interface DeviceSelectorFilter {
    * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
    */
   model?: string;
+
+  /**
+   * When set, the list of devices is limited to devices that have the set model ID.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#device-selector
+   */
+  model_id?: string;
 }
 
 export interface DeviceSelector {
@@ -316,7 +354,7 @@ export interface DurationSelector {
    */
   duration: {
     /**
-     * Set to true to display the input as a multi-line text box on the user interface.
+     * When true, the duration selector will allow selecting days.
      * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
      */
     enable_day?: boolean;
@@ -326,6 +364,12 @@ export interface DurationSelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
      */
     enable_millisecond?: boolean;
+
+    /**
+     * Allow negative durations. Will default to False in HA Core 2025.6.0.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#duration-selector
+     */
+    allow_negative?: boolean;
   } | null;
 }
 
@@ -396,6 +440,21 @@ export interface EntitySelector {
      */
     multiple?: boolean;
   } | null;
+}
+
+export interface FileSelector {
+  /**
+   * The file selector allows the user to select a file.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#file-selector
+   */
+  file: {
+    /**
+     * File type filter using HTML input accept attribute format.
+     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#accept
+     * https://www.home-assistant.io/docs/blueprint/selectors/#file-selector
+     */
+    accept: string;
+  };
 }
 
 export interface FloorSelector {
@@ -603,24 +662,50 @@ export interface SelectSelector {
     multiple?: boolean;
 
     /**
+     * Display options in alphabetical order.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    sort?: boolean;
+
+    /**
+     * Translation key for internationalization support.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
+     */
+    translation_key?: string;
+
+    /**
      * List of options that the user can choose from.
      * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
      */
     options:
       | string[]
       | {
-          /**
+        /**
            * The description to show in the UI for this item.
            * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
            */
-          label: string;
+        label: string;
 
-          /**
+        /**
            * The value to return when this label is selected.
            * https://www.home-assistant.io/docs/blueprint/selectors/#select-selector
            */
-          value: string;
-        }[];
+        value: string;
+      }[];
+  };
+}
+
+export interface StateSelector {
+  /**
+   * The state selector shows a list of states for a provided entity of which one can be selected.
+   * https://www.home-assistant.io/docs/blueprint/selectors/#state-selector
+   */
+  state: {
+    /**
+     * The entity ID of which a state can be selected from.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#state-selector
+     */
+    entity_id: Entity;
   };
 }
 
@@ -665,7 +750,7 @@ export interface TextSelector {
     multiline?: boolean;
 
     /**
-     * llows adding list of text strings. If set to true, the resulting value of this selector will be a list instead of a single string value.
+     * Allows adding list of text strings. If set to true, the resulting value of this selector will be a list instead of a single string value.
      * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
      */
     multiple?: boolean;
@@ -700,6 +785,12 @@ export interface TextSelector {
       | "time"
       | "url"
       | "week";
+
+    /**
+     * Guides the browser on the type of information which should automatically fill the field. This supplies the HTML autocomplete attribute.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#text-selector
+     */
+    autocomplete?: string;
   } | null;
 }
 
@@ -708,7 +799,13 @@ export interface ThemeSelector {
    * The theme selector allows for selecting a theme from the available themes installed in Home Assistant.
    * https://www.home-assistant.io/docs/blueprint/selectors/#theme-selector
    */
-  theme: null | Record<string, never>;
+  theme: {
+    /**
+     * Includes Home Assistant default theme in the list.
+     * https://www.home-assistant.io/docs/blueprint/selectors/#theme-selector
+     */
+    include_default?: boolean;
+  } | null;
 }
 
 export interface TimeSelector {

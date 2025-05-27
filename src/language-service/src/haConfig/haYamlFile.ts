@@ -1,16 +1,14 @@
 import * as path from "path";
 import * as YAML from "yaml";
-import { Schema, Node, Collection, Scalar } from "yaml/types";
-import { ParsedCST, CST } from "yaml/parse-cst";
-import { Type, LinePos } from "yaml/util";
+import { Node, isMap, isSeq, isPair, isScalar, Scalar, YAMLMap, LineCounter } from "yaml";
 import * as vscodeUri from "vscode-uri";
 import { FileAccessor } from "../fileAccessor";
 import { IncludeReferences, Includetype, ScriptReferences } from "./dto";
 
 export class HomeAssistantYamlFile {
-  private cst: ParsedCST | undefined;
-
   private yaml: YAML.Document | undefined;
+  private lineCounter: LineCounter | undefined;
+  private currentPath = ""; // Track current path during parsing
 
   private includes: IncludeReferences = {};
 
@@ -19,7 +17,7 @@ export class HomeAssistantYamlFile {
   constructor(
     private fileAccessor: FileAccessor,
     private filename: string,
-    // eslint-disable-next-line no-shadow, @typescript-eslint/no-shadow
+
     public path: string,
   ) {}
 
@@ -29,10 +27,14 @@ export class HomeAssistantYamlFile {
       return;
     }
 
-    this.cst = YAML.parseCST(fileContents);
-    this.yaml = new YAML.Document({
+    // Create a line counter to track positions
+    this.lineCounter = new LineCounter();
+
+    this.yaml = YAML.parseDocument(fileContents, {
       customTags: this.getCustomTags(),
-    }).parse(this.cst[0]);
+      keepSourceTokens: true,
+      lineCounter: this.lineCounter,
+    });
 
     await this.parseAstRecursive(this.yaml.contents, this.path);
   }
@@ -54,11 +56,10 @@ export class HomeAssistantYamlFile {
     }
     if (this.yaml.errors && this.yaml.errors.length > 0) {
       const errors = this.yaml.errors.slice(0, 3).map((x) => {
-        const line =
-          x.linePos && x.linePos.start
-            ? ` (Line: ${x.linePos.start.line})`
-            : "";
-        return `${x.name}: ${x.message}${line}`;
+        const line = x.linePos && x.linePos[0] 
+          ? ` (Line: ${x.linePos[0].line})` 
+          : "";
+        return `${x.name || "YAMLError"}: ${x.message}${line}`;
       });
       if (this.yaml.errors.length > 3) {
         errors.push(` - And ${this.yaml.errors.length - 3} more errors...`);
@@ -93,100 +94,85 @@ export class HomeAssistantYamlFile {
     return this.scripts;
   };
 
-  private getCustomTags(): Schema.Tag[] {
+  private getCustomTags() {
     return [
-      `env_Var`,
-      `input`,
-      `secret`,
+      "env_Var",
+      "input", 
+      "secret",
       `${Includetype[Includetype.include]}`,
       `${Includetype[Includetype.include_dir_list]}`,
       `${Includetype[Includetype.include_dir_merge_list]}`,
       `${Includetype[Includetype.include_dir_merge_named]}`,
       `${Includetype[Includetype.include_dir_named]}`,
     ].map(
-      (x) =>
-        <Schema.Tag>{
-          tag: `!${x}`,
-          resolve: (_doc: any, cst: any) => Symbol.for(cst.strValue),
-        },
+      (x) => ({
+        tag: `!${x}`,
+        resolve: (value: string) => value,
+      }),
     );
   }
 
   private parseAstRecursive = async (
-    node: Collection | Node | null,
+    node: Node | null,
     currentPath: string,
   ): Promise<void> => {
     if (!node) {
-      // null object like 'frontend:'
       return;
     }
-    switch (node.type) {
-      case Type.FLOW_SEQ:
-      case Type.MAP:
-      case Type.SEQ:
-        if (node instanceof Collection) {
-          if (
-            node.type !== Type.FLOW_SEQ &&
-            (currentPath === "configuration.yaml/script" ||
-              currentPath ===
-                "configuration.yaml/homeassistant/packages/script")
-          ) {
-            this.collectScripts(node);
-            break;
-          }
-          const results = [];
-          for (const item of node.items) {
-            if (item == null) {
-              // This can happen if the list contains 1 item without a value, e.g.:
-              // entity_id:
-              //   -
-              continue;
-            }
 
-            switch (item.type) {
-              case "PAIR":
-                results.push(
-                  this.parseAstRecursive(
-                    item.value,
-                    `${currentPath}/${this.getKeyName(item.key)}`,
-                  ),
-                );
-                break;
-              case Type.BLOCK_FOLDED:
-              case Type.BLOCK_LITERAL:
-              case Type.FLOW_SEQ:
-              case Type.MAP:
-              case Type.PLAIN:
-              case Type.QUOTE_DOUBLE:
-              case Type.QUOTE_SINGLE:
-              case Type.SEQ:
-                results.push(this.parseAstRecursive(item, currentPath));
-                break;
-              default:
-                break;
-            }
+    // Update the current path being processed
+    this.currentPath = currentPath;
+
+    // Handle maps (objects)
+    if (isMap(node)) {
+      // Check if this is a scripts section in different formats
+      if (currentPath === "configuration.yaml/script" ||
+          currentPath === "configuration.yaml/homeassistant/packages/script") {
+        this.collectScripts(node);
+        return;
+      }
+
+      // Check for script definitions in format: script my_script:
+      if (currentPath.endsWith("/script") || 
+          /^configuration\.yaml\/script\s+/.test(currentPath)) {
+        this.collectScripts(node);
+        return;
+      }
+      
+      for (const pair of node.items) {
+        if (isPair(pair) && pair.value) {
+          const keyName = this.getKeyName(pair.key as Scalar);
+          // Type guard to ensure pair.value is a Node
+          if (typeof pair.value === "object" && pair.value !== null) {
+            await this.parseAstRecursive(
+              pair.value as Node,
+              `${currentPath}/${keyName}`,
+            );
           }
-          await Promise.all(results);
         }
-        break;
-      case "BLOCK_FOLDED":
-      case "BLOCK_LITERAL":
-      case "PLAIN":
-      case "QUOTE_DOUBLE":
-      case "QUOTE_SINGLE":
-        if (node instanceof Scalar && node.tag) {
-          this.collectInclude(node, currentPath);
+      }
+    }
+    
+    // Handle sequences (arrays)
+    else if (isSeq(node)) {
+      for (const item of node.items) {
+        if (item !== null && item !== undefined && typeof item === "object") {
+          await this.parseAstRecursive(item as Node, currentPath);
         }
-        break;
+      }
+    }
+    
+    // Handle scalar nodes with include tags
+    else if (isScalar(node) && node.tag) {
+      this.collectInclude(node, currentPath);
     }
   };
 
   private getKeyName = (node: Scalar): string => {
-    if (node.tag && node.type === Type.PLAIN) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+    if (node.tag && node.type === "PLAIN") {
       return node.value.toString().slice(7, -1);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
     return node.toJSON();
   };
 
@@ -222,7 +208,6 @@ export class HomeAssistantYamlFile {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     value = x.value.toString().slice(7, -1).replace(/\\/g, "/"); // \ to / on windows
 
     let files: string[] = [];
@@ -260,114 +245,83 @@ export class HomeAssistantYamlFile {
     }
   }
 
-  private collectScripts(node: Collection) {
-    for (const item of node.items) {
-      const isNamed = item.value && item.value.type === Type.MAP;
-
-      const filepath = vscodeUri.URI.file(path.resolve(this.filename)).fsPath;
-      const filename = path.parse(filepath).base.replace(".yaml", "");
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      const key = isNamed ? item.key.toJSON() : filename;
-
-      if (item.type === "PAIR") {
-        const lp = this.getLinePos(item.key.range[0], this.cst);
-        const lp2 = this.getLinePos(item.value.range[1], this.cst);
-
-        if (lp !== null && lp2 !== null) {
-          this.scripts[key] = {
-            fileUri: vscodeUri.URI.file(filepath).toString(),
-            start: [lp.line - 1, lp.col - 1],
-            end: [lp2.line - 1, lp2.col - 1],
-          };
+  private collectScripts(node: YAMLMap) {
+    const filepath = vscodeUri.URI.file(path.resolve(this.filename)).fsPath;
+    
+    // Check if this is a direct script definition (script another_script:)
+    const directScriptMatch = /^configuration\.yaml\/script\s+(.+)$/.exec(this.currentPath);
+    if (directScriptMatch) {
+      const scriptId = directScriptMatch[1];
+      
+      let startPos: [number, number] = [0, 0];
+      let endPos: [number, number] = [0, 0];
+      
+      // For direct script definitions, try to get position from the first relevant item
+      if (this.lineCounter && node.items.length > 0) {
+        for (const item of node.items) {
+          if (item && item.key && typeof item.key === "object" && item.key !== null && "range" in item.key && 
+              Array.isArray((item.key as any).range)) {
+            const range = (item.key as any).range as [number, number, number];
+            const startOffset = range[0];
+            const endOffset = range[2] || range[1];
+            
+            const startLinePos = this.lineCounter.linePos(startOffset);
+            const endLinePos = this.lineCounter.linePos(endOffset);
+            
+            // Convert from 1-indexed to 0-indexed positions as expected by VS Code
+            startPos = [startLinePos.line - 1, startLinePos.col - 1];
+            endPos = [endLinePos.line - 1, endLinePos.col - 1];
+            break; // Use the first item with a range
+          }
         }
       }
+      
+      this.scripts[scriptId] = {
+        fileUri: vscodeUri.URI.file(filepath).toString(),
+        start: startPos,
+        end: endPos,
+      };
+      
+      return;
     }
-  }
+    
+    // Handle regular script section (script:)
+    for (const item of node.items) {
+      const isNamed = item.value && isMap(item.value);
+      const filename = path.parse(filepath).base.replace(".yaml", "");
 
-  /**
-   * This function is copied from the YAML library, as it is not exposed.
-   *
-   * @source https://github.com/eemeli/yaml/blob/master/src/cst/source-utils.js
-   */
-  private findLineStarts(src: string): number[] {
-    const ls = [0];
-    let offset = src.indexOf("\n");
-    while (offset !== -1) {
-      offset += 1;
-      ls.push(offset);
-      offset = src.indexOf("\n", offset);
-    }
-    return ls;
-  }
-
-  /**
-   * Get YAML source information.
-   *
-   * This function is copied from the YAML library, as it is not exposed.
-   *
-   * @source https://github.com/eemeli/yaml/blob/master/src/cst/source-utils.js
-   */
-  private getSrcInfo(cst: string | ParsedCST | CST.Document | CST.Document[]) {
-    let lineStarts;
-    let src;
-    if (typeof cst === "string") {
-      lineStarts = this.findLineStarts(cst);
-      src = cst;
-    } else {
-      if (Array.isArray(cst)) {
-        cst = cst[0];
+      let key: string;
+      if (isNamed && item.key && isScalar(item.key)) {
+        key = item.key.toJSON();
+      } else {
+        key = filename;
       }
 
-      if (cst && cst.context) {
-        lineStarts = this.findLineStarts(cst.context.src);
-        src = cst.context.src;
+      if (isPair(item)) {
+        let startPos: [number, number] = [0, 0];
+        let endPos: [number, number] = [0, 0];
+
+        // Get position from range property if available and line counter exists
+        if (this.lineCounter && item.key && typeof item.key === "object" && item.key !== null && "range" in item.key && Array.isArray((item.key as any).range)) {
+          const range = (item.key as any).range as [number, number, number];
+          const startOffset = range[0];
+          const endOffset = range[2] || range[1];
+          
+          const startLinePos = this.lineCounter.linePos(startOffset);
+          const endLinePos = this.lineCounter.linePos(endOffset);
+          
+          // Convert from 1-indexed to 0-indexed positions as expected by VS Code
+          startPos = [startLinePos.line - 1, startLinePos.col - 1];
+          endPos = [endLinePos.line - 1, endLinePos.col - 1];
+        }
+
+        this.scripts[key] = {
+          fileUri: vscodeUri.URI.file(filepath).toString(),
+          start: startPos,
+          end: endPos,
+        };
       }
     }
-    return { lineStarts, src };
-  }
-
-  /**
-   * Determine the line/col position matching a character offset.
-   *
-   * Accepts a source string or a CST document as the second parameter. With
-   * the latter, starting indices for lines are cached in the document as
-   * `lineStarts: number[]`.
-   *
-   * Returns a one-indexed `{ line, col }` location if found, or
-   * `undefined` otherwise.
-   *
-   * This function is copied from the YAML library, as it is not exposed.
-   *
-   * @source https://github.com/eemeli/yaml/blob/master/src/cst/source-utils.js
-   */
-  private getLinePos(
-    offset: number,
-    cst: string | ParsedCST | undefined,
-  ): LinePos | null {
-    if (typeof offset !== "number" || offset < 0) {
-      return null;
-    }
-
-    if (cst === undefined) {
-      return null;
-    }
-
-    const { lineStarts, src } = this.getSrcInfo(cst);
-    if (!lineStarts || !src || offset > src.length) {
-      return null;
-    }
-
-    // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < lineStarts.length; ++i) {
-      const start = lineStarts[i];
-      if (offset < start) {
-        return { line: i, col: offset - lineStarts[i - 1] + 1 };
-      }
-      if (offset === start) return { line: i + 1, col: 1 };
-    }
-    const line = lineStarts.length;
-    return { line, col: offset - lineStarts[line - 1] + 1 };
   }
 }
 

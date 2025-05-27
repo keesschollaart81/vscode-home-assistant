@@ -1,6 +1,10 @@
 export type Area = string;
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/light/const.py
+ */
 export type ColorMode =
+  | "unknown"
   | "onoff"
   | "brightness"
   | "color_temp"
@@ -8,11 +12,12 @@ export type ColorMode =
   | "xy"
   | "rgb"
   | "rgbw"
-  | "rgbww";
+  | "rgbww"
+  | "white";
 
-export type Data = {
+export interface Data {
   [key: string]: any | Template;
-};
+}
 
 /**
  * @TJS-pattern DEPRECATED^
@@ -87,15 +92,18 @@ export type DeviceClassesCover =
 export type DeviceClassesMediaPlayer = "tv" | "speaker" | "receiver";
 
 /**
- * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/const.py
  */
 export type DeviceClassesSensor =
   | "apparent_power"
   | "aqi"
+  | "area"
   | "atmospheric_pressure"
   | "battery"
+  | "blood_glucose_concentration"
   | "carbon_dioxide"
   | "carbon_monoxide"
+  | "conductivity"
   | "current"
   | "data_rate"
   | "data_size"
@@ -103,6 +111,7 @@ export type DeviceClassesSensor =
   | "distance"
   | "duration"
   | "energy"
+  | "energy_distance"
   | "energy_storage"
   | "enum"
   | "frequency"
@@ -116,6 +125,7 @@ export type DeviceClassesSensor =
   | "nitrogen_monoxide"
   | "nitrous_oxide"
   | "ozone"
+  | "ph"
   | "pm1"
   | "pm10"
   | "pm25"
@@ -127,21 +137,27 @@ export type DeviceClassesSensor =
   | "reactive_power"
   | "signal_strength"
   | "sound_pressure"
+  | "speed"
   | "sulphur_dioxide"
   | "temperature"
   | "timestamp"
   | "volatile_organic_compounds"
+  | "volatile_organic_compounds_parts"
   | "voltage"
   | "volume"
+  | "volume_flow_rate"
   | "volume_storage"
   | "water"
   | "weight"
   | "wind_speed";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/const.py
+ */
 export type EntityCategory = "config" | "diagnostic";
 
 /**
- * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/__init__.py
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/sensor/const.py
  */
 export type StateClassesSensor = "measurement" | "total" | "total_increasing";
 
@@ -159,246 +175,267 @@ export type Domain = string;
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)$
  * @items.pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)$
  */
-export type Domains = string[];
+export type Domains = Domain[];
+
+/**
+ * @TJS-pattern ^(?!_)[\da-z_]+(?<!_)$
+ */
+type EntitySuffix = string;
 
 /**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
  */
-export type Entity = string;
+export type Entity = `${Domain}.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^(?!.+__)(?!_)[\da-z_]+(?<!_)\.(?!_)[\da-z_]+(?<!_)$
  */
-export type Entities = string | string[];
+export type Entities = Entity | Entity[];
 
 /**
  * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
  */
-export type AlarmControlPanelEntity = string;
+export type AlarmControlPanelEntity = `alarm_control_panel.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?alarm_control_panel\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^alarm_control_panel\.(?!_)[\da-z_]+(?<!_)$
  */
-export type AlarmControlPanelEntities = string | string[];
+export type AlarmControlPanelEntities =
+  | AlarmControlPanelEntity
+  | AlarmControlPanelEntity[];
 
 /**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
-export type DeviceTrackerEntity = string;
+export type DeviceTrackerEntity = `device_tracker.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?device_tracker\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^device_tracker\.(?!_)[\da-z_]+(?<!_)$
  */
-export type DeviceTrackerEntities = string | string[];
+export type DeviceTrackerEntities = DeviceTrackerEntity | DeviceTrackerEntity[];
 
 /**
  * @TJS-pattern ^calendar\.(?!_)[\da-z_]+(?<!_)$
  */
-export type CalendarEntity = string;
+export type CalendarEntity = `calendar.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^calendar\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?calendar\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^calendar\.(?!_)[\da-z_]+(?<!_)$
  */
-export type CalendaraEntities = string | string[];
+export type CalendarEntities = CalendarEntity | CalendarEntity[];
 
 /**
  * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)$
  */
-export type CameraEntity = string;
+export type CameraEntity = `camera.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^camera\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?camera\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^camera\.(?!_)[\da-z_]+(?<!_)$
  */
-export type CameraEntities = string | string[];
+export type CameraEntities = CameraEntity | CameraEntity[];
 
 /**
  * @TJS-pattern ^climate\.(?!_)[\da-z_]+(?<!_)$
  */
-export type ClimateEntity = string;
+export type ClimateEntity = `climate.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^climate\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?climate\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^climate\.(?!_)[\da-z_]+(?<!_)$
  */
-export type ClimateEntities = string | string[];
+export type ClimateEntities = ClimateEntity | ClimateEntity[];
 
 export type Floor = string;
 
 /**
  * @TJS-pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)$
  */
-export type GeoLocationEntity = string;
+export type GeoLocationEntity = `geo_location.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?geo_location\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^geo_location\.(?!_)[\da-z_]+(?<!_)$
  */
-export type GeoLocationEntities = string | string[];
+export type GeoLocationEntities = GeoLocationEntity | GeoLocationEntity[];
 
 /**
  * @TJS-pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)$
  */
-export type HumidifierEntity = string;
+export type HumidifierEntity = `humidifier.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?humidifier\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^humidifier\.(?!_)[\da-z_]+(?<!_)$
  */
-export type HumidifierEntities = string | string[];
+export type HumidifierEntities = HumidifierEntity | HumidifierEntity[];
+
+type InputDomains =
+  | "input_select"
+  | "input_text"
+  | "input_number"
+  | "input_boolean"
+  | "input_datetime";
 
 /**
  * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$"
  */
-export type InputEntity = string;
+export type InputEntity = `${InputDomains}.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^input_(?:select|text|number|boolean|datetime)\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputEntities = string | string[];
+export type InputEntities = InputEntity | InputEntity[];
 
 /**
  * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputDatetimeEntity = string;
+export type InputDatetimeEntity = `input_datetime.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_datetime\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^input_datetime\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputDatetimeEntities = string | string[];
+export type InputDatetimeEntities = InputDatetimeEntity | InputDatetimeEntity[];
 
 /**
  * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputNumberEntity = string;
+export type InputNumberEntity = `input_number.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^input_number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?input_number\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^input_number\.(?!_)[\da-z_]+(?<!_)$
  */
-export type InputNumberEntities = string | string[];
+export type InputNumberEntities = InputNumberEntity | InputNumberEntity[];
 
 export type Label = string;
 
 /**
  * @TJS-pattern ^light\.(?!_)[\da-z_]+(?<!_)$
  */
-export type LightEntity = string;
+export type LightEntity = `light.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^light\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?light\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^light\.(?!_)[\da-z_]+(?<!_)$
  */
-export type LightEntities = string | string[];
+export type LightEntities = LightEntity | LightEntity[];
 
 /**
  * @TJS-pattern ^media_player\.(?!_)[\da-z_]+(?<!_)$
  */
-export type MediaPlayerEntity = string;
+export type MediaPlayerEntity = `media_player.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^media_player\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?media_player\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^media_player\.(?!_)[\da-z_]+(?<!_)$
  */
-export type MediaPlayerEntities = string | string[];
+export type MediaPlayerEntities = MediaPlayerEntity | MediaPlayerEntity[];
 
 /**
  * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)$
  */
-export type NumberEntity = string;
+export type NumberEntity = `number.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^number\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?number\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^number\.(?!_)[\da-z_]+(?<!_)$
  */
-export type NumberEntities = string | string[];
+export type NumberEntities = NumberEntity | NumberEntity[];
 
 /**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
-export type PersonEntity = string;
+export type PersonEntity = `person.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^person\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?person\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^person\.(?!_)[\da-z_]+(?<!_)$
  */
-export type PersonEntities = string | string[];
+export type PersonEntities = PersonEntity | PersonEntity[];
 
 /**
  * @TJS-pattern ^plant\.(?!_)[\da-z_]+(?<!_)$
  */
-export type PlantEntity = string;
+export type PlantEntity = `plant.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^plant\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?plant\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^plant\.(?!_)[\da-z_]+(?<!_)$
  */
-export type PlantEntities = string | string[];
+export type PlantEntities = PlantEntity | PlantEntity[];
 
 /**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
  */
-export type SceneEntity = string;
+export type SceneEntity = `scene.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^scene\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?scene\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^scene\.(?!_)[\da-z_]+(?<!_)$
  */
-export type SceneEntities = string | string[];
+export type SceneEntities = SceneEntity | SceneEntity[];
 
 /**
  * @TJS-pattern ^sensor\.(?!_)[\da-z_]+(?<!_)$
  */
-export type SensorEntity = string;
+export type SensorEntity = `sensor.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^sensor\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?sensor\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^sensor\.(?!_)[\da-z_]+(?<!_)$
  */
-export type SensorEntities = string | string[];
+export type SensorEntities = SensorEntity | SensorEntity[];
 
 /**
  * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)$
  */
-export type WeatherEntity = string;
+export type WeatherEntity = `weather.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?weather\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^weather\.(?!_)[\da-z_]+(?<!_)$
  */
-export type WeatherEntities = string | string[];
+export type WeatherEntities = WeatherEntity | WeatherEntity[];
 
 /**
  * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)$
  */
-export type ZoneEntity = string;
+export type ZoneEntity = `zone.${EntitySuffix}`;
 
 /**
  * @TJS-pattern ^zone\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?zone\.(?!_)[\da-z_]+(?<!_))*$
  * @items.pattern ^zone\.(?!_)[\da-z_]+(?<!_)$
  */
-export type ZoneEntities = string | string[];
+export type ZoneEntities = ZoneEntity | ZoneEntity[];
+
+type WhitespaceCharacter = " " | "\r" | "\n" | "\t" | "\f" | "\v";
+type YamlFileExtension = ".yaml" | ".yml";
 
 /**
  * @TJS-pattern ^\!include\s.+\.y?aml$
  */
-export type Include = string;
+export type Include =
+  `!include${WhitespaceCharacter}${string}${YamlFileExtension}`;
+
+type IncludeDir = "include_dir" | "include_dir_merge";
 
 /**
  * @TJS-pattern ^\!(include_dir(_merge)?_list\s.+(?<!\.yaml|\.yml)|include\s.+\.y?aml)$
  */
-export type IncludeList = string;
+export type IncludeList = `!${IncludeDir}_list${WhitespaceCharacter}${string}`;
 
 /**
  * @TJS-pattern ^\!(include_dir(_merge)?_named\s.+(?<!\.yaml|\.yml)|include\s.+\.y?aml)$
  */
-export type IncludeNamed = string;
+export type IncludeNamed =
+  `!${IncludeDir}_named${WhitespaceCharacter}${string}`;
 
 /**
  * @TJS-type integer
@@ -426,18 +463,18 @@ export type Template = string;
  *
  * @TJS-pattern \{(?:[%\{#])
  */
-export type DynamicTemplate = string;
+export type DynamicTemplate = `{${"{" | "%" | "#"}${string}`;
 
 /**
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)$
  */
-export type Time = string;
+export type Time = `${number}:${number}:${number}`;
 
 /**
  * @TJS-pattern ^(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?$
  * @items.pattern ^(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?$
  */
-export type Times = string | string[];
+export type Times = Time | Time[];
 
 export type TimePeriod = string | TimePeriodSeconds | TimePeriodMap;
 
@@ -1536,7 +1573,15 @@ export type TimeZone =
   | "Zulu";
 
 export type UnitSystem = "metric" | "imperial";
+
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/const.py
+ */
 export type TemperatureUnit = "°C" | "°F" | "K";
+
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/const.py
+ */
 export type PressureUnit =
   | "Pa"
   | "hPa"
@@ -1579,6 +1624,9 @@ export type SupportedFeature =
   | SupportedFeatureVacuum
   | SupportedFeatureWeather;
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/alarm_control_panel/const.py
+ */
 export type SupportedFeatureAlarmControlPanel =
   | "camera.AlarmControlPanelEntityFeature.ARM_HOME"
   | "camera.AlarmControlPanelEntityFeature.ARM_AWAY"
@@ -1587,10 +1635,16 @@ export type SupportedFeatureAlarmControlPanel =
   | "camera.AlarmControlPanelEntityFeature.ARM_CUSTOM_BYPASS"
   | "camera.AlarmControlPanelEntityFeature.ARM_VACATION";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/camera/__init__.py
+ */
 export type SupportedFeatureCamera =
   | "camera.CameraEntityFeature.ON_OFF"
   | "camera.CameraEntityFeature.STREAM";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/climate/const.py
+ */
 export type SupportedFeatureClimate =
   | "climate.ClimateEntityFeature.TARGET_TEMPERATURE"
   | "climate.ClimateEntityFeature.TARGET_TEMPERATURE_RANGE"
@@ -1598,8 +1652,14 @@ export type SupportedFeatureClimate =
   | "climate.ClimateEntityFeature.FAN_MODE"
   | "climate.ClimateEntityFeature.PRESET_MODE"
   | "climate.ClimateEntityFeature.SWING_MODE"
-  | "climate.ClimateEntityFeature.AUX_HEAT";
+  | "climate.ClimateEntityFeature.AUX_HEAT"
+  | "climate.ClimateEntityFeature.TURN_OFF"
+  | "climate.ClimateEntityFeature.TURN_ON"
+  | "climate.ClimateEntityFeature.SWING_HORIZONTAL_MODE";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/cover/__init__.py
+ */
 export type SupportedFeatureCover =
   | "cover.CoverEntityFeature.OPEN"
   | "cover.CoverEntityFeature.CLOSE"
@@ -1610,19 +1670,33 @@ export type SupportedFeatureCover =
   | "cover.CoverEntityFeature.STOP_TILT"
   | "cover.CoverEntityFeature.SET_TILT_POSITION";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/fan/__init__.py
+ */
 export type SupportedFeatureFan =
   | "fan.FanEntityFeature.SET_SPEED"
   | "fan.FanEntityFeature.OSCILLATE"
   | "fan.FanEntityFeature.DIRECTION"
-  | "fan.FanEntityFeature.PRESET_MODE";
+  | "fan.FanEntityFeature.PRESET_MODE"
+  | "fan.FanEntityFeature.TURN_OFF"
+  | "fan.FanEntityFeature.TURN_ON";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/light/const.py
+ */
 export type SupportedFeatureLight =
   | "light.LightEntityFeature.EFFECT"
   | "light.LightEntityFeature.FLASH"
   | "light.LightEntityFeature.TRANSITION";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/lock/__init__.py
+ */
 export type SupportedFeatureLock = "lock.LockEntityFeature.OPEN";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/update/const.py
+ */
 export type SupportedFeatureUpdate =
   | "update.UpdateEntityFeature.INSTALL"
   | "update.UpdateEntityFeature.SPECIFIC_VERSION"
@@ -1630,15 +1704,18 @@ export type SupportedFeatureUpdate =
   | "update.UpdateEntityFeature.BACKUP"
   | "update.UpdateEntityFeature.RELEASE_NOTES";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/vacuum/__init__.py
+ */
 export type SupportedFeatureVacuum =
-  | "vacuum.VacuumEntityFeature.TURN_ON"
-  | "vacuum.VacuumEntityFeature.TURN_OFF"
+  | "vacuum.VacuumEntityFeature.TURN_ON" /**@deprecated not supported by StateVacuumEntity */
+  | "vacuum.VacuumEntityFeature.TURN_OFF" /**@deprecated not supported by StateVacuumEntity */
   | "vacuum.VacuumEntityFeature.PAUSE"
   | "vacuum.VacuumEntityFeature.STOP"
   | "vacuum.VacuumEntityFeature.RETURN_HOME"
   | "vacuum.VacuumEntityFeature.FAN_SPEED"
   | "vacuum.VacuumEntityFeature.BATTERY"
-  | "vacuum.VacuumEntityFeature.STATUS"
+  | "vacuum.VacuumEntityFeature.STATUS" /**@deprecated not supported by StateVacuumEntity */
   | "vacuum.VacuumEntityFeature.SEND_COMMAND"
   | "vacuum.VacuumEntityFeature.LOCATE"
   | "vacuum.VacuumEntityFeature.CLEAN_SPOT"
@@ -1646,6 +1723,9 @@ export type SupportedFeatureVacuum =
   | "vacuum.VacuumEntityFeature.STATE"
   | "vacuum.VacuumEntityFeature.START";
 
+/**
+ * From: https://github.com/home-assistant/core/blob/dev/homeassistant/components/weather/const.py
+ */
 export type SupportedFeatureWeather =
   | "weather.WeatherEntityFeature.FORECAST_DAILY"
   | "weather.WeatherEntityFeature.FORECAST_HOURLY"

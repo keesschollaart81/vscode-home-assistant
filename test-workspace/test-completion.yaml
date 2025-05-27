@@ -1,0 +1,11 @@
+
+# Test service data completion
+automation:
+  - alias: Test Service Data Completion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.motion
+    action:
+      - service: light.turn_on
+        data:
+          

@@ -283,7 +283,7 @@ export interface RepeatAction {
      * This repeat form accepts a list of items to iterate over. The list of items can be a pre-defined list, or a list created by a template.
      * https://www.home-assistant.io/docs/scripts/#for-each
      */
-    for_each?: Data | Template | Template[];
+    for_each?: Data[] | Template | Template[];
 
     /**
      * The sequence of actions to be repeatedly performed in the script.
@@ -420,36 +420,36 @@ export interface ServiceAction {
    */
   target?:
     | {
-        /**
+      /**
          * The entity (or entities) to execute this service call on.
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
-        entity_id?: Entities | "all" | "none" | null | Template;
+      entity_id?: Entities | "all" | "none" | null | Template;
 
-        /**
+      /**
          * The device (or devices) to execute this service call on.
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
-        device_id?: string | string[] | "none" | Template;
+      device_id?: string | string[] | "none" | Template;
 
-        /**
+      /**
          * The area (or areas) to execute this service call on.
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
-        area_id?: Area | Area[] | "none";
+      area_id?: Area | Area[] | "none";
 
-        /**
+      /**
          * The floor (or floors) to execute this service call on.
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
-        floor_id?: Floor | Floor[] | "none";
+      floor_id?: Floor | Floor[] | "none";
 
-        /**
+      /**
          * The labels (or labels) to execute this service call on.
          * https://www.home-assistant.io/docs/scripts/service-calls
          */
-        label_id?: Label | Label[] | "none";
-      }
+      label_id?: Label | Label[] | "none";
+    }
     | Template;
 
   /**
