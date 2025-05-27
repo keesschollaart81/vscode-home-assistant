@@ -151,6 +151,9 @@ export class HaConnection implements IHaConnection {
   public onConnectionEstablished: ((info: { name?: string; version?: string }) => void) | undefined;
   public onConnectionFailed: ((error: string) => void) | undefined;
 
+  // Track the last entity count to avoid logging duplicate messages
+  private lastEntityCount: number | undefined;
+
   constructor(private configurationService: IConfigurationService) {}
 
   public tryConnect = async (): Promise<void> => {
@@ -703,7 +706,24 @@ export class HaConnection implements IHaConnection {
         
         // Subscribe to entities and resolve with the initial state
         subscribeEntities(this.connection, (entities) => {
-          console.log(`Got ${Object.keys(entities).length} entities from Home Assistant`);
+          const entityCount = Object.keys(entities).length;
+          
+          // Only log if the entity count has changed
+          if (this.lastEntityCount !== entityCount) {
+            if (this.lastEntityCount === undefined) {
+              // Initial load
+              console.log(`Got ${entityCount} entities from Home Assistant`);
+            } else {
+              const diff = entityCount - this.lastEntityCount;
+              if (diff > 0) {
+                console.log(`Got ${diff} new entities from Home Assistant (total: ${entityCount})`);
+              } else {
+                console.log(`${Math.abs(diff)} entities have been removed from Home Assistant (total: ${entityCount})`);
+              }
+            }
+            this.lastEntityCount = entityCount;
+          }
+          
           resolve(entities);
         });
       },
