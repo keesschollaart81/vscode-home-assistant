@@ -30,6 +30,12 @@ export interface InternalIntegrations {
     | IncludeList;
 
   /**
+   * The alert integration is designed to notify you when problematic issues arise.
+   * https://www.home-assistant.io/integrations/alert
+   */
+  alert?: integrations.Core.Alert.Schema | IncludeNamed | null;
+
+  /**
    * Automations offer the capability to call a service based on a simple or complex trigger. Automation allows a condition such as a sunset to cause an event, such as a light turning on.
    * https://www.home-assistant.io/docs/automation/
    */
