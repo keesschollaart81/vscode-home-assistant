@@ -226,14 +226,58 @@ connection.onInitialize((params) => {
     connection.sendNotification("get_eror_log_completed", result);
   });
   connection.onRequest("renderTemplate", async (args: { template: string }) => {
-    const result = await haConnection.callApi("post", "template", {
-      template: args.template,
-      strict: true,
-    });
-
     const timePrefix = `[${new Date().toLocaleTimeString()}] `;
     let outputString = `${timePrefix}Rendering template:\n${args.template}\n\n`;
-    outputString += `Result:\n${result}`;
+    
+    try {
+      const result = await haConnection.callApi("post", "template", {
+        template: args.template,
+        strict: true,
+      });
+      
+      // Check if the result is an error object
+      if (result && typeof result === "object") {
+        if (result.error) {
+          // Direct error message
+          outputString += `Error:\n${result.error}`;
+        } else if (result.message) {
+          // Error message in message field
+          outputString += `Error:\n${result.message}`;
+        } else if (Object.keys(result).length > 0) {
+          // For other types of error objects, get a formatted representation
+          const errorMessage = JSON.stringify(result, null, 2);
+          outputString += `Error:\n${errorMessage}`;
+        } else {
+          // Just a string representation as fallback
+          outputString += `Result:\n${result}`;
+        }
+      } else {
+        outputString += `Result:\n${result}`;
+      }
+    } catch (error) {
+      // Handle API errors or exceptions
+      let errorMessage = "Unknown error occurred";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === "object" && error !== null) {
+        try {
+          // Try to convert error object to a readable string
+          errorMessage = JSON.stringify(error, null, 2);
+        } catch {
+          // If JSON conversion fails, try to extract properties
+          if ("message" in error) {
+            errorMessage = error.message;
+          } else if ("toString" in error && typeof error.toString === "function") {
+            errorMessage = error.toString();
+          }
+        }
+      } else if (typeof error === "string") {
+        errorMessage = error;
+      }
+      
+      outputString += `Error:\n${errorMessage}`;
+    }
 
     connection.sendNotification("render_template_completed", outputString);
   });

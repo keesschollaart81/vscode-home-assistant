@@ -1102,7 +1102,6 @@ export class HaConnection implements IHaConnection {
   public callApi = async (
     method: Method,
     api: string,
-
     requestBody?: any,
   ): Promise<any> => {
     try {
@@ -1117,7 +1116,33 @@ export class HaConnection implements IHaConnection {
 
       return resp.data;
     } catch (error) {
-      console.error(error);
+      console.error(`Error calling API ${api}:`, error);
+      
+      // Extract error information for better error messages
+      if (error.response) {
+        // The request was made and the server responded with a status code outside of 2xx range
+        console.error(`Response status: ${error.response.status}`);
+        console.error(`Response data:`, error.response.data);
+        
+        // Return the error data to allow the caller to handle it
+        return error.response.data;
+      } else if (error.request) {
+        // The request was made but no response was received
+        return { error: "No response received from Home Assistant" };
+      } else {
+        // Something happened in setting up the request
+        if (typeof error === "object" && error !== null) {
+          if (error.message) {
+            return { error: error.message };
+          }
+          try {
+            return { error: JSON.stringify(error) };
+          } catch {
+            return { error: "Unknown error occurred" };
+          }
+        }
+        return { error: String(error) };
+      }
     }
     return Promise.resolve("");
   };
