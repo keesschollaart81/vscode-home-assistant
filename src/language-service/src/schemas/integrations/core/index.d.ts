@@ -24,6 +24,7 @@ export * as KNX from "./knx";
 export * as Light from "./light";
 export * as Lock from "./lock";
 export * as Lovelace from "./lovelace";
+export * as Modbus from "./modbus";
 export * as MQTT from "./mqtt";
 export * as MQTTEventstream from "./mqtt_eventstream";
 export * as MQTTStatestream from "./mqtt_statestream";
