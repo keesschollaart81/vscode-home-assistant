@@ -203,19 +203,18 @@ export class AuthMiddleware {
               : `${token.substring(0, 5)}...${token.substring(token.length - 5)}`;
             AuthMiddleware.log(`Using token (obscured): ${obscuredToken}`);
 
-            if (!secretToken && (settingsToken || envToken)) {
-              AuthMiddleware.log("Token was found in settings or environment but not in SecretStorage, attempting migration");
+            // Only migrate from settings, not from environment variables
+            if (!secretToken && settingsToken) {
+              AuthMiddleware.log("Token was found in settings but not in SecretStorage, attempting migration");
               try {
                 await AuthManager.storeToken(this.context, token);
-                if (settingsToken) {
-                  await config.update("longLivedAccessToken", undefined, vscode.ConfigurationTarget.Global);
-                  AuthMiddleware.log("Successfully migrated token from settings.json to SecretStorage");
-                } else {
-                  AuthMiddleware.log("Using environment token, copied to SecretStorage for future use");
-                }
+                await config.update("longLivedAccessToken", undefined, vscode.ConfigurationTarget.Global);
+                AuthMiddleware.log("Successfully migrated token from settings.json to SecretStorage");
               } catch (error) {
                 AuthMiddleware.log(`Failed to migrate token to SecretStorage: ${error.message}`);
               }
+            } else if (!secretToken && envToken) {
+              AuthMiddleware.log("Using environment token");
             }
           } else {
             AuthMiddleware.log("WARNING: No token found in SecretStorage, environment, or settings for configuration item");
@@ -313,20 +312,18 @@ export class AuthMiddleware {
             }
           }
           
-          // If the token was from settings.json or environment, migrate it to SecretStorage
-          if (!secretToken && (settingsToken || envToken)) {
-            AuthMiddleware.log("Token was found in settings or environment but not in SecretStorage, attempting migration");
+          // Only migrate from settings, not from environment variables
+          if (!secretToken && settingsToken) {
+            AuthMiddleware.log("Token was found in settings but not in SecretStorage, attempting migration");
             try {
               await AuthManager.storeToken(this.context, token);
-              if (settingsToken) {
-                await config.update("longLivedAccessToken", undefined, vscode.ConfigurationTarget.Global);
-                AuthMiddleware.log("Successfully migrated token from settings.json to SecretStorage");
-              } else {
-                AuthMiddleware.log("Using environment token, copied to SecretStorage for future use");
-              }
+              await config.update("longLivedAccessToken", undefined, vscode.ConfigurationTarget.Global);
+              AuthMiddleware.log("Successfully migrated token from settings.json to SecretStorage");
             } catch (error) {
               AuthMiddleware.log(`Failed to migrate token to SecretStorage: ${error.message}`);
             }
+          } else if (!secretToken && envToken) {
+            AuthMiddleware.log("Using environment token (not migrated to SecretStorage)");
           }
         } else {
           AuthMiddleware.log("WARNING: No token found in SecretStorage, environment, or settings for notification");
