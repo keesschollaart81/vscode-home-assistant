@@ -58,6 +58,13 @@ export class SchemaServiceForIncludes {
         sourceFileMappingPath = "configuration.yaml/automation";
       }
 
+      if (
+        sourceFileMappingPath.startsWith("groups" + path.sep) ||
+        sourceFileMappingPath === "groups.yaml"
+      ) {
+        sourceFileMappingPath = "configuration.yaml/group";
+      }
+
       if (sourceFileMappingPath.startsWith("custom_sentences" + path.sep)) {
         sourceFileMappingPath = "custom_sentences.yaml";
       }

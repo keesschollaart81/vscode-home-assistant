@@ -1,0 +1,75 @@
+# Test file for group platform configurations specifically
+# This tests the platform: group configurations
+
+# Switch platform group
+switch:
+  - platform: group
+    name: "Entertainment System"
+    entities:
+      - switch.tv
+      - switch.soundbar
+    all: false
+    unique_id: entertainment_switch_group
+
+# Sensor platform group
+sensor:
+  - platform: group
+    name: "Average Temperature"
+    type: mean
+    entities:
+      - sensor.temperature_kitchen
+      - sensor.temperature_hallway
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    ignore_non_numeric: false
+    unique_id: avg_temperature_group
+
+# Light platform group
+light:
+  - platform: group
+    name: "Kitchen Lights"
+    entities:
+      - light.kitchen_ceiling_lights
+      - light.kitchen_under_cabinet_lights
+    all: true
+    unique_id: kitchen_lights_group
+
+# Cover platform group  
+cover:
+  - platform: group
+    name: "Window Covers"
+    device_class: window
+    entities:
+      - cover.hall_window
+      - cover.living_room_window
+    unique_id: window_covers_group
+
+# Fan platform group
+fan:
+  - platform: group
+    name: "Downstairs Fans"
+    entities:
+      - fan.lanai_west
+      - fan.lanai_south
+    unique_id: downstairs_fans_group
+
+# Lock platform group
+lock:
+  - platform: group
+    name: "House Locks"
+    entities:
+      - lock.front_door
+      - lock.back_door
+    unique_id: house_locks_group
+
+# Binary sensor platform group
+binary_sensor:
+  - platform: group
+    name: "Patio Doors"
+    device_class: opening
+    entities:
+      - binary_sensor.door_left_contact
+      - binary_sensor.door_right_contact
+    all: false
+    unique_id: patio_doors_group

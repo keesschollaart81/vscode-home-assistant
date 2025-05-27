@@ -4,6 +4,7 @@
  */
 import { IncludeList } from "../../types";
 import { PlatformSchema } from "../platform";
+import { CoverPlatformSchema as GroupPlatformSchema } from "./group";
 import { CoverPlatformSchema as TemplatePlatformSchema } from "./template";
 
 export type Domain = "cover";
@@ -15,9 +16,9 @@ export type File = Item | Item[];
  */
 interface OtherPlatform extends PlatformSchema {
   /**
-   * @TJS-pattern ^(?!(template)$)\w+$
+   * @TJS-pattern ^(?!(group|template)$)\w+$
    */
   platform: string;
 }
 
-type Item = TemplatePlatformSchema | OtherPlatform;
+type Item = GroupPlatformSchema | TemplatePlatformSchema | OtherPlatform;
