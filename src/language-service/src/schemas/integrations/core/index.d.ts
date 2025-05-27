@@ -6,6 +6,7 @@ export * as Blueprint from "./blueprint";
 export * as Camera from "./camera";
 export * as Climate from "./climate";
 export * as Cloud from "./cloud";
+export * as Compensation from "./compensation";
 export * as Conversation from "./conversation";
 export * as Counter from "./counter";
 export * as Cover from "./cover";

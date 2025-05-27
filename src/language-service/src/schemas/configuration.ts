@@ -257,6 +257,12 @@ export interface CoreIntegrations {
   cloud?: integrations.Core.Cloud.Schema | IncludeNamed | null;
 
   /**
+   * The Compensation integration consumes the state from other sensors. It exports the compensated value as state in a separate entity.
+   * https://www.home-assistant.io/integrations/compensation/
+   */
+  compensation?: integrations.Core.Compensation.Schema | IncludeNamed;
+
+  /**
    * The KNX integration for Home Assistant allows you to connect to KNX/IP devices.
    * https://www.home-assistant.io/integrations/knx
    */
