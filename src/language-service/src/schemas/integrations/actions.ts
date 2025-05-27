@@ -283,7 +283,7 @@ export interface RepeatAction {
      * This repeat form accepts a list of items to iterate over. The list of items can be a pre-defined list, or a list created by a template.
      * https://www.home-assistant.io/docs/scripts/#for-each
      */
-    for_each?: Data | Template | Template[];
+    for_each?: Data[] | Template | Template[];
 
     /**
      * The sequence of actions to be repeatedly performed in the script.
