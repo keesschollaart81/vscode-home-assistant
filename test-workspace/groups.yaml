@@ -1,0 +1,21 @@
+# Test groups.yaml file for entity autocompletion
+# This should provide entity suggestions in the entities list
+
+bedroom:
+  name: Bedroom
+  entities:
+    - light.bedroom_ceiling
+    - 
+
+kitchen:
+  name: Kitchen
+  entities:
+    - light.kitchen_ceiling
+    - switch.kitchen_outlet
+  all: false
+  icon: mdi:kitchen-set
+
+living_room:
+  name: Living Room
+  entities:
+    - 

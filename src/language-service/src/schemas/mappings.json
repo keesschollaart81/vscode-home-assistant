@@ -28,6 +28,13 @@
     "fromType": "File"
   },
   {
+    "key": "integration-group",
+    "path": "configuration.yaml/group",
+    "file": "integration-group.json",
+    "tsFile": "integrations/core/group.ts",
+    "fromType": "Schema"
+  },
+  {
     "key": "integration-http",
     "path": "configuration.yaml/http",
     "file": "integration-http.json",
