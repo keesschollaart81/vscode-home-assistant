@@ -227,6 +227,12 @@ export interface InternalIntegrations {
   template?: integrations.Core.Template.Schema | IncludeList;
 
   /**
+   * The timer integration aims to simplify automations based on (dynamic) durations.
+   * https://www.home-assistant.io/integrations/timer/
+   */
+  timer?: integrations.Core.Timer.Schema | IncludeNamed | null;
+
+  /**
    * The vacuum integration enables the ability to control home cleaning robots within Home Assistant.
    * https://www.home-assistant.io/integrations/vacuum
    */

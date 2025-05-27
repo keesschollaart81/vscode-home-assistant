@@ -1,0 +1,17 @@
+# Example configuration for testing the timer integration
+timer:
+  laundry:
+    duration: "00:01:00"
+    icon: mdi:washing-machine
+    restore: true
+    name: Laundry Timer
+    
+  cooking:
+    name: Cooking Timer
+    duration: "00:30:00"
+    restore: false
+
+  meditation:
+    duration: 300 # 5 minutes in seconds
+    icon: mdi:meditation
+    name: Meditation Timer
