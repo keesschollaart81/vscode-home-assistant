@@ -1,4 +1,5 @@
 export * as AlarmControlPanel from "./alarm_control_panel";
+export * as Alert from "./alert";
 export * as Automation from "./automation";
 export * as BinarySensor from "./binary_sensor";
 export * as Blueprint from "./blueprint";
