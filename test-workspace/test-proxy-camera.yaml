@@ -1,0 +1,24 @@
+# Test file for camera proxy integration
+camera:
+  - platform: proxy
+    entity_id: camera.front_door
+    name: "Front Door Proxy"
+    mode: resize
+    max_image_width: 720
+    max_stream_width: 360
+    image_quality: 75
+    image_refresh_rate: 5.0
+    force_resize: true
+    cache_images: true
+  
+  - platform: proxy
+    entity_id: camera.backyard
+    name: "Backyard Crop"
+    mode: crop
+    max_image_width: 480
+    max_image_height: 320
+    max_stream_width: 480
+    max_stream_height: 320
+    image_left: 100
+    image_top: 50
+    stream_quality: 80
