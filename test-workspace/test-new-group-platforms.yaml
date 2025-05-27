@@ -1,0 +1,69 @@
+# Test file for all group platform configurations including newly supported platforms
+
+# Button platform group
+button:
+  - platform: group
+    name: "Restart all ESPHome devices"
+    device_class: restart
+    entities:
+      - button.device_1_restart
+      - button.device_2_restart
+    unique_id: esphome_restart_group
+
+# Event platform group  
+event:
+  - platform: group
+    name: "Remote events"
+    entities:
+      - event.remote_button_1
+      - event.remote_button_2
+      - event.remote_button_3
+      - event.remote_button_4
+    unique_id: remote_events_group
+
+# Media player platform group
+media_player:
+  - platform: group
+    name: "Living Room Entertainment"
+    device_class: tv
+    entities:
+      - media_player.kitchen_tv
+      - media_player.living_room_tv
+    unique_id: entertainment_group
+
+# Notify platform group
+notify:
+  - platform: group
+    name: "My notification group"
+    services:
+      - action: html5
+        data:
+          target: "macbook"
+      - action: mobile_app_pauluus
+        data:
+          title: "Custom Title"
+          message: "Custom message"
+
+# Switch platform group (existing, but testing)
+switch:
+  - platform: group
+    name: "Entertainment System"
+    entities:
+      - switch.tv
+      - switch.soundbar
+    all: false
+    unique_id: entertainment_switch_group
+
+# Sensor platform group (existing, but testing)
+sensor:
+  - platform: group
+    name: "Average Temperature"
+    type: mean
+    entities:
+      - sensor.temperature_kitchen
+      - sensor.temperature_hallway
+    unit_of_measurement: "°C"
+    device_class: temperature
+    state_class: measurement
+    ignore_non_numeric: false
+    unique_id: avg_temperature_group
