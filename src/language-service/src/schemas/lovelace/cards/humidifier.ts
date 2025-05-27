@@ -8,6 +8,29 @@
 import { HumidifierEntity } from "../../types";
 import { ViewLayout } from "../types";
 
+interface FeatureBase {
+  type: string;
+  style?: "icons" | "dropdown";
+}
+
+interface TargetHumidityFeature {
+  type: "target-humidity";
+}
+
+interface HumidifierModesFeature extends FeatureBase {
+  type: "humidifier-modes";
+  modes?: string[];
+}
+
+interface HumidifierToggleFeature {
+  type: "humidifier-toggle";
+}
+
+type Feature =
+  | TargetHumidityFeature
+  | HumidifierModesFeature
+  | HumidifierToggleFeature;
+
 export interface Schema {
   /**
    * The Humidifier card lets you control and monitor humidifiers, dehumidifiers, and hygrostat devices.
@@ -37,4 +60,10 @@ export interface Schema {
    * Layout options for the view this card is in
    */
   view_layout?: ViewLayout;
+
+  /**
+   * A list of features to customize the card.
+   * https://www.home-assistant.io/dashboards/humidifier/#features
+   */
+  features?: Feature[];
 }
