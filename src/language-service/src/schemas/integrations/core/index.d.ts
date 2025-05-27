@@ -38,5 +38,6 @@ export * as Select from "./select";
 export * as Sensor from "./sensor";
 export * as Switch from "./switch";
 export * as Template from "./template";
+export * as Timer from "./timer";
 export * as Vacuum from "./vacuum";
 export * as Weather from "./weather";
