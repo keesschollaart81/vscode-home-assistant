@@ -485,19 +485,19 @@ interface Climate {
   fan_speed_address?: GroupAddresses;
 
   /**
+   * Fan speed group address data type. `percent` for DPT 5.001 and `step` for DPT 5.010.
+   * https://www.home-assistant.io/integrations/knx#climate
+   */
+  fan_speed_mode?: "percent" | "step";
+
+  /**
    * KNX group address for retrieving the percentage or step of the fan. DPT 5.001 or DPT 5.010
    * https://www.home-assistant.io/integrations/knx#fan_speed_state_address
    */
   fan_speed_state_address?: GroupAddresses;
 
   /**
-   * Fan speed group address data type. percent for DPT 5.001 and step for DPT 5.010.
-   * https://www.home-assistant.io/integrations/knx#climate
-   */
-  fan_speed_mode?: "percent" | "step";
-
-  /**
-   * The fan mode for the zero speed, either off or auto. This affects the fan modes displayed in the UI.
+   * The fan mode for the zero speed. This affects the fan modes displayed in the UI.
    * https://www.home-assistant.io/integrations/knx#climate
    */
 
@@ -642,6 +642,30 @@ interface Climate {
    * https://www.home-assistant.io/integrations/knx#setpoint_shift_state_address
    */
   setpoint_shift_state_address?: GroupAddresses;
+
+  /**
+   * KNX address for turning the (vertical) swing on/off. DPT 1
+   * https://www.home-assistant.io/integrations/knx#swing_address
+   */
+  swing_address?: GroupAddresses;
+
+  /**
+   * KNX address for turning the horizontal swing on/off. DPT 1
+   * https://www.home-assistant.io/integrations/knx#swing_horizontal_address
+   */
+  swing_horizontal_address?: GroupAddresses;
+
+  /**
+   * KNX address for gathering the current state (on/off) of the horizontal swing. DPT 1
+   * https://www.home-assistant.io/integrations/knx#swing_horizontal_state_address
+   */
+  swing_horizontal_state_address?: GroupAddresses;
+
+  /**
+   * KNX address for gathering the current state (on/off) of the (vertical) swing. DPT 1
+   * https://www.home-assistant.io/integrations/knx#swing_state_address
+   */
+  swing_state_address?: GroupAddresses;
 
   /**
    * KNX group address for setting target temperature. DPT 9.001
