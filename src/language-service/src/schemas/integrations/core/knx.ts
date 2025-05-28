@@ -11,6 +11,7 @@ import {
   EntityCategory,
   Integer,
   StateClassesSensor,
+  Template,
 } from "../../types";
 
 /**
@@ -432,7 +433,14 @@ interface Climate {
    * Overrides the supported controller modes.
    * https://www.home-assistant.io/integrations/knx#controller_modes
    */
-  controller_modes?: ("Off" | "Auto" | "Heat" | "Cool" | "Fan only" | "Dry")[];
+  controller_modes?: (
+    | "off"
+    | "auto"
+    | "heat"
+    | "cool"
+    | "fan_only"
+    | "dehumidification"
+  )[];
 
   /**
    * KNX address for HVAC controller status (in accordance with KNX AN 097/07 rev 3).
@@ -466,6 +474,37 @@ interface Climate {
   entity_category?: EntityCategory;
 
   /**
+   * The maximum amount of steps for the fan.
+   * https://www.home-assistant.io/integrations/knx#fan_max_step
+   */
+  fan_max_step?: number;
+
+  /**
+   * KNX group address for setting the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * https://www.home-assistant.io/integrations/knx#fan_speed_address
+   */
+  fan_speed_address?: GroupAddresses;
+
+  /**
+   * Fan speed group address data type. `percent` for DPT 5.001 and `step` for DPT 5.010.
+   * https://www.home-assistant.io/integrations/knx#climate
+   */
+  fan_speed_mode?: "percent" | "step";
+
+  /**
+   * KNX group address for retrieving the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * https://www.home-assistant.io/integrations/knx#fan_speed_state_address
+   */
+  fan_speed_state_address?: GroupAddresses;
+
+  /**
+   * The fan mode for the zero speed. This affects the fan modes displayed in the UI.
+   * https://www.home-assistant.io/integrations/knx#climate
+   */
+
+  fan_zero_mode?: "auto" | "off";
+
+  /**
    * KNX address for switching between heat/cool mode. DPT 1.100
    * https://www.home-assistant.io/integrations/knx#heat_cool_address
    */
@@ -476,6 +515,12 @@ interface Climate {
    * https://www.home-assistant.io/integrations/knx#heat_cool_state_address
    */
   heat_cool_state_address?: GroupAddresses;
+
+  /**
+   * KKNX address for reading current humidity. DPT 9.007
+   * https://www.home-assistant.io/integrations/knx#humidity_state_address
+   */
+  humidity_state_address?: GroupAddresses;
 
   /**
    * Override the minimum temperature.
@@ -553,7 +598,13 @@ interface Climate {
    * Overrides the supported operation modes.
    * https://www.home-assistant.io/integrations/knx#operation_modes
    */
-  operation_modes?: ("Auto" | "Comfort" | "Standby" | "Night" | "Frost")[];
+  operation_modes?: (
+    | "auto"
+    | "comfort"
+    | "standby"
+    | "economy"
+    | "building_protection"
+  )[];
 
   /**
    * KNX address for setpoint_shift. DPT 6.010 or DPT 9.002 based on setpoint_shift_mode
@@ -592,6 +643,30 @@ interface Climate {
    * https://www.home-assistant.io/integrations/knx#setpoint_shift_state_address
    */
   setpoint_shift_state_address?: GroupAddresses;
+
+  /**
+   * KNX address for turning the (vertical) swing on/off. DPT 1
+   * https://www.home-assistant.io/integrations/knx#swing_address
+   */
+  swing_address?: GroupAddresses;
+
+  /**
+   * KNX address for turning the horizontal swing on/off. DPT 1
+   * https://www.home-assistant.io/integrations/knx#swing_horizontal_address
+   */
+  swing_horizontal_address?: GroupAddresses;
+
+  /**
+   * KNX address for gathering the current state (on/off) of the horizontal swing. DPT 1
+   * https://www.home-assistant.io/integrations/knx#swing_horizontal_state_address
+   */
+  swing_horizontal_state_address?: GroupAddresses;
+
+  /**
+   * KNX address for gathering the current state (on/off) of the (vertical) swing. DPT 1
+   * https://www.home-assistant.io/integrations/knx#swing_state_address
+   */
+  swing_state_address?: GroupAddresses;
 
   /**
    * KNX group address for setting target temperature. DPT 9.001
@@ -748,19 +823,19 @@ interface ExposeTime {
 interface ExposeSensor {
   /**
    * Group address state or attribute updates will be sent to. GroupValueRead requests will be answered.
-   * https://www.home-assistant.io/integrations/knx#address
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
   address: GroupAddresses;
 
   /**
    * Attribute of the entity that shall be sent to the KNX bus. If not set (or None) the state will be sent.
-   * https://www.home-assistant.io/integrations/knx#attribute
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
   attribute?: string;
 
   /**
    * Minimum time in seconds between two sent telegrams.
-   * https://www.home-assistant.io/integrations/knx#cooldown
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    *
    * @minimum 0
    */
@@ -768,13 +843,13 @@ interface ExposeSensor {
 
   /**
    * Default value to send to the bus if the state or attribute value is None.
-   * https://www.home-assistant.io/integrations/knx#default
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
   default?: boolean | string | number;
 
   /**
    * Entity ID to be exposed.
-   * https://www.home-assistant.io/integrations/knx#entity_id
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
   entity_id: Entity;
 
@@ -789,6 +864,12 @@ interface ExposeSensor {
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
   type: ValueType | "binary" | "time" | "date" | "datetime";
+
+  /**
+   * A template to process the value before sending it to the KNX bus. The template has access to the entity state or attribute value as `value`.
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
+   */
+  value_template?: Template;
 }
 
 interface Fan {
