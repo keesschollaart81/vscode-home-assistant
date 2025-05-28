@@ -473,6 +473,37 @@ interface Climate {
   entity_category?: EntityCategory;
 
   /**
+   * The maximum amount of steps for the fan.
+   * https://www.home-assistant.io/integrations/knx#fan_max_step
+   */
+  fan_max_step?: number;
+
+  /**
+   * KNX group address for setting the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * https://www.home-assistant.io/integrations/knx#fan_speed_address
+   */
+  fan_speed_address?: GroupAddresses;
+
+  /**
+   * KNX group address for retrieving the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * https://www.home-assistant.io/integrations/knx#fan_speed_state_address
+   */
+  fan_speed_state_address?: GroupAddresses;
+
+  /**
+   * Fan speed group address data type. percent for DPT 5.001 and step for DPT 5.010.
+   * https://www.home-assistant.io/integrations/knx#climate
+   */
+  fan_speed_mode?: "percent" | "step";
+
+  /**
+   * The fan mode for the zero speed, either off or auto. This affects the fan modes displayed in the UI.
+   * https://www.home-assistant.io/integrations/knx#climate
+   */
+
+  fan_zero_mode?: "auto" | "off";
+
+  /**
    * KNX address for switching between heat/cool mode. DPT 1.100
    * https://www.home-assistant.io/integrations/knx#heat_cool_address
    */
