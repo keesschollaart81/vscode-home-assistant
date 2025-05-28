@@ -432,7 +432,14 @@ interface Climate {
    * Overrides the supported controller modes.
    * https://www.home-assistant.io/integrations/knx#controller_modes
    */
-  controller_modes?: ("Off" | "Auto" | "Heat" | "Cool" | "Fan only" | "Dry")[];
+  controller_modes?: (
+    | "off"
+    | "auto"
+    | "heat"
+    | "cool"
+    | "fan_only"
+    | "dehumidification"
+  )[];
 
   /**
    * KNX address for HVAC controller status (in accordance with KNX AN 097/07 rev 3).
@@ -553,7 +560,13 @@ interface Climate {
    * Overrides the supported operation modes.
    * https://www.home-assistant.io/integrations/knx#operation_modes
    */
-  operation_modes?: ("Auto" | "Comfort" | "Standby" | "Night" | "Frost")[];
+  operation_modes?: (
+    | "auto"
+    | "comfort"
+    | "standby"
+    | "economy"
+    | "building_protection"
+  )[];
 
   /**
    * KNX address for setpoint_shift. DPT 6.010 or DPT 9.002 based on setpoint_shift_mode
