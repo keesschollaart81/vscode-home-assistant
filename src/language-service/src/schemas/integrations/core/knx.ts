@@ -11,6 +11,7 @@ import {
   EntityCategory,
   Integer,
   StateClassesSensor,
+  Template,
 } from "../../types";
 
 /**
@@ -822,19 +823,19 @@ interface ExposeTime {
 interface ExposeSensor {
   /**
    * Group address state or attribute updates will be sent to. GroupValueRead requests will be answered.
-   * https://www.home-assistant.io/integrations/knx#address
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
   address: GroupAddresses;
 
   /**
    * Attribute of the entity that shall be sent to the KNX bus. If not set (or None) the state will be sent.
-   * https://www.home-assistant.io/integrations/knx#attribute
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
   attribute?: string;
 
   /**
    * Minimum time in seconds between two sent telegrams.
-   * https://www.home-assistant.io/integrations/knx#cooldown
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    *
    * @minimum 0
    */
@@ -842,13 +843,13 @@ interface ExposeSensor {
 
   /**
    * Default value to send to the bus if the state or attribute value is None.
-   * https://www.home-assistant.io/integrations/knx#default
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
   default?: boolean | string | number;
 
   /**
    * Entity ID to be exposed.
-   * https://www.home-assistant.io/integrations/knx#entity_id
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
   entity_id: Entity;
 
@@ -863,6 +864,12 @@ interface ExposeSensor {
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
   type: ValueType | "binary" | "time" | "date" | "datetime";
+
+  /**
+   * A template to process the value before sending it to the KNX bus. The template has access to the entity state or attribute value as `value`.
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
+   */
+  value_template?: Template;
 }
 
 interface Fan {
