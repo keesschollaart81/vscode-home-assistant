@@ -485,6 +485,12 @@ interface Climate {
   heat_cool_state_address?: GroupAddresses;
 
   /**
+   * KKNX address for reading current humidity. DPT 9.007
+   * https://www.home-assistant.io/integrations/knx#humidity_state_address
+   */
+  humidity_state_address?: GroupAddresses;
+
+  /**
    * Override the minimum temperature.
    * https://www.home-assistant.io/integrations/knx#max_temp
    */
