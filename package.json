@@ -716,7 +716,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@eslint/js": "^9.28.0",
+    "@eslint/js": "^9.29.0",
     "@stylistic/eslint-plugin": "^4.4.1",
     "@types/mocha": "^10.0.10",
     "@types/node": "24.0.1",
