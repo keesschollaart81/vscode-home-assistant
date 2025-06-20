@@ -208,7 +208,7 @@ export class HomeAssistantYamlFile {
       return;
     }
 
-    value = x.value.toString().slice(7, -1).replace(/\\/g, "/"); // \ to / on windows
+    value = x.value.toString().replace(/\\/g, "/"); // \ to / on windows
 
     let files: string[] = [];
 
