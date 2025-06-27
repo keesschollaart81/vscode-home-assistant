@@ -66,6 +66,12 @@ export interface Item {
    */
   sensor?: SensorItem | SensorItem[] | IncludeList;
 
+    /**
+   * List of switches
+   * https://www.home-assistant.io/integrations/template/#switch
+   */
+  switch?: SwitchItem | SwitchItem[] | IncludeList;
+
   /**
    * Define actions to be executed when the trigger fires. Optional. Variables set by the action script are available when evaluating entity templates.
    * This can be used to interact with anything via services, in particular services with response data. See action documentation.
@@ -287,6 +293,49 @@ interface SensorItem extends BaseItem {
   unit_of_measurement?: string;
 }
 
+interface SwitchItem {
+  /**
+   * Defines a template to get the available state of the component. If the template returns true, the device is available.
+   * https://www.home-assistant.io/integrations/switch.template#availability_template
+   */
+  availability?: Template;
+
+  /**
+   * Name to use in the frontend.
+   * https://www.home-assistant.io/integrations/switch.template#friendly_name
+   */
+  name?: string;
+
+  /**
+   * Defines a template for the icon of the switch.
+   * https://www.home-assistant.io/integrations/switch.template#icon_template
+   */
+  icon?: Template;
+
+  /**
+   * Defines an action to run when the switch is turned off.
+   * https://www.home-assistant.io/integrations/switch.template#turn_off
+   */
+  turn_off: Action | Action[];
+
+  /**
+   * Defines an action to run when the switch is turned on.
+   * https://www.home-assistant.io/integrations/switch.template#turn_on
+   */
+  turn_on: Action | Action[];
+
+  /**
+   * An ID that uniquely identifies this switch. Set this to an unique value to allow customization trough the UI.
+   * https://www.home-assistant.io/integrations/switch.template#unique_id
+   */
+  unique_id?: string;
+
+  /**
+   * Defines a template to set the state of the switch. If not defined, the switch will optimistically assume all commands are successful.
+   * https://www.home-assistant.io/integrations/template/#state
+   */
+  state?: Template;
+}
 export interface AlarmControlPanelPlatformSchema extends PlatformSchema {
   /**
    * The template integrations creates alarm control panels that combine integrations or adds pre-processing logic to actions.
