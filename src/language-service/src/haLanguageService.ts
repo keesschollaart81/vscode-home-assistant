@@ -261,6 +261,11 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
         // Find entity ID properties that need validation
         for (const propertyName of EntityIdCompletionContribution.propertyMatches) {
           const propertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*([^\\s\\n#]+)`, "g");
@@ -451,6 +456,11 @@ export class HomeAssistantLanguageService {
       // Iterate through each line to find area references
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
+        
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
         
         // Find area ID properties that need validation
         for (const propertyName of AreaCompletionContribution.propertyMatches) {
@@ -675,6 +685,11 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
         // Find device ID properties that need validation
         for (const propertyName of DeviceCompletionContribution.propertyMatches) {
           // Check for single device values first: device_id: device_name
@@ -898,6 +913,11 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
         // Find floor ID properties that need validation
         for (const propertyName of FloorCompletionContribution.propertyMatches) {
           // Check for single floor values first: floor_id: floor_name
@@ -1120,6 +1140,11 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
         // Find !secret tag usage: !secret secret_name
         const secretRegex = /!secret\s+([a-zA-Z0-9_]+)/g;
         let match;
@@ -1184,6 +1209,11 @@ export class HomeAssistantLanguageService {
       // Iterate through each line to find label references
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
+        
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
         
         // Find label ID properties that need validation
         for (const propertyName of LabelCompletionContribution.propertyMatches) {
@@ -1429,6 +1459,11 @@ export class HomeAssistantLanguageService {
       // Iterate through each line to find action references
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
+        
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
         
         // Find action properties that need validation (both "service" and "action")
         for (const propertyName of ServicesCompletionContribution.propertyMatches) {

@@ -283,4 +283,52 @@ automation:
     assert.strictEqual(foundArea, "unknown_area", 
       "Should flag the unknown area");
   });
+
+  test("Area validation skips commented lines", async () => {
+    const testContent = `
+# This is a comment with area_id: commented_area
+automation:
+  - alias: "Comment Test"
+    trigger:
+      - platform: state
+        entity_id: sensor.test
+    # area_id: commented_in_middle
+    action:
+      - service: light.turn_on
+        target:
+          # This commented line should be ignored: area_id: commented_area
+          area_id: living_room
+      # - service: light.turn_off
+      #   target:
+      #     area_id: commented_unknown_area
+`;
+
+    const document = TextDocument.create(
+      "file:///test-area-comments.yaml",
+      "yaml",
+      1,
+      testContent
+    );
+
+    const diagnostics = await languageService.getDiagnostics(document);
+
+    // Filter for area validation diagnostics
+    const areaDiagnostics = diagnostics.filter(d => 
+      d.source === "home-assistant" && d.code === "unknown-area"
+    );
+
+    console.log(`Found ${areaDiagnostics.length} area validation diagnostics for comment test:`);
+    for (const diagnostic of areaDiagnostics) {
+      console.log(`  - Line ${diagnostic.range.start.line + 1}: ${diagnostic.message}`);
+    }
+
+    // Should have no diagnostics for commented areas
+    assert.strictEqual(areaDiagnostics.length, 0, 
+      "Should not flag areas in commented lines");
+
+    // Verify that the line with living_room (valid area) doesn't generate diagnostics
+    const allDiagnostics = diagnostics.filter(d => d.source === "home-assistant");
+    const livingRoomDiagnostic = allDiagnostics.find(d => d.message.includes("living_room"));
+    assert.ok(!livingRoomDiagnostic, "Should not flag valid areas");
+  });
 });
