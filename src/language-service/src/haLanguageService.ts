@@ -1183,6 +1183,60 @@ export class HomeAssistantLanguageService {
     return diagnostics;
   };
 
+  private isInActionContext(lines: string[], currentLineIndex: number): boolean {
+    // Check if we're within an automation action section or script sequence
+    const currentLine = lines[currentLineIndex];
+    
+    // Get the indentation level of the current line
+    const currentIndentMatch = currentLine.match(/^(\s*)/);
+    const currentIndentLevel = currentIndentMatch ? currentIndentMatch[1].length : 0;
+    
+    // Track contexts as we go up
+    let inActionOrSequenceBlock = false;
+    let inAutomationOrScript = false;
+    let lowestRelevantIndent = currentIndentLevel;
+    
+    // Look backwards through the file to understand context
+    for (let i = currentLineIndex - 1; i >= 0; i--) {
+      const line = lines[i];
+      const trimmedLine = line.trim();
+      
+      // Skip empty lines and comments
+      if (trimmedLine === "" || trimmedLine.startsWith("#")) {
+        continue;
+      }
+      
+      // Get indentation of this line
+      const indentMatch = line.match(/^(\s*)/);
+      const lineIndent = indentMatch ? indentMatch[1].length : 0;
+      
+      // Only look at lines that could be parent contexts (less indented)
+      if (lineIndent < lowestRelevantIndent) {
+        lowestRelevantIndent = lineIndent;
+        
+        // Check for action/actions/sequence blocks
+        if (trimmedLine.match(/^(action|actions|sequence)\s*:\s*$/)) {
+          inActionOrSequenceBlock = true;
+        }
+        
+        // Check for automation or script at root level
+        if (lineIndent === 0) {
+          if (trimmedLine.match(/^(automation|script)\s*:/)) {
+            inAutomationOrScript = true;
+          }
+          // Stop if we hit another root-level key
+          else if (!trimmedLine.startsWith("#")) {
+            break;
+          }
+        }
+      }
+    }
+    
+    // We're in a valid action context if we're inside an action/sequence block
+    // within an automation or script section
+    return inActionOrSequenceBlock && inAutomationOrScript;
+  }
+
   private validateLabelIds = async (
     document: TextDocument,
   ): Promise<Diagnostic[]> => {
@@ -1465,6 +1519,11 @@ export class HomeAssistantLanguageService {
           continue;
         }
         
+        // Check if we're in a valid context for action/service validation
+        if (!this.isInActionContext(lines, lineIndex)) {
+          continue;
+        }
+        
         // Find action properties that need validation (both "service" and "action")
         for (const propertyName of ServicesCompletionContribution.propertyMatches) {
           // Check for single action values first: action: domain.action_name
@@ -1587,6 +1646,11 @@ export class HomeAssistantLanguageService {
         
         // Handle multi-line action arrays
         if (line.trim().startsWith("- ")) {
+          // Use the same context check as above
+          if (!this.isInActionContext(lines, lineIndex)) {
+            continue;
+          }
+          
           // Check if we're in an action list context by looking at previous lines
           let currentLineIndex = lineIndex - 1;
           let foundActionProperty = false;
