@@ -364,6 +364,27 @@ export async function activate(
   // Register all reload commands from the reloadCommands module
   registerReloadCommands(context, commandMappings, client);
 
+  // Register restart and reboot commands
+  const restartCommands = commandMappings.filter(mapping => {
+    const commandId = mapping.commandId.toLowerCase();
+    return commandId.includes("restart") || commandId.includes("reboot");
+  });
+  
+  restartCommands.forEach((mapping) => {
+    context.subscriptions.push(
+      vscode.commands.registerCommand(mapping.commandId, async (_) => {
+        await client.sendRequest("callService", {
+          domain: mapping.domain,
+          service: mapping.service,
+          serviceData: mapping.serviceData,
+        });
+        await vscode.window.showInformationMessage(
+          `Home Assistant service ${mapping.domain}.${mapping.service} called!`,
+        );
+      })
+    );
+  });
+
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "vscode-home-assistant.homeassistantCheckConfig",
