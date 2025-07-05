@@ -435,8 +435,7 @@
           "when": "false"
         },
         {
-          "command": "vscode-home-assistant.homeassistantRestart",
-          "when": "false"
+          "command": "vscode-home-assistant.homeassistantRestart"
         },
         {
           "command": "vscode-home-assistant.scriptReload",
@@ -568,6 +567,11 @@
           "command": "vscode-home-assistant.showReloadIntegrations",
           "title": "Home Assistant: Reload specific integration",
           "group": "navigation@2"
+        },
+        {
+          "command": "vscode-home-assistant.homeassistantRestart",
+          "title": "Home Assistant: Restart Home Assistant",
+          "group": "navigation@3"
         }
       ],
       "home-assistant.reload": [
