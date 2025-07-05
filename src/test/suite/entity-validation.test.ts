@@ -92,4 +92,60 @@ automation:
     // Close the document
     await vscode.commands.executeCommand("workbench.action.closeActiveEditor");
   });
+
+  test("Entity validation skips commented lines", async () => {
+    // Create a test document with commented entity IDs
+    const testContent = `
+# This is a comment with entity_id: sensor.commented_sensor
+automation:
+  - alias: "Comment Test"
+    trigger:
+      platform: state
+      entity_id: sensor.real_sensor
+    # entity_id: sensor.commented_in_middle
+    action:
+      - service: light.turn_on
+        # This commented line should be ignored: entity_id: light.commented_light
+        entity_id: light.real_light
+      # - service: switch.turn_off
+      #   entity_id: switch.commented_switch
+`;
+    
+    const document = await vscode.workspace.openTextDocument({
+      content: testContent,
+      language: "yaml"
+    });
+    
+    await vscode.window.showTextDocument(document);
+    
+    // Wait for language server processing
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Get diagnostics for the document
+    const diagnostics = vscode.languages.getDiagnostics(document.uri);
+    
+    // Log diagnostics for debugging
+    console.log(`Found ${diagnostics.length} diagnostics in comment test file:`);
+    for (const diagnostic of diagnostics) {
+      console.log(`  - Line ${diagnostic.range.start.line + 1}: ${diagnostic.message} (${diagnostic.source})`);
+    }
+    
+    // Check that commented entity IDs don't generate diagnostics
+    const entityDiagnostics = diagnostics.filter(d => 
+      d.source === "home-assistant" && 
+      (d.code === "unknown-entity" || d.message.includes("does not exist"))
+    );
+    
+    // Verify that only non-commented entity IDs generate diagnostics
+    for (const diagnostic of entityDiagnostics) {
+      const line = document.lineAt(diagnostic.range.start.line).text;
+      assert.ok(!line.trim().startsWith("#"), 
+        `Diagnostic found on commented line: ${line.trim()}`);
+    }
+    
+    console.log(`Entity validation correctly skipped commented lines`);
+    
+    // Close the document
+    await vscode.commands.executeCommand("workbench.action.closeActiveEditor");
+  });
 });

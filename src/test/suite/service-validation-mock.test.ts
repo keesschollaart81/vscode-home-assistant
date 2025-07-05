@@ -387,4 +387,47 @@ automation:
     assert.strictEqual(foundAction, "light.valid_but_unknown",
       "Should flag the valid but unknown action");
   });
+
+  test("Action validation skips commented lines", async () => {
+    const testContent = `
+# This is a comment with service: commented_service
+automation:
+  - alias: "Comment Test"
+    trigger:
+      - platform: state
+        entity_id: sensor.test
+    # service: commented_in_middle
+    action:
+      - service: light.turn_on
+        # This commented line should be ignored: service: commented_action
+        target:
+          entity_id: light.test
+      # - service: switch.commented_unknown_action
+      #   target:
+      #     entity_id: switch.test
+`;
+
+    const document = TextDocument.create(
+      "file:///test-action-comments.yaml",
+      "yaml",
+      1,
+      testContent
+    );
+
+    const diagnostics = await languageService.getDiagnostics(document);
+
+    // Filter for action validation diagnostics
+    const actionDiagnostics = diagnostics.filter(d => 
+      d.source === "home-assistant" && d.code === "unknown-action"
+    );
+
+    console.log(`Found ${actionDiagnostics.length} action validation diagnostics for comment test:`);
+    for (const diagnostic of actionDiagnostics) {
+      console.log(`  - Line ${diagnostic.range.start.line + 1}: ${diagnostic.message}`);
+    }
+
+    // Should have no diagnostics for commented actions
+    assert.strictEqual(actionDiagnostics.length, 0, 
+      "Should not flag actions in commented lines");
+  });
 });

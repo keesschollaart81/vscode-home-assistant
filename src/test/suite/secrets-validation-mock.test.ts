@@ -289,4 +289,48 @@ automation:
     assert.strictEqual(foundSecret, "valid_but_unknown",
       "Should flag the valid but unknown secret");
   });
+
+  test("Secrets validation skips commented lines", async () => {
+    const testContent = `
+# This is a comment with !secret commented_secret
+automation:
+  - alias: "Comment Test"
+    trigger:
+      - platform: state
+        entity_id: sensor.test
+    # api_key: !secret commented_in_middle
+    action:
+      - service: notify.email
+        data:
+          # This commented line should be ignored: password: !secret commented_password
+          message: "Test"
+          title: "Alert"
+      # - service: other
+      #   data:
+      #     token: !secret commented_unknown_secret
+`;
+
+    const document = TextDocument.create(
+      "file:///test-secrets-comments.yaml",
+      "yaml",
+      1,
+      testContent
+    );
+
+    const diagnostics = await languageService.getDiagnostics(document);
+
+    // Filter for secrets validation diagnostics
+    const secretsDiagnostics = diagnostics.filter(d => 
+      d.source === "home-assistant" && d.code === "unknown-secret"
+    );
+
+    console.log(`Found ${secretsDiagnostics.length} secrets validation diagnostics for comment test:`);
+    for (const diagnostic of secretsDiagnostics) {
+      console.log(`  - Line ${diagnostic.range.start.line + 1}: ${diagnostic.message}`);
+    }
+
+    // Should have no diagnostics for commented secrets
+    assert.strictEqual(secretsDiagnostics.length, 0, 
+      "Should not flag secrets in commented lines");
+  });
 });
