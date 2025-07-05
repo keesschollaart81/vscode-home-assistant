@@ -271,15 +271,16 @@ group:
       console.log(`  - Line ${diagnostic.range.start.line + 1}: ${diagnostic.message}`);
     }
 
-    // We should have exactly 3 unknown action diagnostics
-    assert.strictEqual(actionDiagnostics.length, 3, 
-      `Expected 3 unknown action diagnostics, got ${actionDiagnostics.length}`);
+    // We should have exactly 2 unknown action diagnostics (not including the one in group: section)
+    assert.strictEqual(actionDiagnostics.length, 2, 
+      `Expected 2 unknown action diagnostics, got ${actionDiagnostics.length}. ` +
+      `The third one (unknown.service) should be ignored because it's not in an automation/script context.`);
 
     // Check that the diagnostics are for the correct actions
     const expectedUnknownActions = [
       "light.non_existing",
-      "switch.non_existing", 
-      "unknown.service"
+      "switch.non_existing"
+      // "unknown.service" is correctly ignored because it's in a group: section
     ];
 
     const foundUnknownActions = actionDiagnostics.map(d => {
