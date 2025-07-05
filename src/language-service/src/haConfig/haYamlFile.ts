@@ -96,7 +96,7 @@ export class HomeAssistantYamlFile {
 
   private getCustomTags() {
     return [
-      "env_Var",
+      "env_var",
       "input", 
       "secret",
       `${Includetype[Includetype.include]}`,
