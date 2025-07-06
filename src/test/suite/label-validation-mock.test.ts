@@ -136,7 +136,8 @@ suite("Label Validation Tests", () => {
       [],
       new SchemaServiceForIncludes(),
       () => { /* mock sendDiagnostics */ }, 
-      () => { /* mock diagnoseAllFiles */ }
+      () => { /* mock diagnoseAllFiles */ },
+      { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service
     );
   });
 
@@ -363,5 +364,48 @@ automation:
     // Should have no diagnostics for empty/null values
     assert.strictEqual(labelDiagnostics.length, 0, 
       "Should not flag empty or null values");
+  });
+
+  test("Label validation skips commented lines", async () => {
+    const testContent = `
+# This is a comment with labels: commented_label
+automation:
+  - alias: "Comment Test"
+    trigger:
+      - platform: state
+        entity_id: sensor.test
+    # labels: commented_in_middle
+    action:
+      - service: light.turn_on
+        target:
+          # This commented line should be ignored: labels: commented_label
+          labels: energy
+      # - service: light.turn_off
+      #   target:
+      #     labels: commented_unknown_label
+`;
+
+    const document = TextDocument.create(
+      "file:///test-label-comments.yaml",
+      "yaml",
+      1,
+      testContent
+    );
+
+    const diagnostics = await languageService.getDiagnostics(document);
+
+    // Filter for label validation diagnostics
+    const labelDiagnostics = diagnostics.filter(d => 
+      d.source === "home-assistant" && d.code === "unknown-label"
+    );
+
+    console.log(`Found ${labelDiagnostics.length} label validation diagnostics for comment test:`);
+    for (const diagnostic of labelDiagnostics) {
+      console.log(`  - Line ${diagnostic.range.start.line + 1}: ${diagnostic.message}`);
+    }
+
+    // Should have no diagnostics for commented labels
+    assert.strictEqual(labelDiagnostics.length, 0, 
+      "Should not flag labels in commented lines");
   });
 });

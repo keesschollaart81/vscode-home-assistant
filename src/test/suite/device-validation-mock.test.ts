@@ -136,7 +136,8 @@ suite("Device Validation Tests", () => {
       [],
       new SchemaServiceForIncludes(),
       () => { /* mock sendDiagnostics */ }, 
-      () => { /* mock diagnoseAllFiles */ }
+      () => { /* mock diagnoseAllFiles */ },
+      { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service
     );
   });
 
@@ -272,5 +273,40 @@ automation:
     const deviceDiagnostics = diagnostics.filter(d => d.code === "unknown-device");
     assert.strictEqual(deviceDiagnostics.length, 1);
     assert.strictEqual(deviceDiagnostics[0].message, "Device 'unknown_device_alt' does not exist in your Home Assistant instance");
+  });
+
+  test("Device validation skips commented lines", async () => {
+    const content = `
+# This is a comment with device_id: commented_device
+automation:
+  - alias: "Comment Test"
+    trigger:
+      platform: state
+      entity_id: sensor.test
+    # device_id: commented_in_middle
+    action:
+      - service: light.turn_on
+        target:
+          # This commented line should be ignored: device_id: commented_device
+          device_id: device_1234
+      # - service: light.turn_off
+      #   target:
+      #     device_id: commented_unknown_device
+`;
+
+    const document = TextDocument.create("file://test.yaml", "yaml", 1, content);
+    const diagnostics = await languageService.getDiagnostics(document);
+    
+    // Filter for device validation diagnostics
+    const deviceDiagnostics = diagnostics.filter(d => d.code === "unknown-device");
+
+    console.log(`Found ${deviceDiagnostics.length} device validation diagnostics for comment test:`);
+    for (const diagnostic of deviceDiagnostics) {
+      console.log(`  - Line ${diagnostic.range.start.line + 1}: ${diagnostic.message}`);
+    }
+
+    // Should have no diagnostics for commented devices
+    assert.strictEqual(deviceDiagnostics.length, 0, 
+      "Should not flag devices in commented lines");
   });
 });

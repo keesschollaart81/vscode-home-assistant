@@ -2,7 +2,7 @@
   "name": "vscode-home-assistant",
   "displayName": "Home Assistant Config Helper",
   "description": " Completion for entity-id's in Home Assistant Configurations",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "preview": false,
   "engines": {
     "vscode": "^1.100.0"
@@ -52,6 +52,11 @@
             "type": "boolean",
             "default": false,
             "description": "Disable automatic association of YAML files with the Home Assistant language. When enabled, the extension will not automatically set file associations for YAML files, even in detected Home Assistant workspaces."
+          },
+          "vscode-home-assistant.autoRenderTemplates": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable automatic rendering of Home Assistant templates on hover. When enabled, templates will be rendered and displayed as previews when hovering over template values in YAML files."
           }
         }
       }
@@ -435,8 +440,7 @@
           "when": "false"
         },
         {
-          "command": "vscode-home-assistant.homeassistantRestart",
-          "when": "false"
+          "command": "vscode-home-assistant.homeassistantRestart"
         },
         {
           "command": "vscode-home-assistant.scriptReload",
@@ -568,6 +572,11 @@
           "command": "vscode-home-assistant.showReloadIntegrations",
           "title": "Home Assistant: Reload specific integration",
           "group": "navigation@2"
+        },
+        {
+          "command": "vscode-home-assistant.homeassistantRestart",
+          "title": "Home Assistant: Restart Home Assistant",
+          "group": "navigation@3"
         }
       ],
       "home-assistant.reload": [
@@ -716,45 +725,45 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@eslint/js": "^9.27.0",
-    "@stylistic/eslint-plugin": "^4.4.0",
+    "@eslint/js": "^9.30.1",
+    "@stylistic/eslint-plugin": "^5.1.0",
     "@types/mocha": "^10.0.10",
-    "@types/node": "22.15.21",
+    "@types/node": "24.0.10",
     "@types/request": "2.48.12",
     "@types/vscode": "^1.100.0",
     "@types/uuid": "^10.0.0",
     "@types/ws": "8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
-    "@typescript-eslint/parser": "^8.32.1",
-    "@vscode/test-cli": "^0.0.10",
+    "@typescript-eslint/parser": "^8.34.0",
+    "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
-    "eslint": "^9.27.0",
+    "eslint": "^9.30.1",
     "eslint-config-prettier": "^10.1.5",
-    "glob": "^11.0.2",
+    "glob": "^11.0.3",
     "husky": "^9.1.7",
-    "lint-staged": "^16.0.0",
-    "mocha": "^11.5.0",
-    "prettier": "^3.5.3",
+    "lint-staged": "^16.1.2",
+    "mocha": "^11.7.1",
+    "prettier": "^3.6.2",
     "rimraf": "6.0.1",
     "ts-loader": "^9.5.2",
     "ts-node": "10.9.2",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.32.1",
+    "typescript-eslint": "^8.35.1",
     "typescript-json-schema": "0.65.1"
   },
   "dependencies": {
     "@vscode/extension-telemetry": "^1.0.0",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "bufferutil": "^4.0.9",
     "home-assistant-js-websocket": "^9.5.0",
     "utf-8-validate": "^6.0.5",
-    "vscode-json-languageservice": "^5.5.0",
+    "vscode-json-languageservice": "^5.6.1",
     "vscode-languageclient": "^9.0.1",
     "vscode-languageserver": "^9.0.1",
     "vscode-languageserver-protocol": "3.17.5",
     "vscode-languageserver-textdocument": "^1.0.12",
     "vscode-uri": "3.1.0",
-    "ws": "8.18.2",
+    "ws": "8.18.3",
     "uuid": "^11.1.0",
     "yaml": "2.8.0",
     "yaml-language-server": "1.18.0"

@@ -32,8 +32,12 @@ import { SecretsCompletionContribution } from "./completionHelpers/secrets";
 import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 import { Includetype } from "./haConfig/dto";
+import { IConfigurationService } from "./configuration";
 
 export class HomeAssistantLanguageService {
+  private templateCache = new Map<string, { value: string; timestamp: number }>();
+  private readonly CACHE_DURATION = 30000; // 30 seconds
+
   constructor(
     private yamlLanguageService: LanguageService,
     private haConfig: HomeAssistantConfiguration,
@@ -45,6 +49,7 @@ export class HomeAssistantLanguageService {
       diagnostics: Diagnostic[],
     ) => void,
     private diagnoseAllFiles: () => void,
+    private configurationService: IConfigurationService,
   ) {}
 
   public findAndApplySchemas = (): void => {
@@ -261,6 +266,11 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
         // Find entity ID properties that need validation
         for (const propertyName of EntityIdCompletionContribution.propertyMatches) {
           const propertyRegex = new RegExp(`\\s*${propertyName}\\s*:\\s*([^\\s\\n#]+)`, "g");
@@ -451,6 +461,11 @@ export class HomeAssistantLanguageService {
       // Iterate through each line to find area references
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
+        
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
         
         // Find area ID properties that need validation
         for (const propertyName of AreaCompletionContribution.propertyMatches) {
@@ -675,6 +690,11 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
         // Find device ID properties that need validation
         for (const propertyName of DeviceCompletionContribution.propertyMatches) {
           // Check for single device values first: device_id: device_name
@@ -898,6 +918,11 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
         // Find floor ID properties that need validation
         for (const propertyName of FloorCompletionContribution.propertyMatches) {
           // Check for single floor values first: floor_id: floor_name
@@ -1120,6 +1145,11 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
         // Find !secret tag usage: !secret secret_name
         const secretRegex = /!secret\s+([a-zA-Z0-9_]+)/g;
         let match;
@@ -1158,6 +1188,60 @@ export class HomeAssistantLanguageService {
     return diagnostics;
   };
 
+  private isInActionContext(lines: string[], currentLineIndex: number): boolean {
+    // Check if we're within an automation action section or script sequence
+    const currentLine = lines[currentLineIndex];
+    
+    // Get the indentation level of the current line
+    const currentIndentMatch = currentLine.match(/^(\s*)/);
+    const currentIndentLevel = currentIndentMatch ? currentIndentMatch[1].length : 0;
+    
+    // Track contexts as we go up
+    let inActionOrSequenceBlock = false;
+    let inAutomationOrScript = false;
+    let lowestRelevantIndent = currentIndentLevel;
+    
+    // Look backwards through the file to understand context
+    for (let i = currentLineIndex - 1; i >= 0; i--) {
+      const line = lines[i];
+      const trimmedLine = line.trim();
+      
+      // Skip empty lines and comments
+      if (trimmedLine === "" || trimmedLine.startsWith("#")) {
+        continue;
+      }
+      
+      // Get indentation of this line
+      const indentMatch = line.match(/^(\s*)/);
+      const lineIndent = indentMatch ? indentMatch[1].length : 0;
+      
+      // Only look at lines that could be parent contexts (less indented)
+      if (lineIndent < lowestRelevantIndent) {
+        lowestRelevantIndent = lineIndent;
+        
+        // Check for action/actions/sequence blocks
+        if (trimmedLine.match(/^(action|actions|sequence)\s*:\s*$/)) {
+          inActionOrSequenceBlock = true;
+        }
+        
+        // Check for automation or script at root level
+        if (lineIndent === 0) {
+          if (trimmedLine.match(/^(automation|script)\s*:/)) {
+            inAutomationOrScript = true;
+          }
+          // Stop if we hit another root-level key
+          else if (!trimmedLine.startsWith("#")) {
+            break;
+          }
+        }
+      }
+    }
+    
+    // We're in a valid action context if we're inside an action/sequence block
+    // within an automation or script section
+    return inActionOrSequenceBlock && inAutomationOrScript;
+  }
+
   private validateLabelIds = async (
     document: TextDocument,
   ): Promise<Diagnostic[]> => {
@@ -1184,6 +1268,11 @@ export class HomeAssistantLanguageService {
       // Iterate through each line to find label references
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
+        
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
         
         // Find label ID properties that need validation
         for (const propertyName of LabelCompletionContribution.propertyMatches) {
@@ -1430,6 +1519,16 @@ export class HomeAssistantLanguageService {
       for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
         const line = lines[lineIndex];
         
+        // Skip commented lines (lines that start with # after optional whitespace)
+        if (line.trim().startsWith("#")) {
+          continue;
+        }
+        
+        // Check if we're in a valid context for action/service validation
+        if (!this.isInActionContext(lines, lineIndex)) {
+          continue;
+        }
+        
         // Find action properties that need validation (both "service" and "action")
         for (const propertyName of ServicesCompletionContribution.propertyMatches) {
           // Check for single action values first: action: domain.action_name
@@ -1552,6 +1651,11 @@ export class HomeAssistantLanguageService {
         
         // Handle multi-line action arrays
         if (line.trim().startsWith("- ")) {
+          // Use the same context check as above
+          if (!this.isInActionContext(lines, lineIndex)) {
+            continue;
+          }
+          
           // Check if we're in an action list context by looking at previous lines
           let currentLineIndex = lineIndex - 1;
           let foundActionProperty = false;
@@ -1717,6 +1821,12 @@ export class HomeAssistantLanguageService {
     // Only show schema hover info when hovering over keys
     if (isOnKey) {
       return this.yamlLanguageService.doHover(document, position);
+    }
+
+    // Check for template hover information when hovering over values
+    const templateHover = await this.getTemplateHoverInfo(document, position);
+    if (templateHover) {
+      return templateHover;
     }
 
     // Don't show schema hover for values
@@ -1923,6 +2033,414 @@ export class HomeAssistantLanguageService {
       console.log("Error getting service hover info:", error);
       return null;
     }
+  }
+
+  private async getTemplateHoverInfo(
+    document: TextDocument,
+    position: Position,
+  ): Promise<Hover | null> {
+    try {
+      // Check if auto-rendering is enabled
+      if (!this.configurationService.autoRenderTemplates) {
+        return null;
+      }
+      
+      const text = document.getText();
+      const { line: lineNumber, character } = position;
+      const lines = text.split("\n");
+      const line = lines[lineNumber];
+      
+      // Check if we're hovering over a template value
+      const templateValue = this.extractTemplateValue(line, character);
+      if (!templateValue) {
+        return null;
+      }
+      
+      // Check if the value contains template syntax
+      if (!this.isTemplate(templateValue)) {
+        return null;
+      }
+      
+      // Render the template
+      const renderedValue = await this.renderTemplate(templateValue);
+      if (renderedValue === null) {
+        return null;
+      }
+      
+      const valueRange = this.getTemplateValueRange(line, lineNumber, templateValue);
+      const syntaxHighlighting = this.getSyntaxHighlighting(renderedValue);
+      
+      return {
+        contents: {
+          kind: "markdown",
+          value: `**Template Preview:**\n\n\`\`\`${syntaxHighlighting}\n${renderedValue}\n\`\`\``,
+        },
+        range: valueRange,
+      };
+    } catch (error) {
+      console.log("Error getting template hover info:", error);
+      return null;
+    }
+  }
+
+  private extractTemplateValue(line: string, character: number): string | null {
+    const colonIndex = line.indexOf(":");
+    if (colonIndex === -1 || character <= colonIndex) {
+      return null;
+    }
+    
+    // Extract the value part after the colon
+    const valueStart = colonIndex + 1;
+    let value = line.substring(valueStart).trim();
+    
+    // Handle quoted strings
+    if ((value.startsWith("\"") && value.endsWith("\"")) || 
+        (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    
+    return value;
+  }
+
+  private isTemplate(value: string): boolean {
+    return value.includes("{{") && value.includes("}}");
+  }
+
+  private async renderTemplate(template: string): Promise<string | null> {
+    try {
+      // Check cache first
+      const cacheKey = template;
+      const cached = this.templateCache.get(cacheKey);
+      const now = Date.now();
+      
+      if (cached && (now - cached.timestamp < this.CACHE_DURATION)) {
+        return cached.value;
+      }
+      
+      // Check if Home Assistant is properly configured
+      if (!this.configurationService.isConfigured) {
+        // Don't cache connection errors - they should be checked each time
+        return "⚠️ Home Assistant connection not configured. Please set up your Home Assistant URL and token.";
+      }
+      
+      // Use the existing Home Assistant connection to render the template
+      if (!this.haConnection) {
+        return null;
+      }
+      
+      const result = await this.haConnection.callApi("post", "template", {
+        template: template,
+        strict: true,
+      });
+      
+      let renderedValue: string;
+      let isError = false;
+      
+      // Check for various error formats that Home Assistant can return
+      if (this.isTemplateError(result)) {
+        renderedValue = this.formatTemplateError(result);
+        isError = true;
+      } else {
+        renderedValue = this.formatTemplateResult(result);
+      }
+      
+      // Only cache successful results, not errors
+      if (!isError) {
+        this.templateCache.set(cacheKey, { value: renderedValue, timestamp: now });
+        
+        // Clean up old cache entries (simple cleanup)
+        if (this.templateCache.size > 100) {
+          const oldestKey = this.templateCache.keys().next().value;
+          this.templateCache.delete(oldestKey);
+        }
+      }
+      
+      return renderedValue;
+    } catch (error) {
+      console.log("Error rendering template:", error);
+      
+      // Handle axios/HTTP errors that weren't caught by callApi
+      if (error && typeof error === "object" && "response" in error) {
+        const axiosError = error as any;
+        if (axiosError.response?.data) {
+          // Handle Home Assistant API errors that came through as exceptions
+          if (this.isTemplateError(axiosError.response.data)) {
+            return this.formatTemplateError(axiosError.response.data);
+          }
+        }
+        
+        if (axiosError.response?.status) {
+          return `❌ HTTP ${axiosError.response.status}: ${axiosError.response.statusText || "Request failed"}`;
+        }
+      }
+      
+      // Provide more user-friendly error messages for common cases
+      if (error instanceof Error) {
+        if (error.message.includes("Invalid URL")) {
+          return "⚠️ Home Assistant connection not configured. Please set up your Home Assistant URL and token.";
+        } else if (error.message.includes("ECONNREFUSED") || error.message.includes("ENOTFOUND")) {
+          return "⚠️ Unable to connect to Home Assistant. Please check your connection settings.";
+        } else if (error.message.includes("401") || error.message.includes("Unauthorized")) {
+          return "⚠️ Authentication failed. Please check your Home Assistant token.";
+        } else if (error.message.includes("timeout")) {
+          return "⚠️ Request timed out. Home Assistant may be slow to respond.";
+        }
+        
+        return `❌ Error: ${error.message}`;
+      }
+      
+      return `❌ Error: ${String(error)}`;
+    }
+  }
+
+  private isTemplateError(result: any): boolean {
+    if (!result || typeof result !== "object") {
+      return false;
+    }
+    
+    // Check for common error properties
+    return !!(
+      result.error || 
+      result.message || 
+      result.detail ||
+      (result.code && typeof result.code === "string")
+    );
+  }
+
+  private formatTemplateError(result: any): string {
+    if (!result || typeof result !== "object") {
+      return "❌ Unknown template error";
+    }
+    
+    // Handle different error formats from Home Assistant
+    if (result.error) {
+      return `❌ ${this.cleanErrorMessage(result.error)}`;
+    }
+    
+    if (result.message) {
+      let errorMsg = `❌ ${this.cleanErrorMessage(result.message)}`;
+      
+      // Add additional details if available
+      if (result.detail) {
+        errorMsg += `\n\nDetails: ${result.detail}`;
+      }
+      
+      if (result.code) {
+        errorMsg += `\n\nError Code: ${result.code}`;
+      }
+      
+      return errorMsg;
+    }
+    
+    // Handle HTTP error responses
+    if (result.status && result.statusText) {
+      return `❌ HTTP ${result.status}: ${result.statusText}`;
+    }
+    
+    // Fallback for other error formats
+    try {
+      const errorStr = JSON.stringify(result, null, 2);
+      return `❌ Template Error:\n${errorStr}`;
+    } catch {
+      return `❌ ${String(result)}`;
+    }
+  }
+
+  private formatListString(listStr: string): string {
+    try {
+      // Remove the brackets and split by comma
+      const content = listStr.slice(1, -1).trim();
+      if (!content) {
+        return "[]";
+      }
+      
+      // Split by comma, but handle quoted strings properly
+      const items: string[] = [];
+      let current = "";
+      let inQuotes = false;
+      let quoteChar = "";
+      
+      for (const char of content) {
+        if (!inQuotes && (char === "'" || char === "\"")) {
+          inQuotes = true;
+          quoteChar = char;
+          current += char;
+        } else if (inQuotes && char === quoteChar) {
+          inQuotes = false;
+          current += char;
+        } else if (!inQuotes && char === ",") {
+          items.push(current.trim());
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+      
+      // Add the last item
+      if (current.trim()) {
+        items.push(current.trim());
+      }
+      
+      // Format the items nicely
+      if (items.length <= 3) {
+        return `[\n  ${items.join(",\n  ")}\n]`;
+      } else {
+        const preview = items.slice(0, 3);
+        const remaining = items.length - 3;
+        return `[\n  ${preview.join(",\n  ")},\n  ... (${remaining} more items)\n]`;
+      }
+    } catch {
+      // If parsing fails, return the original string
+      return listStr;
+    }
+  }
+
+  private cleanErrorMessage(message: string): string {
+    if (!message || typeof message !== "string") {
+      return "Unknown error";
+    }
+    
+    // Remove redundant prefixes
+    let cleanMsg = message
+      .replace(/^Error rendering template:\s*/i, "")
+      .replace(/^Template Error:\s*/i, "")
+      .replace(/^TemplateSyntaxError:\s*/i, "")
+      .replace(/^Template error:\s*/i, "")
+      .replace(/^Error:\s*/i, "");
+    
+    // Capitalize first letter if it's not already
+    if (cleanMsg.length > 0) {
+      cleanMsg = cleanMsg.charAt(0).toUpperCase() + cleanMsg.slice(1);
+    }
+    
+    return cleanMsg || "Unknown error";
+  }
+
+  private getSyntaxHighlighting(value: string): string {
+    // For error messages, use text highlighting
+    if (value.startsWith("❌") || value.startsWith("⚠️")) {
+      return "text";
+    }
+    
+    // Detect JSON-like structures for better syntax highlighting
+    if (value.startsWith("{") && value.endsWith("}")) {
+      return "json";
+    }
+    if (value.startsWith("[") && value.endsWith("]")) {
+      return "json";
+    }
+    // For plain text, numbers, booleans
+    if (value === "null" || value === "undefined" || value === "true" || value === "false") {
+      return "json";
+    }
+    // Check if it's a number
+    if (!isNaN(Number(value)) && value.trim() !== "") {
+      return "json";
+    }
+    // Default to text for strings and other content
+    return "text";
+  }
+
+  private formatTemplateResult(result: any): string {
+    if (result === null) {
+      return "null";
+    }
+    
+    if (result === undefined) {
+      return "undefined";
+    }
+    
+    if (typeof result === "string") {
+      // Check if the string looks like a list/array and try to format it
+      const trimmed = result.trim();
+      
+      // Handle Python-style lists that Home Assistant might return
+      if (trimmed.startsWith("[") && trimmed.includes(",")) {
+        return this.formatListString(trimmed);
+      }
+      
+      // Try to parse as JSON for objects and arrays
+      if ((trimmed.startsWith("[") && trimmed.endsWith("]")) || 
+          (trimmed.startsWith("{") && trimmed.endsWith("}"))) {
+        try {
+          const parsed = JSON.parse(trimmed);
+          return this.formatTemplateResult(parsed); // Recursively format the parsed result
+        } catch {
+          // If JSON parsing fails, treat it as a list string if it looks like one
+          if (trimmed.startsWith("[")) {
+            return this.formatListString(trimmed);
+          }
+          return result;
+        }
+      }
+      return result;
+    }
+    
+    if (typeof result === "number" || typeof result === "boolean") {
+      return String(result);
+    }
+    
+    if (Array.isArray(result)) {
+      // For arrays, format them nicely
+      if (result.length === 0) {
+        return "[]";
+      }
+      
+      // For small arrays (≤3 items), show all items
+      if (result.length <= 3) {
+        return `[\n  ${result.map(item => JSON.stringify(item)).join(",\n  ")}\n]`;
+      }
+      
+      // For larger arrays, show first 3 items with count
+      const preview = result.slice(0, 3);
+      const remaining = result.length - 3;
+      return `[\n  ${preview.map(item => JSON.stringify(item)).join(",\n  ")},\n  ... (${remaining} more items)\n]`;
+    }
+    
+    if (typeof result === "object") {
+      try {
+        const keys = Object.keys(result);
+        
+        // For empty objects
+        if (keys.length === 0) {
+          return "{}";
+        }
+        
+        // For small objects (≤3 properties), show all
+        if (keys.length <= 3) {
+          return JSON.stringify(result, null, 2);
+        }
+        
+        // For larger objects, show preview with count
+        const preview = keys.slice(0, 3).reduce((obj, key) => {
+          obj[key] = result[key];
+          return obj;
+        }, {} as any);
+        
+        const previewStr = JSON.stringify(preview, null, 2);
+        const remainingKeys = keys.length - 3;
+        
+        // Replace the closing brace with continuation indicator
+        return previewStr.slice(0, -2) + `,\n  ... (${remainingKeys} more properties)\n}`;
+      } catch {
+        // Fallback if JSON.stringify fails (circular references, etc.)
+        return `[object ${result.constructor?.name || "Object"}]`;
+      }
+    }
+    
+    // Fallback for any other types
+    return String(result);
+  }
+
+  private getTemplateValueRange(line: string, lineNumber: number, templateValue: string): Range {
+    const colonIndex = line.indexOf(":");
+    const valueStart = colonIndex + 1;
+    const trimmedStart = line.substring(valueStart).indexOf(templateValue) + valueStart;
+    
+    return Range.create(
+      Position.create(lineNumber, trimmedStart),
+      Position.create(lineNumber, trimmedStart + templateValue.length)
+    );
   }
 
   public onDefinition = async (

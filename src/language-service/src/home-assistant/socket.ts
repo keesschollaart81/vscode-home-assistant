@@ -137,13 +137,6 @@ export function createSocket(
           const tokenFirstFive = token.substring(0, 5);
           const tokenLength = token.length;
           console.log(`[Auth phase] Sending auth message with token (first 5 chars: ${tokenFirstFive}..., length: ${tokenLength})`);
-          
-          // Check if token looks like a JWT
-          if (token.split(".").length === 3) {
-            console.log("[Auth phase] Token appears to be a valid JWT format");
-          } else {
-            console.warn("[Auth phase] Token does not appear to be in JWT format, may not be valid");
-          }
         }
         
         // Send authentication even if invalid to get proper error message from server

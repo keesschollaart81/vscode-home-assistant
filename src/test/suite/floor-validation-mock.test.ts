@@ -136,7 +136,8 @@ suite("Floor Validation Tests", () => {
       [],
       new SchemaServiceForIncludes(),
       () => { /* mock sendDiagnostics */ }, 
-      () => { /* mock diagnoseAllFiles */ }
+      () => { /* mock diagnoseAllFiles */ },
+      { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service
     );
   });
 
@@ -282,5 +283,48 @@ automation:
     const foundFloor = floorDiagnostics[0].message.match(/Floor '([^']+)'/)?.[1];
     assert.strictEqual(foundFloor, "unknown_floor", 
       "Should flag the unknown floor");
+  });
+
+  test("Floor validation skips commented lines", async () => {
+    const testContent = `
+# This is a comment with floor_id: commented_floor
+automation:
+  - alias: "Comment Test"
+    trigger:
+      - platform: state
+        entity_id: sensor.test
+    # floor_id: commented_in_middle
+    action:
+      - service: light.turn_on
+        target:
+          # This commented line should be ignored: floor_id: commented_floor
+          floor_id: ground_floor
+      # - service: light.turn_off
+      #   target:
+      #     floor_id: commented_unknown_floor
+`;
+
+    const document = TextDocument.create(
+      "file:///test-floor-comments.yaml",
+      "yaml",
+      1,
+      testContent
+    );
+
+    const diagnostics = await languageService.getDiagnostics(document);
+
+    // Filter for floor validation diagnostics
+    const floorDiagnostics = diagnostics.filter(d => 
+      d.source === "home-assistant" && d.code === "unknown-floor"
+    );
+
+    console.log(`Found ${floorDiagnostics.length} floor validation diagnostics for comment test:`);
+    for (const diagnostic of floorDiagnostics) {
+      console.log(`  - Line ${diagnostic.range.start.line + 1}: ${diagnostic.message}`);
+    }
+
+    // Should have no diagnostics for commented floors
+    assert.strictEqual(floorDiagnostics.length, 0, 
+      "Should not flag floors in commented lines");
   });
 });

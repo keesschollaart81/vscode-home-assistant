@@ -1,6 +1,6 @@
 {
   "name": "home-assistant-language-service",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Home Assistant Language Service",
   "source": "src/haLanguageService.ts",
   "main": "dist/haLanguageService.js",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/mocha": "10.0.10",
-    "@types/node": "22.15.21",
+    "@types/node": "24.0.10",
     "@types/vscode": "1.48.0",
     "@types/ws": "8.18.1",
     "@types/yaml": "1.9.7",
