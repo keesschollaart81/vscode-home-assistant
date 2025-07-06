@@ -136,7 +136,8 @@ suite("Label Validation Tests", () => {
       [],
       new SchemaServiceForIncludes(),
       () => { /* mock sendDiagnostics */ }, 
-      () => { /* mock diagnoseAllFiles */ }
+      () => { /* mock diagnoseAllFiles */ },
+      { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service
     );
   });
 

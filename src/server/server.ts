@@ -107,6 +107,7 @@ connection.onInitialize((params) => {
         sendDiagnostics(d.uri, diagnostics);
       });
     },
+    configurationService,
   );
 
   // Setup handlers to notify client about connection status

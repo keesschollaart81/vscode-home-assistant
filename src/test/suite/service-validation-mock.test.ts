@@ -216,7 +216,8 @@ suite("Action Validation Mock Test", () => {
       [],
       new SchemaServiceForIncludes(),
       () => { /* mock sendDiagnostics */ }, 
-      () => { /* mock diagnoseAllFiles */ }
+      () => { /* mock diagnoseAllFiles */ },
+      { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service
     );
   });
 
