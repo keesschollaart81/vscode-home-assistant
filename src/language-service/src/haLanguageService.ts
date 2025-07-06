@@ -2260,10 +2260,8 @@ export class HomeAssistantLanguageService {
       let inQuotes = false;
       let quoteChar = "";
       
-      for (let i = 0; i < content.length; i++) {
-        const char = content[i];
-        
-        if (!inQuotes && (char === "'" || char === '"')) {
+      for (const char of content) {
+        if (!inQuotes && (char === "'" || char === "\"")) {
           inQuotes = true;
           quoteChar = char;
           current += char;
@@ -2291,7 +2289,7 @@ export class HomeAssistantLanguageService {
         const remaining = items.length - 3;
         return `[\n  ${preview.join(",\n  ")},\n  ... (${remaining} more items)\n]`;
       }
-    } catch (error) {
+    } catch {
       // If parsing fails, return the original string
       return listStr;
     }
@@ -2424,7 +2422,7 @@ export class HomeAssistantLanguageService {
         
         // Replace the closing brace with continuation indicator
         return previewStr.slice(0, -2) + `,\n  ... (${remainingKeys} more properties)\n}`;
-      } catch (error) {
+      } catch {
         // Fallback if JSON.stringify fails (circular references, etc.)
         return `[object ${result.constructor?.name || "Object"}]`;
       }
