@@ -7,6 +7,7 @@ export interface IConfigurationService {
   url?: string;
   ignoreCertificates: boolean;
   disableAutomaticFileAssociation: boolean;
+  autoRenderTemplates: boolean;
   updateConfiguration(config: DidChangeConfigurationParams): void;
 }
 
@@ -15,6 +16,7 @@ export interface HomeAssistantConfiguration {
   hostUrl?: string;
   ignoreCertificates: boolean;
   disableAutomaticFileAssociation: boolean;
+  autoRenderTemplates: boolean;
 }
 
 export class ConfigurationService implements IConfigurationService {
@@ -27,6 +29,8 @@ export class ConfigurationService implements IConfigurationService {
   public ignoreCertificates = false;
 
   public disableAutomaticFileAssociation = false;
+
+  public autoRenderTemplates = true;
 
   constructor() {
     this.setConfigViaEnvironmentVariables();
@@ -42,6 +46,7 @@ export class ConfigurationService implements IConfigurationService {
     const prevUrl = this.url;
     const prevIgnoreCertificates = this.ignoreCertificates;
     const prevDisableAutomaticFileAssociation = this.disableAutomaticFileAssociation;
+    const prevAutoRenderTemplates = this.autoRenderTemplates;
 
     // Get the Home Assistant configuration section
     const incoming = config.settings[
@@ -67,6 +72,7 @@ export class ConfigurationService implements IConfigurationService {
       
       this.ignoreCertificates = !!incoming.ignoreCertificates;
       this.disableAutomaticFileAssociation = !!incoming.disableAutomaticFileAssociation;
+      this.autoRenderTemplates = incoming.autoRenderTemplates !== undefined ? !!incoming.autoRenderTemplates : true;
     } else {
       console.warn("Received invalid or empty configuration object");
     }
@@ -96,6 +102,10 @@ export class ConfigurationService implements IConfigurationService {
     
     if (this.disableAutomaticFileAssociation !== prevDisableAutomaticFileAssociation) {
       console.log(`Disable automatic file association setting changed: ${prevDisableAutomaticFileAssociation} -> ${this.disableAutomaticFileAssociation}`);
+    }
+    
+    if (this.autoRenderTemplates !== prevAutoRenderTemplates) {
+      console.log(`Auto render templates setting changed: ${prevAutoRenderTemplates} -> ${this.autoRenderTemplates}`);
     }
 
     console.log(`Configuration status after update: ${this.isConfigured ? "Configured" : "Not Configured"}`);

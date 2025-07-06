@@ -52,6 +52,11 @@
             "type": "boolean",
             "default": false,
             "description": "Disable automatic association of YAML files with the Home Assistant language. When enabled, the extension will not automatically set file associations for YAML files, even in detected Home Assistant workspaces."
+          },
+          "vscode-home-assistant.autoRenderTemplates": {
+            "type": "boolean",
+            "default": true,
+            "description": "Enable automatic rendering of Home Assistant templates on hover. When enabled, templates will be rendered and displayed as previews when hovering over template values in YAML files."
           }
         }
       }
