@@ -128,7 +128,7 @@ export async function debugAuthSettings(context: vscode.ExtensionContext): Promi
         {
           hostname: parsedUrl.hostname,
           port: parsedUrl.port,
-          path: "/api/",
+          path: parsedUrl.pathname.replace(/\/$/, "") + "/api/",
           method: "GET",
           headers: {
             "Authorization": `Bearer ${activeToken}`,
