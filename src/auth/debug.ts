@@ -121,14 +121,14 @@ export async function debugAuthSettings(context: vscode.ExtensionContext): Promi
     }
     
     try {
-      const parsedUrl = new URL(activeUrl);
+      const parsedUrl = new URL(`${activeUrl}/api/`);
       const agent = parsedUrl.protocol === "https:" ? new https.Agent({ rejectUnauthorized: !ignoreCertificates }) : undefined;
       
       const request = (parsedUrl.protocol === "https:" ? https : http).request(
         {
           hostname: parsedUrl.hostname,
           port: parsedUrl.port,
-          path: parsedUrl.pathname.replace(/\/$/, "") + "/api/",
+          path: parsedUrl.pathname,
           method: "GET",
           headers: {
             "Authorization": `Bearer ${activeToken}`,
@@ -204,7 +204,7 @@ export async function testHomeAssistantConnection(
 ): Promise<{ success: boolean; message: string; data?: any }> {
   return new Promise((resolve, reject) => {
     try {
-      const apiUrl = new URL("/api/", url);
+      const apiUrl = new URL(`${url}/api/`);
       const options = {
         method: "GET",
         headers: {
@@ -249,7 +249,7 @@ export async function testHomeAssistantConnection(
               
               // If we still don't have the version, try a second call to /api/config
               if (version === "unknown") {
-                const configUrl = new URL("/api/config", url);
+                const configUrl = new URL(`${url}/api/config`);
                 const configReq = requestLib.request(configUrl, options, (configRes) => {
                   let configData = "";
                   configRes.on("data", (chunk) => {
