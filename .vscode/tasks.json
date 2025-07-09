@@ -12,17 +12,17 @@
         "problemMatcher": []
     },
     {
-			"type": "npm",
-			"script": "watch",
-			"problemMatcher": "$tsc-watch",
-			"isBackground": true,
-			"presentation": {
-				"reveal": "never"
-			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		}
+        "type": "npm",
+        "script": "watch",
+        "problemMatcher": "$tsc-watch",
+        "isBackground": true,
+        "presentation": {
+            "reveal": "never"
+        },
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        }
+    }
 ]
 }
