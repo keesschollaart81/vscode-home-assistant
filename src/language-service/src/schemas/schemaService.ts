@@ -20,16 +20,12 @@ export class SchemaServiceForIncludes {
     const jsonPathMappings = path.join(__dirname, "mappings.json");
     const mappingFileContents = await fs.readFile(jsonPathMappings, "utf-8");
     this.mappings = JSON.parse(mappingFileContents);
-
-    // Load all schemas in parallel for better performance
-    await Promise.all(
-      this.mappings.map(async (mapping) => {
-        const jsonPath = path.join(__dirname, "json", mapping.file);
-        const filecontents = await fs.readFile(jsonPath, "utf-8");
-        const schema = JSON.parse(filecontents) as JSONSchema;
-        mapping.schema = schema;
-      })
-    );
+    for (const mapping of this.mappings) {
+      const jsonPath = path.join(__dirname, "json", mapping.file);
+      const filecontents = await fs.readFile(jsonPath, "utf-8");
+      const schema = JSON.parse(filecontents) as JSONSchema;
+      mapping.schema = schema;
+    };
   }
 
   public async getSchemaContributions(haFiles: HaFileInfo[]): Promise<any> {
