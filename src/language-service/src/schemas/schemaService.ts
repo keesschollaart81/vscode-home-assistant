@@ -5,19 +5,22 @@ import { HaFileInfo } from "../haConfig/dto";
 
 export class SchemaServiceForIncludes {
   private mappings: (PathToSchemaMapping & { schema: JSONSchema })[];
-  private initialized: boolean = false;
 
-  constructor() {
+  private constructor() {
     this.mappings = [];
   }
 
+  public static async create(): Promise<SchemaServiceForIncludes> {
+    const instance = new SchemaServiceForIncludes();
+    await instance.initialize();
+    return instance;
+  }
+
   private async initialize(): Promise<void> {
-    if (this.initialized) return;
-    
     const jsonPathMappings = path.join(__dirname, "mappings.json");
     const mappingFileContents = await fs.readFile(jsonPathMappings, "utf-8");
     this.mappings = JSON.parse(mappingFileContents);
-    
+
     // Load all schemas in parallel for better performance
     await Promise.all(
       this.mappings.map(async (mapping) => {
@@ -27,14 +30,9 @@ export class SchemaServiceForIncludes {
         mapping.schema = schema;
       })
     );
-    
-    this.initialized = true;
   }
 
   public async getSchemaContributions(haFiles: HaFileInfo[]): Promise<any> {
-    // Ensure the service is initialized before proceeding
-    await this.initialize();
-    
     const results: {
       uri: string;
       fileMatch?: string[];

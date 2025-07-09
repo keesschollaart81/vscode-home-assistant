@@ -37,18 +37,16 @@ export class VsCodeFileAccessor implements FileAccessor {
       // open file in editor, might not be saved yet
       return textDocument.getText();
     }
-    return new Promise<string>(async (c, e) => {
-      try {
-        const result = await fs.readFile(uri, "utf-8");
-        c(result);
-      } catch (err: any) {
-        if (err.code === 'ENOENT') {
-          c(null);
-        } else {
-          e(err);
-        }
+    try {
+      const result = await fs.readFile(uri, "utf-8");
+      return result;
+    } catch (err: any) {
+      if (err.code === "ENOENT") {
+        return null;
+      } else {
+        throw err;
       }
-    });
+    }
   }
 
   public async getFilesInFolder(
@@ -98,7 +96,7 @@ export class VsCodeFileAccessor implements FileAccessor {
 
     const dirOfFile = path.dirname(relativeFrom);
     subFolder = path.join(dirOfFile, subFolder);
-    return this.getFilesInFolder(subFolder);
+    return await this.getFilesInFolder(subFolder);
   }
 
   public async getFilesInFolderRelativeFromAsFileUri(

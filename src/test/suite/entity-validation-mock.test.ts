@@ -118,7 +118,7 @@ suite("Entity Validation with Mock Data", () => {
   let languageService: HomeAssistantLanguageService;
   let mockConnection: MockHaConnection;
 
-  suiteSetup(() => {
+  suiteSetup(async () => {
     // Set up mock services
     mockConnection = new MockHaConnection();
     const fileAccessor = new MockFileAccessor();
@@ -135,7 +135,7 @@ suite("Entity Validation with Mock Data", () => {
       haConfig,
       mockConnection as any, // Type assertion to bypass strict typing
       [],
-      new SchemaServiceForIncludes(),
+      await SchemaServiceForIncludes.create(),
       () => { /* mock sendDiagnostics */ }, 
       () => { /* mock diagnoseAllFiles */ },
       { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service
