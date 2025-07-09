@@ -100,12 +100,12 @@ connection.onInitialize(async (params) => {
     definitionProviders,
     await SchemaServiceForIncludes.create(),
     sendDiagnostics,
-    () => {
-      documents.all().forEach(async (d) => {
+    async () => {
+      for (const d of documents.all()) {
         const diagnostics =
           await homeAsisstantLanguageService.getDiagnostics(d);
         sendDiagnostics(d.uri, diagnostics);
-      });
+      }
     },
     configurationService,
   );
