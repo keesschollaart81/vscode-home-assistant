@@ -52,7 +52,7 @@ export class HomeAssistantLanguageService {
     private configurationService: IConfigurationService,
   ) {}
 
-  public findAndApplySchemas = (): void => {
+  public findAndApplySchemas = async (): Promise<void> => {
     try {
       const haFiles = this.haConfig.getAllFiles();
       if (haFiles && haFiles.length > 0) {
@@ -68,7 +68,7 @@ export class HomeAssistantLanguageService {
         format: true,
         hover: true,
         isKubernetes: false,
-        schemas: this.schemaServiceForIncludes.getSchemaContributions(haFiles),
+        schemas: await this.schemaServiceForIncludes.getSchemaContributions(haFiles),
       } as LanguageSettings);
 
       this.diagnoseAllFiles();
@@ -110,7 +110,7 @@ export class HomeAssistantLanguageService {
           `Discover all configuration files because ${document.uri} got updated and new files were found...`,
         );
         await this.haConfig.discoverFiles();
-        this.findAndApplySchemas();
+        await this.findAndApplySchemas();
       }
 
       const diagnostics = await this.getDiagnostics(document);

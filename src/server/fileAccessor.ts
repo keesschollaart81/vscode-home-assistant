@@ -1,20 +1,20 @@
 import { TextDocuments } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import * as path from "path";
 import * as vscodeUri from "vscode-uri";
 
 export interface FileAccessor {
   getFileContents(fileName: string): Promise<string>;
-  getFilesInFolder(subFolder: string): string[];
+  getFilesInFolder(subFolder: string): Promise<string[]>;
   getFilesInFolderRelativeFrom(
     subFolder: string,
     relativeFrom: string,
-  ): string[];
+  ): Promise<string[]>;
   getFilesInFolderRelativeFromAsFileUri(
     subFolder: string,
     relativeFrom: string,
-  ): string[];
+  ): Promise<string[]>;
   getRelativePath(relativeFrom: string, filename: string): string;
   getRelativePathAsFileUri(relativeFrom: string, filename: string): string;
   fromUriToLocalPath(uri: string): string;
@@ -37,40 +37,41 @@ export class VsCodeFileAccessor implements FileAccessor {
       // open file in editor, might not be saved yet
       return textDocument.getText();
     }
-    return new Promise<string>((c, e) => {
-      fs.exists(uri, (exists) => {
-        if (!exists) {
+    return new Promise<string>(async (c, e) => {
+      try {
+        const result = await fs.readFile(uri, "utf-8");
+        c(result);
+      } catch (err: any) {
+        if (err.code === 'ENOENT') {
           c(null);
+        } else {
+          e(err);
         }
-        fs.readFile(uri, "utf-8", (err, result) => {
-          if (err) {
-            e(err);
-          } else {
-            c(result);
-          }
-        });
-      });
+      }
     });
   }
 
-  public getFilesInFolder(
+  public async getFilesInFolder(
     subFolder: string,
     filelist: string[] = [],
-  ): string[] {
+  ): Promise<string[]> {
     subFolder = path.normalize(subFolder);
 
     try {
-      fs.readdirSync(subFolder).forEach((file) => {
+      const files = await fs.readdir(subFolder);
+      for (const file of files) {
         // ignore dot files
         if (file.charAt(0) === ".") {
-          return;
+          continue;
         }
-        filelist =
-          fs.statSync(path.join(subFolder, file)).isDirectory() &&
-          !file.startsWith(".")
-            ? this.getFilesInFolder(path.join(subFolder, file), filelist)
-            : filelist.concat(path.join(subFolder, file));
-      });
+        const filePath = path.join(subFolder, file);
+        const stat = await fs.stat(filePath);
+        if (stat.isDirectory() && !file.startsWith(".")) {
+          filelist = await this.getFilesInFolder(filePath, filelist);
+        } else {
+          filelist = filelist.concat(filePath);
+        }
+      }
     } catch {
       console.log(`Cannot find the files in folder ${subFolder}`);
     }
@@ -89,10 +90,10 @@ export class VsCodeFileAccessor implements FileAccessor {
     return relativeFrom;
   };
 
-  public getFilesInFolderRelativeFrom(
+  public async getFilesInFolderRelativeFrom(
     subFolder: string,
     relativeFrom: string,
-  ): string[] {
+  ): Promise<string[]> {
     relativeFrom = this.dealtWithRelativeFrom(relativeFrom);
 
     const dirOfFile = path.dirname(relativeFrom);
@@ -100,11 +101,11 @@ export class VsCodeFileAccessor implements FileAccessor {
     return this.getFilesInFolder(subFolder);
   }
 
-  public getFilesInFolderRelativeFromAsFileUri(
+  public async getFilesInFolderRelativeFromAsFileUri(
     subFolder: string,
     relativeFrom: string,
-  ): string[] {
-    const files = this.getFilesInFolderRelativeFrom(subFolder, relativeFrom);
+  ): Promise<string[]> {
+    const files = await this.getFilesInFolderRelativeFrom(subFolder, relativeFrom);
     return files.map((f) => vscodeUri.URI.file(f).toString());
   }
 

@@ -84,7 +84,7 @@ connection.onInitialize((params) => {
     try {
       console.log("Discovering files and updating schemas...");
       await haConfigInstance.discoverFiles();
-      homeAsisstantLanguageService.findAndApplySchemas();
+      await homeAsisstantLanguageService.findAndApplySchemas();
       console.log("Files discovered and schemas updated successfully");
     } catch (e) {
       console.error(
