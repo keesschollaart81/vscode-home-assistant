@@ -112,6 +112,7 @@ export class HomeAssistantConfiguration {
     const ourFolders = [
       path.join("blueprints", "automation") + path.sep,
       path.join("blueprints", "script") + path.sep,
+      path.join("blueprints", "template") + path.sep,
       "automations" + path.sep,
       "custom_sentences" + path.sep,
     ];

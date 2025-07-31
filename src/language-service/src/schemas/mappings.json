@@ -245,6 +245,13 @@
     "fromType": "ScriptBlueprint"
   },
   {
+    "key": "blueprint-template",
+    "path": "blueprints/template",
+    "file": "blueprint-template.json",
+    "tsFile": "integrations/core/blueprint.ts",
+    "fromType": "TemplateBlueprint"
+  },
+  {
     "key": "custom-sentences",
     "path": "custom_sentences.yaml",
     "file": "custom-sentences.json",
