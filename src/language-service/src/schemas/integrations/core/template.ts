@@ -19,6 +19,7 @@ import {
   WindSpeedUnit,
 } from "../../types";
 import { Action } from "../actions";
+import { BlueprintUsage } from "./blueprint";
 import { Condition } from "../conditions";
 import { PlatformSchema } from "../platform";
 import { Trigger } from "../triggers";
@@ -66,7 +67,7 @@ export interface Item {
    */
   sensor?: SensorItem | SensorItem[] | IncludeList;
 
-    /**
+  /**
    * List of switches
    * https://www.home-assistant.io/integrations/template/#switch
    */
@@ -90,6 +91,12 @@ export interface Item {
    * https://www.home-assistant.io/integrations/template#trigger
    */
   trigger?: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * Define template sensors or binary sensors based on a blueprint. Optional. See template template documentation.
+   * https://www.home-assistant.io/integrations/template/#using-blueprints
+   */
+  use_blueprint?: BlueprintUsage;
 
   /**
    * The unique ID for this config block. This will be prefixed to all unique IDs of all entities in this block.
