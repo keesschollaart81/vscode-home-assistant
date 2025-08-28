@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🏗 Set up NodeJS
         uses: actions/setup-node@v4.4.0
