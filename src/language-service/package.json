@@ -46,7 +46,7 @@
     "vscode-test": "^1.4.0"
   },
   "dependencies": {
-    "@types/uuid": "^10.0.0",
+    "@types/uuid": "^11.0.0",
     "axios": "^1.2.1",
     "home-assistant-js-websocket": "^9.1.0",
     "uuid": "^13.0.0",
