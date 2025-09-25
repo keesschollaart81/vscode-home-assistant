@@ -766,6 +766,6 @@
     "ws": "8.18.3",
     "uuid": "^13.0.0",
     "yaml": "2.8.1",
-    "yaml-language-server": "1.18.0"
+    "yaml-language-server": "1.19.1"
   }
 }
