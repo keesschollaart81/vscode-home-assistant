@@ -41,7 +41,7 @@
     "rimraf": "6.0.1",
     "ts-loader": "^9.2.8",
     "ts-node": "10.9.2",
-    "typescript": "5.9.2",
+    "typescript": "5.9.3",
     "typescript-json-schema": "0.65.1",
     "vscode-test": "^1.4.0"
   },
