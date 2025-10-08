@@ -752,7 +752,7 @@
     "typescript-json-schema": "0.65.1"
   },
   "dependencies": {
-    "@vscode/extension-telemetry": "^1.0.0",
+    "@vscode/extension-telemetry": "^1.1.0",
     "axios": "^1.12.2",
     "bufferutil": "^4.0.9",
     "home-assistant-js-websocket": "^9.5.0",
