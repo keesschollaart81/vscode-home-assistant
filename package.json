@@ -733,7 +733,7 @@
     "@types/vscode": "^1.100.0",
     "@types/uuid": "^11.0.0",
     "@types/ws": "8.18.1",
-    "@typescript-eslint/eslint-plugin": "^8.45.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
     "@typescript-eslint/parser": "^8.45.0",
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2",
