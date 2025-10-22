@@ -34,14 +34,14 @@
   },
   "devDependencies": {
     "@types/mocha": "10.0.10",
-    "@types/node": "24.5.2",
+    "@types/node": "24.8.1",
     "@types/vscode": "1.48.0",
     "@types/ws": "8.18.1",
     "@types/yaml": "1.9.7",
     "rimraf": "6.0.1",
     "ts-loader": "^9.2.8",
     "ts-node": "10.9.2",
-    "typescript": "5.9.2",
+    "typescript": "5.9.3",
     "typescript-json-schema": "0.65.1",
     "vscode-test": "^1.4.0"
   },
@@ -54,6 +54,6 @@
     "vscode-languageserver-protocol": "^3.16.0",
     "vscode-languageserver-textdocument": "^1.0.12",
     "vscode-uri": "^3.0.8",
-    "yaml-language-server": "1.18.0"
+    "yaml-language-server": "1.19.2"
   }
 }
