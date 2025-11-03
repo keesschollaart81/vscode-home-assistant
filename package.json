@@ -744,7 +744,7 @@
     "lint-staged": "^16.2.6",
     "mocha": "^11.7.4",
     "prettier": "^3.6.2",
-    "rimraf": "6.0.1",
+    "rimraf": "6.1.0",
     "ts-loader": "^9.5.4",
     "ts-node": "10.9.2",
     "typescript": "^5.9.3",
