@@ -89,7 +89,7 @@ export interface Item {
    * Define an automation trigger to update the entities. Optional. If omitted will update based on referenced entities. See trigger documentation.
    * https://www.home-assistant.io/integrations/template#trigger
    */
-  trigger?: Trigger | Trigger[] | IncludeList;
+  triggers?: Trigger | Trigger[] | IncludeList;
 
   /**
    * The unique ID for this config block. This will be prefixed to all unique IDs of all entities in this block.
