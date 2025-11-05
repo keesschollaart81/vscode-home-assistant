@@ -106,10 +106,24 @@ interface BaseItem {
   availability?: Template;
 
   /**
+   * Use default_entity_id instead of name for automatic generation of the entity id. E.g. sensor.my_awesome_sensor. When used without a unique_id, 
+   * the entity id will update during restart or reload if the entity id is available. If the entity id already exists, the entity id will be created with a number at the end. 
+   * When used with a unique_id, the default_entity_id is only used when the entity is added for the first time. When set, this overrides a user-customized Entity ID in case the entity was deleted and added again.
+   * https://www.home-assistant.io/integrations/template/#default_entity_id
+   */
+  default_entity_id?: string;  
+
+  /**
    * Defines a template for the icon of the entity.
    * https://www.home-assistant.io/integrations/template#icon
    */
   icon?: Template;
+
+  /**
+   * Defines a template for the entity picture of the sensor.
+   * https://www.home-assistant.io/integrations/template/#picture
+   */
+  picture?: Template;  
 
   /**
    * Defines a template to get the name of the entity.
