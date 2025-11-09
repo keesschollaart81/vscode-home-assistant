@@ -34,7 +34,7 @@ export class IncludeDefinitionProvider implements DefinitionProvider {
       case "!include_dir_merge_list":
       case "!include_dir_merge_named":
         // eslint-disable-next-line no-case-declarations
-        let files = this.fileAccessor.getFilesInFolderRelativeFromAsFileUri(
+        let files = await this.fileAccessor.getFilesInFolderRelativeFromAsFileUri(
           whatToInclude,
           uri,
         );

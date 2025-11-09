@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import * as path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 // Tests for goto definition functionality with script references
 suite("Script Reference Tests", () => {
@@ -17,8 +17,8 @@ suite("Script Reference Tests", () => {
     const positionTrackingPath = path.join(workspacePath, "test-position-tracking.yaml");
     const gotoDefinitionPath = path.join(workspacePath, "test-goto-definition.yaml");
     
-    assert.ok(fs.existsSync(positionTrackingPath), "Position tracking test file exists");
-    assert.ok(fs.existsSync(gotoDefinitionPath), "Goto definition test file exists");
+    assert.ok(await fs.access(positionTrackingPath).then(()=>true,()=>false), "Position tracking test file exists");
+    assert.ok(await fs.access(gotoDefinitionPath).then(()=>true,()=>false), "Goto definition test file exists");
   });
 
   test("Script references in automations", async () => {

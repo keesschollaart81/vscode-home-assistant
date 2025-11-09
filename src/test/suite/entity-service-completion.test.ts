@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import * as path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 suite("Entity and Service Completion Tests", () => {
   let workspacePath: string;
@@ -23,7 +23,7 @@ suite("Entity and Service Completion Tests", () => {
   // Create or update a test file with entity/service references
   async function createTestFile(content: string): Promise<vscode.TextDocument> {
     const testFilePath = path.join(workspacePath, "test-completion.yaml");
-    fs.writeFileSync(testFilePath, content);
+    await fs.writeFile(testFilePath, content);
     const document = await vscode.workspace.openTextDocument(testFilePath);
     await vscode.window.showTextDocument(document);
     return document;

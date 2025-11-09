@@ -1,24 +1,34 @@
 import * as path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import { JSONSchema } from "yaml-language-server/out/server/src/languageservice/jsonSchema";
 import { HaFileInfo } from "../haConfig/dto";
 
 export class SchemaServiceForIncludes {
   private mappings: (PathToSchemaMapping & { schema: JSONSchema })[];
 
-  constructor() {
-    const jsonPathMappings = path.join(__dirname, "mappings.json");
-    const mappingFileContents = fs.readFileSync(jsonPathMappings, "utf-8");
-    this.mappings = JSON.parse(mappingFileContents);
-    this.mappings.forEach((mapping) => {
-      const jsonPath = path.join(__dirname, "json", mapping.file);
-      const filecontents = fs.readFileSync(jsonPath, "utf-8");
-      const schema = JSON.parse(filecontents) as JSONSchema;
-      mapping.schema = schema;
-    });
+  private constructor() {
+    this.mappings = [];
   }
 
-  public getSchemaContributions(haFiles: HaFileInfo[]): any {
+  public static async create(): Promise<SchemaServiceForIncludes> {
+    const instance = new SchemaServiceForIncludes();
+    await instance.initialize();
+    return instance;
+  }
+
+  private async initialize(): Promise<void> {
+    const jsonPathMappings = path.join(__dirname, "mappings.json");
+    const mappingFileContents = await fs.readFile(jsonPathMappings, "utf-8");
+    this.mappings = JSON.parse(mappingFileContents);
+    for (const mapping of this.mappings) {
+      const jsonPath = path.join(__dirname, "json", mapping.file);
+      const filecontents = await fs.readFile(jsonPath, "utf-8");
+      const schema = JSON.parse(filecontents) as JSONSchema;
+      mapping.schema = schema;
+    };
+  }
+
+  public async getSchemaContributions(haFiles: HaFileInfo[]): Promise<any> {
     const results: {
       uri: string;
       fileMatch?: string[];
@@ -74,7 +84,7 @@ export class SchemaServiceForIncludes {
       );
       if (relatedPathToSchemaMapping) {
         const id = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
-        let absolutePath = fs.realpathSync.native(haFiles[sourceFile].filename);
+        let absolutePath = await fs.realpath(haFiles[sourceFile].filename);
         absolutePath = absolutePath.replace(/\\/g, "/");
         const fileass = encodeURI(absolutePath);
         let resultEntry = results.find((x) => x.uri === id);

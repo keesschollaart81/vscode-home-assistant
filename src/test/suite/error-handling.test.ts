@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import * as path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import { HomeAssistantYamlFile } from "../../language-service/src/haConfig/haYamlFile";
 import { FileAccessor } from "../../language-service/src/fileAccessor";
 
@@ -30,20 +30,20 @@ class ErrorSimulatingFileAccessor implements FileAccessor {
     }
     
     try {
-      return fs.readFileSync(fileName, "utf8");
+      return await fs.readFile(fileName, "utf8");
     } catch (error) {
       console.error(`Error reading file ${fileName}:`, error);
       return "";
     }
   }
 
-  getFilesInFolder(subFolder: string): string[] {
+  async getFilesInFolder(subFolder: string): Promise<string[]> {
     if (this.shouldFailOnFile && subFolder.includes(this.shouldFailOnFile)) {
       throw new Error(`Simulated error reading directory: ${subFolder}`);
     }
     
     try {
-      return fs.readdirSync(subFolder).filter(f => f.endsWith(".yaml") || f.endsWith(".yml"));
+      return (await fs.readdir(subFolder)).filter(f => f.endsWith(".yaml") || f.endsWith(".yml"));
     } catch {
       return [];
     }
@@ -62,25 +62,25 @@ class ErrorSimulatingFileAccessor implements FileAccessor {
     return `file://${fullPath}`;
   }
 
-  getFilesInFolderRelativeFrom(folder: string, from: string): string[] {
+  async getFilesInFolderRelativeFrom(folder: string, from: string): Promise<string[]> {
     if (this.shouldFailOnFile && (folder.includes(this.shouldFailOnFile) || from.includes(this.shouldFailOnFile))) {
       throw new Error(`Simulated error in getFilesInFolderRelativeFrom: ${folder} from ${from}`);
     }
     
     try {
       const absoluteFolder = path.resolve(path.dirname(from), folder);
-      return fs.readdirSync(absoluteFolder).filter(f => f.endsWith(".yaml") || f.endsWith(".yml"));
+      return (await fs.readdir(absoluteFolder)).filter(f => f.endsWith(".yaml") || f.endsWith(".yml"));
     } catch {
       return [];
     }
   }
 
-  getFilesInFolderRelativeFromAsFileUri(subFolder: string, relativeFrom: string): string[] {
+  async getFilesInFolderRelativeFromAsFileUri(subFolder: string, relativeFrom: string): Promise<string[]> {
     if (this.shouldFailOnFile && (subFolder.includes(this.shouldFailOnFile) || relativeFrom.includes(this.shouldFailOnFile))) {
       throw new Error("Simulated error in getFilesInFolderRelativeFromAsFileUri");
     }
     
-    return this.getFilesInFolderRelativeFrom(subFolder, relativeFrom).map(file => 
+    return (await this.getFilesInFolderRelativeFrom(subFolder, relativeFrom)).map(file => 
       `file://${path.resolve(path.dirname(relativeFrom), subFolder, file)}`
     );
   }
@@ -95,9 +95,9 @@ suite("Error Handling Tests", () => {
   });
   
   // Create a test file with known content
-  function createTestFile(content: string, fileName = "test-error-handling.yaml"): string {
+  async function createTestFile(content: string, fileName = "test-error-handling.yaml"): Promise<string> {
     const testFilePath = path.join(workspacePath, fileName);
-    fs.writeFileSync(testFilePath, content);
+    await fs.writeFile(testFilePath, content);
     return testFilePath;
   }
   
@@ -120,7 +120,7 @@ script:
       another_error
 `;
     
-    const testFilePath = createTestFile(malformedContent);
+    const testFilePath = await createTestFile(malformedContent);
     const fileAccessor = new ErrorSimulatingFileAccessor();
     
     // Parse the file
@@ -166,7 +166,7 @@ script:
           entity_id: light.living_room
 `;
     
-    const testFilePath = createTestFile(validContent);
+    const testFilePath = await createTestFile(validContent);
     const fileAccessor = new ErrorSimulatingFileAccessor();
     
     // Set up the file accessor to fail on this file
@@ -203,7 +203,7 @@ script:
           entity_id: light.living_room
 `;
     
-    const testFilePath = createTestFile(validContent);
+    const testFilePath = await createTestFile(validContent);
     const fileAccessor = new ErrorSimulatingFileAccessor();
     
     // Simulate a slow file access (1.5 seconds)
@@ -225,7 +225,7 @@ script:
   
   test("Handles empty files gracefully", async () => {
     // Create an empty file
-    const testFilePath = createTestFile("", "empty.yaml");
+    const testFilePath = await createTestFile("", "empty.yaml");
     const fileAccessor = new ErrorSimulatingFileAccessor();
     
     // Try to parse an empty file

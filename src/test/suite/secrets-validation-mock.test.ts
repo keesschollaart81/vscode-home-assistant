@@ -111,7 +111,7 @@ mqtt_password: "mqttpass"
       haConfig,
       mockConnection as any, // Type assertion to bypass strict typing
       [],
-      new SchemaServiceForIncludes(),
+      await SchemaServiceForIncludes.create(),
       () => { /* mock sendDiagnostics */ }, 
       () => { /* mock diagnoseAllFiles */ },
       { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service
