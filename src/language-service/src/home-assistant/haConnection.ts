@@ -207,9 +207,9 @@ export class HaConnection implements IHaConnection {
     
     if (hassUrl) {
       try {
-        const url = new URL(hassUrl);
+        const url = new URL(`${hassUrl}/api/websocket`);
         const wsProtocol = url.protocol === "https:" ? "wss:" : "ws:";
-        wsUrl = `${wsProtocol}//${url.host}/api/websocket`;
+        wsUrl = `${wsProtocol}//${url.host}${url.pathname}`;
         console.log(`Generated WebSocket URL: ${wsUrl}`);
       } catch (error) {
         console.error(`Failed to generate WebSocket URL from ${hassUrl}:`, error);
