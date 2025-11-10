@@ -102,8 +102,8 @@ export class HomeAssistantConfiguration {
     return allScripts;
   };
 
-  private getRootFiles = (): string[] => {
-    const filesInRoot = this.fileAccessor.getFilesInFolder("");
+  private getRootFiles = async (): Promise<string[]> => {
+    const filesInRoot = await this.fileAccessor.getFilesInFolder("");
     const ourFiles = [
       "configuration.yaml",
       "ui-lovelace.yaml",
@@ -139,7 +139,7 @@ export class HomeAssistantConfiguration {
   };
 
   public discoverFiles = async (): Promise<void> => {
-    const rootFiles = this.getRootFiles();
+    const rootFiles = await this.getRootFiles();
 
     let results = [];
     for (const rootFile of rootFiles) {

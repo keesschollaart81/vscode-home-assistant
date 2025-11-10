@@ -27,7 +27,7 @@ console.error = connection.window.showErrorMessage.bind(connection.window);
 const documents = new TextDocuments(TextDocument);
 documents.listen(connection);
 
-connection.onInitialize((params) => {
+connection.onInitialize(async (params) => {
   connection.console.log(
     `[Home Assistant Language Server(${process.pid})] Started and initialize received`,
   );
@@ -84,7 +84,7 @@ connection.onInitialize((params) => {
     try {
       console.log("Discovering files and updating schemas...");
       await haConfigInstance.discoverFiles();
-      homeAsisstantLanguageService.findAndApplySchemas();
+      await homeAsisstantLanguageService.findAndApplySchemas();
       console.log("Files discovered and schemas updated successfully");
     } catch (e) {
       console.error(
@@ -98,14 +98,14 @@ connection.onInitialize((params) => {
     haConfigInstance,
     haConnection,
     definitionProviders,
-    new SchemaServiceForIncludes(),
+    await SchemaServiceForIncludes.create(),
     sendDiagnostics,
-    () => {
-      documents.all().forEach(async (d) => {
+    async () => {
+      for (const d of documents.all()) {
         const diagnostics =
           await homeAsisstantLanguageService.getDiagnostics(d);
         sendDiagnostics(d.uri, diagnostics);
-      });
+      }
     },
     configurationService,
   );
