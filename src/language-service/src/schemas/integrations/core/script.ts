@@ -4,6 +4,7 @@
  */
 import { Data, IncludeNamed, IncludeList, PositiveInteger } from "../../types";
 import { Action } from "../actions";
+import { BlueprintUsage } from "./blueprint";
 import { Selector } from "../selectors";
 
 export type Domain = "script";
@@ -143,10 +144,11 @@ export interface ScriptItem extends BaseItem {
 }
 
 interface BlueprintItem extends BaseItem {
-  use_blueprint: {
-    path: string;
-    input?: { [key: string]: any };
-  };
+  /**
+   * Define script based on a blueprint. Optional. See blueprint tutorial.
+   * https://www.home-assistant.io/docs/blueprint/tutorial/#using-your-blueprint-via-configurationyaml
+   */
+  use_blueprint: BlueprintUsage;
 
   /**
    * The sequence of actions to be performed in the script.

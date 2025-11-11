@@ -9,6 +9,7 @@ import {
   PositiveInteger,
 } from "../../types";
 import { Action } from "../actions";
+import { BlueprintUsage } from "./blueprint";
 import { Condition } from "../conditions";
 import { Trigger } from "../triggers";
 
@@ -140,10 +141,12 @@ export interface AutomationItem extends BaseItem {
 }
 
 interface BlueprintItem extends BaseItem {
-  use_blueprint: {
-    path: string;
-    input?: { [key: string]: any };
-  };
+
+  /**
+   * Define automation based on a blueprint. Optional. See blueprint tutorial.
+   * https://www.home-assistant.io/docs/blueprint/tutorial/#using-your-blueprint-via-configurationyaml
+   */
+  use_blueprint: BlueprintUsage; 
 
   /**
    * Triggers describe events that should trigger the automation rule.

@@ -136,3 +136,18 @@ interface BlueprintInputSectionSchema {
     [key: string]: BlueprintInputSchema;
   };
 }
+
+export interface BlueprintUsage {
+  /**
+   * Path to the blueprint, depending on the blueprint type relative to:
+   * * config/blueprints/automation/
+   * * config/blueprints/script/
+   * * config/blueprints/template/
+   */
+  path: string;
+
+  /**
+   * A dictionary of defined blueprint inputs as per blueprint definition.
+   */
+  input?: { [key: string]: any };
+}
