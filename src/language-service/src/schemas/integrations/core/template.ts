@@ -143,7 +143,7 @@ interface BaseItem {
   unique_id?: string;
 }
 
-interface BinarySensorItem extends BaseItem {
+export interface BinarySensorItem extends BaseItem {
   /**
    * Defines a template to get the available state of the entity. If the template either fails to render or returns True, "1", "true", "yes", "on", "enable", or a non-zero number, the entity will be available.
    * https://www.home-assistant.io/integrations/template#availability
@@ -274,7 +274,7 @@ interface SelectItem extends BaseItem {
   state: Template;
 }
 
-interface SensorItem extends BaseItem {
+export interface SensorItem extends BaseItem {
   /**
    * Defines a template to get the available state of the entity. If the template either fails to render or returns True, "1", "true", "yes", "on", "enable", or a non-zero number, the entity will be available.
    * https://www.home-assistant.io/integrations/template#availability

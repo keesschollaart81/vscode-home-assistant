@@ -62,6 +62,14 @@ export class SchemaServiceForIncludes {
       }
 
       if (
+        sourceFileMappingPath.startsWith(
+          path.join("blueprints", "template") + path.sep,
+        )
+      ) {
+        sourceFileMappingPath = "blueprints/template";
+      }
+
+      if (
         sourceFileMappingPath.startsWith("automations" + path.sep) ||
         sourceFileMappingPath === "automations.yaml"
       ) {
