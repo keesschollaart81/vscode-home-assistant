@@ -7,6 +7,7 @@ import {
   DynamicTemplate,
   Entities,
   IncludeList,
+  Input,
   InputDatetimeEntity,
   InputNumberEntity,
   Integer,
@@ -27,6 +28,7 @@ export type Condition =
   | AndShorthandCondition
   | DeviceCondition
   | DynamicTemplate
+  | Input
   | NotCondition
   | NotShorthandCondition
   | NumericStateCondition

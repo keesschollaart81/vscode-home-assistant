@@ -454,6 +454,11 @@ export type IncludeNamed =
   `!${IncludeDir}_named${WhitespaceCharacter}${string}`;
 
 /**
+ * @TJS-pattern ^\!input\s.+$
+ */
+export type Input = `!input${WhitespaceCharacter}${string}`;
+
+/**
  * @TJS-type integer
  */
 export type Integer = number;
