@@ -16,6 +16,7 @@ import { Trigger } from "../triggers";
 export type Domain = "automation";
 export type Schema = Item[] | IncludeList;
 export type File = Item | Item[];
+export type AutomationFile = Item | Item[];
 
 export type Mode = "single" | "parallel" | "queued" | "restart";
 type Item = AutomationItem | BlueprintItem;
