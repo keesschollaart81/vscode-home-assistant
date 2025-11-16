@@ -116,7 +116,7 @@
     "path": "configuration.yaml/automation",
     "file": "integration-automation.json",
     "tsFile": "integrations/core/automation.ts",
-    "fromType": "File"
+    "fromType": "AutomationFile"
   },
   {
     "key": "integration-binary_sensor",
