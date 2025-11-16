@@ -52,8 +52,28 @@ export class VsCodeFileAccessor implements FileAccessor {
   public async getFilesInFolder(
     subFolder: string,
     filelist: string[] = [],
+    visitedDirs = new Set<string>(),
   ): Promise<string[]> {
     subFolder = path.normalize(subFolder);
+
+    // Get the real path to detect symlink loops
+    let realPath: string;
+    try {
+      realPath = await fs.realpath(subFolder);
+    } catch {
+      // If we can't resolve the real path, skip this directory
+      console.log(`Cannot resolve real path for ${subFolder}`);
+      return filelist;
+    }
+
+    // Check if we've already visited this directory (prevents infinite loops)
+    if (visitedDirs.has(realPath)) {
+      console.log(`Skipping already visited directory: ${subFolder} (real path: ${realPath})`);
+      return filelist;
+    }
+
+    // Mark this directory as visited
+    visitedDirs.add(realPath);
 
     try {
       const files = await fs.readdir(subFolder);
@@ -63,10 +83,34 @@ export class VsCodeFileAccessor implements FileAccessor {
           continue;
         }
         const filePath = path.join(subFolder, file);
-        const stat = await fs.stat(filePath);
-        if (stat.isDirectory() && !file.startsWith(".")) {
-          filelist = await this.getFilesInFolder(filePath, filelist);
-        } else {
+
+        // Use lstat to not follow symlinks automatically
+        let stat;
+        try {
+          stat = await fs.lstat(filePath);
+        } catch {
+          // Skip files we can't stat
+          continue;
+        }
+
+        if (stat.isSymbolicLink()) {
+          // For symlinks, check if they point to a directory
+          try {
+            const targetStat = await fs.stat(filePath);
+            if (targetStat.isDirectory()) {
+              // Recursively scan, but with visited directory tracking
+              filelist = await this.getFilesInFolder(filePath, filelist, visitedDirs);
+            } else {
+              // It's a file symlink, add it to the list
+              filelist = filelist.concat(filePath);
+            }
+          } catch {
+            // Broken symlink or permission issue, skip it
+            console.log(`Skipping broken or inaccessible symlink: ${filePath}`);
+          }
+        } else if (stat.isDirectory() && !file.startsWith(".")) {
+          filelist = await this.getFilesInFolder(filePath, filelist, visitedDirs);
+        } else if (stat.isFile()) {
           filelist = filelist.concat(filePath);
         }
       }
