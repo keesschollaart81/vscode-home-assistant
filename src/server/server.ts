@@ -127,6 +127,10 @@ connection.onInitialize(async (params) => {
   documents.onDidOpen((e) =>
     homeAsisstantLanguageService.onDocumentOpen(e.document),
   );
+  documents.onDidClose((e) => {
+    // Remove closed documents from file collection to prevent memory leaks
+    haConfigInstance.removeFile(e.document.uri);
+  });
 
   let onDidSaveDebounce: NodeJS.Timeout;
   documents.onDidSave((e) => {

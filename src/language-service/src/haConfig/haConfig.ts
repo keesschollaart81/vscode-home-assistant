@@ -74,6 +74,11 @@ export class HomeAssistantConfiguration {
     };
   };
 
+  public removeFile = (uri: string): void => {
+    const filename = this.fileAccessor.fromUriToLocalPath(uri);
+    delete this.files[filename];
+  };
+
   public getIncludes = async (): Promise<IncludeReferences> => {
     let results = [];
     for (const file of Object.values(this.files)) {

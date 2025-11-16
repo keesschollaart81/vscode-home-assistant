@@ -141,6 +141,14 @@ export class HaConnection implements IHaConnection {
 
   private hassServices!: Promise<HassServices>;
 
+  // Cache the current entities to avoid memory churn from subscription updates
+  private currentEntitiesCache: HassEntities | undefined;
+  private currentServicesCache: HassServices | undefined;
+
+  // Track unsubscribe functions to prevent memory leaks
+  private unsubscribeEntities: (() => void) | undefined;
+  private unsubscribeServices: (() => void) | undefined;
+
   // Track the last successful configuration to avoid unnecessary reconnections
   private lastSuccessfulConfig: {
     token?: string;
@@ -425,7 +433,7 @@ export class HaConnection implements IHaConnection {
     }
     
     this.disconnect();
-    
+
     // Reset connection state to force full reconnection
     this.connection = undefined;
     this.hassAreas = undefined as any;
@@ -435,6 +443,10 @@ export class HaConnection implements IHaConnection {
     this.hassFloors = undefined as any;
     this.hassLabels = undefined as any;
     this.hassServices = undefined as any;
+
+    // Clear caches to release memory
+    this.currentEntitiesCache = undefined;
+    this.currentServicesCache = undefined;
     
     try {
       await this.tryConnect();
@@ -694,6 +706,13 @@ export class HaConnection implements IHaConnection {
   }
 
   public async getHassEntities(): Promise<HassEntities> {
+    // If we have a cached value, return it immediately
+    // This is updated in real-time by the subscription callback
+    if (this.currentEntitiesCache !== undefined) {
+      return this.currentEntitiesCache;
+    }
+
+    // If we already have a promise waiting for initial load, return it
     if (this.hassEntities !== undefined) {
       return this.hassEntities;
     }
@@ -706,11 +725,18 @@ export class HaConnection implements IHaConnection {
         if (!this.connection) {
           return reject();
         }
-        
-        // Subscribe to entities and resolve with the initial state
-        subscribeEntities(this.connection, (entities) => {
+
+        // Unsubscribe from previous subscription to prevent memory leak
+        if (this.unsubscribeEntities) {
+          this.unsubscribeEntities();
+          this.unsubscribeEntities = undefined;
+        }
+
+        // Subscribe to entities and update cache on every change
+        // This prevents memory churn from creating new promise values on each update
+        this.unsubscribeEntities = subscribeEntities(this.connection, (entities) => {
           const entityCount = Object.keys(entities).length;
-          
+
           // Only log if the entity count has changed
           if (this.lastEntityCount !== entityCount) {
             if (this.lastEntityCount === undefined) {
@@ -726,7 +752,12 @@ export class HaConnection implements IHaConnection {
             }
             this.lastEntityCount = entityCount;
           }
-          
+
+          // Update the cache with the latest entities
+          // This is more memory-efficient than creating new promises on each update
+          this.currentEntitiesCache = entities;
+
+          // Only resolve the promise once (on first load)
           resolve(entities);
         });
       },
@@ -1115,9 +1146,17 @@ export class HaConnection implements IHaConnection {
   }
 
   public async getHassServices(): Promise<HassServices> {
+    // If we have a cached value, return it immediately
+    // This is updated in real-time by the subscription callback
+    if (this.currentServicesCache !== undefined) {
+      return this.currentServicesCache;
+    }
+
+    // If we already have a promise waiting for initial load, return it
     if (this.hassServices !== undefined) {
       return this.hassServices;
     }
+
     await this.createConnection();
 
     this.hassServices = new Promise<HassServices>(
@@ -1126,10 +1165,25 @@ export class HaConnection implements IHaConnection {
         if (!this.connection) {
           return reject();
         }
-        subscribeServices(this.connection, (services: HassServices) => {
+
+        // Unsubscribe from previous subscription to prevent memory leak
+        if (this.unsubscribeServices) {
+          this.unsubscribeServices();
+          this.unsubscribeServices = undefined;
+        }
+
+        // Subscribe to services and update cache on every change
+        // This prevents memory churn from creating new promise values on each update
+        this.unsubscribeServices = subscribeServices(this.connection, (services: HassServices) => {
           console.log(
             `Got ${Object.keys(services).length} services from Home Assistant`,
           );
+
+          // Update the cache with the latest services
+          // This is more memory-efficient than creating new promises on each update
+          this.currentServicesCache = services;
+
+          // Only resolve the promise once (on first load)
           return resolve(services);
         });
       },
@@ -1186,9 +1240,24 @@ export class HaConnection implements IHaConnection {
       return;
     }
     console.log("Disconnecting from Home Assistant");
+
+    // Unsubscribe from all subscriptions to prevent memory leaks
+    if (this.unsubscribeEntities) {
+      this.unsubscribeEntities();
+      this.unsubscribeEntities = undefined;
+    }
+    if (this.unsubscribeServices) {
+      this.unsubscribeServices();
+      this.unsubscribeServices = undefined;
+    }
+
+    // Clear caches to release memory immediately on disconnect
+    this.currentEntitiesCache = undefined;
+    this.currentServicesCache = undefined;
+
     this.connection.close();
     this.connection = undefined;
-    
+
     // Notify about disconnection if handler exists
     if (this.onConnectionFailed) {
       try {
