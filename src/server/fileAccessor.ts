@@ -22,12 +22,15 @@ export interface FileAccessor {
 
 export class VsCodeFileAccessor implements FileAccessor {
   private ourRoot: string;
+  private workspacePath: string;
 
   constructor(
     private workspaceFolder: string,
     private documents: TextDocuments<TextDocument>,
   ) {
     this.ourRoot = path.resolve();
+    // Convert workspace URI to file system path
+    this.workspacePath = vscodeUri.URI.parse(workspaceFolder).fsPath;
   }
 
   public async getFileContents(uri: string): Promise<string> {
@@ -54,21 +57,25 @@ export class VsCodeFileAccessor implements FileAccessor {
     filelist: string[] = [],
     visitedDirs = new Set<string>(),
   ): Promise<string[]> {
-    subFolder = path.normalize(subFolder);
+    // Resolve subfolder relative to workspace path
+    const resolvedSubFolder = path.isAbsolute(subFolder)
+      ? subFolder
+      : path.join(this.workspacePath, subFolder);
+    const normalizedSubFolder = path.normalize(resolvedSubFolder);
 
     // Get the real path to detect symlink loops
     let realPath: string;
     try {
-      realPath = await fs.realpath(subFolder);
+      realPath = await fs.realpath(normalizedSubFolder);
     } catch {
       // If we can't resolve the real path, skip this directory
-      console.log(`Cannot resolve real path for ${subFolder}`);
+      console.log(`Cannot resolve real path for ${normalizedSubFolder}`);
       return filelist;
     }
 
     // Check if we've already visited this directory (prevents infinite loops)
     if (visitedDirs.has(realPath)) {
-      console.log(`Skipping already visited directory: ${subFolder} (real path: ${realPath})`);
+      console.log(`Skipping already visited directory: ${normalizedSubFolder} (real path: ${realPath})`);
       return filelist;
     }
 
@@ -76,13 +83,13 @@ export class VsCodeFileAccessor implements FileAccessor {
     visitedDirs.add(realPath);
 
     try {
-      const files = await fs.readdir(subFolder);
+      const files = await fs.readdir(normalizedSubFolder);
       for (const file of files) {
         // ignore dot files
         if (file.charAt(0) === ".") {
           continue;
         }
-        const filePath = path.join(subFolder, file);
+        const filePath = path.join(normalizedSubFolder, file);
 
         // Use lstat to not follow symlinks automatically
         let stat;
@@ -115,7 +122,7 @@ export class VsCodeFileAccessor implements FileAccessor {
         }
       }
     } catch {
-      console.log(`Cannot find the files in folder ${subFolder}`);
+      console.log(`Cannot find the files in folder ${normalizedSubFolder}`);
     }
     return filelist;
   }
