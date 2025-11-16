@@ -44,6 +44,12 @@ export interface Item {
   button?: ButtonItem | ButtonItem[] | IncludeList;
 
   /**
+   * List of covers
+   * https://www.home-assistant.io/integrations/template#cover
+   */
+  cover?: CoverItem | CoverItem[] | IncludeList;
+
+  /**
    * List of numbers
    * https://www.home-assistant.io/integrations/template#number
    */
@@ -193,6 +199,74 @@ interface ButtonItem extends BaseItem {
    * https://www.home-assistant.io/integrations/template#button
    */
   press?: Action | Action[];
+}
+
+interface CoverItem extends BaseItem {
+  /**
+   * Defines actions to run when the cover is given a close command.
+   * https://www.home-assistant.io/integrations/template#close_cover
+   */
+  close_cover?: Action | Action[];
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the UI.
+   * https://www.home-assistant.io/integrations/template#device_class
+   */
+  device_class?: DeviceClassesCover;
+
+  /**
+   * Defines actions to run when the cover is given an open command.
+   * https://www.home-assistant.io/integrations/template#open_cover
+   */
+  open_cover?: Action | Action[];
+
+  /**
+   * Defines if the cover works in optimistic mode.
+   * https://www.home-assistant.io/integrations/template#optimistic
+   */
+  optimistic?: boolean;
+
+  /**
+   * Defines a template to get the position of the cover. Legal values are numbers between 0 (closed) and 100 (open).
+   * https://www.home-assistant.io/integrations/template#position
+   */
+  position?: Template;
+
+  /**
+   * Defines actions to run when the cover is given a set position command. The position is available as `position` variable.
+   * https://www.home-assistant.io/integrations/template#set_cover_position
+   */
+  set_cover_position?: Action | Action[];
+
+  /**
+   * Defines actions to run when the cover is given a set tilt position command. The tilt position is available as `tilt` variable.
+   * https://www.home-assistant.io/integrations/template#set_cover_tilt_position
+   */
+  set_cover_tilt_position?: Action | Action[];
+
+  /**
+   * Defines a template to get the state of the cover. Valid values are open, opening, closed, closing.
+   * https://www.home-assistant.io/integrations/template#state
+   */
+  state?: Template;
+
+  /**
+   * Defines actions to run when the cover is given a stop command.
+   * https://www.home-assistant.io/integrations/template#stop_cover
+   */
+  stop_cover?: Action | Action[];
+
+  /**
+   * Defines a template to get the tilt position of the cover. Legal values are numbers between 0 (closed) and 100 (open).
+   * https://www.home-assistant.io/integrations/template#tilt
+   */
+  tilt?: Template;
+
+  /**
+   * Defines if the cover tilt works in optimistic mode.
+   * https://www.home-assistant.io/integrations/template#tilt_optimistic
+   */
+  tilt_optimistic?: boolean;
 }
 
 interface ImageItem extends BaseItem {
