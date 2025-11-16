@@ -15,6 +15,7 @@ import {
   PersonEntities,
   ZoneEntities,
   SensorEntities,
+  SensorEntityOffsetOrList,
   NumberEntity,
   SensorEntity,
   CalendarEntity,
@@ -22,6 +23,7 @@ import {
 } from "../types";
 
 import { WebOSTvTrigger } from "./core/webostv";
+import { KnxTelegramTrigger } from "./core/knx";
 
 export type Trigger =
   | CalendarTrigger
@@ -30,6 +32,7 @@ export type Trigger =
   | EventTrigger
   | GeolocationTrigger
   | HomeAssistantTrigger
+  | KnxTelegramTrigger
   | MqttTrigger
   | NumericStateTrigger
   | PersistentNotificationTrigger
@@ -784,12 +787,12 @@ interface TimeTrigger {
 
   /**
    * Time of day to trigger on, in HH:MM:SS, 24 hours clock format. For example: "13:30:00"
-   * Also accepts input_datetime entities (e.g., input_datetime.start_of_day)
+   * Also accepts input_datetime entities (e.g., input_datetime.start_of_day), or sensor entities (e.g., sensor.sunrise) with an optional time offset.
    *
    * @TJS-pattern ^((input_datetime|sensor)\.(?!_)[\da-z_]+(?<!_)\s?(?:,\s?(input_datetime|sensor)\.(?!_)[\da-z_]+(?<!_))*|(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?)$
    * @items.pattern ^((input_datetime|sensor)\.(?!_)[\da-z_]+(?<!_)|(?:[01]\d|2[0123]):(?:[012345]\d)(:(?:[012345]\d))?)$
    */
-  at: Times | InputDatetimeEntities | SensorEntities;
+  at: Times | InputDatetimeEntities | SensorEntities | SensorEntityOffsetOrList;
 
   /**
    * An personal identifier for this trigger, that is passed into the trigger

@@ -191,6 +191,10 @@ class MockHaConnection implements IHaConnection {
   async getHassServices(): Promise<HassServices> {
     return this.mockServices;
   }
+
+  async resolveEntityCompletionDocumentation(_entityId: string): Promise<any> {
+    return undefined;
+  }
 }
 
 // Test suite for action validation
@@ -198,7 +202,7 @@ suite("Action Validation Mock Test", () => {
   let languageService: HomeAssistantLanguageService;
   let mockConnection: MockHaConnection;
 
-  setup(() => {
+  setup(async () => {
     mockConnection = new MockHaConnection();
     const fileAccessor = new MockFileAccessor();
     const haConfig = new HomeAssistantConfiguration(fileAccessor as any);
@@ -214,7 +218,7 @@ suite("Action Validation Mock Test", () => {
       haConfig,
       mockConnection as any, // Type assertion to bypass strict typing
       [],
-      new SchemaServiceForIncludes(),
+      await SchemaServiceForIncludes.create(),
       () => { /* mock sendDiagnostics */ }, 
       () => { /* mock diagnoseAllFiles */ },
       { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service

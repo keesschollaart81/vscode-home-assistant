@@ -1,20 +1,20 @@
 import { TextDocuments } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import * as path from "path";
 import * as vscodeUri from "vscode-uri";
 
 export interface FileAccessor {
   getFileContents(fileName: string): Promise<string>;
-  getFilesInFolder(subFolder: string): string[];
+  getFilesInFolder(subFolder: string): Promise<string[]>;
   getFilesInFolderRelativeFrom(
     subFolder: string,
     relativeFrom: string,
-  ): string[];
+  ): Promise<string[]>;
   getFilesInFolderRelativeFromAsFileUri(
     subFolder: string,
     relativeFrom: string,
-  ): string[];
+  ): Promise<string[]>;
   getRelativePath(relativeFrom: string, filename: string): string;
   getRelativePathAsFileUri(relativeFrom: string, filename: string): string;
   fromUriToLocalPath(uri: string): string;
@@ -22,12 +22,15 @@ export interface FileAccessor {
 
 export class VsCodeFileAccessor implements FileAccessor {
   private ourRoot: string;
+  private workspacePath: string;
 
   constructor(
     private workspaceFolder: string,
     private documents: TextDocuments<TextDocument>,
   ) {
     this.ourRoot = path.resolve();
+    // Convert workspace URI to file system path
+    this.workspacePath = vscodeUri.URI.parse(workspaceFolder).fsPath;
   }
 
   public async getFileContents(uri: string): Promise<string> {
@@ -37,42 +40,89 @@ export class VsCodeFileAccessor implements FileAccessor {
       // open file in editor, might not be saved yet
       return textDocument.getText();
     }
-    return new Promise<string>((c, e) => {
-      fs.exists(uri, (exists) => {
-        if (!exists) {
-          c(null);
-        }
-        fs.readFile(uri, "utf-8", (err, result) => {
-          if (err) {
-            e(err);
-          } else {
-            c(result);
-          }
-        });
-      });
-    });
+    try {
+      const result = await fs.readFile(uri, "utf-8");
+      return result;
+    } catch (err: any) {
+      if (err.code === "ENOENT") {
+        return null;
+      } else {
+        throw err;
+      }
+    }
   }
 
-  public getFilesInFolder(
+  public async getFilesInFolder(
     subFolder: string,
     filelist: string[] = [],
-  ): string[] {
-    subFolder = path.normalize(subFolder);
+    visitedDirs = new Set<string>(),
+  ): Promise<string[]> {
+    // Resolve subfolder relative to workspace path
+    const resolvedSubFolder = path.isAbsolute(subFolder)
+      ? subFolder
+      : path.join(this.workspacePath, subFolder);
+    const normalizedSubFolder = path.normalize(resolvedSubFolder);
+
+    // Get the real path to detect symlink loops
+    let realPath: string;
+    try {
+      realPath = await fs.realpath(normalizedSubFolder);
+    } catch {
+      // If we can't resolve the real path, skip this directory
+      console.log(`Cannot resolve real path for ${normalizedSubFolder}`);
+      return filelist;
+    }
+
+    // Check if we've already visited this directory (prevents infinite loops)
+    if (visitedDirs.has(realPath)) {
+      console.log(`Skipping already visited directory: ${normalizedSubFolder} (real path: ${realPath})`);
+      return filelist;
+    }
+
+    // Mark this directory as visited
+    visitedDirs.add(realPath);
 
     try {
-      fs.readdirSync(subFolder).forEach((file) => {
+      const files = await fs.readdir(normalizedSubFolder);
+      for (const file of files) {
         // ignore dot files
         if (file.charAt(0) === ".") {
-          return;
+          continue;
         }
-        filelist =
-          fs.statSync(path.join(subFolder, file)).isDirectory() &&
-          !file.startsWith(".")
-            ? this.getFilesInFolder(path.join(subFolder, file), filelist)
-            : filelist.concat(path.join(subFolder, file));
-      });
+        const filePath = path.join(normalizedSubFolder, file);
+
+        // Use lstat to not follow symlinks automatically
+        let stat;
+        try {
+          stat = await fs.lstat(filePath);
+        } catch {
+          // Skip files we can't stat
+          continue;
+        }
+
+        if (stat.isSymbolicLink()) {
+          // For symlinks, check if they point to a directory
+          try {
+            const targetStat = await fs.stat(filePath);
+            if (targetStat.isDirectory()) {
+              // Recursively scan, but with visited directory tracking
+              filelist = await this.getFilesInFolder(filePath, filelist, visitedDirs);
+            } else {
+              // It's a file symlink, add it to the list
+              filelist = filelist.concat(filePath);
+            }
+          } catch {
+            // Broken symlink or permission issue, skip it
+            console.log(`Skipping broken or inaccessible symlink: ${filePath}`);
+          }
+        } else if (stat.isDirectory() && !file.startsWith(".")) {
+          filelist = await this.getFilesInFolder(filePath, filelist, visitedDirs);
+        } else if (stat.isFile()) {
+          filelist = filelist.concat(filePath);
+        }
+      }
     } catch {
-      console.log(`Cannot find the files in folder ${subFolder}`);
+      console.log(`Cannot find the files in folder ${normalizedSubFolder}`);
     }
     return filelist;
   }
@@ -89,22 +139,22 @@ export class VsCodeFileAccessor implements FileAccessor {
     return relativeFrom;
   };
 
-  public getFilesInFolderRelativeFrom(
+  public async getFilesInFolderRelativeFrom(
     subFolder: string,
     relativeFrom: string,
-  ): string[] {
+  ): Promise<string[]> {
     relativeFrom = this.dealtWithRelativeFrom(relativeFrom);
 
     const dirOfFile = path.dirname(relativeFrom);
     subFolder = path.join(dirOfFile, subFolder);
-    return this.getFilesInFolder(subFolder);
+    return await this.getFilesInFolder(subFolder);
   }
 
-  public getFilesInFolderRelativeFromAsFileUri(
+  public async getFilesInFolderRelativeFromAsFileUri(
     subFolder: string,
     relativeFrom: string,
-  ): string[] {
-    const files = this.getFilesInFolderRelativeFrom(subFolder, relativeFrom);
+  ): Promise<string[]> {
+    const files = await this.getFilesInFolderRelativeFrom(subFolder, relativeFrom);
     return files.map((f) => vscodeUri.URI.file(f).toString());
   }
 

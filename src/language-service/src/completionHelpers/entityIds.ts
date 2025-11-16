@@ -151,6 +151,61 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
     return /^[a-z_]+\.[a-z0-9_]+$/.test(value);
   }
 
+  private safeStringify(value: any, maxLength = 200): string {
+    try {
+      // Handle primitives
+      if (value === null || value === undefined) {
+        return String(value);
+      }
+      if (typeof value === "string") {
+        return value.length > maxLength ? value.substring(0, maxLength) + "..." : value;
+      }
+      if (typeof value === "number" || typeof value === "boolean") {
+        return String(value);
+      }
+
+      // Handle arrays
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          return "[]";
+        }
+        // Only show first few items to avoid very long strings
+        const items = value.slice(0, 3).map(item => {
+          if (typeof item === "object") {
+            return "[object]";
+          }
+          return String(item);
+        });
+        const result = items.join(", ");
+        const suffix = value.length > 3 ? ` ... (${value.length - 3} more)` : "";
+        return result + suffix;
+      }
+
+      // Handle objects with circular reference protection
+      if (typeof value === "object") {
+        try {
+          const seen = new WeakSet();
+          const str = JSON.stringify(value, (_key, val) => {
+            if (typeof val === "object" && val !== null) {
+              if (seen.has(val)) {
+                return "[Circular]";
+              }
+              seen.add(val);
+            }
+            return val;
+          });
+          return str.length > maxLength ? str.substring(0, maxLength) + "..." : str;
+        } catch {
+          return "[object]";
+        }
+      }
+
+      return String(value);
+    } catch (error) {
+      return "[error converting value]";
+    }
+  }
+
   private async createEntityHoverMarkdown(entity: any): Promise<string> {
     // Show friendly name on top, fallback to entity_id if missing
     const displayName = entity.attributes?.friendly_name || entity.entity_id;
@@ -175,7 +230,7 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
     // Current state
     if (entity.state !== undefined) {
       let stateDisplay = `**Current State:** \`${entity.state}\``;
-      
+
       // Add unit of measurement if available
       if (entity.attributes?.unit_of_measurement) {
         stateDisplay += ` ${entity.attributes.unit_of_measurement}`;
@@ -204,9 +259,9 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
         if (attr === "supported_features" || attr === "friendly_name") {
           continue;
         }
-        
+
         if (value !== undefined && value !== null) {
-          const displayValue = Array.isArray(value) ? value.join(", ") : String(value);
+          const displayValue = this.safeStringify(value);
           attributeEntries.push([attr, displayValue]);
         }
       }
@@ -215,10 +270,10 @@ export class EntityIdCompletionContribution implements JSONWorkerContribution {
     if (attributeEntries.length > 0) {
       // Sort attributes alphabetically
       attributeEntries.sort((a, b) => a[0].localeCompare(b[0]));
-      
+
       markdown += "| Attribute | Value |\n";
       markdown += "|:----------|:------|\n";
-      
+
       for (const [attr, displayValue] of attributeEntries) {
         markdown += `| ${attr} | ${displayValue} |\n`;
       }

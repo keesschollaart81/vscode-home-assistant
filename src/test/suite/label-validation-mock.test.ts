@@ -8,8 +8,8 @@ import { SchemaServiceForIncludes } from "../../language-service/src/schemas/sch
 import { HomeAssistantConfiguration } from "../../language-service/src/haConfig/haConfig";
 
 class MockFileAccessor {
-  getFileContents(_uri: string): Promise<string> {
-    return Promise.resolve("");
+  async getFileContents(_uri: string): Promise<string> {
+    return "";
   }
   
   getRelativePath(_fileUri: string, _includePath: string): string {
@@ -20,7 +20,7 @@ class MockFileAccessor {
     return "";
   }
   
-  getFilesInFolderRelativeFromAsFileUri(_folderPath: string, _fileUri: string): string[] {
+  async getFilesInFolderRelativeFromAsFileUri(_folderPath: string, _fileUri: string): Promise<string[]> {
     return [];
   }
 }
@@ -111,13 +111,17 @@ class MockHaConnection implements IHaConnection {
   async getHassServices(): Promise<any> {
     return {};
   }
+
+  async resolveEntityCompletionDocumentation(_entityId: string): Promise<any> {
+    return undefined;
+  }
 }
 
 suite("Label Validation Tests", () => {
   let languageService: HomeAssistantLanguageService;
   let mockConnection: MockHaConnection;
   
-  setup(() => {
+  setup(async () => {
     mockConnection = new MockHaConnection();
     
     const fileAccessor = new MockFileAccessor();
@@ -134,7 +138,7 @@ suite("Label Validation Tests", () => {
       haConfig,
       mockConnection as any, // Type assertion to bypass strict typing
       [],
-      new SchemaServiceForIncludes(),
+      await SchemaServiceForIncludes.create(),
       () => { /* mock sendDiagnostics */ }, 
       () => { /* mock diagnoseAllFiles */ },
       { isConfigured: true, autoRenderTemplates: true } as any // Mock configuration service

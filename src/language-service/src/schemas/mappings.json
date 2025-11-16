@@ -116,7 +116,7 @@
     "path": "configuration.yaml/automation",
     "file": "integration-automation.json",
     "tsFile": "integrations/core/automation.ts",
-    "fromType": "File"
+    "fromType": "AutomationFile"
   },
   {
     "key": "integration-binary_sensor",
@@ -243,6 +243,13 @@
     "file": "blueprint-script.json",
     "tsFile": "integrations/core/blueprint.ts",
     "fromType": "ScriptBlueprint"
+  },
+  {
+    "key": "blueprint-template",
+    "path": "blueprints/template",
+    "file": "blueprint-template.json",
+    "tsFile": "integrations/core/blueprint.ts",
+    "fromType": "TemplateBlueprint"
   },
   {
     "key": "custom-sentences",

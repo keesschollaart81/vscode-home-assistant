@@ -56,6 +56,14 @@ export function createSocket(
     // If invalid auth, we will not try to reconnect.
     let invalidAuth = false;
 
+    // Helper function to remove all event listeners to prevent memory leaks
+    const removeAllListeners = () => {
+      socket.removeEventListener("open", handleOpen);
+      socket.removeEventListener("message", handleMessage);
+      socket.removeEventListener("close", closeMessage);
+      socket.removeEventListener("error", errorMessage);
+    };
+
     const closeMessage = (ev: {
       wasClean: boolean;
       code: number;
@@ -66,6 +74,8 @@ export function createSocket(
       if (ev && ev.code && ev.code !== 1000) {
         errorMessage = `WebSocket connection to Home Assistant closed with code ${ev.code} and reason ${ev.reason}`;
       }
+      // Remove all listeners before handling close/error to prevent memory leaks
+      removeAllListeners();
       closeOrError(errorMessage);
     };
 
@@ -75,13 +85,13 @@ export function createSocket(
       type: string;
       target: WebSocket;
     }) => {
-      // If we are in error handler make sure close handler doesn't also fire.
-      socket.removeEventListener("close", closeMessage);
       let errMessage =
         "Disconnected from Home Assistant with a WebSocket error";
       if (ev.message) {
         errMessage += ` with message: ${ev.message}`;
       }
+      // Remove all listeners before handling close/error to prevent memory leaks
+      removeAllListeners();
       closeOrError(errMessage);
     };
 
@@ -209,10 +219,7 @@ export function createSocket(
 
         case MSG_TYPE_AUTH_OK:
           console.log("[Auth phase] Authentication successful!");
-          socket.removeEventListener("open", handleOpen);
-          socket.removeEventListener("message", handleMessage);
-          socket.removeEventListener("close", closeMessage);
-          socket.removeEventListener("error", errorMessage);
+          removeAllListeners();
           socket.haVersion = message.ha_version;
           promResolve(socket);
           break;

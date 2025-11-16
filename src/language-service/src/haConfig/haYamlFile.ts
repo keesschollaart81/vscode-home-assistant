@@ -164,7 +164,7 @@ export class HomeAssistantYamlFile {
     
     // Handle scalar nodes with include tags
     else if (isScalar(node) && node.tag) {
-      this.collectInclude(node, currentPath);
+      await this.collectInclude(node, currentPath);
     }
   };
 
@@ -200,7 +200,7 @@ export class HomeAssistantYamlFile {
     return includeType;
   };
 
-  private collectInclude(x: Scalar, currentPath: string) {
+  private async collectInclude(x: Scalar, currentPath: string) {
     let value: null | boolean | number | string = "";
     const includeType = this.getIncludeType(`${x.tag}`.slice(1).toLowerCase());
     if (includeType === null) {
@@ -221,7 +221,7 @@ export class HomeAssistantYamlFile {
       files.push(relativeFilePath);
     } else {
       // multiple file include
-      const filesInThisFolder = this.fileAccessor.getFilesInFolderRelativeFrom(
+      const filesInThisFolder = await this.fileAccessor.getFilesInFolderRelativeFrom(
         String(value),
         this.filename,
       );

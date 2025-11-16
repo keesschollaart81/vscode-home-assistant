@@ -74,6 +74,11 @@ export class HomeAssistantConfiguration {
     };
   };
 
+  public removeFile = (uri: string): void => {
+    const filename = this.fileAccessor.fromUriToLocalPath(uri);
+    delete this.files[filename];
+  };
+
   public getIncludes = async (): Promise<IncludeReferences> => {
     let results = [];
     for (const file of Object.values(this.files)) {
@@ -102,8 +107,8 @@ export class HomeAssistantConfiguration {
     return allScripts;
   };
 
-  private getRootFiles = (): string[] => {
-    const filesInRoot = this.fileAccessor.getFilesInFolder("");
+  private getRootFiles = async (): Promise<string[]> => {
+    const filesInRoot = await this.fileAccessor.getFilesInFolder("");
     const ourFiles = [
       "configuration.yaml",
       "ui-lovelace.yaml",
@@ -112,6 +117,7 @@ export class HomeAssistantConfiguration {
     const ourFolders = [
       path.join("blueprints", "automation") + path.sep,
       path.join("blueprints", "script") + path.sep,
+      path.join("blueprints", "template") + path.sep,
       "automations" + path.sep,
       "custom_sentences" + path.sep,
     ];
@@ -139,7 +145,7 @@ export class HomeAssistantConfiguration {
   };
 
   public discoverFiles = async (): Promise<void> => {
-    const rootFiles = this.getRootFiles();
+    const rootFiles = await this.getRootFiles();
 
     let results = [];
     for (const rootFile of rootFiles) {

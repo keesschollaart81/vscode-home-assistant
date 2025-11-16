@@ -3,6 +3,7 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/knx/__init__.py
  */
 import {
+  Data,
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   DeviceClassesSensor,
@@ -1634,4 +1635,80 @@ interface TimeEntity {
    * https://www.home-assistant.io/integrations/knx#sync_state
    */
   sync_state?: boolean | number | string;
+}
+
+export interface KnxTelegramTrigger {
+  /**
+   * Alias for the KNX telegram trigger.
+   */
+  alias?: string;
+
+  /**
+   * KNX telegram trigger fires on incoming or outgoing KNX telegrams matching specified criteria.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  trigger: "knx.telegram";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  enabled?: boolean;
+
+  /**
+   * A group address or list of addresses to listen on.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  destination?: GroupAddresses;
+
+  /**
+   * DPT identifier to decode payload (e.g., "2byte_float").
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  type?: ValueType | string;
+
+  /**
+   * Fire on GroupValueWrite telegrams. Defaults to true.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  group_value_write?: boolean;
+
+  /**
+   * Fire on GroupValueResponse telegrams. Defaults to true.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  group_value_response?: boolean;
+
+  /**
+   * Fire on GroupValueRead telegrams. Defaults to true.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  group_value_read?: boolean;
+
+  /**
+   * Fire on incoming telegrams. Defaults to true.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  incoming?: boolean;
+
+  /**
+   * Fire on outgoing telegrams. Defaults to true.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  outgoing?: boolean;
+
+  /**
+   * An personal identifier for this trigger, that is passed into the trigger
+   * variables when the automation triggers using this trigger.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  id?: string;
+
+  /**
+   * This allows you to define variables that will be set when the trigger fires.
+   * These can be used in the automation actions or conditions. Templates
+   * can be used in these variables.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  variables?: Data;
 }

@@ -74,11 +74,15 @@ export async function activate(
     },
   };
 
+  // Create file system watcher and register for disposal to prevent memory leaks
+  const fileWatcher = vscode.workspace.createFileSystemWatcher("**/*.?(e)y?(a)ml");
+  context.subscriptions.push(fileWatcher);
+
   const clientOptions: LanguageClientOptions = {
     documentSelector,
     synchronize: {
       configurationSection: "vscode-home-assistant",
-      fileEvents: vscode.workspace.createFileSystemWatcher("**/*.?(e)y?(a)ml"),
+      fileEvents: fileWatcher,
     },
     initializationOptions: async () => {
       // Pass token and URL directly in initialization options
@@ -157,77 +161,96 @@ export async function activate(
     }
   }
 
-  client.onNotification("no-config", async (): Promise<void> => {
-    if (await AuthManager.hasCredentials(context)) {
-      console.log("'no-config' notification received from server, but credentials (token and/or Home Assistant instance URL) found in SecretStorage. Ignoring pop-up.");
-      return;
-    }
-    const manageAuthCommand = "Manage Authentication";
-    const optionClicked = await vscode.window.showInformationMessage(
-      "No Home Assistant authentication (token and/or Home Assistant instance URL) found. Please set authentication.",
-      manageAuthCommand,
-    );
-    if (optionClicked === manageAuthCommand) {
-      await vscode.commands.executeCommand(
-        "vscode-home-assistant.manageAuth",
+  // Register all notification handlers and add them to subscriptions to prevent memory leaks
+  context.subscriptions.push(
+    client.onNotification("no-config", async (): Promise<void> => {
+      if (await AuthManager.hasCredentials(context)) {
+        console.log("'no-config' notification received from server, but credentials (token and/or Home Assistant instance URL) found in SecretStorage. Ignoring pop-up.");
+        return;
+      }
+      const manageAuthCommand = "Manage Authentication";
+      const optionClicked = await vscode.window.showInformationMessage(
+        "No Home Assistant authentication (token and/or Home Assistant instance URL) found. Please set authentication.",
+        manageAuthCommand,
       );
-    }
-    
-    // Update status bar to show disconnected state
-    statusBar.checkConnectionStatus();
-  });
-  
+      if (optionClicked === manageAuthCommand) {
+        await vscode.commands.executeCommand(
+          "vscode-home-assistant.manageAuth",
+        );
+      }
+
+      // Update status bar to show disconnected state
+      statusBar.checkConnectionStatus();
+    })
+  );
+
   // Add handler for connection established event
-  client.onNotification("ha_connected", async (data: { name?: string; version?: string }): Promise<void> => {
-    console.log("Home Assistant connection established notification received");
-    // Get instance information if available
-    const instanceInfo = {
-      name: data.name || "Home Assistant",
-      version: data.version
-    };
-    // Update status bar with connection information
-    statusBar.setConnectionStatus("connected", instanceInfo);
-  });
-  
+  context.subscriptions.push(
+    client.onNotification("ha_connected", async (data: { name?: string; version?: string }): Promise<void> => {
+      console.log("Home Assistant connection established notification received");
+      // Get instance information if available
+      const instanceInfo = {
+        name: data.name || "Home Assistant",
+        version: data.version
+      };
+      // Update status bar with connection information
+      statusBar.setConnectionStatus("connected", instanceInfo);
+    })
+  );
+
   // Add handler for connection error event
-  client.onNotification("ha_connection_error", async (data: { error?: string }): Promise<void> => {
-    console.log(`Home Assistant connection error notification received: ${data.error || "Unknown error"}`);
-    // Update status bar to show error state
-    statusBar.setConnectionStatus("error");
-  });
-  client.onNotification("configuration_check_completed", async (result) => {
-    if (result && result.result === "valid") {
-      await vscode.window.showInformationMessage(
-        "Home Assistant Configuration Checked, result: 'Valid'!",
-      );
-    } else {
-      await vscode.window.showErrorMessage(
-        `Home Assistant Configuration check resulted in an error: ${result.error}`,
-      );
-    }
-  });
+  context.subscriptions.push(
+    client.onNotification("ha_connection_error", async (data: { error?: string }): Promise<void> => {
+      console.log(`Home Assistant connection error notification received: ${data.error || "Unknown error"}`);
+      // Update status bar to show error state
+      statusBar.setConnectionStatus("error");
+    })
+  );
+
+  context.subscriptions.push(
+    client.onNotification("configuration_check_completed", async (result) => {
+      if (result && result.result === "valid") {
+        await vscode.window.showInformationMessage(
+          "Home Assistant Configuration Checked, result: 'Valid'!",
+        );
+      } else {
+        await vscode.window.showErrorMessage(
+          `Home Assistant Configuration check resulted in an error: ${result.error}`,
+        );
+      }
+    })
+  );
+
   let haOutputChannel: vscode.OutputChannel;
-  client.onNotification("get_eror_log_completed", (result) => {
-    if (!haOutputChannel) {
-      haOutputChannel = vscode.window.createOutputChannel(
-        "Home Assistant Error Log",
-      );
-    }
-    haOutputChannel.appendLine(result);
-    haOutputChannel.show();
-  });
+  context.subscriptions.push(
+    client.onNotification("get_eror_log_completed", (result) => {
+      if (!haOutputChannel) {
+        haOutputChannel = vscode.window.createOutputChannel(
+          "Home Assistant Error Log",
+        );
+        // Register the output channel for disposal to prevent memory leaks
+        context.subscriptions.push(haOutputChannel);
+      }
+      haOutputChannel.appendLine(result);
+      haOutputChannel.show();
+    })
+  );
 
   let haTemplateRendererChannel: vscode.OutputChannel;
-  client.onNotification("render_template_completed", (result) => {
-    if (!haTemplateRendererChannel) {
-      haTemplateRendererChannel = vscode.window.createOutputChannel(
-        "Home Assistant Template Renderer",
-      );
-    }
-    haTemplateRendererChannel.clear();
-    haTemplateRendererChannel.appendLine(result);
-    haTemplateRendererChannel.show();
-  });
+  context.subscriptions.push(
+    client.onNotification("render_template_completed", (result) => {
+      if (!haTemplateRendererChannel) {
+        haTemplateRendererChannel = vscode.window.createOutputChannel(
+          "Home Assistant Template Renderer",
+        );
+        // Register the output channel for disposal to prevent memory leaks
+        context.subscriptions.push(haTemplateRendererChannel);
+      }
+      haTemplateRendererChannel.clear();
+      haTemplateRendererChannel.appendLine(result);
+      haTemplateRendererChannel.show();
+    })
+  );
 
   const commandMappings = [
     new CommandMappings(
@@ -482,9 +505,25 @@ export async function activate(
       Object.values(fileAssociations).indexOf("home-assistant") === -1
     ) {
       console.log("Home Assistant workspace detected, setting YAML file associations");
+      // Set general YAML files to home-assistant, but exclude docker-compose and esphome files
       await vscode.workspace
         .getConfiguration()
-        .update("files.associations", { "*.yaml": "home-assistant" }, false);
+        .update("files.associations", {
+          "*.yaml": "home-assistant",
+          // Modern Docker Compose filenames (compose.yaml is the preferred format)
+          "compose.yml": "yaml",
+          "compose.yaml": "yaml",
+          "compose.*.yml": "yaml",
+          "compose.*.yaml": "yaml",
+          // Legacy Docker Compose filenames (for backward compatibility)
+          "docker-compose.yml": "yaml",
+          "docker-compose.yaml": "yaml",
+          "docker-compose.*.yml": "yaml",
+          "docker-compose.*.yaml": "yaml",
+          // ESPHome configuration files (for ESPHome extension)
+          "esphome/**/*.yml": "esphome",
+          "esphome/**/*.yaml": "esphome"
+        }, false);
     }
   } else {
     console.log("Configuration.yaml found but this doesn't appear to be a Home Assistant workspace - skipping file associations");

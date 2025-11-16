@@ -121,6 +121,7 @@ export interface IHaConnection {
   getHassDevices(): Promise<HassDevices>;
   getHassEntityRegistry(): Promise<HassEntityRegistry>;
   getHassServices(): Promise<HassServices>;
+  resolveEntityCompletionDocumentation(entityId: string): Promise<MarkupContent | undefined>;
 }
 
 export class HaConnection implements IHaConnection {
@@ -139,6 +140,14 @@ export class HaConnection implements IHaConnection {
   private hassLabels!: Promise<HassLabels>;
 
   private hassServices!: Promise<HassServices>;
+
+  // Cache the current entities to avoid memory churn from subscription updates
+  private currentEntitiesCache: HassEntities | undefined;
+  private currentServicesCache: HassServices | undefined;
+
+  // Track unsubscribe functions to prevent memory leaks
+  private unsubscribeEntities: (() => void) | undefined;
+  private unsubscribeServices: (() => void) | undefined;
 
   // Track the last successful configuration to avoid unnecessary reconnections
   private lastSuccessfulConfig: {
@@ -207,9 +216,11 @@ export class HaConnection implements IHaConnection {
     
     if (hassUrl) {
       try {
-        const url = new URL(hassUrl);
+        // Remove trailing slashes to prevent double slashes in the path
+        const normalizedUrl = hassUrl.replace(/\/+$/, "");
+        const url = new URL(`${normalizedUrl}/api/websocket`);
         const wsProtocol = url.protocol === "https:" ? "wss:" : "ws:";
-        wsUrl = `${wsProtocol}//${url.host}/api/websocket`;
+        wsUrl = `${wsProtocol}//${url.host}${url.pathname}`;
         console.log(`Generated WebSocket URL: ${wsUrl}`);
       } catch (error) {
         console.error(`Failed to generate WebSocket URL from ${hassUrl}:`, error);
@@ -422,7 +433,7 @@ export class HaConnection implements IHaConnection {
     }
     
     this.disconnect();
-    
+
     // Reset connection state to force full reconnection
     this.connection = undefined;
     this.hassAreas = undefined as any;
@@ -432,6 +443,10 @@ export class HaConnection implements IHaConnection {
     this.hassFloors = undefined as any;
     this.hassLabels = undefined as any;
     this.hassServices = undefined as any;
+
+    // Clear caches to release memory
+    this.currentEntitiesCache = undefined;
+    this.currentServicesCache = undefined;
     
     try {
       await this.tryConnect();
@@ -691,6 +706,13 @@ export class HaConnection implements IHaConnection {
   }
 
   public async getHassEntities(): Promise<HassEntities> {
+    // If we have a cached value, return it immediately
+    // This is updated in real-time by the subscription callback
+    if (this.currentEntitiesCache !== undefined) {
+      return this.currentEntitiesCache;
+    }
+
+    // If we already have a promise waiting for initial load, return it
     if (this.hassEntities !== undefined) {
       return this.hassEntities;
     }
@@ -703,11 +725,18 @@ export class HaConnection implements IHaConnection {
         if (!this.connection) {
           return reject();
         }
-        
-        // Subscribe to entities and resolve with the initial state
-        subscribeEntities(this.connection, (entities) => {
+
+        // Unsubscribe from previous subscription to prevent memory leak
+        if (this.unsubscribeEntities) {
+          this.unsubscribeEntities();
+          this.unsubscribeEntities = undefined;
+        }
+
+        // Subscribe to entities and update cache on every change
+        // This prevents memory churn from creating new promise values on each update
+        this.unsubscribeEntities = subscribeEntities(this.connection, (entities) => {
           const entityCount = Object.keys(entities).length;
-          
+
           // Only log if the entity count has changed
           if (this.lastEntityCount !== entityCount) {
             if (this.lastEntityCount === undefined) {
@@ -723,7 +752,12 @@ export class HaConnection implements IHaConnection {
             }
             this.lastEntityCount = entityCount;
           }
-          
+
+          // Update the cache with the latest entities
+          // This is more memory-efficient than creating new promises on each update
+          this.currentEntitiesCache = entities;
+
+          // Only resolve the promise once (on first load)
           resolve(entities);
         });
       },
@@ -920,18 +954,73 @@ export class HaConnection implements IHaConnection {
       completionItem.kind = CompletionItemKind.Variable;
       completionItem.filterText = `${value.entity_id} ${value.attributes.friendly_name}`;
       completionItem.insertText = value.entity_id;
-      completionItem.data = {};
-      completionItem.data.isEntity = true;
+      completionItem.data = {
+        isEntity: true,
+        entityId: value.entity_id,
+      };
 
-      // Create documentation using the same format as hover cards
-      completionItem.documentation = {
-        kind: "markdown",
-        value: await this.createEntityCompletionMarkdown(value),
-      } as MarkupContent;
+      // Don't generate documentation upfront - this causes massive performance issues
+      // with hundreds/thousands of entities. Documentation will be lazy-loaded on-demand
+      // in onCompletionResolve when the user actually selects/focuses the completion item.
 
       completions.push(completionItem);
     }
     return completions;
+  }
+
+  private safeStringify(value: any, maxLength = 200): string {
+    try {
+      // Handle primitives
+      if (value === null || value === undefined) {
+        return String(value);
+      }
+      if (typeof value === "string") {
+        return value.length > maxLength ? value.substring(0, maxLength) + "..." : value;
+      }
+      if (typeof value === "number" || typeof value === "boolean") {
+        return String(value);
+      }
+
+      // Handle arrays
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          return "[]";
+        }
+        // Only show first few items to avoid very long strings
+        const items = value.slice(0, 3).map(item => {
+          if (typeof item === "object") {
+            return "[object]";
+          }
+          return String(item);
+        });
+        const result = items.join(", ");
+        const suffix = value.length > 3 ? ` ... (${value.length - 3} more)` : "";
+        return result + suffix;
+      }
+
+      // Handle objects with circular reference protection
+      if (typeof value === "object") {
+        try {
+          const seen = new WeakSet();
+          const str = JSON.stringify(value, (_key, val) => {
+            if (typeof val === "object" && val !== null) {
+              if (seen.has(val)) {
+                return "[Circular]";
+              }
+              seen.add(val);
+            }
+            return val;
+          });
+          return str.length > maxLength ? str.substring(0, maxLength) + "..." : str;
+        } catch {
+          return "[object]";
+        }
+      }
+
+      return String(value);
+    } catch (error) {
+      return "[error converting value]";
+    }
   }
 
   private async createEntityCompletionMarkdown(entity: any): Promise<string> {
@@ -957,7 +1046,7 @@ export class HaConnection implements IHaConnection {
     // Current state
     if (entity.state !== undefined) {
       let stateDisplay = `**Current State:** \`${entity.state}\``;
-      
+
       // Add unit of measurement if available
       if (entity.attributes?.unit_of_measurement) {
         stateDisplay += ` ${entity.attributes.unit_of_measurement}`;
@@ -986,9 +1075,9 @@ export class HaConnection implements IHaConnection {
         if (attr === "supported_features" || attr === "friendly_name") {
           continue;
         }
-        
+
         if (value !== undefined && value !== null) {
-          const displayValue = Array.isArray(value) ? value.join(", ") : String(value);
+          const displayValue = this.safeStringify(value);
           attributeEntries.push([attr, displayValue]);
         }
       }
@@ -997,10 +1086,10 @@ export class HaConnection implements IHaConnection {
     if (attributeEntries.length > 0) {
       // Sort attributes alphabetically
       attributeEntries.sort((a, b) => a[0].localeCompare(b[0]));
-      
+
       markdown += "| Attribute | Value |\n";
       markdown += "|:----------|:------|\n";
-      
+
       for (const [attr, displayValue] of attributeEntries) {
         markdown += `| ${attr} | ${displayValue} |\n`;
       }
@@ -1008,6 +1097,28 @@ export class HaConnection implements IHaConnection {
     }
 
     return markdown;
+  }
+
+  public async resolveEntityCompletionDocumentation(entityId: string): Promise<MarkupContent | undefined> {
+    try {
+      const entities = await this.getHassEntities();
+      if (!entities) {
+        return undefined;
+      }
+
+      const entity = Object.values(entities).find((e: any) => e.entity_id === entityId);
+      if (!entity) {
+        return undefined;
+      }
+
+      return {
+        kind: "markdown",
+        value: await this.createEntityCompletionMarkdown(entity),
+      } as MarkupContent;
+    } catch (error) {
+      console.error(`Error resolving entity completion documentation for ${entityId}:`, error);
+      return undefined;
+    }
   }
 
   public async getDomainCompletions(): Promise<CompletionItem[]> {
@@ -1035,9 +1146,17 @@ export class HaConnection implements IHaConnection {
   }
 
   public async getHassServices(): Promise<HassServices> {
+    // If we have a cached value, return it immediately
+    // This is updated in real-time by the subscription callback
+    if (this.currentServicesCache !== undefined) {
+      return this.currentServicesCache;
+    }
+
+    // If we already have a promise waiting for initial load, return it
     if (this.hassServices !== undefined) {
       return this.hassServices;
     }
+
     await this.createConnection();
 
     this.hassServices = new Promise<HassServices>(
@@ -1046,10 +1165,25 @@ export class HaConnection implements IHaConnection {
         if (!this.connection) {
           return reject();
         }
-        subscribeServices(this.connection, (services: HassServices) => {
+
+        // Unsubscribe from previous subscription to prevent memory leak
+        if (this.unsubscribeServices) {
+          this.unsubscribeServices();
+          this.unsubscribeServices = undefined;
+        }
+
+        // Subscribe to services and update cache on every change
+        // This prevents memory churn from creating new promise values on each update
+        this.unsubscribeServices = subscribeServices(this.connection, (services: HassServices) => {
           console.log(
             `Got ${Object.keys(services).length} services from Home Assistant`,
           );
+
+          // Update the cache with the latest services
+          // This is more memory-efficient than creating new promises on each update
+          this.currentServicesCache = services;
+
+          // Only resolve the promise once (on first load)
           return resolve(services);
         });
       },
@@ -1106,9 +1240,24 @@ export class HaConnection implements IHaConnection {
       return;
     }
     console.log("Disconnecting from Home Assistant");
+
+    // Unsubscribe from all subscriptions to prevent memory leaks
+    if (this.unsubscribeEntities) {
+      this.unsubscribeEntities();
+      this.unsubscribeEntities = undefined;
+    }
+    if (this.unsubscribeServices) {
+      this.unsubscribeServices();
+      this.unsubscribeServices = undefined;
+    }
+
+    // Clear caches to release memory immediately on disconnect
+    this.currentEntitiesCache = undefined;
+    this.currentServicesCache = undefined;
+
     this.connection.close();
     this.connection = undefined;
-    
+
     // Notify about disconnection if handler exists
     if (this.onConnectionFailed) {
       try {

@@ -393,6 +393,22 @@ export type SensorEntity = `sensor.${EntitySuffix}`;
  */
 export type SensorEntities = SensorEntity | SensorEntity[];
 
+interface SensorEntityOffset {
+  /**
+   * The sensor entity ID to monitor for.
+   * https://www.home-assistant.io/docs/automation/trigger/#sensors-of-datetime-device-class-with-offsets
+   */
+  entity_id: SensorEntity;
+
+  /**
+   * Optional offset that adjusts the trigger relative to the sensor’s time.
+   * https://www.home-assistant.io/docs/automation/trigger/#sensors-of-datetime-device-class-with-offsets
+   */
+  offset?: TimePeriod;
+}
+
+export type SensorEntityOffsetOrList = SensorEntityOffset | SensorEntityOffset[];
+
 /**
  * @TJS-pattern ^weather\.(?!_)[\da-z_]+(?<!_)$
  */
@@ -436,6 +452,11 @@ export type IncludeList = `!${IncludeDir}_list${WhitespaceCharacter}${string}`;
  */
 export type IncludeNamed =
   `!${IncludeDir}_named${WhitespaceCharacter}${string}`;
+
+/**
+ * @TJS-pattern ^\!input\s.+$
+ */
+export type Input = `!input${WhitespaceCharacter}${string}`;
 
 /**
  * @TJS-type integer

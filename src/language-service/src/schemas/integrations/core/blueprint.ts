@@ -5,9 +5,14 @@
  * - https://github.com/home-assistant/core/blob/dev/homeassistant/components/blueprint/models.py
  * - https://github.com/home-assistant/core/blob/dev/homeassistant/components/blueprint/schemas.py
  */
+import { 
+  BinarySensorItem, 
+  SensorItem
+} from "./template";
 import { Selector } from "../selectors";
 import { AutomationItem } from "./automation";
 import { ScriptItem } from "./script";
+import { Data } from "../../types";
 
 export type Domain = "blueprint";
 export type Schema = null;
@@ -26,6 +31,31 @@ export interface ScriptBlueprint extends ScriptItem {
    * https://www.home-assistant.io/docs/blueprint/schema/#the-blueprint-schema
    */
   blueprint: Blueprint;
+}
+
+export interface TemplateBlueprint {
+  /**
+   * The blueprint schema.
+   * https://www.home-assistant.io/docs/blueprint/schema/#the-blueprint-schema
+   */
+  blueprint: Blueprint;
+
+  /**
+   * Variables that will be available inside your state definition.
+   */
+  variables?: Data;
+
+  /**
+   * The sensor definition. See template sensor documentation.
+   * https://www.home-assistant.io/integrations/template/#sensor
+   */
+  sensor?: SensorItem;
+
+  /**
+   * The binary sensor definition. See template binary sensor documentation.
+   * https://www.home-assistant.io/integrations/template/#binary-sensor
+   */
+  binary_sensor?: BinarySensorItem;
 }
 
 interface Blueprint {
@@ -135,4 +165,19 @@ interface BlueprintInputSectionSchema {
   input: {
     [key: string]: BlueprintInputSchema;
   };
+}
+
+export interface BlueprintUsage {
+  /**
+   * Path to the blueprint, depending on the blueprint type relative to:
+   * * config/blueprints/automation/
+   * * config/blueprints/script/
+   * * config/blueprints/template/
+   */
+  path: string;
+
+  /**
+   * A dictionary of defined blueprint inputs as per blueprint definition.
+   */
+  input?: { [key: string]: any };
 }

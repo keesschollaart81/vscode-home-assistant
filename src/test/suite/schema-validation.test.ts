@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import * as path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 suite("Schema Validation Tests", () => {
   let workspacePath: string;
@@ -14,7 +14,7 @@ suite("Schema Validation Tests", () => {
   // Create or update a test file with schema validation content
   async function createTestFile(content: string, fileName = "test-schema-validation.yaml"): Promise<vscode.TextDocument> {
     const testFilePath = path.join(workspacePath, fileName);
-    fs.writeFileSync(testFilePath, content);
+    await fs.writeFile(testFilePath, content);
     return await vscode.workspace.openTextDocument(testFilePath);
   }
 

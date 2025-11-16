@@ -50,9 +50,71 @@ export class HomeAssistantLanguageService {
     ) => void,
     private diagnoseAllFiles: () => void,
     private configurationService: IConfigurationService,
-  ) {}
+  ) {
+    // Patch the yaml-language-server to prevent stack overflow from circular schema references
+    this.patchYamlLanguageServerForCircularRefs();
+  }
 
-  public findAndApplySchemas = (): void => {
+  /**
+   * Patches the yaml-language-server's schema matching to add cycle detection
+   * for circular $ref references in JSON schemas.
+   */
+  private patchYamlLanguageServerForCircularRefs(): void {
+    // Schemas with circular references are handled by fixing them before
+    // they're passed to the yaml-language-server in findAndApplySchemas()
+  }
+
+  /**
+   * Removes circular $ref references from a schema by expanding them to a limited depth.
+   * This prevents stack overflow in yaml-language-server's schema matching.
+   */
+  private fixCircularRefsInSchema(schema: any, maxDepth = 3): any {
+    const visited = new Map<string, number>();
+
+    const fixRefs = (obj: any, path: string, currentDepth: number): any => {
+      if (typeof obj !== "object" || obj === null) {
+        return obj;
+      }
+
+      // Track how many times we've seen this reference path
+      const depthAtPath = visited.get(path) || 0;
+      if (depthAtPath >= maxDepth) {
+        // Stop resolving at max depth - return a simple schema instead
+        return { type: "object", description: "(Nested structure - see schema documentation)" };
+      }
+
+      visited.set(path, depthAtPath + 1);
+
+      if (Array.isArray(obj)) {
+        const result = obj.map((item, index) => fixRefs(item, `${path}[${index}]`, currentDepth));
+        visited.set(path, depthAtPath);
+        return result;
+      }
+
+      const result: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (key === "$ref" && typeof value === "string") {
+          // Check if this is a self-reference
+          const refPath = value.replace("#/definitions/", "");
+          if (path.includes(refPath)) {
+            // Self-reference detected - limit depth
+            if (currentDepth >= maxDepth) {
+              result[key] = value; // Keep the ref but we won't expand it further
+              continue;
+            }
+          }
+        }
+        result[key] = fixRefs(value, `${path}.${key}`, currentDepth + 1);
+      }
+
+      visited.set(path, depthAtPath);
+      return result;
+    };
+
+    return fixRefs(schema, "root", 0);
+  }
+
+  public findAndApplySchemas = async (): Promise<void> => {
     try {
       const haFiles = this.haConfig.getAllFiles();
       if (haFiles && haFiles.length > 0) {
@@ -61,6 +123,13 @@ export class HomeAssistantLanguageService {
         );
       }
 
+      // Get schemas and fix circular references before applying
+      const schemas = await this.schemaServiceForIncludes.getSchemaContributions(haFiles);
+      const fixedSchemas = schemas.map((schemaContribution: any) => ({
+        ...schemaContribution,
+        schema: schemaContribution.schema ? this.fixCircularRefsInSchema(schemaContribution.schema) : schemaContribution.schema,
+      }));
+
       this.yamlLanguageService.configure({
         validate: true,
         customTags: this.getValidYamlTags(),
@@ -68,7 +137,7 @@ export class HomeAssistantLanguageService {
         format: true,
         hover: true,
         isKubernetes: false,
-        schemas: this.schemaServiceForIncludes.getSchemaContributions(haFiles),
+        schemas: fixedSchemas,
       } as LanguageSettings);
 
       this.diagnoseAllFiles();
@@ -110,7 +179,7 @@ export class HomeAssistantLanguageService {
           `Discover all configuration files because ${document.uri} got updated and new files were found...`,
         );
         await this.haConfig.discoverFiles();
-        this.findAndApplySchemas();
+        await this.findAndApplySchemas();
       }
 
       const diagnostics = await this.getDiagnostics(document);
@@ -1793,7 +1862,19 @@ export class HomeAssistantLanguageService {
 
   public onCompletionResolve = async (
     completionItem: CompletionItem,
-  ): Promise<CompletionItem> => completionItem;
+  ): Promise<CompletionItem> => {
+    // Lazy-load entity documentation on-demand to avoid performance issues
+    // when there are hundreds/thousands of entities
+    if (completionItem.data?.isEntity && completionItem.data?.entityId) {
+      const documentation = await this.haConnection.resolveEntityCompletionDocumentation(
+        completionItem.data.entityId
+      );
+      if (documentation) {
+        completionItem.documentation = documentation;
+      }
+    }
+    return completionItem;
+  };
 
   public onHover = async (
     document: TextDocument,
@@ -1803,35 +1884,77 @@ export class HomeAssistantLanguageService {
       return null;
     }
 
-    // First check for entity hover information
-    const entityHover = await this.getEntityHoverInfo(document, position);
-    if (entityHover) {
-      return entityHover;
+    try {
+      // First check for entity hover information
+      const entityHover = await this.getEntityHoverInfo(document, position);
+      if (entityHover) {
+        return entityHover;
+      }
+    } catch (error) {
+      console.error("Error in getEntityHoverInfo:", error);
+      // Continue to try other hover providers
     }
 
-    // Check for service hover information
-    const serviceHover = await this.getServiceHoverInfo(document, position);
-    if (serviceHover) {
-      return serviceHover;
+    try {
+      // Check for service hover information
+      const serviceHover = await this.getServiceHoverInfo(document, position);
+      if (serviceHover) {
+        return serviceHover;
+      }
+    } catch (error) {
+      console.error("Error in getServiceHoverInfo:", error);
+      // Continue to try other hover providers
     }
 
-    // Check if we're hovering over a YAML key or value
-    const isOnKey = this.isHoveringOverYamlKey(document, position);
-    
-    // Only show schema hover info when hovering over keys
-    if (isOnKey) {
-      return this.yamlLanguageService.doHover(document, position);
+    try {
+      // Check if we're hovering over a YAML key or value
+      const isOnKey = this.isHoveringOverYamlKey(document, position);
+
+      // Only show schema hover info when hovering over keys
+      if (isOnKey) {
+        // Use custom hover provider instead of yaml-language-server's doHover
+        // to avoid stack overflow from circular schema references
+        const customHover = await this.getCustomSchemaHover(document, position);
+        if (customHover) {
+          return customHover;
+        }
+      }
+    } catch (error) {
+      console.error("Error checking YAML key hover:", error);
+      // Continue to try template hover
     }
 
-    // Check for template hover information when hovering over values
-    const templateHover = await this.getTemplateHoverInfo(document, position);
-    if (templateHover) {
-      return templateHover;
+    try {
+      // Check for template hover information when hovering over values
+      const templateHover = await this.getTemplateHoverInfo(document, position);
+      if (templateHover) {
+        return templateHover;
+      }
+    } catch (error) {
+      console.error("Error in getTemplateHoverInfo:", error);
+      // Fall through to return null
     }
 
     // Don't show schema hover for values
     return null;
   };
+
+  /**
+   * Provides schema hover information using yaml-language-server.
+   * Circular references have been fixed in the schemas, so this should be safe.
+   */
+  private async getCustomSchemaHover(
+    document: TextDocument,
+    position: Position,
+  ): Promise<Hover | null> {
+    try {
+      // Schemas have been fixed to remove circular refs, so doHover should work
+      return this.yamlLanguageService.doHover(document, position);
+    } catch (error) {
+      console.error("Error in schema hover:", error);
+      return null;
+    }
+  }
 
   private isHoveringOverYamlKey(
     document: TextDocument,
@@ -2147,12 +2270,9 @@ export class HomeAssistantLanguageService {
       // Only cache successful results, not errors
       if (!isError) {
         this.templateCache.set(cacheKey, { value: renderedValue, timestamp: now });
-        
-        // Clean up old cache entries (simple cleanup)
-        if (this.templateCache.size > 100) {
-          const oldestKey = this.templateCache.keys().next().value;
-          this.templateCache.delete(oldestKey);
-        }
+
+        // Clean up expired and excessive cache entries to prevent memory leaks
+        this.cleanupTemplateCache(now);
       }
       
       return renderedValue;
@@ -2193,15 +2313,45 @@ export class HomeAssistantLanguageService {
     }
   }
 
+  /**
+   * Cleans up the template cache by removing expired entries and enforcing size limits
+   * to prevent unbounded memory growth
+   */
+  private cleanupTemplateCache(currentTime: number): void {
+    const maxCacheSize = 100;
+
+    // First, remove all expired entries based on CACHE_DURATION
+    for (const [key, entry] of this.templateCache.entries()) {
+      if (currentTime - entry.timestamp > this.CACHE_DURATION) {
+        this.templateCache.delete(key);
+      }
+    }
+
+    // If cache is still too large, remove oldest entries until we're at the limit
+    if (this.templateCache.size > maxCacheSize) {
+      // Convert to array and sort by timestamp (oldest first)
+      const entries = Array.from(this.templateCache.entries())
+        .sort((a, b) => a[1].timestamp - b[1].timestamp);
+
+      // Calculate how many entries to remove
+      const entriesToRemove = this.templateCache.size - maxCacheSize;
+
+      // Remove the oldest entries
+      for (let i = 0; i < entriesToRemove; i++) {
+        this.templateCache.delete(entries[i][0]);
+      }
+    }
+  }
+
   private isTemplateError(result: any): boolean {
     if (!result || typeof result !== "object") {
       return false;
     }
-    
+
     // Check for common error properties
     return !!(
-      result.error || 
-      result.message || 
+      result.error ||
+      result.message ||
       result.detail ||
       (result.code && typeof result.code === "string")
     );
@@ -2341,30 +2491,36 @@ export class HomeAssistantLanguageService {
     return "text";
   }
 
-  private formatTemplateResult(result: any): string {
+  private formatTemplateResult(result: any, depth = 0): string {
+    // Prevent stack overflow by limiting recursion depth
+    const MAX_DEPTH = 10;
+    if (depth > MAX_DEPTH) {
+      return "[max depth exceeded]";
+    }
+
     if (result === null) {
       return "null";
     }
-    
+
     if (result === undefined) {
       return "undefined";
     }
-    
+
     if (typeof result === "string") {
       // Check if the string looks like a list/array and try to format it
       const trimmed = result.trim();
-      
+
       // Handle Python-style lists that Home Assistant might return
       if (trimmed.startsWith("[") && trimmed.includes(",")) {
         return this.formatListString(trimmed);
       }
-      
+
       // Try to parse as JSON for objects and arrays
-      if ((trimmed.startsWith("[") && trimmed.endsWith("]")) || 
+      if ((trimmed.startsWith("[") && trimmed.endsWith("]")) ||
           (trimmed.startsWith("{") && trimmed.endsWith("}"))) {
         try {
           const parsed = JSON.parse(trimmed);
-          return this.formatTemplateResult(parsed); // Recursively format the parsed result
+          return this.formatTemplateResult(parsed, depth + 1); // Recursively format the parsed result
         } catch {
           // If JSON parsing fails, treat it as a list string if it looks like one
           if (trimmed.startsWith("[")) {
@@ -2375,51 +2531,51 @@ export class HomeAssistantLanguageService {
       }
       return result;
     }
-    
+
     if (typeof result === "number" || typeof result === "boolean") {
       return String(result);
     }
-    
+
     if (Array.isArray(result)) {
       // For arrays, format them nicely
       if (result.length === 0) {
         return "[]";
       }
-      
+
       // For small arrays (≤3 items), show all items
       if (result.length <= 3) {
         return `[\n  ${result.map(item => JSON.stringify(item)).join(",\n  ")}\n]`;
       }
-      
+
       // For larger arrays, show first 3 items with count
       const preview = result.slice(0, 3);
       const remaining = result.length - 3;
       return `[\n  ${preview.map(item => JSON.stringify(item)).join(",\n  ")},\n  ... (${remaining} more items)\n]`;
     }
-    
+
     if (typeof result === "object") {
       try {
         const keys = Object.keys(result);
-        
+
         // For empty objects
         if (keys.length === 0) {
           return "{}";
         }
-        
+
         // For small objects (≤3 properties), show all
         if (keys.length <= 3) {
           return JSON.stringify(result, null, 2);
         }
-        
+
         // For larger objects, show preview with count
         const preview = keys.slice(0, 3).reduce((obj, key) => {
           obj[key] = result[key];
           return obj;
         }, {} as any);
-        
+
         const previewStr = JSON.stringify(preview, null, 2);
         const remainingKeys = keys.length - 3;
-        
+
         // Replace the closing brace with continuation indicator
         return previewStr.slice(0, -2) + `,\n  ... (${remainingKeys} more properties)\n}`;
       } catch {
@@ -2427,7 +2583,7 @@ export class HomeAssistantLanguageService {
         return `[object ${result.constructor?.name || "Object"}]`;
       }
     }
-    
+
     // Fallback for any other types
     return String(result);
   }

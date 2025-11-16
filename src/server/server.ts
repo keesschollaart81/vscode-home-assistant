@@ -27,7 +27,7 @@ console.error = connection.window.showErrorMessage.bind(connection.window);
 const documents = new TextDocuments(TextDocument);
 documents.listen(connection);
 
-connection.onInitialize((params) => {
+connection.onInitialize(async (params) => {
   connection.console.log(
     `[Home Assistant Language Server(${process.pid})] Started and initialize received`,
   );
@@ -84,7 +84,7 @@ connection.onInitialize((params) => {
     try {
       console.log("Discovering files and updating schemas...");
       await haConfigInstance.discoverFiles();
-      homeAsisstantLanguageService.findAndApplySchemas();
+      await homeAsisstantLanguageService.findAndApplySchemas();
       console.log("Files discovered and schemas updated successfully");
     } catch (e) {
       console.error(
@@ -98,14 +98,14 @@ connection.onInitialize((params) => {
     haConfigInstance,
     haConnection,
     definitionProviders,
-    new SchemaServiceForIncludes(),
+    await SchemaServiceForIncludes.create(),
     sendDiagnostics,
-    () => {
-      documents.all().forEach(async (d) => {
+    async () => {
+      for (const d of documents.all()) {
         const diagnostics =
           await homeAsisstantLanguageService.getDiagnostics(d);
         sendDiagnostics(d.uri, diagnostics);
-      });
+      }
     },
     configurationService,
   );
@@ -127,11 +127,34 @@ connection.onInitialize((params) => {
   documents.onDidOpen((e) =>
     homeAsisstantLanguageService.onDocumentOpen(e.document),
   );
+  documents.onDidClose((e) => {
+    // Remove closed documents from file collection to prevent memory leaks
+    haConfigInstance.removeFile(e.document.uri);
+  });
 
   let onDidSaveDebounce: NodeJS.Timeout;
-  documents.onDidSave(() => {
+  documents.onDidSave((e) => {
     clearTimeout(onDidSaveDebounce);
-    onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 100);
+
+    // Only rediscover files if the saved document is likely to contain includes
+    // or is a root configuration file. This significantly improves performance
+    // for large Home Assistant configurations.
+    const uri = e.document.uri;
+    const isRootConfigFile = uri.endsWith("configuration.yaml") ||
+                             uri.endsWith("ui-lovelace.yaml") ||
+                             uri.endsWith("automations.yaml");
+    const isInBlueprintsFolder = uri.includes("/blueprints/") ||
+                                 uri.includes("\\blueprints\\");
+
+    // Check if the document content contains include directives
+    const hasIncludes = e.document.getText().match(/!include(_dir_list|_dir_named|_dir_merge_list|_dir_merge_named)?/);
+
+    // Only trigger rediscovery for files that could affect the schema
+    if (isRootConfigFile || isInBlueprintsFolder || hasIncludes) {
+      // Use a longer debounce timeout to reduce unnecessary rediscoveries
+      // This helps when users save multiple files in quick succession
+      onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 1000);
+    }
   });
 
   connection.onDocumentSymbol((p) =>

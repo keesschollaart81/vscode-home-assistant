@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 import * as path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 // Tests for goto definition functionality with secrets
 suite("Secrets Definition Tests", () => {
@@ -24,7 +24,7 @@ suite("Secrets Definition Tests", () => {
   // Create or update a test file with secrets references
   async function createTestFile(content: string, fileName: string): Promise<vscode.TextDocument> {
     const testFilePath = path.join(workspacePath, fileName);
-    fs.writeFileSync(testFilePath, content);
+    await fs.writeFile(testFilePath, content);
     const document = await vscode.workspace.openTextDocument(testFilePath);
     await vscode.window.showTextDocument(document);
     return document;
@@ -35,8 +35,8 @@ suite("Secrets Definition Tests", () => {
     const secretsPath = path.join(workspacePath, "secrets.yaml");
     const secretsValidationPath = path.join(workspacePath, "test-secrets-validation.yaml");
     
-    assert.ok(fs.existsSync(secretsPath), "secrets.yaml test file exists");
-    assert.ok(fs.existsSync(secretsValidationPath), "test-secrets-validation.yaml test file exists");
+    assert.ok(await fs.access(secretsPath).then(()=>true,()=>false), "secrets.yaml test file exists");
+    assert.ok(await fs.access(secretsValidationPath).then(()=>true,()=>false), "test-secrets-validation.yaml test file exists");
   });
 
   test("Secrets file content validation", async () => {
@@ -265,7 +265,7 @@ homeassistant:
     const backupPath = path.join(workspacePath, "secrets.yaml.backup");
     
     // Backup the original file
-    fs.renameSync(secretsPath, backupPath);
+    await fs.rename(secretsPath, backupPath);
     
     try {
       const testContent = `# Test with missing secrets.yaml
@@ -291,7 +291,7 @@ homeassistant:
       
     } finally {
       // Restore the original file
-      fs.renameSync(backupPath, secretsPath);
+      await fs.rename(backupPath, secretsPath);
     }
   });
 });
