@@ -439,6 +439,12 @@ export interface EntitySelector {
      * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
      */
     multiple?: boolean;
+
+    /**
+     * Allows reordering of entities (only applies if `multiple` is set to `true`).
+     * https://www.home-assistant.io/docs/blueprint/selectors/#entity-selector
+     */
+    reorder?: boolean;
   } | null;
 }
 
