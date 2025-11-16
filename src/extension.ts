@@ -482,9 +482,25 @@ export async function activate(
       Object.values(fileAssociations).indexOf("home-assistant") === -1
     ) {
       console.log("Home Assistant workspace detected, setting YAML file associations");
+      // Set general YAML files to home-assistant, but exclude docker-compose and esphome files
       await vscode.workspace
         .getConfiguration()
-        .update("files.associations", { "*.yaml": "home-assistant" }, false);
+        .update("files.associations", {
+          "*.yaml": "home-assistant",
+          // Modern Docker Compose filenames (compose.yaml is the preferred format)
+          "compose.yml": "yaml",
+          "compose.yaml": "yaml",
+          "compose.*.yml": "yaml",
+          "compose.*.yaml": "yaml",
+          // Legacy Docker Compose filenames (for backward compatibility)
+          "docker-compose.yml": "yaml",
+          "docker-compose.yaml": "yaml",
+          "docker-compose.*.yml": "yaml",
+          "docker-compose.*.yaml": "yaml",
+          // ESPHome configuration files (for ESPHome extension)
+          "esphome/**/*.yml": "esphome",
+          "esphome/**/*.yaml": "esphome"
+        }, false);
     }
   } else {
     console.log("Configuration.yaml found but this doesn't appear to be a Home Assistant workspace - skipping file associations");
