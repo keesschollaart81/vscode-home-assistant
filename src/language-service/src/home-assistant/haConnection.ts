@@ -937,58 +937,58 @@ export class HaConnection implements IHaConnection {
     return completions;
   }
 
-  private safeStringify(value: any, maxLength: number = 200): string {
+  private safeStringify(value: any, maxLength = 200): string {
     try {
       // Handle primitives
       if (value === null || value === undefined) {
         return String(value);
       }
-      if (typeof value === 'string') {
-        return value.length > maxLength ? value.substring(0, maxLength) + '...' : value;
+      if (typeof value === "string") {
+        return value.length > maxLength ? value.substring(0, maxLength) + "..." : value;
       }
-      if (typeof value === 'number' || typeof value === 'boolean') {
+      if (typeof value === "number" || typeof value === "boolean") {
         return String(value);
       }
 
       // Handle arrays
       if (Array.isArray(value)) {
         if (value.length === 0) {
-          return '[]';
+          return "[]";
         }
         // Only show first few items to avoid very long strings
         const items = value.slice(0, 3).map(item => {
-          if (typeof item === 'object') {
-            return '[object]';
+          if (typeof item === "object") {
+            return "[object]";
           }
           return String(item);
         });
-        const result = items.join(', ');
-        const suffix = value.length > 3 ? ` ... (${value.length - 3} more)` : '';
+        const result = items.join(", ");
+        const suffix = value.length > 3 ? ` ... (${value.length - 3} more)` : "";
         return result + suffix;
       }
 
       // Handle objects with circular reference protection
-      if (typeof value === 'object') {
+      if (typeof value === "object") {
         try {
           const seen = new WeakSet();
           const str = JSON.stringify(value, (_key, val) => {
-            if (typeof val === 'object' && val !== null) {
+            if (typeof val === "object" && val !== null) {
               if (seen.has(val)) {
-                return '[Circular]';
+                return "[Circular]";
               }
               seen.add(val);
             }
             return val;
           });
-          return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+          return str.length > maxLength ? str.substring(0, maxLength) + "..." : str;
         } catch {
-          return '[object]';
+          return "[object]";
         }
       }
 
       return String(value);
     } catch (error) {
-      return '[error converting value]';
+      return "[error converting value]";
     }
   }
 

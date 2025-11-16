@@ -2381,7 +2381,7 @@ export class HomeAssistantLanguageService {
     return "text";
   }
 
-  private formatTemplateResult(result: any, depth: number = 0): string {
+  private formatTemplateResult(result: any, depth = 0): string {
     // Prevent stack overflow by limiting recursion depth
     const MAX_DEPTH = 10;
     if (depth > MAX_DEPTH) {
