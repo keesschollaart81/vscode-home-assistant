@@ -566,17 +566,20 @@
         {
           "command": "vscode-home-assistant.reloadAll",
           "title": "Home Assistant: Quick reload all",
-          "group": "navigation@1"
+          "group": "navigation@1",
+          "when": "editorLangId == home-assistant"
         },
         {
           "command": "vscode-home-assistant.showReloadIntegrations",
           "title": "Home Assistant: Reload specific integration",
-          "group": "navigation@2"
+          "group": "navigation@2",
+          "when": "editorLangId == home-assistant"
         },
         {
           "command": "vscode-home-assistant.homeassistantRestart",
           "title": "Home Assistant: Restart Home Assistant",
-          "group": "navigation@3"
+          "group": "navigation@3",
+          "when": "editorLangId == home-assistant"
         }
       ],
       "home-assistant.reload": [
