@@ -68,11 +68,11 @@ export class HomeAssistantLanguageService {
    * Removes circular $ref references from a schema by expanding them to a limited depth.
    * This prevents stack overflow in yaml-language-server's schema matching.
    */
-  private fixCircularRefsInSchema(schema: any, maxDepth: number = 3): any {
+  private fixCircularRefsInSchema(schema: any, maxDepth = 3): any {
     const visited = new Map<string, number>();
 
     const fixRefs = (obj: any, path: string, currentDepth: number): any => {
-      if (typeof obj !== 'object' || obj === null) {
+      if (typeof obj !== "object" || obj === null) {
         return obj;
       }
 
@@ -80,7 +80,7 @@ export class HomeAssistantLanguageService {
       const depthAtPath = visited.get(path) || 0;
       if (depthAtPath >= maxDepth) {
         // Stop resolving at max depth - return a simple schema instead
-        return { type: 'object', description: '(Nested structure - see schema documentation)' };
+        return { type: "object", description: "(Nested structure - see schema documentation)" };
       }
 
       visited.set(path, depthAtPath + 1);
@@ -93,9 +93,9 @@ export class HomeAssistantLanguageService {
 
       const result: any = {};
       for (const [key, value] of Object.entries(obj)) {
-        if (key === '$ref' && typeof value === 'string') {
+        if (key === "$ref" && typeof value === "string") {
           // Check if this is a self-reference
-          const refPath = value.replace('#/definitions/', '');
+          const refPath = value.replace("#/definitions/", "");
           if (path.includes(refPath)) {
             // Self-reference detected - limit depth
             if (currentDepth >= maxDepth) {
@@ -111,7 +111,7 @@ export class HomeAssistantLanguageService {
       return result;
     };
 
-    return fixRefs(schema, 'root', 0);
+    return fixRefs(schema, "root", 0);
   }
 
   public findAndApplySchemas = async (): Promise<void> => {
