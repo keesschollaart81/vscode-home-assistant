@@ -121,9 +121,11 @@ export async function debugAuthSettings(context: vscode.ExtensionContext): Promi
     }
     
     try {
-      const parsedUrl = new URL(`${activeUrl}/api/`);
+      // Remove trailing slashes to prevent double slashes in the path
+      const normalizedUrl = activeUrl.replace(/\/+$/, "");
+      const parsedUrl = new URL(`${normalizedUrl}/api/`);
       const agent = parsedUrl.protocol === "https:" ? new https.Agent({ rejectUnauthorized: !ignoreCertificates }) : undefined;
-      
+
       const request = (parsedUrl.protocol === "https:" ? https : http).request(
         {
           hostname: parsedUrl.hostname,
@@ -204,7 +206,9 @@ export async function testHomeAssistantConnection(
 ): Promise<{ success: boolean; message: string; data?: any }> {
   return new Promise((resolve, reject) => {
     try {
-      const apiUrl = new URL(`${url}/api/`);
+      // Remove trailing slashes to prevent double slashes in the path
+      const normalizedUrl = url.replace(/\/+$/, "");
+      const apiUrl = new URL(`${normalizedUrl}/api/`);
       const options = {
         method: "GET",
         headers: {
@@ -249,7 +253,7 @@ export async function testHomeAssistantConnection(
               
               // If we still don't have the version, try a second call to /api/config
               if (version === "unknown") {
-                const configUrl = new URL(`${url}/api/config`);
+                const configUrl = new URL(`${normalizedUrl}/api/config`);
                 const configReq = requestLib.request(configUrl, options, (configRes) => {
                   let configData = "";
                   configRes.on("data", (chunk) => {
