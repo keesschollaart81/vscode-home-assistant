@@ -129,9 +129,28 @@ connection.onInitialize(async (params) => {
   );
 
   let onDidSaveDebounce: NodeJS.Timeout;
-  documents.onDidSave(() => {
+  documents.onDidSave((e) => {
     clearTimeout(onDidSaveDebounce);
-    onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 100);
+
+    // Only rediscover files if the saved document is likely to contain includes
+    // or is a root configuration file. This significantly improves performance
+    // for large Home Assistant configurations.
+    const uri = e.document.uri;
+    const isRootConfigFile = uri.endsWith("configuration.yaml") ||
+                             uri.endsWith("ui-lovelace.yaml") ||
+                             uri.endsWith("automations.yaml");
+    const isInBlueprintsFolder = uri.includes("/blueprints/") ||
+                                 uri.includes("\\blueprints\\");
+
+    // Check if the document content contains include directives
+    const hasIncludes = e.document.getText().match(/!include(_dir_list|_dir_named|_dir_merge_list|_dir_merge_named)?/);
+
+    // Only trigger rediscovery for files that could affect the schema
+    if (isRootConfigFile || isInBlueprintsFolder || hasIncludes) {
+      // Use a longer debounce timeout to reduce unnecessary rediscoveries
+      // This helps when users save multiple files in quick succession
+      onDidSaveDebounce = setTimeout(discoverFilesAndUpdateSchemas, 1000);
+    }
   });
 
   connection.onDocumentSymbol((p) =>

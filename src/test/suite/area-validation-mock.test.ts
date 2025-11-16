@@ -111,6 +111,10 @@ class MockHaConnection implements IHaConnection {
   async getHassServices(): Promise<any> {
     return {};
   }
+
+  async resolveEntityCompletionDocumentation(_entityId: string): Promise<any> {
+    return undefined;
+  }
 }
 
 suite("Area Validation Tests", () => {

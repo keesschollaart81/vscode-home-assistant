@@ -121,6 +121,7 @@ export interface IHaConnection {
   getHassDevices(): Promise<HassDevices>;
   getHassEntityRegistry(): Promise<HassEntityRegistry>;
   getHassServices(): Promise<HassServices>;
+  resolveEntityCompletionDocumentation(entityId: string): Promise<MarkupContent | undefined>;
 }
 
 export class HaConnection implements IHaConnection {
@@ -922,18 +923,73 @@ export class HaConnection implements IHaConnection {
       completionItem.kind = CompletionItemKind.Variable;
       completionItem.filterText = `${value.entity_id} ${value.attributes.friendly_name}`;
       completionItem.insertText = value.entity_id;
-      completionItem.data = {};
-      completionItem.data.isEntity = true;
+      completionItem.data = {
+        isEntity: true,
+        entityId: value.entity_id,
+      };
 
-      // Create documentation using the same format as hover cards
-      completionItem.documentation = {
-        kind: "markdown",
-        value: await this.createEntityCompletionMarkdown(value),
-      } as MarkupContent;
+      // Don't generate documentation upfront - this causes massive performance issues
+      // with hundreds/thousands of entities. Documentation will be lazy-loaded on-demand
+      // in onCompletionResolve when the user actually selects/focuses the completion item.
 
       completions.push(completionItem);
     }
     return completions;
+  }
+
+  private safeStringify(value: any, maxLength = 200): string {
+    try {
+      // Handle primitives
+      if (value === null || value === undefined) {
+        return String(value);
+      }
+      if (typeof value === "string") {
+        return value.length > maxLength ? value.substring(0, maxLength) + "..." : value;
+      }
+      if (typeof value === "number" || typeof value === "boolean") {
+        return String(value);
+      }
+
+      // Handle arrays
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          return "[]";
+        }
+        // Only show first few items to avoid very long strings
+        const items = value.slice(0, 3).map(item => {
+          if (typeof item === "object") {
+            return "[object]";
+          }
+          return String(item);
+        });
+        const result = items.join(", ");
+        const suffix = value.length > 3 ? ` ... (${value.length - 3} more)` : "";
+        return result + suffix;
+      }
+
+      // Handle objects with circular reference protection
+      if (typeof value === "object") {
+        try {
+          const seen = new WeakSet();
+          const str = JSON.stringify(value, (_key, val) => {
+            if (typeof val === "object" && val !== null) {
+              if (seen.has(val)) {
+                return "[Circular]";
+              }
+              seen.add(val);
+            }
+            return val;
+          });
+          return str.length > maxLength ? str.substring(0, maxLength) + "..." : str;
+        } catch {
+          return "[object]";
+        }
+      }
+
+      return String(value);
+    } catch (error) {
+      return "[error converting value]";
+    }
   }
 
   private async createEntityCompletionMarkdown(entity: any): Promise<string> {
@@ -959,7 +1015,7 @@ export class HaConnection implements IHaConnection {
     // Current state
     if (entity.state !== undefined) {
       let stateDisplay = `**Current State:** \`${entity.state}\``;
-      
+
       // Add unit of measurement if available
       if (entity.attributes?.unit_of_measurement) {
         stateDisplay += ` ${entity.attributes.unit_of_measurement}`;
@@ -988,9 +1044,9 @@ export class HaConnection implements IHaConnection {
         if (attr === "supported_features" || attr === "friendly_name") {
           continue;
         }
-        
+
         if (value !== undefined && value !== null) {
-          const displayValue = Array.isArray(value) ? value.join(", ") : String(value);
+          const displayValue = this.safeStringify(value);
           attributeEntries.push([attr, displayValue]);
         }
       }
@@ -999,10 +1055,10 @@ export class HaConnection implements IHaConnection {
     if (attributeEntries.length > 0) {
       // Sort attributes alphabetically
       attributeEntries.sort((a, b) => a[0].localeCompare(b[0]));
-      
+
       markdown += "| Attribute | Value |\n";
       markdown += "|:----------|:------|\n";
-      
+
       for (const [attr, displayValue] of attributeEntries) {
         markdown += `| ${attr} | ${displayValue} |\n`;
       }
@@ -1010,6 +1066,28 @@ export class HaConnection implements IHaConnection {
     }
 
     return markdown;
+  }
+
+  public async resolveEntityCompletionDocumentation(entityId: string): Promise<MarkupContent | undefined> {
+    try {
+      const entities = await this.getHassEntities();
+      if (!entities) {
+        return undefined;
+      }
+
+      const entity = Object.values(entities).find((e: any) => e.entity_id === entityId);
+      if (!entity) {
+        return undefined;
+      }
+
+      return {
+        kind: "markdown",
+        value: await this.createEntityCompletionMarkdown(entity),
+      } as MarkupContent;
+    } catch (error) {
+      console.error(`Error resolving entity completion documentation for ${entityId}:`, error);
+      return undefined;
+    }
   }
 
   public async getDomainCompletions(): Promise<CompletionItem[]> {

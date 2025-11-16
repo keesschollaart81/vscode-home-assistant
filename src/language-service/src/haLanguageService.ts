@@ -1793,7 +1793,19 @@ export class HomeAssistantLanguageService {
 
   public onCompletionResolve = async (
     completionItem: CompletionItem,
-  ): Promise<CompletionItem> => completionItem;
+  ): Promise<CompletionItem> => {
+    // Lazy-load entity documentation on-demand to avoid performance issues
+    // when there are hundreds/thousands of entities
+    if (completionItem.data?.isEntity && completionItem.data?.entityId) {
+      const documentation = await this.haConnection.resolveEntityCompletionDocumentation(
+        completionItem.data.entityId
+      );
+      if (documentation) {
+        completionItem.documentation = documentation;
+      }
+    }
+    return completionItem;
+  };
 
   public onHover = async (
     document: TextDocument,
@@ -1803,30 +1815,58 @@ export class HomeAssistantLanguageService {
       return null;
     }
 
-    // First check for entity hover information
-    const entityHover = await this.getEntityHoverInfo(document, position);
-    if (entityHover) {
-      return entityHover;
+    try {
+      // First check for entity hover information
+      const entityHover = await this.getEntityHoverInfo(document, position);
+      if (entityHover) {
+        return entityHover;
+      }
+    } catch (error) {
+      console.error("Error in getEntityHoverInfo:", error);
+      // Continue to try other hover providers
     }
 
-    // Check for service hover information
-    const serviceHover = await this.getServiceHoverInfo(document, position);
-    if (serviceHover) {
-      return serviceHover;
+    try {
+      // Check for service hover information
+      const serviceHover = await this.getServiceHoverInfo(document, position);
+      if (serviceHover) {
+        return serviceHover;
+      }
+    } catch (error) {
+      console.error("Error in getServiceHoverInfo:", error);
+      // Continue to try other hover providers
     }
 
-    // Check if we're hovering over a YAML key or value
-    const isOnKey = this.isHoveringOverYamlKey(document, position);
-    
-    // Only show schema hover info when hovering over keys
-    if (isOnKey) {
-      return this.yamlLanguageService.doHover(document, position);
+    try {
+      // Check if we're hovering over a YAML key or value
+      const isOnKey = this.isHoveringOverYamlKey(document, position);
+
+      // Only show schema hover info when hovering over keys
+      if (isOnKey) {
+        // Wrap yaml-language-service doHover in try-catch as it can cause
+        // stack overflow with deeply nested YAML or complex schemas
+        try {
+          return this.yamlLanguageService.doHover(document, position);
+        } catch (yamlError) {
+          console.error("Error in yamlLanguageService.doHover (possibly stack overflow):", yamlError);
+          // Return null to gracefully handle the error
+          return null;
+        }
+      }
+    } catch (error) {
+      console.error("Error checking YAML key hover:", error);
+      // Continue to try template hover
     }
 
-    // Check for template hover information when hovering over values
-    const templateHover = await this.getTemplateHoverInfo(document, position);
-    if (templateHover) {
-      return templateHover;
+    try {
+      // Check for template hover information when hovering over values
+      const templateHover = await this.getTemplateHoverInfo(document, position);
+      if (templateHover) {
+        return templateHover;
+      }
+    } catch (error) {
+      console.error("Error in getTemplateHoverInfo:", error);
+      // Fall through to return null
     }
 
     // Don't show schema hover for values
@@ -2341,30 +2381,36 @@ export class HomeAssistantLanguageService {
     return "text";
   }
 
-  private formatTemplateResult(result: any): string {
+  private formatTemplateResult(result: any, depth = 0): string {
+    // Prevent stack overflow by limiting recursion depth
+    const MAX_DEPTH = 10;
+    if (depth > MAX_DEPTH) {
+      return "[max depth exceeded]";
+    }
+
     if (result === null) {
       return "null";
     }
-    
+
     if (result === undefined) {
       return "undefined";
     }
-    
+
     if (typeof result === "string") {
       // Check if the string looks like a list/array and try to format it
       const trimmed = result.trim();
-      
+
       // Handle Python-style lists that Home Assistant might return
       if (trimmed.startsWith("[") && trimmed.includes(",")) {
         return this.formatListString(trimmed);
       }
-      
+
       // Try to parse as JSON for objects and arrays
-      if ((trimmed.startsWith("[") && trimmed.endsWith("]")) || 
+      if ((trimmed.startsWith("[") && trimmed.endsWith("]")) ||
           (trimmed.startsWith("{") && trimmed.endsWith("}"))) {
         try {
           const parsed = JSON.parse(trimmed);
-          return this.formatTemplateResult(parsed); // Recursively format the parsed result
+          return this.formatTemplateResult(parsed, depth + 1); // Recursively format the parsed result
         } catch {
           // If JSON parsing fails, treat it as a list string if it looks like one
           if (trimmed.startsWith("[")) {
@@ -2375,51 +2421,51 @@ export class HomeAssistantLanguageService {
       }
       return result;
     }
-    
+
     if (typeof result === "number" || typeof result === "boolean") {
       return String(result);
     }
-    
+
     if (Array.isArray(result)) {
       // For arrays, format them nicely
       if (result.length === 0) {
         return "[]";
       }
-      
+
       // For small arrays (≤3 items), show all items
       if (result.length <= 3) {
         return `[\n  ${result.map(item => JSON.stringify(item)).join(",\n  ")}\n]`;
       }
-      
+
       // For larger arrays, show first 3 items with count
       const preview = result.slice(0, 3);
       const remaining = result.length - 3;
       return `[\n  ${preview.map(item => JSON.stringify(item)).join(",\n  ")},\n  ... (${remaining} more items)\n]`;
     }
-    
+
     if (typeof result === "object") {
       try {
         const keys = Object.keys(result);
-        
+
         // For empty objects
         if (keys.length === 0) {
           return "{}";
         }
-        
+
         // For small objects (≤3 properties), show all
         if (keys.length <= 3) {
           return JSON.stringify(result, null, 2);
         }
-        
+
         // For larger objects, show preview with count
         const preview = keys.slice(0, 3).reduce((obj, key) => {
           obj[key] = result[key];
           return obj;
         }, {} as any);
-        
+
         const previewStr = JSON.stringify(preview, null, 2);
         const remainingKeys = keys.length - 3;
-        
+
         // Replace the closing brace with continuation indicator
         return previewStr.slice(0, -2) + `,\n  ... (${remainingKeys} more properties)\n}`;
       } catch {
@@ -2427,7 +2473,7 @@ export class HomeAssistantLanguageService {
         return `[object ${result.constructor?.name || "Object"}]`;
       }
     }
-    
+
     // Fallback for any other types
     return String(result);
   }
