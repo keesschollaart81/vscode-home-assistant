@@ -23,6 +23,7 @@ import {
 } from "../types";
 
 import { WebOSTvTrigger } from "./core/webostv";
+import { KnxTelegramTrigger } from "./core/knx";
 
 export type Trigger =
   | CalendarTrigger
@@ -31,6 +32,7 @@ export type Trigger =
   | EventTrigger
   | GeolocationTrigger
   | HomeAssistantTrigger
+  | KnxTelegramTrigger
   | MqttTrigger
   | NumericStateTrigger
   | PersistentNotificationTrigger
