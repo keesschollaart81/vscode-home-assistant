@@ -207,7 +207,9 @@ export class HaConnection implements IHaConnection {
     
     if (hassUrl) {
       try {
-        const url = new URL(`${hassUrl}/api/websocket`);
+        // Remove trailing slashes to prevent double slashes in the path
+        const normalizedUrl = hassUrl.replace(/\/+$/, "");
+        const url = new URL(`${normalizedUrl}/api/websocket`);
         const wsProtocol = url.protocol === "https:" ? "wss:" : "ws:";
         wsUrl = `${wsProtocol}//${url.host}${url.pathname}`;
         console.log(`Generated WebSocket URL: ${wsUrl}`);
