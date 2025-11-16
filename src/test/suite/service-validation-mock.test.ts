@@ -191,6 +191,10 @@ class MockHaConnection implements IHaConnection {
   async getHassServices(): Promise<HassServices> {
     return this.mockServices;
   }
+
+  async resolveEntityCompletionDocumentation(_entityId: string): Promise<any> {
+    return undefined;
+  }
 }
 
 // Test suite for action validation
