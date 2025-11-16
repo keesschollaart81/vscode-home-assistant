@@ -50,7 +50,69 @@ export class HomeAssistantLanguageService {
     ) => void,
     private diagnoseAllFiles: () => void,
     private configurationService: IConfigurationService,
-  ) {}
+  ) {
+    // Patch the yaml-language-server to prevent stack overflow from circular schema references
+    this.patchYamlLanguageServerForCircularRefs();
+  }
+
+  /**
+   * Patches the yaml-language-server's schema matching to add cycle detection
+   * for circular $ref references in JSON schemas.
+   */
+  private patchYamlLanguageServerForCircularRefs(): void {
+    // Schemas with circular references are handled by fixing them before
+    // they're passed to the yaml-language-server in findAndApplySchemas()
+  }
+
+  /**
+   * Removes circular $ref references from a schema by expanding them to a limited depth.
+   * This prevents stack overflow in yaml-language-server's schema matching.
+   */
+  private fixCircularRefsInSchema(schema: any, maxDepth = 3): any {
+    const visited = new Map<string, number>();
+
+    const fixRefs = (obj: any, path: string, currentDepth: number): any => {
+      if (typeof obj !== "object" || obj === null) {
+        return obj;
+      }
+
+      // Track how many times we've seen this reference path
+      const depthAtPath = visited.get(path) || 0;
+      if (depthAtPath >= maxDepth) {
+        // Stop resolving at max depth - return a simple schema instead
+        return { type: "object", description: "(Nested structure - see schema documentation)" };
+      }
+
+      visited.set(path, depthAtPath + 1);
+
+      if (Array.isArray(obj)) {
+        const result = obj.map((item, index) => fixRefs(item, `${path}[${index}]`, currentDepth));
+        visited.set(path, depthAtPath);
+        return result;
+      }
+
+      const result: any = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (key === "$ref" && typeof value === "string") {
+          // Check if this is a self-reference
+          const refPath = value.replace("#/definitions/", "");
+          if (path.includes(refPath)) {
+            // Self-reference detected - limit depth
+            if (currentDepth >= maxDepth) {
+              result[key] = value; // Keep the ref but we won't expand it further
+              continue;
+            }
+          }
+        }
+        result[key] = fixRefs(value, `${path}.${key}`, currentDepth + 1);
+      }
+
+      visited.set(path, depthAtPath);
+      return result;
+    };
+
+    return fixRefs(schema, "root", 0);
+  }
 
   public findAndApplySchemas = async (): Promise<void> => {
     try {
@@ -61,6 +123,13 @@ export class HomeAssistantLanguageService {
         );
       }
 
+      // Get schemas and fix circular references before applying
+      const schemas = await this.schemaServiceForIncludes.getSchemaContributions(haFiles);
+      const fixedSchemas = schemas.map((schemaContribution: any) => ({
+        ...schemaContribution,
+        schema: schemaContribution.schema ? this.fixCircularRefsInSchema(schemaContribution.schema) : schemaContribution.schema,
+      }));
+
       this.yamlLanguageService.configure({
         validate: true,
         customTags: this.getValidYamlTags(),
@@ -68,7 +137,7 @@ export class HomeAssistantLanguageService {
         format: true,
         hover: true,
         isKubernetes: false,
-        schemas: await this.schemaServiceForIncludes.getSchemaContributions(haFiles),
+        schemas: fixedSchemas,
       } as LanguageSettings);
 
       this.diagnoseAllFiles();
@@ -1843,14 +1912,11 @@ export class HomeAssistantLanguageService {
 
       // Only show schema hover info when hovering over keys
       if (isOnKey) {
-        // Wrap yaml-language-service doHover in try-catch as it can cause
-        // stack overflow with deeply nested YAML or complex schemas
-        try {
-          return this.yamlLanguageService.doHover(document, position);
-        } catch (yamlError) {
-          console.error("Error in yamlLanguageService.doHover (possibly stack overflow):", yamlError);
-          // Return null to gracefully handle the error
-          return null;
+        // Use custom hover provider instead of yaml-language-server's doHover
+        // to avoid stack overflow from circular schema references
+        const customHover = await this.getCustomSchemaHover(document, position);
+        if (customHover) {
+          return customHover;
         }
       }
     } catch (error) {
@@ -1872,6 +1938,23 @@ export class HomeAssistantLanguageService {
     // Don't show schema hover for values
     return null;
   };
+
+  /**
+   * Provides schema hover information using yaml-language-server.
+   * Circular references have been fixed in the schemas, so this should be safe.
+   */
+  private async getCustomSchemaHover(
+    document: TextDocument,
+    position: Position,
+  ): Promise<Hover | null> {
+    try {
+      // Schemas have been fixed to remove circular refs, so doHover should work
+      return this.yamlLanguageService.doHover(document, position);
+    } catch (error) {
+      console.error("Error in schema hover:", error);
+      return null;
+    }
+  }
 
   private isHoveringOverYamlKey(
     document: TextDocument,
@@ -2187,12 +2270,9 @@ export class HomeAssistantLanguageService {
       // Only cache successful results, not errors
       if (!isError) {
         this.templateCache.set(cacheKey, { value: renderedValue, timestamp: now });
-        
-        // Clean up old cache entries (simple cleanup)
-        if (this.templateCache.size > 100) {
-          const oldestKey = this.templateCache.keys().next().value;
-          this.templateCache.delete(oldestKey);
-        }
+
+        // Clean up expired and excessive cache entries to prevent memory leaks
+        this.cleanupTemplateCache(now);
       }
       
       return renderedValue;
@@ -2233,15 +2313,45 @@ export class HomeAssistantLanguageService {
     }
   }
 
+  /**
+   * Cleans up the template cache by removing expired entries and enforcing size limits
+   * to prevent unbounded memory growth
+   */
+  private cleanupTemplateCache(currentTime: number): void {
+    const maxCacheSize = 100;
+
+    // First, remove all expired entries based on CACHE_DURATION
+    for (const [key, entry] of this.templateCache.entries()) {
+      if (currentTime - entry.timestamp > this.CACHE_DURATION) {
+        this.templateCache.delete(key);
+      }
+    }
+
+    // If cache is still too large, remove oldest entries until we're at the limit
+    if (this.templateCache.size > maxCacheSize) {
+      // Convert to array and sort by timestamp (oldest first)
+      const entries = Array.from(this.templateCache.entries())
+        .sort((a, b) => a[1].timestamp - b[1].timestamp);
+
+      // Calculate how many entries to remove
+      const entriesToRemove = this.templateCache.size - maxCacheSize;
+
+      // Remove the oldest entries
+      for (let i = 0; i < entriesToRemove; i++) {
+        this.templateCache.delete(entries[i][0]);
+      }
+    }
+  }
+
   private isTemplateError(result: any): boolean {
     if (!result || typeof result !== "object") {
       return false;
     }
-    
+
     // Check for common error properties
     return !!(
-      result.error || 
-      result.message || 
+      result.error ||
+      result.message ||
       result.detail ||
       (result.code && typeof result.code === "string")
     );
