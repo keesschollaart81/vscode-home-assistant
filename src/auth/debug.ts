@@ -2,27 +2,28 @@ import * as vscode from "vscode";
 import * as https from "https";
 import * as http from "http";
 import { URL } from "url";
-import { AuthManager } from "./manager";
 
 /**
  * Debug the authentication (token and Home Assistant instance URL) and connection settings
  * @param context Extension context
  */
 export async function debugAuthSettings(context: vscode.ExtensionContext): Promise<void> {
-  // Get token from SecretStorage
-  const secretToken = await AuthManager.getToken(context);
-  // Get URL from SecretStorage
-  const secretUrl = await AuthManager.getUrl(context);
-  
-  // Get token from settings (for migration check)
+  // Get configuration
   const config = vscode.workspace.getConfiguration("vscode-home-assistant");
-  const settingsToken = config.get<string>("longLivedAccessToken");
-  // Get URL from settings (for migration check)
-  const settingsUrl = config.get<string>("hostUrl");
   
-  // Check environment variables
+  // Check different sources for token
   const envToken = process.env.HASS_TOKEN || process.env.SUPERVISOR_TOKEN;
+  const tokenInspection = config.inspect<string>("longLivedAccessToken");
+  const workspaceToken = tokenInspection?.workspaceFolderValue || tokenInspection?.workspaceValue;
+  const globalToken = tokenInspection?.globalValue;
+  const secretToken = await context.secrets.get("home-assistant.token");
+  
+  // Check different sources for URL
   const envUrl = process.env.HASS_SERVER || (process.env.SUPERVISOR_TOKEN ? "http://supervisor/core" : undefined);
+  const urlInspection = config.inspect<string>("hostUrl");
+  const workspaceUrl = urlInspection?.workspaceFolderValue || urlInspection?.workspaceValue;
+  const globalUrl = urlInspection?.globalValue;
+  const secretUrl = await context.secrets.get("home-assistant.url");
   
   // Show results
   const debugPanel = vscode.window.createOutputChannel("Home Assistant Auth Debug");
@@ -31,44 +32,57 @@ export async function debugAuthSettings(context: vscode.ExtensionContext): Promi
   debugPanel.appendLine("---------------------------------");
   
   debugPanel.appendLine("\n--- Home Assistant Instance URL --- ");
-  debugPanel.appendLine(`URL in SecretStorage: ${secretUrl || "Not configured"}`);
-  debugPanel.appendLine(`URL in settings.json (deprecated): ${settingsUrl || "Not configured"}`);
-  debugPanel.appendLine(`URL in environment: ${envUrl || "Not configured"}`);
+  debugPanel.appendLine(`URL in environment variable: ${envUrl || "Not configured"}`);
+  debugPanel.appendLine(`URL in workspace settings: ${workspaceUrl || "Not configured"}`);
+  debugPanel.appendLine(`URL in SecretStorage (global): ${secretUrl || "Not configured"}`);
+  debugPanel.appendLine(`URL in global settings.json (deprecated): ${globalUrl || "Not configured"}`);
   
-  const activeUrl = secretUrl || envUrl || settingsUrl;
+  // Determine active URL based on priority
+  const activeUrl = envUrl || workspaceUrl || secretUrl;
   if (activeUrl) {
-    debugPanel.appendLine(`Active URL: ${activeUrl}`);
-    if (secretUrl === activeUrl) {
-      debugPanel.appendLine("URL source: SecretStorage (recommended)");
-    } else if (envUrl === activeUrl) {
-      debugPanel.appendLine("URL source: Environment variable");
-    } else if (settingsUrl === activeUrl) {
-      debugPanel.appendLine("URL source: settings.json (deprecated, should be migrated)");
+    debugPanel.appendLine(`\nActive URL: ${activeUrl}`);
+    if (envUrl === activeUrl) {
+      debugPanel.appendLine("URL source: Environment variable (highest priority)");
+    } else if (workspaceUrl === activeUrl) {
+      debugPanel.appendLine("URL source: Workspace settings (appropriate for workspace-specific configuration)");
+    } else if (secretUrl === activeUrl) {
+      debugPanel.appendLine("URL source: SecretStorage (global, recommended for personal use)");
     }
   } else {
-    debugPanel.appendLine("No active URL found. Please configure the Home Assistant instance URL.");
+    debugPanel.appendLine("\nNo active URL found. Please configure the Home Assistant instance URL.");
+  }
+  
+  // Warn about deprecated global settings
+  if (globalUrl && !secretUrl) {
+    debugPanel.appendLine("⚠️ WARNING: URL is in global settings.json (deprecated). It will be migrated to SecretStorage on next use.");
   }
 
   debugPanel.appendLine("\n--- Access Token --- ");
-  debugPanel.appendLine(`Token in SecretStorage: ${secretToken ? "Present" : "Not present"}`);
-  debugPanel.appendLine(`Token in settings.json (deprecated): ${settingsToken ? "Present" : "Not present"}`);
-  debugPanel.appendLine(`Token in environment: ${envToken ? "Present" : "Not present"}`);
+  debugPanel.appendLine(`Token in environment variable: ${envToken ? "Present" : "Not present"}`);
+  debugPanel.appendLine(`Token in workspace settings: ${workspaceToken ? "Present" : "Not present"}`);
+  debugPanel.appendLine(`Token in SecretStorage (global): ${secretToken ? "Present" : "Not present"}`);
+  debugPanel.appendLine(`Token in global settings.json (deprecated): ${globalToken ? "Present" : "Not present"}`);
   
-  // Show token details if available
-  const activeToken = secretToken || envToken || settingsToken;
+  // Determine active token based on priority
+  const activeToken = envToken || workspaceToken || secretToken;
   if (activeToken) {
     const obscuredToken = activeToken.length <= 10 
       ? "***" 
       : `${activeToken.substring(0, 5)}...${activeToken.substring(activeToken.length - 5)}`;
-    debugPanel.appendLine(`Active token (obscured): ${obscuredToken}`);
+    debugPanel.appendLine(`\nActive token (obscured): ${obscuredToken}`);
     
     // Show which source is being used
-    if (secretToken === activeToken) {
-      debugPanel.appendLine("Token source: SecretStorage (recommended)");
-    } else if (envToken === activeToken) {
-      debugPanel.appendLine("Token source: Environment variable");
-    } else if (settingsToken === activeToken) {
-      debugPanel.appendLine("Token source: settings.json (deprecated, should be migrated)");
+    if (envToken === activeToken) {
+      debugPanel.appendLine("Token source: Environment variable (highest priority)");
+    } else if (workspaceToken === activeToken) {
+      debugPanel.appendLine("Token source: Workspace settings (appropriate for workspace-specific configuration)");
+    } else if (secretToken === activeToken) {
+      debugPanel.appendLine("Token source: SecretStorage (global, recommended for personal use)");
+    }
+    
+    // Warn about deprecated global settings
+    if (globalToken && !secretToken) {
+      debugPanel.appendLine("⚠️ WARNING: Token is in global settings.json (deprecated). It will be migrated to SecretStorage on next use.");
     }
     
     // Check token format
@@ -108,7 +122,7 @@ export async function debugAuthSettings(context: vscode.ExtensionContext): Promi
       debugPanel.appendLine("Token appears to be a long-lived access token (not JWT format).");
     }
   } else {
-    debugPanel.appendLine("No active token found. Please configure the Home Assistant access token.");
+    debugPanel.appendLine("\nNo active token found. Please configure the Home Assistant access token.");
   }
   
   debugPanel.appendLine("\n--- Connection Test --- ");
