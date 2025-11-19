@@ -729,7 +729,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@stylistic/eslint-plugin": "^5.5.0",
+    "@stylistic/eslint-plugin": "^5.6.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "24.10.1",
     "@types/request": "2.48.13",
