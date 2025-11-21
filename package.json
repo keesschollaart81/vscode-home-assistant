@@ -752,7 +752,7 @@
     "ts-node": "10.9.2",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.4",
-    "typescript-json-schema": "0.65.1"
+    "typescript-json-schema": "0.66.0"
   },
   "dependencies": {
     "@vscode/extension-telemetry": "^1.2.0",
