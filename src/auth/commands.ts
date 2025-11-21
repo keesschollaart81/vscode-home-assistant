@@ -132,7 +132,7 @@ async function setToken(context: vscode.ExtensionContext): Promise<void> {
 
 async function clearToken(context: vscode.ExtensionContext): Promise<void> {
   const confirmation = await vscode.window.showWarningMessage(
-    "Are you sure you want to clear the stored Home Assistant token?",
+    "Are you sure you want to clear the stored Home Assistant token from SecretStorage? This will not affect tokens in workspace settings or environment variables.",
     { modal: true },
     "Yes"
   );
@@ -140,7 +140,7 @@ async function clearToken(context: vscode.ExtensionContext): Promise<void> {
   if (confirmation === "Yes") {
     try {
       await AuthManager.deleteToken(context);
-      vscode.window.showInformationMessage("Home Assistant token has been cleared.");
+      vscode.window.showInformationMessage("Home Assistant token has been cleared from SecretStorage.");
     } catch (error) {
       vscode.window.showErrorMessage(`Failed to clear token: ${error.message}`);
     }
@@ -148,28 +148,74 @@ async function clearToken(context: vscode.ExtensionContext): Promise<void> {
 }
 
 async function viewAuthDetails(context: vscode.ExtensionContext): Promise<void> {
-  const token = await AuthManager.getToken(context);
-  const url = await AuthManager.getUrl(context);
+  const config = vscode.workspace.getConfiguration("vscode-home-assistant");
   
-  if (token || url) {
-    let message = "Current Home Assistant Authentication Details:\n";
-    if (url) {
-      message += `\nHome Assistant Instance URL: ${url}`;
-    } else {
-      message += "\nHome Assistant Instance URL: Not set";
+  // Check all sources for credentials
+  const envToken = process.env.HASS_TOKEN || process.env.SUPERVISOR_TOKEN;
+  const tokenInspection = config.inspect<string>("longLivedAccessToken");
+  const workspaceToken = tokenInspection?.workspaceFolderValue || tokenInspection?.workspaceValue;
+  const globalToken = tokenInspection?.globalValue;
+  const secretToken = await context.secrets.get("home-assistant.token");
+  
+  const envUrl = process.env.HASS_SERVER || (process.env.SUPERVISOR_TOKEN ? "http://supervisor/core" : undefined);
+  const urlInspection = config.inspect<string>("hostUrl");
+  const workspaceUrl = urlInspection?.workspaceFolderValue || urlInspection?.workspaceValue;
+  const globalUrl = urlInspection?.globalValue;
+  const secretUrl = await context.secrets.get("home-assistant.url");
+  
+  // Determine active credentials based on priority
+  const activeToken = envToken || workspaceToken || secretToken;
+  const activeUrl = envUrl || workspaceUrl || secretUrl;
+  
+  let message = "Home Assistant Authentication Details:\n";
+  message += "\n--- Instance URL ---";
+  
+  if (activeUrl) {
+    message += `\nActive URL: ${activeUrl}`;
+    if (envUrl === activeUrl) {
+      message += " (from environment variable)";
+    } else if (workspaceUrl === activeUrl) {
+      message += " (from workspace settings)";
+    } else if (secretUrl === activeUrl) {
+      message += " (from SecretStorage)";
     }
-    if (token) {
-      const obscuredToken = token.length <= 10 
-        ? "***" 
-        : `${token.substring(0, 5)}...${token.substring(token.length - 5)}`;
-      message += `\nToken: ${obscuredToken}`;
-    } else {
-      message += "\nToken: Not set";
-    }
-    vscode.window.showInformationMessage(message, { modal: true });
   } else {
-    vscode.window.showInformationMessage("No Home Assistant token or instance URL is currently stored.");
+    message += "\nActive URL: Not set";
   }
+  
+  message += "\n\nAll URL sources:";
+  message += `\n  Environment: ${envUrl || "Not set"}`;
+  message += `\n  Workspace settings: ${workspaceUrl || "Not set"}`;
+  message += `\n  SecretStorage: ${secretUrl || "Not set"}`;
+  message += `\n  Global settings (deprecated): ${globalUrl || "Not set"}`;
+  
+  message += "\n\n--- Access Token ---";
+  
+  if (activeToken) {
+    const obscuredToken = activeToken.length <= 10 
+      ? "***" 
+      : `${activeToken.substring(0, 5)}...${activeToken.substring(activeToken.length - 5)}`;
+    message += `\nActive Token: ${obscuredToken}`;
+    if (envToken === activeToken) {
+      message += " (from environment variable)";
+    } else if (workspaceToken === activeToken) {
+      message += " (from workspace settings)";
+    } else if (secretToken === activeToken) {
+      message += " (from SecretStorage)";
+    }
+  } else {
+    message += "\nActive Token: Not set";
+  }
+  
+  message += "\n\nAll token sources:";
+  message += `\n  Environment: ${envToken ? "Present" : "Not set"}`;
+  message += `\n  Workspace settings: ${workspaceToken ? "Present" : "Not set"}`;
+  message += `\n  SecretStorage: ${secretToken ? "Present" : "Not set"}`;
+  message += `\n  Global settings (deprecated): ${globalToken ? "Present" : "Not set"}`;
+  
+  message += "\n\nPriority order: Environment > Workspace settings > SecretStorage";
+  
+  vscode.window.showInformationMessage(message, { modal: true });
 }
 
 export async function testConnection(context: vscode.ExtensionContext): Promise<void> {
@@ -326,7 +372,7 @@ async function setInstanceUrl(context: vscode.ExtensionContext): Promise<void> {
 
 async function clearInstanceUrl(context: vscode.ExtensionContext): Promise<void> {
   const confirmation = await vscode.window.showWarningMessage(
-    "Are you sure you want to clear the stored Home Assistant instance URL?",
+    "Are you sure you want to clear the stored Home Assistant instance URL from SecretStorage? This will not affect URLs in workspace settings or environment variables.",
     { modal: true },
     "Yes"
   );
@@ -334,7 +380,7 @@ async function clearInstanceUrl(context: vscode.ExtensionContext): Promise<void>
   if (confirmation === "Yes") {
     try {
       await AuthManager.deleteUrl(context);
-      vscode.window.showInformationMessage("Home Assistant instance URL has been cleared.");
+      vscode.window.showInformationMessage("Home Assistant instance URL has been cleared from SecretStorage.");
     } catch (error) {
       vscode.window.showErrorMessage(`Failed to clear Home Assistant instance URL: ${error.message}`);
     }
