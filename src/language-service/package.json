@@ -42,7 +42,7 @@
     "ts-loader": "^9.2.8",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
-    "typescript-json-schema": "0.65.1",
+    "typescript-json-schema": "0.66.0",
     "vscode-test": "^1.4.0"
   },
   "dependencies": {
