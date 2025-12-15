@@ -740,7 +740,7 @@
     "@typescript-eslint/parser": "^8.48.1",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "glob": "^13.0.0",
     "husky": "^9.1.7",
