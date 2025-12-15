@@ -70,6 +70,7 @@ type EventType =
 
 type AllowedMethods = "POST" | "PUT" | "GET" | "HEAD";
 type PersistentNotificationUpdateType = "added" | "updated" | "removed";
+export type Weekday = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
 
 interface CalendarTrigger {
   /**
@@ -808,6 +809,12 @@ interface TimeTrigger {
    * https://www.home-assistant.io/docs/automation/trigger#trigger-variables
    */
   variables?: Data;
+
+  /**
+   * Optional weekday, accepts a single day or a list of days.
+   * https://www.home-assistant.io/docs/automation/trigger/#weekday-filtering
+   */
+  weekday?: Weekday | Weekday[];
 }
 
 interface TimePatternTrigger {
