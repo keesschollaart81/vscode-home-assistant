@@ -7,6 +7,7 @@ import {
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   DeviceClassesSensor,
+  IncludeList,
   Integer,
   StateClassesSensor,
 } from "../../types";
@@ -98,43 +99,43 @@ interface Item {
    * A list of all binary sensors configured for this connection.
    * https://www.home-assistant.io/integrations/modbus/#binary_sensors
    */
-  binary_sensors?: BinarySensorItem | BinarySensorItem[];
+  binary_sensors?: BinarySensorItem | BinarySensorItem[] | IncludeList;
 
   /**
    * A list of all climate entities in this modbus instance.
    * https://www.home-assistant.io/integrations/modbus/#climates
    */
-  climates?: ClimateItem | ClimateItem[];
+  climates?: ClimateItem | ClimateItem[] | IncludeList;
 
   /**
    * A list of all cover entities configured for this connection.
    * https://www.home-assistant.io/integrations/modbus/#covers
    */
-  covers?: CoverItem | CoverItem[];
+  covers?: CoverItem | CoverItem[] | IncludeList;
 
   /**
    * A list of all fan entities in this modbus instance.
    * https://www.home-assistant.io/integrations/modbus/#fans
    */
-  fans?: FanItem | FanItem[];
+  fans?: FanItem | FanItem[] | IncludeList;
 
   /**
    * A list of all light entities in this modbus instance.
    * https://www.home-assistant.io/integrations/modbus/#lights
    */
-  lights?: LightItem | LightItem[];
+  lights?: LightItem | LightItem[] | IncludeList;
 
   /**
    * A list of all sensors in this modbus instance.
    * https://www.home-assistant.io/integrations/modbus/#sensors
    */
-  sensors?: SensorItem | SensorItem[];
+  sensors?: SensorItem | SensorItem[] | IncludeList;
 
   /**
    * A list of all switches in this modbus instance.
    * https://www.home-assistant.io/integrations/modbus/#switches
    */
-  switches?: SwitchItem | SwitchItem[];
+  switches?: SwitchItem | SwitchItem[] | IncludeList;
 }
 
 interface BaseEntityItem {
