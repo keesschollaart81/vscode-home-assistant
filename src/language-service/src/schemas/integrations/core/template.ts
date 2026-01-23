@@ -153,6 +153,17 @@ export interface Item {
   use_blueprint?: BlueprintUsage;
 
   /**
+   * Defines a template to get the name of the entity.
+   * https://www.home-assistant.io/integrations/template#name
+   */
+  name?: Template;
+
+  /**
+   * Use default_entity_id instead of name for automatic generation of the entity id. E.g. sensor.my_awesome_sensor. When used without a unique_id, the entity id will update during restart or reload if the entity id is available. If the entity id already exists, the entity id will be created with a number at the end. When used with a unique_id, the default_entity_id is only used when the entity is added for the first time. When set, this overrides a user-customized Entity ID in case the entity was deleted and added again.
+   * https://www.home-assistant.io/integrations/template#default_entity_id
+   */
+  default_entity_id?: string;
+  /**
    * The unique ID for this config block. This will be prefixed to all unique IDs of all entities in this block.
    * https://www.home-assistant.io/integrations/template#unique_id
    */
@@ -756,7 +767,7 @@ export interface SensorItem extends BaseItem {
   unit_of_measurement?: string;
 }
 
-interface SwitchItem {
+export interface SwitchItem extends BaseItem {
   /**
    * Defines a template to get the available state of the component. If the template returns true, the device is available.
    * https://www.home-assistant.io/integrations/switch.template#availability_template
