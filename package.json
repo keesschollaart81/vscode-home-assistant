@@ -756,7 +756,7 @@
   },
   "dependencies": {
     "@vscode/extension-telemetry": "^1.2.0",
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "bufferutil": "^4.0.9",
     "home-assistant-js-websocket": "^9.6.0",
     "utf-8-validate": "^6.0.5",
