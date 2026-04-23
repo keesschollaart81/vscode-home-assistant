@@ -61,6 +61,44 @@ Snippets allow you to create commonly used data structures very quickly.
 
 Commands allow you to quickly interact with Home Assistant! Find them using Cmd+shift+P and type 'Home Assistant'
 
+## Ignoring entities and validation warnings
+
+Use inline YAML comments (inspired by [cSpell document settings](https://cspell.org/docs/Configuration/document-settings)) to silence false-positive validation warnings on entities, areas, devices, floors, labels, actions, or secrets that exist elsewhere (e.g. on a remote instance, or not yet created):
+
+```yaml
+# homeassistant:ignore light.fake_one, light.fake_two
+
+automation:
+  - alias: Example
+    trigger:
+      - platform: state
+        entity_id: light.fake_one          # suppressed by the file-wide ignore above
+
+      # homeassistant:disable-next-line
+      - platform: state
+        entity_id: light.only_on_remote
+
+      - platform: state
+        entity_id: light.staging  # homeassistant:disable-line
+
+    # homeassistant:disable
+    condition:
+      - condition: state
+        entity_id: light.not_yet_created
+    # homeassistant:enable
+```
+
+Supported directives:
+
+| Directive | Effect |
+| --- | --- |
+| `# homeassistant:ignore <id1>, <id2>, ...` | File-wide — silence diagnostics for the listed IDs |
+| `# homeassistant:disable-line` (inline) | Silence all Home Assistant diagnostics on the current line |
+| `# homeassistant:disable-next-line` | Silence all Home Assistant diagnostics on the next line |
+| `# homeassistant:disable` / `# homeassistant:enable` | Silence all Home Assistant diagnostics in the enclosed range |
+
+Directives only suppress diagnostics produced by this extension (`source: "home-assistant"`); YAML schema errors from the Home Assistant schemas are still reported.
+
 ## Render templates
 
 Evaluate jinja templates via Home Assistant's API and see how they would render.
