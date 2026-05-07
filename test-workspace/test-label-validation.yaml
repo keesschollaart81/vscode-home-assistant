@@ -11,8 +11,8 @@ automation:
       - service: light.turn_off
         target:
           label_id: automation            # Should be valid
-          
-  - alias: "Test Unknown Labels"  
+
+  - alias: "Test Unknown Labels"
     trigger:
       - platform: state
         entity_id: light.living_room
@@ -30,11 +30,11 @@ script:
     sequence:
       - service: homeassistant.turn_off
         target:
-          label_id: 
+          label_id:
             - lighting                    # Should be valid
             - security                    # Should be valid
             - fake_label                  # Should trigger warning
-          
+
 # Test with inline array
 group:
   test_group:
@@ -83,8 +83,10 @@ automation:
         target:
           label_id: none                  # Should be ignored
 
-# Test secrets (should be ignored)  
+
+# homeassistant:disable
 automation:
+# homeassistant:enable
   - alias: "Test Secrets"
     trigger:
       - platform: state
