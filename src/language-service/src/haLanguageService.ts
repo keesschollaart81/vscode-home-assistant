@@ -33,6 +33,10 @@ import { DefinitionProvider } from "./definition/definition";
 import { HomeAssistantConfiguration } from "./haConfig/haConfig";
 import { Includetype } from "./haConfig/dto";
 import { IConfigurationService } from "./configuration";
+import {
+  IgnoreDirectives,
+  parseIgnoreDirectives,
+} from "./utils/commentDirectives";
 
 export class HomeAssistantLanguageService {
   private templateCache = new Map<string, { value: string; timestamp: number }>();
@@ -308,7 +312,33 @@ export class HomeAssistantLanguageService {
     const actionValidationDiagnostics = await this.validateActionIds(document);
     diagnostics.push(...actionValidationDiagnostics);
 
-    return diagnostics;
+    const directives = parseIgnoreDirectives(document);
+    return this.applyIgnoreDirectives(diagnostics, directives);
+  };
+
+  private applyIgnoreDirectives = (
+    diagnostics: Diagnostic[],
+    directives: IgnoreDirectives,
+  ): Diagnostic[] => {
+    if (
+      directives.disabledLines.size === 0 &&
+      directives.ignoredIds.size === 0
+    ) {
+      return diagnostics;
+    }
+    return diagnostics.filter((d) => {
+      if (d.source !== "home-assistant") {
+        return true;
+      }
+      if (directives.disabledLines.has(d.range.start.line)) {
+        return false;
+      }
+      const idMatch = typeof d.message === "string" ? d.message.match(/'([^']+)'/) : null;
+      if (idMatch && directives.ignoredIds.has(idMatch[1])) {
+        return false;
+      }
+      return true;
+    });
   };
 
   private validateEntityIds = async (
