@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { AuthManager } from "./manager";
+import { testHomeAssistantConnection } from "./debug";
 
 /**
  * Command to manage the Home Assistant authentication (token and instance URL)
@@ -172,6 +173,36 @@ async function viewAuthDetails(context: vscode.ExtensionContext): Promise<void> 
   }
 }
 
+function describeConnectionError(error: any): string {
+  if (!error) {
+    return "Unknown error";
+  }
+  // undici's fetch hides the real failure under error.cause; Node http/https
+  // errors carry a `.code` directly. Unwrap both so the user sees the cause.
+  const cause = error.cause ?? error;
+  const code = cause.code ?? error.code;
+  const baseMessage = cause.message ?? error.message ?? String(error);
+
+  switch (code) {
+    case "ENOTFOUND":
+    case "EAI_AGAIN":
+      return `${baseMessage} — the hostname could not be resolved. Check the URL/DNS. mDNS '.local' names often don't resolve from the editor; try the IP address instead.`;
+    case "ECONNREFUSED":
+      return `${baseMessage} — connection refused. Make sure Home Assistant is running and reachable at this host and port.`;
+    case "ETIMEDOUT":
+    case "EHOSTUNREACH":
+    case "ENETUNREACH":
+      return `${baseMessage} — could not reach the host. Check your network/firewall and that the port is correct.`;
+    case "CERT_HAS_EXPIRED":
+    case "UNABLE_TO_VERIFY_LEAF_SIGNATURE":
+    case "DEPTH_ZERO_SELF_SIGNED_CERT":
+    case "SELF_SIGNED_CERT_IN_CHAIN":
+      return `${baseMessage} — TLS certificate problem. For a self-signed certificate, set 'vscode-home-assistant.ignoreCertificates' to true.`;
+    default:
+      return code ? `${baseMessage} (${code})` : baseMessage;
+  }
+}
+
 export async function testConnection(context: vscode.ExtensionContext): Promise<void> {
   const token = await AuthManager.getToken(context);
   const hostUrl = await AuthManager.getUrl(context);
@@ -231,48 +262,39 @@ export async function testConnection(context: vscode.ExtensionContext): Promise<
     },
     async (progress) => {
       progress.report({ increment: 0, message: "Connecting..." });
-      
+
+      // Use the same Node http/https transport as the status bar and the
+      // language-server websocket. The previous implementation used the global
+      // `fetch` (undici), which behaves differently in the extension host
+      // (proxy handling, DNS/Happy-Eyeballs) and collapses every failure into
+      // an opaque "fetch failed" message, hiding the real cause.
+      const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+      const ignoreCertificates = !!config.get<boolean>("ignoreCertificates");
+
       try {
-        const response = await fetch(`${hostUrl}/api/`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        
+        const result = await testHomeAssistantConnection(hostUrl, token, ignoreCertificates);
+
         progress.report({ increment: 50, message: "Validating response..." });
-        
-        if (response.ok) {
-          const data: any = await response.json(); // Add type assertion to any
-          if (data.message === "API running.") {
-            progress.report({ increment: 100, message: "Connection successful!" });
-            vscode.window.showInformationMessage(
-              `Successfully connected to Home Assistant at ${hostUrl}. API is running.`
-            );
-          } else {
-            progress.report({ increment: 100, message: "Connection failed." });
-            vscode.window.showErrorMessage(
-              `Connected to Home Assistant at ${hostUrl}, but API response was unexpected: ${data.message || "No message"}`
-            );
-          }
+
+        if (result.success) {
+          progress.report({ increment: 100, message: "Connection successful!" });
+          const version =
+            result.data && result.data.version && result.data.version !== "unknown"
+              ? ` (version ${result.data.version})`
+              : "";
+          vscode.window.showInformationMessage(
+            `Successfully connected to Home Assistant at ${hostUrl}${version}. API is running.`
+          );
         } else {
           progress.report({ increment: 100, message: "Connection failed." });
-          let errorMessage = `Failed to connect to Home Assistant at ${hostUrl}. Status: ${response.status} ${response.statusText}`;
-          try {
-            const errorBody: any = await response.json(); // Add type assertion to any
-            if (errorBody && errorBody.message) {
-              errorMessage += ` - ${errorBody.message}`;
-            }
-          } catch {
-            // Ignore if error body is not JSON or doesn't have message
-          }
-          vscode.window.showErrorMessage(errorMessage);
+          vscode.window.showErrorMessage(
+            `Failed to connect to Home Assistant at ${hostUrl}: ${result.message}`
+          );
         }
       } catch (error) {
         progress.report({ increment: 100, message: "Connection error." });
         vscode.window.showErrorMessage(
-          `Error connecting to Home Assistant at ${hostUrl}: ${error.message}`
+          `Error connecting to Home Assistant at ${hostUrl}: ${describeConnectionError(error)}`
         );
       }
     }
