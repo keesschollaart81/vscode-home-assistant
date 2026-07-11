@@ -3,6 +3,7 @@
  * Source: https://github.com/home-assistant/core/blob/dev/homeassistant/components/template/
  */
 import {
+  Data,
   DeviceClassesBinarySensor,
   DeviceClassesCover,
   DeviceClassesSensor,
@@ -145,6 +146,18 @@ export interface Item {
    * https://www.home-assistant.io/integrations/template#trigger
    */
   trigger?: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * Define an automation trigger to update the entities. Optional. If omitted will update based on referenced entities. See trigger documentation.
+   * https://www.home-assistant.io/integrations/template#trigger
+   */
+  triggers?: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * Key-value pairs of variable definitions which can be referenced and used in the templates below (for trigger-based entities only). Mostly used by blueprints. With State-based template entities, variables are only resolved when the configuration is loaded or reloaded. Trigger based template entities resolve variables between triggers and actions.
+   * https://www.home-assistant.io/integrations/template/
+   */
+  variables?: Data;
 
   /**
    * Define template sensors or binary sensors based on a blueprint. Optional. See template template documentation.
