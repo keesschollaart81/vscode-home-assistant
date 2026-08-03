@@ -224,6 +224,25 @@ automation:
     assert.strictEqual(deviceDiagnostics[0].message, "Device 'unknown_device' does not exist in your Home Assistant instance");
   });
 
+  test("Does not treat later list items as device IDs", async () => {
+    const content = `automation:
+  - alias: "Test Automation"
+    trigger:
+      device_id:
+        - device_1234
+    action:
+      - action: light.toggle
+        target:
+          entity_id: light.kitchen
+`;
+
+    const document = TextDocument.create("file://test.yaml", "yaml", 1, content);
+    const diagnostics = await languageService.getDiagnostics(document);
+    const deviceDiagnostics = diagnostics.filter(d => d.code === "unknown-device");
+
+    assert.strictEqual(deviceDiagnostics.length, 0);
+  });
+
   test("Should skip template devices", async () => {
     const content = `
 automation:
