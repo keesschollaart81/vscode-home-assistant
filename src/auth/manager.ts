@@ -8,22 +8,27 @@ export class AuthManager {
   private static readonly URL_KEY = "home-assistant.url";
 
   /**
-   * Get the stored token from SecretStorage or environment variables
+   * Get the stored token with priority: environment > workspace settings > secret storage
    * @param context Extension context
    * @returns The stored token or undefined if not found
    */
   public static async getToken(context: vscode.ExtensionContext): Promise<string | undefined> {
-    // First try to get token from SecretStorage
-    const secretToken = await context.secrets.get(AuthManager.TOKEN_KEY);
-    
-    // If no secret token, check environment variables
-    if (!secretToken) {
-      const envToken = process.env.HASS_TOKEN || process.env.SUPERVISOR_TOKEN;
-      if (envToken) {
-        return envToken;
-      }
+    // Priority 1: Environment variables
+    const envToken = process.env.HASS_TOKEN || process.env.SUPERVISOR_TOKEN;
+    if (envToken) {
+      return envToken;
     }
     
+    // Priority 2: Workspace/folder settings
+    const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+    const inspection = config.inspect<string>("longLivedAccessToken");
+    const workspaceToken = inspection?.workspaceFolderValue || inspection?.workspaceValue;
+    if (workspaceToken) {
+      return workspaceToken;
+    }
+    
+    // Priority 3: SecretStorage (global)
+    const secretToken = await context.secrets.get(AuthManager.TOKEN_KEY);
     return secretToken;
   }
 
@@ -45,23 +50,28 @@ export class AuthManager {
   }
   
   /**
-   * Get the stored URL from SecretStorage or environment variables
+   * Get the stored URL with priority: environment > workspace settings > secret storage
    * @param context Extension context
    * @returns The stored URL or undefined if not found
    */
   public static async getUrl(context: vscode.ExtensionContext): Promise<string | undefined> {
-    // First try to get URL from SecretStorage
-    const secretUrl = await context.secrets.get(AuthManager.URL_KEY);
-    
-    // If no secret URL, check environment variables
-    if (!secretUrl) {
-      const envUrl = process.env.HASS_SERVER || 
-                    (process.env.SUPERVISOR_TOKEN ? "http://supervisor/core" : undefined);
-      if (envUrl) {
-        return envUrl;
-      }
+    // Priority 1: Environment variables
+    const envUrl = process.env.HASS_SERVER || 
+                  (process.env.SUPERVISOR_TOKEN ? "http://supervisor/core" : undefined);
+    if (envUrl) {
+      return envUrl;
     }
     
+    // Priority 2: Workspace/folder settings
+    const config = vscode.workspace.getConfiguration("vscode-home-assistant");
+    const inspection = config.inspect<string>("hostUrl");
+    const workspaceUrl = inspection?.workspaceFolderValue || inspection?.workspaceValue;
+    if (workspaceUrl) {
+      return workspaceUrl;
+    }
+    
+    // Priority 3: SecretStorage (global)
+    const secretUrl = await context.secrets.get(AuthManager.URL_KEY);
     return secretUrl;
   }
 
@@ -94,15 +104,21 @@ export class AuthManager {
   }
 
   /**
-   * Migrate token from settings.json to SecretStorage
+   * Migrate token from user/global settings.json to SecretStorage
+   * Only migrates from user/global settings, not workspace settings
    * @param context Extension context
    * @returns true if a token was migrated, false otherwise
    */
   public static async migrateTokenFromSettings(context: vscode.ExtensionContext): Promise<boolean> {
     const config = vscode.workspace.getConfiguration("vscode-home-assistant");
-    const token = config.get<string>("longLivedAccessToken");
+    
+    // Get the inspection to see where the value comes from
+    const inspection = config.inspect<string>("longLivedAccessToken");
+    
+    // Only migrate if the token is in globalValue (user settings), not workspaceValue or workspaceFolderValue
+    const token = inspection?.globalValue;
 
-    // If there's no token in settings, nothing to migrate
+    // If there's no token in global settings, nothing to migrate
     if (!token) {
       return false;
     }
@@ -111,12 +127,12 @@ export class AuthManager {
       // Store in SecretStorage
       await AuthManager.storeToken(context, token);
 
-      // Clear from settings
+      // Clear from global settings only
       await config.update("longLivedAccessToken", undefined, vscode.ConfigurationTarget.Global);
       
       // Inform user
       vscode.window.showInformationMessage(
-        "Your Home Assistant access token has been securely migrated to VS Code's SecretStorage. It is no longer stored in your settings.json file."
+        "Your Home Assistant access token has been securely migrated to VS Code's SecretStorage. It is no longer stored in your global settings.json file."
       );
       
       return true;
@@ -127,15 +143,21 @@ export class AuthManager {
   }
   
   /**
-   * Migrate Home Assistant instance URL from settings.json to SecretStorage
+   * Migrate Home Assistant instance URL from user/global settings.json to SecretStorage
+   * Only migrates from user/global settings, not workspace settings
    * @param context Extension context
    * @returns true if a URL was migrated, false otherwise
    */
   public static async migrateUrlFromSettings(context: vscode.ExtensionContext): Promise<boolean> {
     const config = vscode.workspace.getConfiguration("vscode-home-assistant");
-    const url = config.get<string>("hostUrl");
+    
+    // Get the inspection to see where the value comes from
+    const inspection = config.inspect<string>("hostUrl");
+    
+    // Only migrate if the URL is in globalValue (user settings), not workspaceValue or workspaceFolderValue
+    const url = inspection?.globalValue;
 
-    // If there's no URL in settings, nothing to migrate
+    // If there's no URL in global settings, nothing to migrate
     if (!url) {
       return false;
     }
@@ -144,12 +166,12 @@ export class AuthManager {
       // Store in SecretStorage
       await AuthManager.storeUrl(context, url);
 
-      // Clear from settings
+      // Clear from global settings only
       await config.update("hostUrl", undefined, vscode.ConfigurationTarget.Global);
       
       // Inform user
       vscode.window.showInformationMessage(
-        "Your Home Assistant instance URL has been securely migrated to VS Code's SecretStorage. It is no longer stored in your settings.json file."
+        "Your Home Assistant instance URL has been securely migrated to VS Code's SecretStorage. It is no longer stored in your global settings.json file."
       );
       
       return true;
@@ -160,28 +182,28 @@ export class AuthManager {
   }
 
   /**
-   * Get token UI helper that tries to get token from SecretStorage first, then falls back to settings.json
+   * Get token UI helper that uses priority: environment > workspace settings > secret storage
    * Also validates Home Assistant instance URL is set
    * @param context Extension context
    * @returns The token or undefined if not found
    */
   public static async getTokenWithUI(context: vscode.ExtensionContext): Promise<string | undefined> {
-    // Check if Home Assistant instance URL is configured in SecretStorage first
+    // Get URL with priority: env > workspace > secret storage
     let hostUrl = await AuthManager.getUrl(context);
     
-    // If not in SecretStorage, check settings and environment
+    // If no URL from any source, try to migrate global settings
     if (!hostUrl) {
       const config = vscode.workspace.getConfiguration("vscode-home-assistant");
-      hostUrl = config.get<string>("hostUrl") || process.env.HASS_SERVER || 
-        (process.env.SUPERVISOR_TOKEN ? "http://supervisor/core" : "");
+      const inspection = config.inspect<string>("hostUrl");
       
-      // If found in settings, migrate it
-      if (config.get<string>("hostUrl")) {
+      // Only migrate if in global settings
+      if (inspection?.globalValue) {
         await AuthManager.migrateUrlFromSettings(context);
+        hostUrl = await AuthManager.getUrl(context);
       }
     }
     
-    // If no URL is configured, ask for it
+    // If still no URL, ask for it
     if (!hostUrl) {
       hostUrl = await vscode.window.showInputBox({
         prompt: "Enter your Home Assistant instance URL",
@@ -215,22 +237,18 @@ export class AuthManager {
       vscode.window.showInformationMessage(`Home Assistant instance URL set to: ${hostUrl}`);
     }
     
-    // Try to get token from SecretStorage first
+    // Get token with priority: env > workspace > secret storage
     let token = await AuthManager.getToken(context);
     
-    // If not found in SecretStorage, check environment variables
-    if (!token) {
-      token = process.env.HASS_TOKEN || process.env.SUPERVISOR_TOKEN;
-    }
-    
-    // If not found in SecretStorage or environment, try from settings
+    // If no token from any source, try to migrate global settings
     if (!token) {
       const config = vscode.workspace.getConfiguration("vscode-home-assistant");
-      token = config.get<string>("longLivedAccessToken");
+      const inspection = config.inspect<string>("longLivedAccessToken");
       
-      // If found in settings, migrate it
-      if (token) {
+      // Only migrate if in global settings
+      if (inspection?.globalValue) {
         await AuthManager.migrateTokenFromSettings(context);
+        token = await AuthManager.getToken(context);
       }
     }
     
