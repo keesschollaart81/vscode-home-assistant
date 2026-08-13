@@ -6,6 +6,7 @@ homeassistant:
   elevation: 0
   unit_system: metric
   time_zone: UTC
+  packages: !include_dir_named packages
 
 # Include our test files
 include:
@@ -22,3 +23,4 @@ sensor:
     name: Demo Sensor
 
 automation: !include test-goto-definition.yaml
+script: !include_dir_merge_named scripts
