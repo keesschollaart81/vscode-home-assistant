@@ -1,0 +1,3 @@
+include_diagnostics_test:
+  alias: Include diagnostics test
+  sequence: []

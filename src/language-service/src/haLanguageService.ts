@@ -37,6 +37,13 @@ import { IConfigurationService } from "./configuration";
 export class HomeAssistantLanguageService {
   private templateCache = new Map<string, { value: string; timestamp: number }>();
   private readonly CACHE_DURATION = 30000; // 30 seconds
+  private readonly validIncludeTags = new Set(
+    Object.values(Includetype)
+      .filter((includeType): includeType is string =>
+        typeof includeType === "string",
+      )
+      .map((includeType) => `!${includeType}`),
+  );
 
   constructor(
     private yamlLanguageService: LanguageService,
@@ -256,24 +263,16 @@ export class HomeAssistantLanguageService {
         }
       }
 
-      // Fetch the text before the error, this might be "!include"
-      const includeStartChar = Math.max(0, startChar - 9);
-      const includeEndChar = Math.max(0, startChar - 1);
-      
-      if (includeStartChar < includeEndChar) {
-        const possibleInclude = document.getText(
-          Range.create(
-            startLine,
-            includeStartChar,
-            endLine,
-            includeEndChar,
-          ),
-        );
+      // yaml-language-server validates the scalar after a custom tag without
+      // the tag itself. Skip those schema errors for every supported include
+      // tag, as the included content is validated in its own file.
+      const textBeforeDiagnostic = document
+        .getText(Range.create(startLine, 0, startLine, startChar))
+        .trimEnd();
+      const possibleInclude = textBeforeDiagnostic.match(/!\w+$/)?.[0];
 
-        // Skip errors about include, everything can be included
-        if (possibleInclude === "!include") {
-          continue;
-        }
+      if (possibleInclude && this.validIncludeTags.has(possibleInclude)) {
+        continue;
       }
 
       diagnosticItem.severity = 1; // Convert all warnings to errors
