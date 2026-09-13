@@ -336,4 +336,75 @@ automation:
     const livingRoomDiagnostic = allDiagnostics.find(d => d.message.includes("living_room"));
     assert.ok(!livingRoomDiagnostic, "Should not flag valid areas");
   });
+
+  test("Area validation does not capture subsequent list items across automations without blank lines", async () => {
+    const testContent = `- id: '1617994745686'
+  alias: Turn off lights at night
+  actions:
+  - action: light.turn_off
+    data: {}
+    target:
+      area_id:
+      - living_room
+      - kitchen
+  mode: single
+- id: '1640515873080'
+  alias: Vacation light on in the afternoon
+  triggers:
+  - trigger: sun
+    event: sunset
+  actions:
+  - action: switch.turn_on
+  - action: light.turn_on
+  mode: single
+`;
+
+    const document = TextDocument.create(
+      "file:///test-area-boundary.yaml",
+      "yaml",
+      1,
+      testContent
+    );
+
+    const diagnostics = await languageService.getDiagnostics(document);
+    const areaDiagnostics = diagnostics.filter(d => 
+      d.source === "home-assistant" && d.code === "unknown-area"
+    );
+
+    assert.strictEqual(areaDiagnostics.length, 0, 
+      `Expected 0 area diagnostics, but found ${areaDiagnostics.length}: ${areaDiagnostics.map(d => d.message).join(", ")}`);
+  });
+
+  test("Area validation validates every item in multi-line lists (including 2nd and 3rd items)", async () => {
+    const testContent = `automation:
+  - alias: "Multi item test"
+    action:
+      - service: light.turn_on
+        target:
+          area_id:
+            - living_room
+            - unknown_second_area
+            - unknown_third_area
+`;
+
+    const document = TextDocument.create(
+      "file:///test-area-multi-items.yaml",
+      "yaml",
+      1,
+      testContent
+    );
+
+    const diagnostics = await languageService.getDiagnostics(document);
+    const areaDiagnostics = diagnostics.filter(d => 
+      d.source === "home-assistant" && d.code === "unknown-area"
+    );
+
+    assert.strictEqual(areaDiagnostics.length, 2, 
+      `Expected 2 area diagnostics for unknown_second_area and unknown_third_area, but got ${areaDiagnostics.length}`);
+
+    const messages = areaDiagnostics.map(d => d.message);
+    assert.ok(messages.some(m => m.includes("unknown_second_area")), "Should validate 2nd item in list");
+    assert.ok(messages.some(m => m.includes("unknown_third_area")), "Should validate 3rd item in list");
+  });
 });
+

@@ -313,4 +313,49 @@ automation:
     assert.strictEqual(deviceDiagnostics.length, 0, 
       "Should not flag devices in commented lines");
   });
+
+  test("Device validation does not treat later list items as device IDs", async () => {
+    const content = `automation:
+  - alias: "Test Automation"
+    trigger:
+      device_id:
+        - device_1234
+    action:
+      - action: light.toggle
+        target:
+          entity_id: light.kitchen
+`;
+
+    const document = TextDocument.create("file://test-device-boundary.yaml", "yaml", 1, content);
+    const diagnostics = await languageService.getDiagnostics(document);
+    const deviceDiagnostics = diagnostics.filter(d => d.code === "unknown-device");
+
+    assert.strictEqual(deviceDiagnostics.length, 0,
+      `Expected 0 device diagnostics, but got: ${deviceDiagnostics.map(d => d.message).join(", ")}`);
+  });
+
+  test("Device validation validates every item in multi-line lists (including 2nd and 3rd items)", async () => {
+    const content = `automation:
+  - alias: "Test Multi Device List"
+    trigger:
+      device_id:
+        - device_1234
+        - unknown_device_2
+        - unknown_device_3
+    action:
+      - action: light.toggle
+`;
+
+    const document = TextDocument.create("file://test-device-multi-items.yaml", "yaml", 1, content);
+    const diagnostics = await languageService.getDiagnostics(document);
+    const deviceDiagnostics = diagnostics.filter(d => d.code === "unknown-device");
+
+    assert.strictEqual(deviceDiagnostics.length, 2,
+      `Expected 2 device diagnostics, but got ${deviceDiagnostics.length}`);
+
+    const messages = deviceDiagnostics.map(d => d.message);
+    assert.ok(messages.some(m => m.includes("unknown_device_2")), "Should validate 2nd device item");
+    assert.ok(messages.some(m => m.includes("unknown_device_3")), "Should validate 3rd device item");
+  });
 });
+
