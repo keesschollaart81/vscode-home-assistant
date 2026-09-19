@@ -74,12 +74,20 @@ automation:
       - platform: state
         entity_id: binary_sensor.motion
         to: "on"
+        note: Trigger note
+      - trigger: time
+        at: "08:00:00"
+        weekday:
+          - mon
+          - fri
     condition:
       - condition: state
         entity_id: input_boolean.test_enabled
         state: "on"
+        note: Condition note
     action:
       - service: light.turn_on
+        note: Action note
         target:
           entity_id: light.living_room
         data:

@@ -1644,6 +1644,12 @@ export interface KnxTelegramTrigger {
   alias?: string;
 
   /**
+   * Note displayed in the Home Assistant automation editor.
+   * https://www.home-assistant.io/docs/automation/editor/#adding-notes-to-an-automation
+   */
+  note?: string;
+
+  /**
    * KNX telegram trigger fires on incoming or outgoing KNX telegrams matching specified criteria.
    * https://www.home-assistant.io/integrations/knx/#triggers
    */
