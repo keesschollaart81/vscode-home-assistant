@@ -275,6 +275,16 @@ export class HomeAssistantLanguageService {
           continue;
         }
       }
+      
+      // yaml-language-server strips custom tags before validating, so a value such as
+      // `!include_dir_named packages` is checked as `packages`. Skip errors behind any include
+      // tag and behind `!env_var`, whose value is only known at runtime.
+      const textBeforeError = document.getText(
+        Range.create(startLine, 0, startLine, startChar),
+      );
+      if (/!(include(_dir_(merge_)?(named|list))?|env_var)\s+$/.test(textBeforeError)) {
+        continue;
+      }
 
       diagnosticItem.severity = 1; // Convert all warnings to errors
       diagnostics.push(diagnosticItem);
@@ -884,24 +894,9 @@ export class HomeAssistantLanguageService {
         // Handle multi-line device arrays
         if (line.trim().startsWith("- ")) {
           // Check if we're in a device list context by looking at previous lines
-          let currentLineIndex = lineIndex - 1;
-          let foundDeviceProperty = false;
-          
-          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
-            const prevLine = lines[currentLineIndex];
-            
-            for (const propertyName of DeviceCompletionContribution.propertyMatches) {
-              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
-                foundDeviceProperty = true;
-                break;
-              }
-            }
-            
-            if (foundDeviceProperty) {
-              break;
-            }
-            currentLineIndex--;
-          }
+          const parentKey = this.getListParentKey(lines, lineIndex);
+          const foundDeviceProperty =
+            parentKey !== null && DeviceCompletionContribution.propertyMatches.includes(parentKey);
           
           if (foundDeviceProperty) {
             const deviceMatch = line.match(/^\s*-\s*([^#\n]+)/);
@@ -1256,6 +1251,37 @@ export class HomeAssistantLanguageService {
     
     return diagnostics;
   };
+
+  /**
+   * Returns the key a block list item belongs to, e.g. `entity_id` for `- light.kitchen`
+   * directly below `entity_id:`. Returns null if the item is not directly below a `key:` line.
+   */
+  private getListParentKey(lines: string[], currentLineIndex: number): string | null {
+    const itemIndent = lines[currentLineIndex].search(/\S/);
+
+    for (let i = currentLineIndex - 1; i >= 0; i--) {
+      const line = lines[i];
+      const trimmedLine = line.trim();
+
+      // Skip empty lines and comments
+      if (trimmedLine === "" || trimmedLine.startsWith("#")) {
+        continue;
+      }
+
+      const lineIndent = line.search(/\S/);
+
+      // Skip content nested inside a previous list item and sibling list items
+      if (lineIndent > itemIndent || (lineIndent === itemIndent && trimmedLine.startsWith("-"))) {
+        continue;
+      }
+
+      // The first less indented line (or a key on the same level) owns the list
+      const keyMatch = trimmedLine.match(/^(?:-\s+)?["']?([\w-]+)["']?\s*:\s*(?:#.*)?$/);
+      return keyMatch ? keyMatch[1] : null;
+    }
+
+    return null;
+  }
 
   private isInActionContext(lines: string[], currentLineIndex: number): boolean {
     // Check if we're within an automation action section or script sequence

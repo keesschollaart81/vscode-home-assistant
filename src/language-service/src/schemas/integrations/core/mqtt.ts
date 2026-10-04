@@ -297,6 +297,13 @@ interface BaseItem {
   object_id?: string;
 
   /**
+   * The entity ID Home Assistant uses when the entity is created, e.g. `sensor.my_sensor`.
+   * Replaces `object_id` (Home Assistant 2025.10).
+   * https://www.home-assistant.io/integrations/mqtt/#default_entity_id
+   */
+  default_entity_id?: string;
+
+  /**
    * An ID that uniquely identifies this sensor. If two sensors have the same unique ID, Home Assistant will raise an exception.
    */
   unique_id?: string;

@@ -133,6 +133,12 @@ export interface Item {
    * https://www.home-assistant.io/integrations/template/#action
    */
   action?: Action | Action[];
+  
+  /**
+   * Define actions to be executed when the trigger fires (current syntax since Home Assistant 2024.10).
+   * https://www.home-assistant.io/integrations/template/#action
+   */
+  actions?: Action | Action[] | IncludeList;
 
   /**
    * Define conditions that have to be met after a trigger fires and before any actions are executed or sensor updates are performed (for trigger-based entities only). Optional. See condition documentation.
@@ -141,10 +147,22 @@ export interface Item {
   condition?: Condition | Condition[] | DynamicTemplate | IncludeList;
 
   /**
+   * Conditions that have to be met after a trigger fires (current syntax since Home Assistant 2024.10).
+   * https://www.home-assistant.io/integrations/template/#condition
+   */
+  conditions?: Condition | Condition[] | DynamicTemplate | IncludeList;
+
+  /**
    * Define an automation trigger to update the entities. Optional. If omitted will update based on referenced entities. See trigger documentation.
    * https://www.home-assistant.io/integrations/template#trigger
    */
   trigger?: Trigger | Trigger[] | IncludeList;
+
+  /**
+   * Automation triggers that update the entities (current syntax since Home Assistant 2024.10).
+   * https://www.home-assistant.io/integrations/template#trigger
+   */
+  triggers?: Trigger | Trigger[] | IncludeList;
 
   /**
    * Define template sensors or binary sensors based on a blueprint. Optional. See template template documentation.
