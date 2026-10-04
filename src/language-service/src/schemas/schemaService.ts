@@ -92,7 +92,17 @@ export class SchemaServiceForIncludes {
       );
       if (relatedPathToSchemaMapping) {
         const id = `http://schemas.home-assistant.io/${relatedPathToSchemaMapping.key}`;
-        let absolutePath = await fs.realpath(haFiles[sourceFile].filename);
+        let absolutePath: string;
+        try {
+          absolutePath = await fs.realpath(haFiles[sourceFile].filename);
+        } catch (error) {
+          // A missing include (e.g. in an old backup folder) must not abort the schema
+          // configuration for all other files.
+          console.log(
+            `Skipping schema for '${haFiles[sourceFile].filename}': ${error}`,
+          );
+          continue;
+        }
         absolutePath = absolutePath.replace(/\\/g, "/");
         const fileass = encodeURI(absolutePath);
         let resultEntry = results.find((x) => x.uri === id);

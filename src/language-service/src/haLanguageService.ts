@@ -275,6 +275,16 @@ export class HomeAssistantLanguageService {
           continue;
         }
       }
+      
+      // yaml-language-server strips custom tags before validating, so a value such as
+      // `!include_dir_named packages` is checked as `packages`. Skip errors behind any include
+      // tag and behind `!env_var`, whose value is only known at runtime.
+      const textBeforeError = document.getText(
+        Range.create(startLine, 0, startLine, startChar),
+      );
+      if (/!(include(_dir_(merge_)?(named|list))?|env_var)\s+$/.test(textBeforeError)) {
+        continue;
+      }
 
       diagnosticItem.severity = 1; // Convert all warnings to errors
       diagnostics.push(diagnosticItem);
@@ -438,24 +448,9 @@ export class HomeAssistantLanguageService {
         // Handle multi-line entity arrays
         if (line.trim().startsWith("- ")) {
           // Check if we're in an entity list context by looking at previous lines
-          let currentLineIndex = lineIndex - 1;
-          let foundEntityProperty = false;
-          
-          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
-            const prevLine = lines[currentLineIndex];
-            
-            for (const propertyName of EntityIdCompletionContribution.propertyMatches) {
-              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
-                foundEntityProperty = true;
-                break;
-              }
-            }
-            
-            if (foundEntityProperty) {
-              break;
-            }
-            currentLineIndex--;
-          }
+          const parentKey = this.getListParentKey(lines, lineIndex);
+          const foundEntityProperty =
+            parentKey !== null && EntityIdCompletionContribution.propertyMatches.includes(parentKey);
           
           if (foundEntityProperty) {
             const entityMatch = line.match(/^\s*-\s*([^#\n]+)/);
@@ -656,24 +651,9 @@ export class HomeAssistantLanguageService {
         // Handle multi-line area arrays
         if (line.trim().startsWith("- ")) {
           // Check if we're in an area list context by looking at previous lines
-          let currentLineIndex = lineIndex - 1;
-          let foundAreaProperty = false;
-          
-          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
-            const prevLine = lines[currentLineIndex];
-            
-            for (const propertyName of AreaCompletionContribution.propertyMatches) {
-              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
-                foundAreaProperty = true;
-                break;
-              }
-            }
-            
-            if (foundAreaProperty) {
-              break;
-            }
-            currentLineIndex--;
-          }
+          const parentKey = this.getListParentKey(lines, lineIndex);
+          const foundAreaProperty =
+            parentKey !== null && AreaCompletionContribution.propertyMatches.includes(parentKey);
           
           if (foundAreaProperty) {
             const areaMatch = line.match(/^\s*-\s*([^#\n]+)/);
@@ -884,24 +864,9 @@ export class HomeAssistantLanguageService {
         // Handle multi-line device arrays
         if (line.trim().startsWith("- ")) {
           // Check if we're in a device list context by looking at previous lines
-          let currentLineIndex = lineIndex - 1;
-          let foundDeviceProperty = false;
-          
-          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
-            const prevLine = lines[currentLineIndex];
-            
-            for (const propertyName of DeviceCompletionContribution.propertyMatches) {
-              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
-                foundDeviceProperty = true;
-                break;
-              }
-            }
-            
-            if (foundDeviceProperty) {
-              break;
-            }
-            currentLineIndex--;
-          }
+          const parentKey = this.getListParentKey(lines, lineIndex);
+          const foundDeviceProperty =
+            parentKey !== null && DeviceCompletionContribution.propertyMatches.includes(parentKey);
           
           if (foundDeviceProperty) {
             const deviceMatch = line.match(/^\s*-\s*([^#\n]+)/);
@@ -1112,24 +1077,9 @@ export class HomeAssistantLanguageService {
         // Handle multi-line floor arrays
         if (line.trim().startsWith("- ")) {
           // Check if we're in a floor list context by looking at previous lines
-          let currentLineIndex = lineIndex - 1;
-          let foundFloorProperty = false;
-          
-          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
-            const prevLine = lines[currentLineIndex];
-            
-            for (const propertyName of FloorCompletionContribution.propertyMatches) {
-              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
-                foundFloorProperty = true;
-                break;
-              }
-            }
-            
-            if (foundFloorProperty) {
-              break;
-            }
-            currentLineIndex--;
-          }
+          const parentKey = this.getListParentKey(lines, lineIndex);
+          const foundFloorProperty =
+            parentKey !== null && FloorCompletionContribution.propertyMatches.includes(parentKey);
           
           if (foundFloorProperty) {
             const floorMatch = line.match(/^\s*-\s*([^#\n]+)/);
@@ -1256,6 +1206,37 @@ export class HomeAssistantLanguageService {
     
     return diagnostics;
   };
+
+  /**
+   * Returns the key a block list item belongs to, e.g. `entity_id` for `- light.kitchen`
+   * directly below `entity_id:`. Returns null if the item is not directly below a `key:` line.
+   */
+  private getListParentKey(lines: string[], currentLineIndex: number): string | null {
+    const itemIndent = lines[currentLineIndex].search(/\S/);
+
+    for (let i = currentLineIndex - 1; i >= 0; i--) {
+      const line = lines[i];
+      const trimmedLine = line.trim();
+
+      // Skip empty lines and comments
+      if (trimmedLine === "" || trimmedLine.startsWith("#")) {
+        continue;
+      }
+
+      const lineIndent = line.search(/\S/);
+
+      // Skip content nested inside a previous list item and sibling list items
+      if (lineIndent > itemIndent || (lineIndent === itemIndent && trimmedLine.startsWith("-"))) {
+        continue;
+      }
+
+      // The first less indented line (or a key on the same level) owns the list
+      const keyMatch = trimmedLine.match(/^(?:-\s+)?["']?([\w-]+)["']?\s*:\s*(?:#.*)?$/);
+      return keyMatch ? keyMatch[1] : null;
+    }
+
+    return null;
+  }
 
   private isInActionContext(lines: string[], currentLineIndex: number): boolean {
     // Check if we're within an automation action section or script sequence
@@ -1473,24 +1454,9 @@ export class HomeAssistantLanguageService {
         // Handle multi-line label arrays
         if (line.trim().startsWith("- ")) {
           // Check if we're in a label list context by looking at previous lines
-          let currentLineIndex = lineIndex - 1;
-          let foundLabelProperty = false;
-          
-          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
-            const prevLine = lines[currentLineIndex];
-            
-            for (const propertyName of LabelCompletionContribution.propertyMatches) {
-              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
-                foundLabelProperty = true;
-                break;
-              }
-            }
-            
-            if (foundLabelProperty) {
-              break;
-            }
-            currentLineIndex--;
-          }
+          const parentKey = this.getListParentKey(lines, lineIndex);
+          const foundLabelProperty =
+            parentKey !== null && LabelCompletionContribution.propertyMatches.includes(parentKey);
           
           if (foundLabelProperty) {
             const labelMatch = line.match(/^\s*-\s*([^#\n]+)/);
@@ -1726,24 +1692,9 @@ export class HomeAssistantLanguageService {
           }
           
           // Check if we're in an action list context by looking at previous lines
-          let currentLineIndex = lineIndex - 1;
-          let foundActionProperty = false;
-          
-          while (currentLineIndex >= 0 && lines[currentLineIndex].trim() !== "") {
-            const prevLine = lines[currentLineIndex];
-            
-            for (const propertyName of ServicesCompletionContribution.propertyMatches) {
-              if (new RegExp(`\\s*${propertyName}\\s*:\\s*$`).test(prevLine)) {
-                foundActionProperty = true;
-                break;
-              }
-            }
-            
-            if (foundActionProperty) {
-              break;
-            }
-            currentLineIndex--;
-          }
+          const parentKey = this.getListParentKey(lines, lineIndex);
+          const foundActionProperty =
+            parentKey !== null && ServicesCompletionContribution.propertyMatches.includes(parentKey);
           
           if (foundActionProperty) {
             const actionMatch = line.match(/^\s*-\s*([^#\n]+)/);

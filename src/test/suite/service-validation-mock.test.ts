@@ -433,7 +433,41 @@ automation:
     }
 
     // Should have no diagnostics for commented actions
-    assert.strictEqual(actionDiagnostics.length, 0, 
+    assert.strictEqual(actionDiagnostics.length, 0,
       "Should not flag actions in commented lines");
+  });
+
+  test("Entity lists below target are not validated as actions (issue #3938)", async () => {
+    const testContent = `
+automation:
+  - alias: "Entity list test"
+    trigger:
+      - platform: state
+        entity_id: sensor.test
+    action:
+      - action: light.turn_on
+        target:
+          entity_id:
+            - sensor.anno_txt_energy_cost   # comment
+            - input_text.whatsapp_notifica
+        data:
+          value: "0"
+      - light.unknown_list_action
+`;
+
+    const document = TextDocument.create(
+      "file:///test-action-entity-list.yaml",
+      "yaml",
+      1,
+      testContent
+    );
+
+    const diagnostics = await languageService.getDiagnostics(document);
+    const foundUnknownActions = diagnostics
+      .filter(d => d.source === "home-assistant" && d.code === "unknown-action")
+      .map(d => d.message.match(/Action '([^']+)'/)?.[1]);
+
+    assert.deepStrictEqual(foundUnknownActions, ["light.unknown_list_action"],
+      "Only list items directly below action: should be validated as actions");
   });
 });
