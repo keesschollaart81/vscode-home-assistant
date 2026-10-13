@@ -88,7 +88,7 @@
     "path": "configuration.yaml/script",
     "file": "integration-script.json",
     "tsFile": "integrations/core/script.ts",
-    "fromType": "File"
+    "fromType": "ScriptFile"
   },
   {
     "key": "integration-sensor",
