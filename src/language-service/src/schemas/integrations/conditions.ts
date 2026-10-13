@@ -37,10 +37,28 @@ export type Condition =
   | ShorthandCondition
   | StateCondition
   | SunCondition
+  | TemperatureIsValueCondition
   | TemplateCondition
   | TimeCondition
   | TriggerCondition
   | ZoneCondition;
+
+interface TemperatureIsValueCondition {
+  alias?: string;
+  enabled?: boolean;
+  condition: "temperature.is_value";
+  target: { entity_id: Entities };
+  options: {
+    behavior?: "any" | "all";
+    for?: TimePeriod;
+    threshold: {
+      type: "above" | "below" | "between" | "outside";
+      value?: number | { active_choice?: "number" | "entity"; number?: number; entity?: string; unit_of_measurement?: string };
+      value_min?: number | { active_choice?: "number" | "entity"; number?: number; entity?: string; unit_of_measurement?: string };
+      value_max?: number | { active_choice?: "number" | "entity"; number?: number; entity?: string; unit_of_measurement?: string };
+    };
+  };
+}
 
 export interface ShorthandCondition {
   /**

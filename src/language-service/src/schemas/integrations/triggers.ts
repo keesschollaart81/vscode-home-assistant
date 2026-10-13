@@ -26,10 +26,13 @@ import { WebOSTvTrigger } from "./core/webostv";
 import { KnxTelegramTrigger } from "./core/knx";
 
 export type Trigger =
+  | CalendarEventStartedTrigger
+  | ClimateHvacModeChangedTrigger
   | CalendarTrigger
   | ConversationTrigger
   | DeviceTrigger
   | EventTrigger
+  | EventReceivedTrigger
   | GeolocationTrigger
   | HomeAssistantTrigger
   | KnxTelegramTrigger
@@ -45,6 +48,45 @@ export type Trigger =
   | WebhookTrigger
   | WebOSTvTrigger
   | ZoneTrigger;
+
+interface TriggerTarget {
+  entity_id: Entities;
+}
+
+/** Integration-provided trigger selectors use a target/options wrapper. */
+interface CalendarEventStartedTrigger {
+  alias?: string;
+  enabled?: boolean;
+  id?: string;
+  trigger: "calendar.event_started";
+  target: TriggerTarget;
+  options?: { offset?: TimePeriod; offset_type?: "before" | "after" };
+  variables?: Data;
+}
+
+interface ClimateHvacModeChangedTrigger {
+  alias?: string;
+  enabled?: boolean;
+  id?: string;
+  trigger: "climate.hvac_mode_changed";
+  target: TriggerTarget;
+  options?: {
+    behavior?: "each" | "first" | "all";
+    for?: TimePeriod;
+    hvac_mode?: string | string[];
+  };
+  variables?: Data;
+}
+
+interface EventReceivedTrigger {
+  alias?: string;
+  enabled?: boolean;
+  id?: string;
+  trigger: "event.received";
+  target: TriggerTarget;
+  options?: { event_type?: string | string[] };
+  variables?: Data;
+}
 
 type EventType =
   | "automation_reloaded"
