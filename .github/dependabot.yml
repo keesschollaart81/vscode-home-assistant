@@ -11,6 +11,9 @@ updates:
       # typescript-eslint 8.x peer range is TypeScript <6.1.0; tsconfig relies on TS 6 deprecation opt-outs
       - dependency-name: typescript
         versions: [">=6.1.0"]
+      # Stay on Node 24.x type definitions; ignore @types/node 25+
+      - dependency-name: "@types/node"
+        versions: [">=25.0.0"]
   - package-ecosystem: npm
     directory: "/src/language-service"
     schedule:
@@ -22,6 +25,9 @@ updates:
       # Keep in sync with the root TypeScript version, which builds this package
       - dependency-name: typescript
         versions: [">=6.1.0"]
+      # Keep in sync with the root @types/node version (Node 24.x)
+      - dependency-name: "@types/node"
+        versions: [">=25.0.0"]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
