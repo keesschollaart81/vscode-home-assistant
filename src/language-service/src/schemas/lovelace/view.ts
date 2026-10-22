@@ -1,9 +1,14 @@
-import { Entity, IncludeList } from "../types";
+import { Entity, IncludeList, PositiveInteger } from "../types";
 import { Badge, Card } from "./types";
 
 type Badges = Badge | Entity;
 
-export type View = MasonryView | PanelView | SidebarView | CustomView;
+export type View =
+  | MasonryView
+  | PanelView
+  | SectionsView
+  | SidebarView
+  | CustomView;
 
 interface BaseView {
   /**
@@ -75,6 +80,76 @@ export interface PanelView extends BaseView {
    * https://www.home-assistant.io/lovelace/panel/
    */
   type: "panel";
+}
+
+export interface SectionsView extends BaseView {
+  /**
+   * The sections view arranges cards in a grid of sections, which can be grouped and rearranged in the dashboard editor.
+   * https://www.home-assistant.io/dashboards/sections/
+   */
+  type: "sections";
+
+  /**
+   * The sections of the view, each holding a list of cards.
+   * https://www.home-assistant.io/dashboards/sections/#sections
+   */
+  sections?: Section[];
+
+  /**
+   * The maximum number of section columns to display.
+   * https://www.home-assistant.io/dashboards/sections/#max_columns
+   */
+  max_columns?: PositiveInteger;
+
+  /**
+   * Fill gaps in the layout by moving sections up, even if this changes their order.
+   * https://www.home-assistant.io/dashboards/sections/#dense_section_placement
+   */
+  dense_section_placement?: boolean;
+}
+
+export interface SectionBackground {
+  /**
+   * The background color of the section.
+   */
+  color?: string;
+
+  /**
+   * The opacity of the background color, as a percentage.
+   */
+  opacity?: PositiveInteger;
+}
+
+export interface Section {
+  /**
+   * The type of the section. Defaults to a grid of cards.
+   */
+  type?: string;
+
+  /**
+   * Cards to display in this section.
+   */
+  cards?: Card[];
+
+  /**
+   * The number of columns this section spans.
+   */
+  column_span?: PositiveInteger;
+
+  /**
+   * The number of rows this section spans.
+   */
+  row_span?: PositiveInteger;
+
+  /**
+   * Show a background behind the section, either default or with a custom color and opacity.
+   */
+  background?: boolean | SectionBackground;
+
+  /**
+   * @deprecated Use a heading card instead.
+   */
+  title?: string;
 }
 
 export interface SidebarView extends BaseView {

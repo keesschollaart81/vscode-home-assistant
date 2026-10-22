@@ -21,6 +21,7 @@ export * as EntityFilter from "./entity_filter";
 export * as Gauge from "./gauge";
 export * as Glance from "./glance";
 export * as Grid from "./grid";
+export * as Heading from "./heading";
 export * as HistoryGraph from "./history_graph";
 export * as HorizontalStack from "./horizontal_stack";
 export * as Humidifier from "./humidifier";
