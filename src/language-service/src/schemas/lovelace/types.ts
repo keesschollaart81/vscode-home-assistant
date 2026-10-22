@@ -27,6 +27,7 @@ export type Card =
   | cards.Gauge.Schema
   | cards.Glance.Schema
   | cards.Grid.Schema
+  | cards.Heading.Schema
   | cards.HistoryGraph.Schema
   | cards.HorizontalStack.Schema
   | cards.Humidifier.Schema
