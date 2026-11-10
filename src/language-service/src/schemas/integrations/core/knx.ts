@@ -13,6 +13,7 @@ import {
   Integer,
   StateClassesSensor,
   Template,
+  TimePeriod,
 } from "../../types";
 
 /**
@@ -26,6 +27,45 @@ type GroupAddress = string;
  */
 type GroupAddresses = string[] | string;
 
+/**
+ * DPT number like "9", "9.001" or 9
+ */
+type DptNumber = `${number}` | `${number}.${number}` | Integer;
+
+interface EntityDevice {
+  /**
+   * Identifier of the device. Entities using the same `id` are grouped into one device.
+   * https://www.home-assistant.io/integrations/knx#device
+   */
+  id: string;
+
+  /**
+   * Name of the device. Only needs to be set once per device `id`.
+   * https://www.home-assistant.io/integrations/knx#device
+   */
+  name?: string;
+}
+
+interface EntityBase {
+  /**
+   * Entity ID the entity is created with, including the domain (for example `light.kitchen`).
+   * https://www.home-assistant.io/integrations/knx#default_entity_id
+   */
+  default_entity_id?: string;
+
+  /**
+   * Device the entity is assigned to.
+   * https://www.home-assistant.io/integrations/knx#device
+   */
+  device?: EntityDevice;
+
+  /**
+   * An ID that uniquely identifies this entity. Must be unique within the platform.
+   * https://www.home-assistant.io/integrations/knx#unique_id
+   */
+  unique_id?: string;
+}
+
 type ValueType =
   | "1byte_signed"
   | "1byte_unsigned"
@@ -38,28 +78,31 @@ type ValueType =
   | "8byte_signed"
   | "absolute_humidity"
   | "absolute_temperature"
-  | "acceleration_angular"
   | "acceleration"
+  | "acceleration_angular"
   | "activation_energy"
+  | "active_energy"
   | "active_energy_8byte"
   | "active_energy_kwh"
-  | "active_energy"
+  | "active_energy_mwh"
   | "activity"
   | "air_flow"
   | "amplitude"
+  | "angle"
   | "angle_deg"
   | "angle_rad"
-  | "angle"
   | "angular_frequency"
   | "angular_momentum"
   | "angular_velocity"
+  | "apparant_energy"
   | "apparant_energy_8byte"
   | "apparant_energy_kvah"
-  | "apparant_energy"
   | "apparent_power"
   | "area"
   | "brightness"
   | "capacitance"
+  | "character"
+  | "character_latin_1"
   | "charge_density_surface"
   | "charge_density_volume"
   | "color_temperature"
@@ -77,23 +120,26 @@ type ValueType =
   | "delta_time_min"
   | "delta_time_ms"
   | "delta_time_sec"
+  | "delta_volume_liquid_litre"
+  | "delta_volume_m3"
   | "density"
   | "electric_charge"
-  | "electric_current_density"
   | "electric_current"
+  | "electric_current_density"
   | "electric_dipole_moment"
   | "electric_displacement"
   | "electric_field_strength"
-  | "electric_flux_density"
   | "electric_flux"
+  | "electric_flux_density"
   | "electric_polarization"
-  | "electric_potential_difference"
   | "electric_potential"
+  | "electric_potential_difference"
   | "electrical_conductivity"
   | "electromagnetic_moment"
   | "electromotive_force"
   | "energy"
   | "enthalpy"
+  | "fan_stage"
   | "flow_rate_m3h"
   | "force"
   | "frequency"
@@ -104,27 +150,28 @@ type ValueType =
   | "illuminance"
   | "impedance"
   | "kelvin_per_percent"
+  | "language_code_alpha2"
   | "latin_1"
+  | "length"
   | "length_m"
   | "length_mm"
-  | "length"
+  | "light_quantity"
+  | "long_delta_timesec"
   | "long_time_period_hrs"
   | "long_time_period_min"
   | "long_time_period_sec"
-  | "light_quantity"
-  | "long_delta_timesec"
   | "luminance"
   | "luminous_flux"
   | "luminous_intensity"
   | "magnetic_field_strength"
-  | "magnetic_flux_density"
   | "magnetic_flux"
+  | "magnetic_flux_density"
   | "magnetic_moment"
   | "magnetic_polarization"
   | "magnetization"
   | "magnetomotive_force"
-  | "mass_flux"
   | "mass"
+  | "mass_flux"
   | "mol"
   | "momentum"
   | "percent"
@@ -133,23 +180,25 @@ type ValueType =
   | "percentV8"
   | "phaseangledeg"
   | "phaseanglerad"
+  | "power"
   | "power_2byte"
   | "power_density"
-  | "power"
   | "powerfactor"
   | "ppm"
-  | "pressure_2byte"
   | "pressure"
-  | "pulse_2byte_signed"
+  | "pressure_2byte"
+  | "prop_data_type"
+  | "pulse"
   | "pulse_2byte"
+  | "pulse_2byte_signed"
   | "pulse_4_ucount"
   | "pulse_4byte"
-  | "pulse"
   | "rain_amount"
   | "reactance"
+  | "reactive_energy"
   | "reactive_energy_8byte"
   | "reactive_energy_kvarh"
-  | "reactive_energy"
+  | "region_code_alpha2"
   | "resistance"
   | "resistivity"
   | "rotation_angle"
@@ -162,11 +211,11 @@ type ValueType =
   | "string"
   | "surface_tension"
   | "tariff"
-  | "temperature_a"
-  | "temperature_difference_2byte"
-  | "temperature_difference"
-  | "temperature_f"
   | "temperature"
+  | "temperature_a"
+  | "temperature_difference"
+  | "temperature_difference_2byte"
+  | "temperature_f"
   | "thermal_capacity"
   | "thermal_conductivity"
   | "thermoelectric_power"
@@ -181,11 +230,13 @@ type ValueType =
   | "time_seconds"
   | "torque"
   | "voltage"
+  | "volume"
   | "volume_flow"
   | "volume_flux"
+  | "volume_flux_ls"
+  | "volume_flux_meter"
   | "volume_liquid_litre"
   | "volume_m3"
-  | "volume"
   | "weight"
   | "wind_speed_kmh"
   | "wind_speed_ms"
@@ -308,7 +359,7 @@ export interface Schema {
   weather?: Weather[];
 }
 
-interface BinarySensor {
+interface BinarySensor extends EntityBase {
   /**
    * The time in seconds between multiple identical telegram payloads would count towards the internal counter that is used for automations.
    * https://www.home-assistant.io/integrations/knx#context_timeout
@@ -323,6 +374,12 @@ interface BinarySensor {
    * https://www.home-assistant.io/integrations/knx#device_class
    */
   device_class?: DeviceClassesBinarySensor;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * Specifies if telegrams should ignore the internal state and always trigger a Home Assistant state update.
@@ -361,7 +418,7 @@ interface BinarySensor {
   sync_state?: boolean | number | string;
 }
 
-interface Button {
+interface Button extends EntityBase {
   /**
    * Group address to send to.
    * https://www.home-assistant.io/integrations/knx#address
@@ -396,16 +453,16 @@ interface Button {
    * The value to be sent.
    * https://www.home-assistant.io/integrations/knx#payload
    */
-  value?: Integer;
+  value?: number | string;
 
   /**
    * A type from the value types to decode the value. Requires `value` to be set.
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type?: ValueType;
+  type?: ValueType | DptNumber;
 }
 
-interface Climate {
+interface Climate extends EntityBase {
   /**
    * KNX address for reading current activity. `0` is idle, `1` is active. DPT 1
    * https://www.home-assistant.io/integrations/knx#active_state_addres
@@ -670,6 +727,12 @@ interface Climate {
   swing_state_address?: GroupAddresses;
 
   /**
+   * Actively read the value from the bus. Can not be disabled for this platform - omit the state address instead.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: true | number | string;
+
+  /**
    * KNX group address for setting target temperature. DPT 9.001
    * https://www.home-assistant.io/integrations/knx#target_temperature_address
    */
@@ -697,7 +760,7 @@ interface Climate {
   temperature_step?: number;
 }
 
-interface Cover {
+interface Cover extends EntityBase {
   /**
    * KNX group address for tilting the cover to the dedicated angle. DPT 5.001
    * https://www.home-assistant.io/integrations/knx#angle_address
@@ -777,6 +840,12 @@ interface Cover {
   stop_address?: GroupAddresses;
 
   /**
+   * Actively read the value from the bus. Can not be disabled for this platform - omit the state address instead.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: true | number | string;
+
+  /**
    * Time cover needs to travel down in seconds. Needed to calculate the intermediate positions of cover while traveling.
    * https://www.home-assistant.io/integrations/knx#travelling_time_down
    *
@@ -804,7 +873,7 @@ interface Event {
    * A type from the value types. The decoded value will be written to the event data `value` key.
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type?: ValueType;
+  type?: ValueType | DptNumber;
 }
 
 interface ExposeTime {
@@ -826,7 +895,7 @@ interface ExposeSensor {
    * Group address state or attribute updates will be sent to. GroupValueRead requests will be answered.
    * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
    */
-  address: GroupAddresses;
+  address: GroupAddress;
 
   /**
    * Attribute of the entity that shall be sent to the KNX bus. If not set (or None) the state will be sent.
@@ -835,12 +904,10 @@ interface ExposeSensor {
   attribute?: string;
 
   /**
-   * Minimum time in seconds between two sent telegrams.
+   * Minimum time between two sent telegrams.
    * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
-   *
-   * @minimum 0
    */
-  cooldown?: number;
+  cooldown?: TimePeriod;
 
   /**
    * Default value to send to the bus if the state or attribute value is None.
@@ -855,16 +922,28 @@ interface ExposeSensor {
   entity_id: Entity;
 
   /**
+   * Time period after which the current value is sent again if no state change occurred. Disabled by default.
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
+   */
+  periodic_send?: TimePeriod;
+
+  /**
    * Respond to GroupValueRead telegrams received to the configured `address`.
    * https://www.home-assistant.io/integrations/knx#respond_to_read
    */
   respond_to_read?: boolean;
 
   /**
+   * Send the current value to the KNX bus when the connection is established. Defaults to false.
+   * https://www.home-assistant.io/integrations/knx#exposing-entity-states-entity-attributes-or-time-to-knx-bus
+   */
+  send_on_init?: boolean;
+
+  /**
    * Type of the exposed value.
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type: ValueType | "binary" | "time" | "date" | "datetime";
+  type: ValueType | DptNumber | "binary";
 
   /**
    * A template to process the value before sending it to the KNX bus. The template has access to the entity state or attribute value as `value`.
@@ -873,12 +952,12 @@ interface ExposeSensor {
   value_template?: Template;
 }
 
-interface Fan {
+interface Fan extends EntityBase {
   /**
-   * KNX group address for setting the percentage or step of the fan. DPT 5.001 or DPT 5.010
+   * KNX group address for setting the percentage or step of the fan. DPT 5.001 or DPT 5.010. At least one of `address` or `switch_address` is required.
    * https://www.home-assistant.io/integrations/knx#address
    */
-  address: GroupAddresses;
+  address?: GroupAddresses;
 
   /**
    * The category of the entity.
@@ -910,15 +989,33 @@ interface Fan {
 
   /**
    * KNX group address for retrieving the state of the fan oscillation. DPT 1
-   * https://www.home-assistant.io/integrations/knx#oscillation_stat_address
+   * https://www.home-assistant.io/integrations/knx#oscillation_state_address
    */
-  oscillation_stat_address?: GroupAddresses;
+  oscillation_state_address?: GroupAddresses;
 
   /**
    * KNX group address for retrieving the percentage or step of the fan. DPT 5.001 or DPT 5.010
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address?: GroupAddresses;
+
+  /**
+   * KNX group address for switching the fan on or off. DPT 1. At least one of `address` or `switch_address` is required.
+   * https://www.home-assistant.io/integrations/knx#switch_address
+   */
+  switch_address?: GroupAddresses;
+
+  /**
+   * KNX group address for retrieving the on/off state of the fan. DPT 1
+   * https://www.home-assistant.io/integrations/knx#switch_state_address
+   */
+  switch_state_address?: GroupAddresses;
+
+  /**
+   * Actively read the value from the bus.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: boolean | number | string;
 }
 
 interface LightColor {
@@ -947,7 +1044,7 @@ interface LightColor {
   brightness_state_address?: GroupAddresses;
 }
 
-interface Light {
+interface Light extends EntityBase {
   /**
    * KNX group address for switching the light on and off. DPT 1.001
    * https://www.home-assistant.io/integrations/knx#address
@@ -985,10 +1082,10 @@ interface Light {
   color_temperature_address?: GroupAddresses;
 
   /**
-   * Color temperature group address data type. absolute color temperature in Kelvin. color_temperature_address -> DPT 7.600. relative color temperature in percent cold white (0% warmest; 100% coldest). color_temperature_address -> DPT 5.001
+   * Color temperature group address data type. absolute color temperature in Kelvin. color_temperature_address -> DPT 7.600. absolute_float color temperature in Kelvin. color_temperature_address -> DPT 9. relative color temperature in percent cold white (0% warmest; 100% coldest). color_temperature_address -> DPT 5.001
    * https://www.home-assistant.io/integrations/knx#color_temperature_mode
    */
-  color_temperature_mode?: "absolute" | "relative";
+  color_temperature_mode?: "absolute" | "absolute_float" | "relative";
 
   /**
    * KNX group address for retrieving the color temperature of the light. DPT 5.001 or 7.600 based on color_temperature_mode
@@ -1041,7 +1138,7 @@ interface Light {
      * Group addresses for the white component.
      * https://www.home-assistant.io/integrations/knx#white
      */
-    white?: Light;
+    white?: LightColor;
   };
 
   /**
@@ -1099,6 +1196,12 @@ interface Light {
   state_address?: GroupAddresses;
 
   /**
+   * Actively read the value from the bus. Can not be disabled for this platform - omit the state address instead.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: true | number | string;
+
+  /**
    * KNX group address for setting the xyY color of the light. DPT 242.600
    * https://www.home-assistant.io/integrations/knx#xyy_address
    */
@@ -1111,12 +1214,18 @@ interface Light {
   xyy_state_address?: GroupAddresses;
 }
 
-interface Notify {
+interface Notify extends EntityBase {
   /**
    * KNX group address of the notification. DPT 16.000
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddress;
+
+  /**
+   * The category of the entity.
+   * https://www.home-assistant.io/integrations/knx#entity_category
+   */
+  entity_category?: EntityCategory;
 
   /**
    * A name for this device used within Home Assistant.
@@ -1128,15 +1237,21 @@ interface Notify {
    * Any supported type of KNX Sensor representing a string value.
    * https://www.home-assistant.io/integrations/knx#type
    */
-  type?: "string" | "latin_1";
+  type?: "string" | "latin_1" | "16.000" | "16.001";
 }
 
-interface NumberEntity {
+interface NumberEntity extends EntityBase {
   /**
    * KNX group address for sending a new value.
    * https://www.home-assistant.io/integrations/knx#address
    */
   address: GroupAddresses;
+
+  /**
+   * Sets the class of the device, changing the device state and icon that is displayed on the frontend.
+   * https://www.home-assistant.io/integrations/number/#device-class
+   */
+  device_class?: string;
 
   /**
    * The category of the entity.
@@ -1189,18 +1304,30 @@ interface NumberEntity {
   step?: number;
 
   /**
+   * Actively read the value from the bus. Can not be disabled for this platform - omit the state address instead.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: true | number | string;
+
+  /**
    * Any supported type of KNX Sensor representing a numeric value (e.g., "percent" or "temperature")
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type: ValueType;
+  type: ValueType | DptNumber;
+
+  /**
+   * Unit of measurement of the entity. Overrides the unit derived from `type`.
+   * https://www.home-assistant.io/integrations/knx#unit_of_measurement
+   */
+  unit_of_measurement?: string;
 }
 
-interface Scene {
+interface Scene extends EntityBase {
   /**
    * KNX group address for the scene. DPT 17.001
    * https://www.home-assistant.io/integrations/knx#address
    */
-  address?: GroupAddresses;
+  address: GroupAddresses;
 
   /**
    * The category of the entity.
@@ -1225,7 +1352,7 @@ interface Scene {
   scene_number: number;
 }
 
-interface Select {
+interface Select extends EntityBase {
   /**
    * Group address new values will be sent to.
    * https://www.home-assistant.io/integrations/knx#address
@@ -1287,7 +1414,7 @@ interface Select {
   sync_state?: boolean | string;
 }
 
-interface Sensor {
+interface Sensor extends EntityBase {
   /**
    * Defines if telegrams with equal payload as the previously received telegram should trigger a state update within Home Assistant.
    * https://www.home-assistant.io/integrations/knx#always_callback
@@ -1334,10 +1461,16 @@ interface Sensor {
    * A type from the value types.
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type: ValueType;
+  type: ValueType | DptNumber;
+
+  /**
+   * Unit of measurement of the entity. Overrides the unit derived from `type`.
+   * https://www.home-assistant.io/integrations/knx#unit_of_measurement
+   */
+  unit_of_measurement?: string;
 }
 
-interface Switch {
+interface Switch extends EntityBase {
   /**
    * KNX group address for switching the switch on/off. DPT 1
    * https://www.home-assistant.io/integrations/knx#address
@@ -1379,9 +1512,15 @@ interface Switch {
    * https://www.home-assistant.io/integrations/knx#state_address
    */
   state_address?: GroupAddresses;
+
+  /**
+   * Actively read the value from the bus. Can not be disabled for this platform - omit the state address instead.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: true | number | string;
 }
 
-interface TextEntity {
+interface TextEntity extends EntityBase {
   /**
    * KNX group address for sending a text.
    * https://www.home-assistant.io/integrations/knx#address
@@ -1419,13 +1558,19 @@ interface TextEntity {
   state_address?: GroupAddresses;
 
   /**
+   * Actively read the value from the bus. Can not be disabled for this platform - omit the state address instead.
+   * https://www.home-assistant.io/integrations/knx#sync_state
+   */
+  sync_state?: true | number | string;
+
+  /**
    * DPT to encode the text. Either `latin_1` for DPT 16.001 or `string` for DPT 16.000 (ASCII).
    * https://www.home-assistant.io/integrations/knx/#value-types
    */
-  type: ValueType;
+  type?: "string" | "latin_1" | "16.000" | "16.001";
 }
 
-interface Weather {
+interface Weather extends EntityBase {
   /**
    * KNX address reading current air pressure. DPT 9.006
    * https://www.home-assistant.io/integrations/knx#address_air_pressure
@@ -1523,7 +1668,7 @@ interface Weather {
   address_temperature: GroupAddresses;
 }
 
-interface DateEntity {
+interface DateEntity extends EntityBase {
   /**
    * The group address to which new values will be sent. DPT 11.001
    * https://www.home-assistant.io/integrations/knx#address
@@ -1561,7 +1706,7 @@ interface DateEntity {
   sync_state?: boolean | number | string;
 }
 
-interface DateTimeEntity {
+interface DateTimeEntity extends EntityBase {
   /**
    * The group address to which new values will be sent. DPT 19.001
    * https://www.home-assistant.io/integrations/knx#address
@@ -1599,7 +1744,7 @@ interface DateTimeEntity {
   sync_state?: boolean | number | string;
 }
 
-interface TimeEntity {
+interface TimeEntity extends EntityBase {
   /**
    * The group address to which new values will be sent. DPT 10.001
    * https://www.home-assistant.io/integrations/knx#address
@@ -1637,24 +1782,7 @@ interface TimeEntity {
   sync_state?: boolean | number | string;
 }
 
-export interface KnxTelegramTrigger {
-  /**
-   * Alias for the KNX telegram trigger.
-   */
-  alias?: string;
-
-  /**
-   * KNX telegram trigger fires on incoming or outgoing KNX telegrams matching specified criteria.
-   * https://www.home-assistant.io/integrations/knx/#triggers
-   */
-  trigger: "knx.telegram";
-
-  /**
-   * Every individual trigger in an automation can be disabled, without removing it.
-   * https://www.home-assistant.io/integrations/knx/#triggers
-   */
-  enabled?: boolean;
-
+interface KnxTelegramTriggerOptions {
   /**
    * A group address or list of addresses to listen on.
    * https://www.home-assistant.io/integrations/knx/#triggers
@@ -1665,7 +1793,7 @@ export interface KnxTelegramTrigger {
    * DPT identifier to decode payload (e.g., "2byte_float").
    * https://www.home-assistant.io/integrations/knx/#triggers
    */
-  type?: ValueType | string;
+  type?: ValueType | string | Integer;
 
   /**
    * Fire on GroupValueWrite telegrams. Defaults to true.
@@ -1696,6 +1824,74 @@ export interface KnxTelegramTrigger {
    * https://www.home-assistant.io/integrations/knx/#triggers
    */
   outgoing?: boolean;
+}
+
+export interface KnxTelegramTrigger {
+  /**
+   * Alias for the KNX telegram trigger.
+   */
+  alias?: string;
+
+  /**
+   * KNX telegram trigger fires on incoming or outgoing KNX telegrams matching specified criteria.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  trigger: "knx.telegram";
+
+  /**
+   * Every individual trigger in an automation can be disabled, without removing it.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  enabled?: boolean;
+
+  /**
+   * A group address or list of addresses to listen on.
+   * Legacy location - prefer setting this in `options`.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  destination?: GroupAddresses;
+
+  /**
+   * DPT identifier to decode payload (e.g., "2byte_float").
+   * Legacy location - prefer setting this in `options`.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  type?: ValueType | string | Integer;
+
+  /**
+   * Fire on GroupValueWrite telegrams. Defaults to true.
+   * Legacy location - prefer setting this in `options`.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  group_value_write?: boolean;
+
+  /**
+   * Fire on GroupValueResponse telegrams. Defaults to true.
+   * Legacy location - prefer setting this in `options`.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  group_value_response?: boolean;
+
+  /**
+   * Fire on GroupValueRead telegrams. Defaults to true.
+   * Legacy location - prefer setting this in `options`.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  group_value_read?: boolean;
+
+  /**
+   * Fire on incoming telegrams. Defaults to true.
+   * Legacy location - prefer setting this in `options`.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  incoming?: boolean;
+
+  /**
+   * Fire on outgoing telegrams. Defaults to true.
+   * Legacy location - prefer setting this in `options`.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  outgoing?: boolean;
 
   /**
    * An personal identifier for this trigger, that is passed into the trigger
@@ -1711,4 +1907,10 @@ export interface KnxTelegramTrigger {
    * https://www.home-assistant.io/integrations/knx/#triggers
    */
   variables?: Data;
+
+  /**
+   * Options of the KNX telegram trigger.
+   * https://www.home-assistant.io/integrations/knx/#triggers
+   */
+  options?: KnxTelegramTriggerOptions;
 }
