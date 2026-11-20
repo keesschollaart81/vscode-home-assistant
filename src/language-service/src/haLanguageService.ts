@@ -2765,7 +2765,20 @@ export class HomeAssistantLanguageService {
       } else {
         end = document.getText().length;
       }
-      const thisLine = document.getText().substring(start, end);
+      // Drop a trailing comment ("- light.kitchen # Kitchen") so it does not
+      // hide the list item from the regex below.
+      const thisLine = document
+        .getText()
+        .substring(start, end)
+        .replace(/\s+#.*$/, "");
+
+      // Blank lines and full-line comments inside a list (section headers
+      // such as "# === Downstairs ===") do not end the list: keep walking up.
+      const trimmedLine = thisLine.trim();
+      if (trimmedLine === "" || trimmedLine.startsWith("#")) {
+        currentLine -= 1;
+        continue;
+      }
 
       const isOtherItemInList = thisLine.match(
         /-\s*([-"\w]+)?(\.)?([-"\w]+?)?\s*$/,
